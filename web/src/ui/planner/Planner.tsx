@@ -37,7 +37,8 @@ import { WhyFewWindows } from "./WhyFewWindows";
 
 type PlannerProps = {
   initialField?: string;
-  initialTank?: string;
+  initialProducts?: string;
+  initialHours?: string;
   initialReplay?: string;
 };
 
@@ -53,6 +54,7 @@ type PlannerResult = {
   hours: PlannerHour[];
   ruleGroups: FilteredRules[];
   registrations: string[];
+  liveFailure?: string;
 };
 
 type Failure = {
@@ -65,9 +67,20 @@ const DEFAULT_FIELD = "tift";
 
 function selectedFromQuery(value: string | undefined): Set<ProductRegistration> {
   if (!value || value === "all") return new Set(PRODUCT_REGISTRATIONS);
-  const requested = new Set(value.split(","));
-  const selected = PRODUCT_REGISTRATIONS.filter((reg) => requested.has(reg));
-  return new Set(selected.length > 0 ? selected : PRODUCT_REGISTRATIONS);
+  const requested = value.split(",");
+  if (
+    requested.length === 0
+    || new Set(requested).size !== requested.length
+    || requested.some((reg) => !PRODUCT_REGISTRATIONS.includes(reg as ProductRegistration))
+  ) {
+    return new Set(PRODUCT_REGISTRATIONS);
+  }
+  return new Set(PRODUCT_REGISTRATIONS.filter((reg) => requested.includes(reg)));
+}
+
+function hoursFromQuery(value: string | undefined): number {
+  const parsed = Number(value);
+  return Number.isInteger(parsed) && parsed >= 1 && parsed <= 12 ? parsed : 3;
 }
 
 function duration(start: number): string {
@@ -83,13 +96,15 @@ function workingSteps(current: number, measured: Array<string | undefined>): Wor
   }));
 }
 
-export function Planner({ initialField, initialTank, initialReplay }: PlannerProps) {
+export function Planner({ initialField, initialProducts, initialHours, initialReplay }: PlannerProps) {
   const replayPoint = initialReplay && REPLAY_POINTS.has(initialReplay) ? initialReplay : undefined;
   const [field, setField] = useState(replayPoint ?? initialField ?? DEFAULT_FIELD);
-  const [selectedRegs, setSelectedRegs] = useState<Set<ProductRegistration>>(() => selectedFromQuery(initialTank));
-  const [jobHours, setJobHours] = useState(3);
+  const [selectedRegs, setSelectedRegs] = useState<Set<ProductRegistration>>(() => selectedFromQuery(initialProducts));
+  const [jobHours, setJobHours] = useState(() => hoursFromQuery(initialHours));
+  const [activeReplay, setActiveReplay] = useState(replayPoint);
   const [points, setPoints] = useState<ForecastPoints | null>(null);
   const [labels, setLabels] = useState<LabelIndex | null>(null);
+  const [configReady, setConfigReady] = useState(false);
   const [configError, setConfigError] = useState<string | null>(null);
   const [working, setWorking] = useState<{ startedAt: number; currentStep: number; steps: WorkingStep[] } | null>(null);
   const [failure, setFailure] = useState<Failure | null>(null);
@@ -108,10 +123,11 @@ export function Planner({ initialField, initialTank, initialReplay }: PlannerPro
         if (!current) return;
         const loadedPoints = parseForecastPoints(pointsPayload);
         const loadedLabels = parseLabelIndex(labelsPayload);
+        const requested = replayPoint ?? initialField;
+        setField(requested && loadedPoints[requested] ? requested : DEFAULT_FIELD);
         setPoints(loadedPoints);
         setLabels(loadedLabels);
-        const requested = replayPoint ?? initialField;
-        if (requested && loadedPoints[requested]) setField(requested);
+        setConfigReady(true);
       })
       .catch((error) => {
         if (current) setConfigError(errorText(error));
@@ -119,10 +135,11 @@ export function Planner({ initialField, initialTank, initialReplay }: PlannerPro
     return () => { current = false; };
   }, [initialField, replayPoint]);
 
-  const runPlanner = useCallback(async ({ pointKey, source, suppliedReplay }: {
+  const runPlanner = useCallback(async ({ pointKey, source, suppliedReplay, fallbackToReplay = false }: {
     pointKey: string;
     source: SourceKind;
     suppliedReplay?: ReplayForecast;
+    fallbackToReplay?: boolean;
   }) => {
     if (!points || !labels) return;
     const point = points[pointKey];
@@ -148,14 +165,28 @@ export function Planner({ initialField, initialTank, initialReplay }: PlannerPro
       const forecastStart = performance.now();
       let periods: ForecastPeriod[];
       let fetchedAt: string;
+      let resolvedSource = source;
+      let liveFailure: string | undefined;
       if (source === "RECORDED") {
         const replay = suppliedReplay ?? await fetchReplay(pointKey);
         periods = replay.periods;
         fetchedAt = replay.forecast_fetched_utc;
+        setActiveReplay(pointKey);
       } else {
-        const live = await fetchLivePeriods(point.forecastHourly);
-        periods = live.periods;
-        fetchedAt = live.fetchedAt;
+        try {
+          const live = await fetchLivePeriods(point.forecastHourly);
+          periods = live.periods;
+          fetchedAt = live.fetchedAt;
+          setActiveReplay(undefined);
+        } catch (error) {
+          if (!fallbackToReplay || !REPLAY_POINTS.has(pointKey)) throw error;
+          const replay = await fetchReplay(pointKey);
+          periods = replay.periods;
+          fetchedAt = replay.forecast_fetched_utc;
+          resolvedSource = "RECORDED";
+          liveFailure = errorText(error);
+          setActiveReplay(pointKey);
+        }
       }
       measured[0] = duration(forecastStart);
       setWorking({ startedAt, currentStep: 1, steps: workingSteps(1, measured) });
@@ -176,7 +207,7 @@ export function Planner({ initialField, initialTank, initialReplay }: PlannerPro
         throw new Error(`The planner returned ${evaluated.length} hours for ${periods.length} forecast periods`);
       }
       setWorking(null);
-      setResult({ pointKey, source, fetchedAt, periods, lat: point.lat, lon: point.lon, hours: evaluated, ruleGroups, registrations });
+      setResult({ pointKey, source: resolvedSource, fetchedAt, periods, lat: point.lat, lon: point.lon, hours: evaluated, ruleGroups, registrations, liveFailure });
     } catch (error) {
       const message = errorText(error);
       setWorking(null);
@@ -194,10 +225,29 @@ export function Planner({ initialField, initialTank, initialReplay }: PlannerPro
   }, [labels, points, selectedRegs]);
 
   useEffect(() => {
-    if (!points || !labels || !replayPoint || autoRan.current) return;
+    if (!points || !labels || !configReady || autoRan.current) return;
     autoRan.current = true;
-    void runPlanner({ pointKey: replayPoint, source: "RECORDED" });
-  }, [labels, points, replayPoint, runPlanner]);
+    void runPlanner({
+      pointKey: field,
+      source: replayPoint ? "RECORDED" : "LIVE",
+      fallbackToReplay: !replayPoint,
+    });
+  }, [configReady, field, labels, points, replayPoint, runPlanner]);
+
+  useEffect(() => {
+    if (!configReady) return;
+    const params = new URLSearchParams(window.location.search);
+    params.set("field", field);
+    params.set(
+      "products",
+      PRODUCT_REGISTRATIONS.filter((reg) => selectedRegs.has(reg)).join(","),
+    );
+    params.set("hours", String(jobHours));
+    params.delete("tank");
+    if (activeReplay) params.set("replay", activeReplay);
+    else params.delete("replay");
+    window.history.replaceState(null, "", `${window.location.pathname}?${params.toString()}${window.location.hash}`);
+  }, [activeReplay, configReady, field, jobHours, selectedRegs]);
 
   const pointEntries = useMemo(() => points ? orderedPointEntries(points) : [], [points]);
   const selectedProducts = result && labels
@@ -218,6 +268,7 @@ export function Planner({ initialField, initialTank, initialReplay }: PlannerPro
       const next = new Set(current);
       if (next.has(reg)) next.delete(reg);
       else next.add(reg);
+      setActiveReplay(undefined);
       setValidation(next.size === 0 ? "Choose at least one product in the tank." : null);
       return next;
     });
@@ -244,6 +295,7 @@ export function Planner({ initialField, initialTank, initialReplay }: PlannerPro
   function useAgentCheck(snapshot: AgentCheckSnapshot) {
     setField(snapshot.pointKey);
     setJobHours(snapshot.jobHours);
+    setActiveReplay(snapshot.source === "RECORDED" ? snapshot.pointKey : undefined);
     setSelectedRegs(new Set(snapshot.products.filter((reg): reg is ProductRegistration => PRODUCT_REGISTRATIONS.includes(reg as ProductRegistration))));
     setFailure(null);
     setValidation(null);
@@ -292,6 +344,7 @@ export function Planner({ initialField, initialTank, initialReplay }: PlannerPro
             aria-label="Tank planner"
             onSubmit={(event) => {
               event.preventDefault();
+              setActiveReplay(undefined);
               void runPlanner({ pointKey: field, source: "LIVE" });
             }}
             className="rounded-[2rem] border-[3px] border-[#14213d] bg-[#fbf7ee] p-5 shadow-[7px_9px_0_#14213d] sm:p-7"
@@ -302,7 +355,10 @@ export function Planner({ initialField, initialTank, initialReplay }: PlannerPro
               <select
                 id="field"
                 value={field}
-                onChange={(event) => setField(event.target.value)}
+                onChange={(event) => {
+                  setField(event.target.value);
+                  setActiveReplay(undefined);
+                }}
                 disabled={!points || Boolean(working)}
                 className="mt-3 min-h-12 w-full rounded-2xl border-2 border-[#14213d] bg-white px-4 py-2 font-extrabold outline-offset-2 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#2f8f4e]"
               >
@@ -353,7 +409,10 @@ export function Planner({ initialField, initialTank, initialReplay }: PlannerPro
                   max={12}
                   step={1}
                   value={jobHours}
-                  onChange={(event) => setJobHours(Number(event.target.value))}
+                  onChange={(event) => {
+                    setJobHours(Number(event.target.value));
+                    setActiveReplay(undefined);
+                  }}
                   disabled={Boolean(working)}
                   className="h-11 min-w-0 flex-1 accent-[#2f8f4e]"
                 />
@@ -515,7 +574,12 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
     : undefined;
 
   return (
-    <section aria-labelledby="results-heading" className="section-card mx-auto mt-5 max-w-[92rem] bg-[#fbf7ee] px-4 py-9 text-[#14213d] sm:px-8 lg:px-12">
+    <section
+      id="planner-results"
+      data-forecast-source={result.source}
+      aria-labelledby="results-heading"
+      className="section-card mx-auto mt-5 max-w-[92rem] bg-[#fbf7ee] px-4 py-9 text-[#14213d] sm:px-8 lg:px-12"
+    >
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="hand -rotate-1 text-3xl text-[#8a5a2b]">{selectedPointName}</p>
@@ -532,6 +596,11 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
       <p className="mt-1 text-sm font-semibold text-[#14213d]/70">
         {result.source === "LIVE" ? "NWS response received" : "NWS forecast recorded"} at {formatForecastTime(result.fetchedAt)}. Source: {result.source === "LIVE" ? "api.weather.gov, fetched by this browser" : "committed NWS replay fixture"}.
       </p>
+      {result.liveFailure ? (
+        <p className="mt-3 rounded-xl border-2 border-[#8a5a2b] bg-[#ffc53d]/25 p-3 text-sm font-bold">
+          The live NWS request failed, so this first check uses the recorded forecast: {result.liveFailure}
+        </p>
+      ) : null}
 
       <section aria-labelledby="windows-heading" className="mt-8 rounded-[1.7rem] border-[3px] border-[#14213d] bg-[#216a38] p-5 text-white shadow-[5px_6px_0_#14213d] sm:p-7">
         <h3 id="windows-heading" className="display text-3xl">Windows at least {jobHours} {jobHours === 1 ? "hour" : "hours"} long</h3>

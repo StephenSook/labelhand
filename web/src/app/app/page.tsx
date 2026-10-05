@@ -20,7 +20,8 @@ export default async function AppPage({ searchParams }: { searchParams: SearchPa
       <Nav />
       <Planner
         initialField={first(query.field)}
-        initialTank={first(query.tank)}
+        initialProducts={first(query.products) ?? first(query.tank)}
+        initialHours={first(query.hours)}
         initialReplay={first(query.replay)}
       />
     </>

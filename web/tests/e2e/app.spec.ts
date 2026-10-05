@@ -3,7 +3,7 @@ import path from "node:path";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
-const replayPath = "/app?field=tift&tank=all&replay=tift";
+const replayPath = "/app?field=tift&products=5481-504,264-700,264-418&hours=3&replay=tift";
 const stillsDir = path.join(process.cwd(), "test-results", "stills");
 
 async function openReplay(page: Page) {
@@ -11,6 +11,37 @@ async function openReplay(page: Page) {
   await expect(page.getByText("RECORDED", { exact: true })).toBeVisible();
   await expect(page.locator("[data-hour-cell]")).toHaveCount(156);
 }
+
+async function waitForAutoRun(page: Page) {
+  await expect(page.locator("#timeline")).toBeVisible({ timeout: 15_000 });
+  await expect(page.locator("[data-forecast-source]")).toHaveAttribute("data-forecast-source", /LIVE|RECORDED/);
+}
+
+test("the planner runs on first load without a click", async ({ page }) => {
+  await page.goto("/app");
+  await waitForAutoRun(page);
+  await expect(page.locator("[data-hour-cell]")).toHaveCount(156);
+});
+
+test("a field, product, and job-length deep link reproduces its state", async ({ page }) => {
+  await page.goto("/app?field=worth&products=5481-504,264-700&hours=4");
+  await waitForAutoRun(page);
+
+  await expect(page.locator("#field")).toHaveValue("worth");
+  await expect(page.locator("#job-hours")).toHaveValue("4");
+  await expect(page.getByRole("checkbox", { name: /5481-504/ })).toBeChecked();
+  await expect(page.getByRole("checkbox", { name: /264-700/ })).toBeChecked();
+  await expect(page.getByRole("checkbox", { name: /264-418/ })).not.toBeChecked();
+  await expect(page).toHaveURL(/field=worth.*products=5481-504%2C264-700.*hours=4/);
+
+  await page.goto("/app?field=unknown&products=5481-504,unknown&hours=99");
+  await waitForAutoRun(page);
+  await expect(page.locator("#field")).toHaveValue("tift");
+  await expect(page.locator("#job-hours")).toHaveValue("3");
+  for (const reg of ["5481-504", "264-700", "264-418"]) {
+    await expect(page.getByRole("checkbox", { name: new RegExp(reg) })).toBeChecked();
+  }
+});
 
 test("the recorded planner exposes every hour and its source quote", async ({ page }) => {
   await openReplay(page);
