@@ -1,0 +1,43 @@
+import type { Metadata, Viewport } from "next";
+import localFont from "next/font/local";
+import type { ReactNode } from "react";
+import "./globals.css";
+
+const display = localFont({
+  src: "./fonts/bricolage-grotesque-latin.woff2",
+  variable: "--font-display",
+  weight: "700 800",
+  display: "swap",
+});
+
+const body = localFont({
+  src: "./fonts/figtree-latin.woff2",
+  variable: "--font-body",
+  weight: "500 800",
+  display: "swap",
+});
+
+const hand = localFont({
+  src: "./fonts/caveat-latin.woff2",
+  variable: "--font-hand",
+  weight: "500 700",
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  title: {
+    default: "Labelhand: forecast planning from the labels in the tank",
+    template: "%s | Labelhand",
+  },
+  description: "Check three EPA cotton defoliation labels against an hourly National Weather Service forecast.",
+};
+
+export const viewport: Viewport = { themeColor: "#2f8f4e" };
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html className={`${display.variable} ${body.variable} ${hand.variable}`} lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "name": "tift",
+    "lat": 31.4,
+    "lon": -83.6,
+    "forecastHourly": "https://api.weather.gov/gridpoints/TAE/106,131/forecast/hourly"
+  },
+  {
+    "name": "worth",
+    "lat": 31.5,
+    "lon": -83.9,
+    "forecastHourly": "https://api.weather.gov/gridpoints/TAE/95,134/forecast/hourly"
+  },
+  {
+    "name": "ben_hill",
+    "lat": 31.75,
+    "lon": -83.3,
+    "forecastHourly": "https://api.weather.gov/gridpoints/TAE/116,147/forecast/hourly"
+  },
+  {
+    "name": "colquitt",
+    "lat": 31.15,
+    "lon": -83.85,
+    "forecastHourly": "https://api.weather.gov/gridpoints/TAE/98,119/forecast/hourly"
+  },
+  {
+    "name": "mitchell",
+    "lat": 31.25,
+    "lon": -84.25,
+    "forecastHourly": "https://api.weather.gov/gridpoints/TAE/82,122/forecast/hourly"
+  },
+  {
+    "name": "dooly",
+    "lat": 32.1,
+    "lon": -83.85,
+    "forecastHourly": "https://api.weather.gov/gridpoints/FFC/76,16/forecast/hourly"
+  },
+  {
+    "name": "coffee",
+    "lat": 31.5,
+    "lon": -82.95,
+    "forecastHourly": "https://api.weather.gov/gridpoints/JAX/12,111/forecast/hourly"
+  },
+  {
+    "name": "irwin",
+    "lat": 31.58,
+    "lon": -83.2,
+    "forecastHourly": "https://api.weather.gov/gridpoints/TAE/121,140/forecast/hourly"
+  },
+  {
+    "name": "berrien",
+    "lat": 31.25,
+    "lon": -83.3,
+    "forecastHourly": "https://api.weather.gov/gridpoints/TAE/118,125/forecast/hourly"
+  },
+  {
+    "name": "cook",
+    "lat": 31.1,
+    "lon": -83.45,
+    "forecastHourly": "https://api.weather.gov/gridpoints/TAE/113,118/forecast/hourly"
+  }
+]

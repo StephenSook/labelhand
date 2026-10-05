@@ -31,3 +31,13 @@ data/text/
 /target/
 core/target/
 core/pkg/
+
+# Web
+web/node_modules/
+web/.next/
+web/out/
+web/coverage/
+web/*.tsbuildinfo
+web/playwright-report/
+web/test-results/
+.vercel/
