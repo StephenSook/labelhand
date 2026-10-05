@@ -558,10 +558,9 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
     .join("; ");
 
   return (
-    <section
+    <div
       id="planner-results"
       data-forecast-source={result.source}
-      aria-labelledby="next-window-heading"
       className="section-card mx-auto mt-5 max-w-[92rem] bg-[#fbf7ee] px-4 py-9 text-[#14213d] sm:px-8 lg:px-12"
     >
       <section
@@ -571,7 +570,7 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
       >
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className={`hand -rotate-1 text-3xl ${nextWindow ? "text-[#ffc53d]" : "text-[#8a5a2b]"}`}>{selectedPointName}</p>
+            <p className={`hand -rotate-1 text-3xl ${nextWindow ? "text-white" : "text-[#8a5a2b]"}`}>{selectedPointName}</p>
             <h2 id="next-window-heading" className="display mt-1 text-5xl sm:text-6xl">Next window</h2>
           </div>
           <span className={`rounded-full border-[3px] px-4 py-2 text-sm font-black ${nextWindow ? "border-white bg-white text-[#155b2c]" : "border-[#14213d] bg-[#fbf7ee]"}`}>
@@ -639,7 +638,7 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
         labels={labels}
       />
       <RulesDisclosure groups={result.ruleGroups} labels={labels} />
-    </section>
+    </div>
   );
 }
 

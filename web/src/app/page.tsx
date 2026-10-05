@@ -97,8 +97,10 @@ export default function HomePage() {
             {measured.map((metric) => (
               <div key={metric.label} data-measured-metric={metric.label}>
                 <dt>{metric.label}</dt>
-                <dd className="display">{formatPercent(metric.value)}</dd>
-                <span>{metric.numerator}/{metric.denominator}</span>
+                <dd className="display">
+                  {formatPercent(metric.value)}
+                  <span>{metric.numerator}/{metric.denominator}</span>
+                </dd>
               </div>
             ))}
           </dl>

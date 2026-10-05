@@ -523,7 +523,7 @@ a {
 .architecture-paths path { fill: none; marker-end: url(#architecture-arrow); stroke: var(--soil); stroke-dasharray: 8 7; stroke-linecap: round; stroke-width: 4; }
 .architecture-paths marker path { fill: var(--soil); stroke: none; }
 .architecture-node { align-self: center; background: var(--paper); border: 3px solid var(--ink); border-radius: 1.3rem; box-shadow: 5px 6px 0 var(--ink); min-width: 0; padding: 1.2rem; position: relative; z-index: 1; }
-.architecture-node p { color: var(--soil); font-size: 0.68rem; font-weight: 900; letter-spacing: 0.1em; margin: 0; text-transform: uppercase; }
+.architecture-node p { color: var(--ink); font-size: 0.68rem; font-weight: 900; letter-spacing: 0.1em; margin: 0; text-transform: uppercase; }
 .architecture-node h3 { font-size: clamp(1.45rem, 2.4vw, 2.3rem); margin: 0.5rem 0 0; }
 .architecture-node span { color: var(--ink-soft); display: block; font-size: 0.82rem; font-weight: 650; line-height: 1.45; margin-top: 0.7rem; }
 .architecture-pdf { grid-area: pdf; transform: rotate(-1deg); }
