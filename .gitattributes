@@ -1,0 +1,5 @@
+# Store text with LF in the repository. Generators run on Windows (CRLF) and on Linux CI (LF).
+* text=auto eol=lf
+*.pdf binary
+*.gz binary
+*.png binary
