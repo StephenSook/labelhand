@@ -1,0 +1,132 @@
+{
+ "suffix": ".typed",
+ "labels": {
+  "5481-504": {
+   "gold": 24,
+   "coverage": 16,
+   "typed": 15,
+   "value_n": 11,
+   "value_ok": 11,
+   "modality_ok": 15,
+   "planner_rules": 20,
+   "planner_good": 18,
+   "coverage_recall": 0.667,
+   "typed_recall": 0.625,
+   "value_exact": 1.0,
+   "modality_acc": 1.0,
+   "planner_precision": 0.9,
+   "missed": [
+    "F-REI-7",
+    "F-REI-10",
+    "F-REI-7B",
+    "F-REI-10B",
+    "F-RAIN-1",
+    "F-WIND-G2",
+    "F-BOLL-50",
+    "F-BOLL-30-60"
+   ],
+   "mistyped": [
+    {
+     "gold": "F-TEMP-60",
+     "got": [
+      "tank_mix"
+     ]
+    }
+   ],
+   "planner_false_positives": [
+    {
+     "id": "5481-504-p7-9",
+     "param": "wind_speed_mph",
+     "quote": "If the windspeed is 10 miles per hour or less, applicators must use \u00bd swath displacement upwind at the downwind edge of "
+    },
+    {
+     "id": "5481-504-p9-2",
+     "param": "temperature_inversion",
+     "quote": "Temperature inversions are characterized by increasing temperature with altitude and are common on nights with limited c"
+    }
+   ],
+   "model": "nvidia/nemotron-3-super-120b-a12b"
+  },
+  "264-700": {
+   "gold": 10,
+   "coverage": 6,
+   "typed": 5,
+   "value_n": 4,
+   "value_ok": 3,
+   "modality_ok": 5,
+   "planner_rules": 7,
+   "planner_good": 5,
+   "coverage_recall": 0.6,
+   "typed_recall": 0.5,
+   "value_exact": 0.75,
+   "modality_acc": 1.0,
+   "planner_precision": 0.714,
+   "missed": [
+    "D-LETTUCE-AIR",
+    "D-NIGHT-ALONE",
+    "D-NIGHT-IDEAL",
+    "D-NIGHT-UNSAT"
+   ],
+   "mistyped": [
+    {
+     "gold": "D-CITRUS",
+     "got": [
+      "crop_stage"
+     ]
+    }
+   ],
+   "planner_false_positives": [
+    {
+     "id": "264-700-p5-2",
+     "param": "wind_speed_mph",
+     "quote": "Follow local recommendations if wind speeds of less than ten (10) miles per hour are specified in those recommendations."
+    },
+    {
+     "id": "264-700-p5-6",
+     "param": "buffer_ft",
+     "quote": "In addition, for citrus crops, do not apply Dropp\u00ae SC by air when citrus in flush is within five (5) miles downwind of t"
+    }
+   ],
+   "model": "nvidia/nemotron-3-super-120b-a12b"
+  },
+  "264-418": {
+   "gold": 12,
+   "coverage": 8,
+   "typed": 8,
+   "value_n": 4,
+   "value_ok": 4,
+   "modality_ok": 7,
+   "planner_rules": 8,
+   "planner_good": 8,
+   "coverage_recall": 0.667,
+   "typed_recall": 0.667,
+   "value_exact": 1.0,
+   "modality_acc": 0.875,
+   "planner_precision": 1.0,
+   "missed": [
+    "P-REI-48",
+    "P-REI-72",
+    "P-DROP",
+    "P-COOL"
+   ],
+   "mistyped": [],
+   "planner_false_positives": [],
+   "model": "nvidia/nemotron-3-super-120b-a12b"
+  }
+ },
+ "overall": {
+  "gold": 46,
+  "coverage": 30,
+  "typed": 28,
+  "value_n": 19,
+  "value_ok": 18,
+  "modality_ok": 27,
+  "planner_rules": 35,
+  "planner_good": 31,
+  "coverage_recall": 0.652,
+  "typed_recall": 0.609,
+  "value_exact": 0.947,
+  "modality_acc": 0.964,
+  "planner_precision": 0.886
+ }
+}
