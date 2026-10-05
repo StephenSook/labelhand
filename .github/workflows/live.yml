@@ -35,3 +35,7 @@ jobs:
       # which also catches an exhausted Token Factory balance (HTTP 402) before a judge does.
       - name: Ask the tank against production
         run: node scripts/agent-check.mjs https://labelhand-web.vercel.app
+      # The label viewer fetches the EPA PDF through our route at run time (CDN-cached); this catches EPA or its
+      # firewall refusing the deployment, a changed label file (sha256 mismatch), or a highlight that stops matching.
+      - name: Show-on-label against production
+        run: node scripts/label-source-check.mjs https://labelhand-web.vercel.app
