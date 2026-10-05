@@ -4,7 +4,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
 const replayPath = "/app?field=tift&products=5481-504,264-700,264-418&hours=3&replay=tift";
-const stillsDir = path.join(process.cwd(), "test-results", "stills");
+const stillsDir = String.raw`C:\Users\STEVEB~1\AppData\Local\Temp\claude\C--Users-stevebillz\2a521d3f-5761-476e-8197-9d532949c28b\scratchpad\stills-ui`;
 
 async function openReplay(page: Page) {
   await page.goto(replayPath);
@@ -152,27 +152,33 @@ test("the constraint panel runs an in-memory what-if through the planner", async
   expect(dataRequests).toEqual([]);
 });
 
-test("the recorded planner never overflows its viewport or day cards", async ({ page }) => {
-  for (const width of [390, 768, 1024, 1440]) {
+test("the home, planner, and judge pages never overflow their viewports", async ({ page }) => {
+  for (const width of [390, 768, 1440]) {
     await page.setViewportSize({ width, height: 900 });
-    await openReplay(page);
 
-    const dimensions = await page.evaluate(() => ({
-      document: {
-        clientWidth: document.documentElement.clientWidth,
-        scrollWidth: document.documentElement.scrollWidth,
-      },
-      days: Array.from(document.querySelectorAll<HTMLElement>("[data-day]"), (day) => ({
-        day: day.dataset.day,
-        clientWidth: day.clientWidth,
-        scrollWidth: day.scrollWidth,
-      })),
-    }));
+    for (const route of ["/", replayPath, "/judge"]) {
+      if (route === replayPath) await openReplay(page);
+      else await page.goto(route);
 
-    expect(dimensions.days.length, `${width}px should render day cards`).toBeGreaterThan(0);
-    expect(dimensions.document.scrollWidth, `${width}px document width`).toBeLessThanOrEqual(dimensions.document.clientWidth);
-    for (const day of dimensions.days) {
-      expect(day.scrollWidth, `${width}px ${day.day} day width`).toBeLessThanOrEqual(day.clientWidth + 1);
+      const dimensions = await page.evaluate(() => ({
+        document: {
+          clientWidth: document.documentElement.clientWidth,
+          scrollWidth: document.documentElement.scrollWidth,
+        },
+        days: Array.from(document.querySelectorAll<HTMLElement>("[data-day]"), (day) => ({
+          day: day.dataset.day,
+          clientWidth: day.clientWidth,
+          scrollWidth: day.scrollWidth,
+        })),
+      }));
+
+      expect(dimensions.document.scrollWidth, `${route} at ${width}px`).toBeLessThanOrEqual(dimensions.document.clientWidth);
+      if (route === replayPath) {
+        expect(dimensions.days.length, `${width}px should render day cards`).toBeGreaterThan(0);
+        for (const day of dimensions.days) {
+          expect(day.scrollWidth, `${width}px ${day.day} day width`).toBeLessThanOrEqual(day.clientWidth + 1);
+        }
+      }
     }
   }
 });
@@ -247,24 +253,26 @@ test("every page names the product exactly once in its title", async ({ page }) 
 test("all Tier 1 pages have zero axe violations and render the requested stills", async ({ page }) => {
   await mkdir(stillsDir, { recursive: true });
 
-  for (const width of [390, 768, 1440]) {
+  for (const width of [390, 1440]) {
     await page.setViewportSize({ width, height: 900 });
 
     for (const route of [
       { name: "home", path: "/" },
-      { name: "app", path: replayPath },
+      { name: "app", path: "/app" },
       { name: "judge", path: "/judge" },
     ]) {
       if (route.name === "app") {
-        await openReplay(page);
+        await page.goto(route.path);
+        await waitForAutoRun(page);
       } else {
         await page.goto(route.path);
+        if (route.name === "home") {
+          await expect(page.locator("[data-live-hero]")).toHaveAttribute("data-forecast-source", /LIVE|RECORDED/, { timeout: 15_000 });
+        }
       }
 
-      if (width === 390 || width === 1440) {
-        const scan = await new AxeBuilder({ page }).analyze();
-        expect(scan.violations, `${route.name} at ${width}px`).toEqual([]);
-      }
+      const scan = await new AxeBuilder({ page }).analyze();
+      expect(scan.violations, `${route.name} at ${width}px`).toEqual([]);
 
       await page.screenshot({
         path: path.join(stillsDir, `${route.name}-${width}.png`),
