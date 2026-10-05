@@ -30,3 +30,8 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
       - name: Live check of the production judge door
         run: node scripts/live-check.mjs https://labelhand-web.vercel.app
+      # One real question to NVIDIA Nemotron 3.5 Lightning on Nebius Token Factory through the deployed route
+      # (about $0.00023 per run). Fails if the model call, the check_tank tool or the guard does not pass,
+      # which also catches an exhausted Token Factory balance (HTTP 402) before a judge does.
+      - name: Ask the tank against production
+        run: node scripts/agent-check.mjs https://labelhand-web.vercel.app
