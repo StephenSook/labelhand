@@ -94,6 +94,9 @@ jobs:
         run: wasm-pack build core --target web --release -- --features wasm
       - name: Sync browser engine and data
         run: pnpm sync-engine
-      - name: Verify committed browser inputs are fresh
+      # Data copies are platform independent, so they must match byte for byte. The WASM is not: rustc embeds host
+      # source paths, so a Linux build never equals the committed Windows build. The committed WASM is instead held
+      # to every frozen engine fixture by the unit tests above (tests/engine.test.ts).
+      - name: Verify committed browser data is fresh
         working-directory: .
-        run: git diff --exit-code -- web/src/engine/pkg web/src/engine/build-info.json web/public/data
+        run: git diff --exit-code -- web/public/data

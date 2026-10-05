@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, test } from "vitest";
 
@@ -53,5 +53,28 @@ describe("Rust WASM adapter", () => {
     expect(blockedCitation!.quote.length).toBeGreaterThan(0);
     expect(blockedCitation!.page).not.toBeNull();
     expect(rules.some((rule) => rule.quote === blockedCitation!.quote)).toBe(true);
+  });
+
+  // The committed WASM is what Vercel serves. Its bytes differ between a Windows and a Linux build (rustc embeds
+  // host source paths in panic messages), so freshness is checked by behaviour: it must reproduce every frozen
+  // engine fixture exactly, the same truth the Python kernel and the Rust parity suite are held to.
+  test("committed WASM reproduces every frozen engine fixture exactly", async () => {
+    const wasm = await readFile(path.join(projectRoot, "src/engine/pkg/labelhand_core_bg.wasm"));
+    await initializeEngine(new Uint8Array(wasm).buffer);
+    const dir = path.join(projectRoot, "..", "tests", "fixtures", "engine");
+    const files = (await readdir(dir)).filter((name) => name.endsWith(".json")).sort();
+    expect(files.length).toBeGreaterThanOrEqual(3); // a parity check that walks nothing must fail
+    for (const name of files) {
+      const fixture = JSON.parse(await readFile(path.join(dir, name), "utf8")) as {
+        rules: Rule[];
+        periods: ForecastPeriod[];
+        lat: number;
+        lon: number;
+        hours: number;
+        expected: unknown[];
+      };
+      const hours = await evaluate(fixture.rules, fixture.periods, fixture.lat, fixture.lon, fixture.hours);
+      expect(hours, name).toEqual(fixture.expected);
+    }
   });
 });
