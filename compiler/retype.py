@@ -23,7 +23,7 @@ import time
 import urllib.error
 import urllib.request
 
-from compile_label import BASE, PARAMS, PRICES, guard, norm
+from compile_label import BASE, PARAMS, PRICES, guard, norm, restore_units
 from compile_label import OUT as COMPILED
 
 DEFAULT_MODEL = "nvidia/Nemotron-3-Ultra-550b-a55b"
@@ -133,7 +133,7 @@ def retype(reg: str, model: str, suffix: str, out_tag: str = "") -> dict:
             accepted.append({**rule, "first_pass_param": rule["param"], "typed_by": None, "agreed": None})
             continue
         t = res["typed"]
-        new = {**rule, **t, "first_pass_param": rule["param"], "typed_by": model, "agreed": t["param"] == rule["param"]}
+        new = restore_units({**rule, **t, "first_pass_param": rule["param"], "typed_by": model, "agreed": t["param"] == rule["param"]})
         why = guard(new, norm(rule["quote"]))  # the quote is its own page here: only the number guard can fail
         if why:
             # The re-typed numbers are not in the quote. The first pass already passed every guard, so keep it

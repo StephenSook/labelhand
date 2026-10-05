@@ -151,9 +151,7 @@ def guard(rule: dict, page_text_norm: str) -> str | None:
         return "QUOTE_SPLICED"  # an ellipsis joins two places on the page into one claim
     if q not in page_text_norm and squash(q) not in squash(page_text_norm):
         return "QUOTE_NOT_IN_PAGE"
-    nums_in_quote = {num_str(float(n)) for n in NUM.findall(q)}
-    nums_in_quote |= {num_str(int(a) / int(b)) for a, b in FRACTION.findall(q) if int(b)}
-    nums_in_quote |= {num_str(int(w) + VULGAR[f]) for w, f in MIXED.findall(q)}
+    nums_in_quote = {num_str(n) for n in quote_numbers(q)}
     for key in ("value", "value2"):
         v = rule.get(key)
         if v is not None and num_str(float(v)) not in nums_in_quote:
@@ -168,6 +166,50 @@ def guard(rule: dict, page_text_norm: str) -> str | None:
 def num_str(f: float) -> str:
     """Canonical text for a number so 10, 10.0 and '10' compare equal."""
     return str(int(f)) if f.is_integer() else f"{f:g}"
+
+
+# (words in the quote, units the model may have converted to, factor). Code, not the model, owns conversions.
+CONVERSIONS = [
+    (("mile",), ("feet", "foot", "ft"), 5280),
+    (("feet", "foot", "ft"), ("inches", "inch", "in"), 12),
+    (("hour",), ("minutes", "minute", "min"), 60),
+    (("day",), ("hours", "hour", "hr"), 24),
+]
+
+
+def quote_numbers(q: str) -> list[float]:
+    """Every number written in a normalised quote: plain, fractions (1/2) and mixed numbers (2 1/2 as a glyph)."""
+    nums = [float(n) for n in NUM.findall(q)]
+    nums += [int(a) / int(b) for a, b in FRACTION.findall(q) if int(b)]
+    nums += [int(w) + VULGAR[f] for w, f in MIXED.findall(q)]
+    return nums
+
+
+def restore_units(rule: dict) -> dict:
+    """Undo a unit conversion the model did on its own, when code can reproduce it exactly.
+
+    The labels say "one-half (1/2) mile"; models tend to answer 2,640 feet. If a value equals a number in the
+    quote times a known factor, and the quote names the source unit, the value goes back to the label's own
+    number and unit, and the rule records what was undone. Anything code cannot reproduce is left for the
+    number guard to reject.
+    """
+    q = norm(rule.get("quote", ""))
+    unit = (rule.get("unit") or "").lower().strip()
+    nums = quote_numbers(q)
+    out = dict(rule)
+    for key in ("value", "value2"):
+        v = rule.get(key)
+        if v is None or any(abs(float(v) - n) < 1e-9 for n in nums):
+            continue
+        for src_words, dst_units, factor in CONVERSIONS:
+            if unit in dst_units and any(w in q for w in src_words):
+                match = [n for n in nums if abs(n * factor - float(v)) < 1e-6]
+                if match:
+                    out[key] = match[0]
+                    out["unit"] = src_words[0]
+                    out["unit_restored"] = f"{num_str(float(v))} {unit} -> {num_str(match[0])} {src_words[0]} (model conversion undone in code)"
+                    break
+    return out
 
 
 def call(model: str, page_no: int, text: str, key: str, thinking: bool) -> dict:
@@ -217,7 +259,7 @@ def compile_label(reg: str, model: str, thinking: bool) -> dict:
             continue
         pn = norm(pages[res["page"] - 1])
         for i, r in enumerate(res["rules"]):
-            r = {**r, "page": res["page"], "id": f"{reg}-p{res['page']}-{i + 1}"}
+            r = restore_units({**r, "page": res["page"], "id": f"{reg}-p{res['page']}-{i + 1}"})
             why = guard(r, pn)
             (rejected if why else accepted).append({**r, "reject_reason": why} if why else r)
     price = PRICES.get(model, (0, 0))

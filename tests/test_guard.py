@@ -49,3 +49,27 @@ def test_extractor_word_splits_still_match_exactly():
 def test_unreadable_glyph_is_not_called_a_model_error():
     page = norm(f"Do not exceed 2 {BAD} pints/A/Year of FOLEX 6 EC.")
     assert guard(rule(f"Do not exceed 2 {BAD} pints/A/Year of FOLEX 6 EC.", 2.5), page).startswith("UNREADABLE_GLYPH")
+
+
+def test_model_unit_conversion_is_undone_in_code_and_then_passes():
+    from compile_label import restore_units
+
+    r = restore_units({"quote": "Do not apply by air within one-half (1/2) mile of lettuce.", "value": 2640, "value2": None, "unit": "feet"})
+    assert r["value"] == 0.5 and r["unit"] == "mile" and "undone" in r["unit_restored"]
+    assert guard(r, PAGE) is None
+
+
+def test_inches_back_to_feet():
+    from compile_label import restore_units
+
+    q = "Apply with the nozzle no more than 3 feet above the crop canopy."
+    r = restore_units({"quote": q, "value": 36, "value2": None, "unit": "inches"})
+    assert r["value"] == 3 and r["unit"] == "feet"
+
+
+def test_a_conversion_code_cannot_reproduce_is_left_for_the_guard_to_reject():
+    from compile_label import restore_units
+
+    r = restore_units({"quote": "Do not apply by air within one-half (1/2) mile of lettuce.", "value": 2600, "value2": None, "unit": "feet"})
+    assert r["value"] == 2600 and "unit_restored" not in r
+    assert guard(r, PAGE).startswith("NUMBER_NOT_IN_QUOTE")
