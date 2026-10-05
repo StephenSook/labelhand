@@ -20,32 +20,17 @@ function numbersIn(value: string): Set<string> {
   return new Set(value.match(NUMBER_PATTERN) ?? []);
 }
 
-const COUNT_WORDS: Record<string, number> = {
-  no: 0, zero: 0, one: 1, single: 1, two: 2, three: 3, four: 4, five: 5,
-  six: 6, seven: 7, eight: 8, nine: 9, ten: 10,
-};
-
-// A count of windows stated in the summary ("two 4-hour windows", "the only window", "3 windows").
-// Up to two words may sit between the count and "window" ("two 4-hour permitted windows"). The word
-// "only" alone is not a count: "only the two windows fit" is a true claim about two windows. "One of
-// the windows" names a member, not a count, so a count followed by "of" is skipped.
-const COUNTED_WINDOWS = /\b(no|zero|one|single|two|three|four|five|six|seven|eight|nine|ten|\d+)(?!\s+of\b)\s+(?:\S+\s+){0,2}?windows?\b/giu;
-const THE_ONLY_WINDOW = /\b(?:the\s+)?only\s+(?:\S+\s+){0,2}?window\b/giu;
-
-function claimedWindowCounts(summary: string): number[] {
-  const counts: number[] = [];
-  for (const match of summary.matchAll(COUNTED_WINDOWS)) {
-    const word = match[1].toLowerCase();
-    counts.push(word in COUNT_WORDS ? COUNT_WORDS[word] : Number(word));
-  }
-  for (const _ of summary.matchAll(THE_ONLY_WINDOW)) counts.push(1);
-  return counts;
-}
-
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+// The guard checks what can be checked structurally: every cited rule id, every window index and
+// every number in the summary must come from a tool result. It deliberately does NOT read window
+// counts out of the prose. Two production false refusals (2026-10-05: "only the two windows ...",
+// then "7 PM. Wed window" read as seven) and an adversarial review ("Only one available window
+// starts at three PM; the other ...") showed that a count scoped by a predicate cannot be told apart
+// from a total by pattern matching. The prompt tells the model not to state counts, and the page
+// lists every returned window under the answer, so a wrong count would sit beside the true list.
 export function guardFinalAnswer(
   answer: FinalAnswerArgs,
   toolResults: ToolResultRecord[],
@@ -75,11 +60,6 @@ export function guardFinalAnswer(
   for (const index of answer.window_indices) {
     if (!knownWindowIndices.has(index)) {
       reasons.push(`Window ${index} did not appear in the latest check_tank result.`);
-    }
-  }
-  for (const claimed of claimedWindowCounts(answer.summary)) {
-    if (claimed !== knownWindowIndices.size) {
-      reasons.push(`The summary claims ${claimed} window${claimed === 1 ? "" : "s"}, but check_tank returned ${knownWindowIndices.size}.`);
     }
   }
 
