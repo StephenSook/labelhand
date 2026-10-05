@@ -216,24 +216,68 @@ def restore_units(rule: dict) -> dict:
     return out
 
 
-def call(model: str, page_no: int, text: str, key: str, thinking: bool) -> dict:
+MAX_TOKENS = 6000
+
+
+class Truncated(Exception):
+    """The answer hit max_tokens. Strict JSON schema does not prevent this; the JSON is cut off mid-string."""
+
+
+def _request(model: str, page_no: int, text: str, key: str, thinking: bool) -> tuple[list[dict], dict, str]:
     body = {
         "model": model,
         "temperature": 0,
-        "max_tokens": 6000,
+        "max_tokens": MAX_TOKENS,
         "messages": [{"role": "system", "content": SYSTEM}, {"role": "user", "content": f"PAGE {page_no} TEXT:\n{text}"}],
         "response_format": {"type": "json_schema", "json_schema": {"name": "label_rules", "schema": SCHEMA, "strict": True}},
         "chat_template_kwargs": {"enable_thinking": thinking},
     }
     req = urllib.request.Request(BASE + "/chat/completions", data=json.dumps(body).encode(), headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=300) as r:
+        out = json.load(r)
+        rid = r.headers.get("x-request-id", "")
+    choice = out["choices"][0]
+    if choice.get("finish_reason") == "length":
+        raise Truncated(f"finish_reason=length at {(out.get('usage') or {}).get('completion_tokens')} tokens")
+    return json.loads(choice["message"]["content"]).get("rules", []), out.get("usage", {}), rid
+
+
+def split_text(text: str) -> tuple[str, str]:
+    """Split a page at the line break nearest its middle, so no sentence is cut in half by the split itself."""
+    mid = len(text) // 2
+    cut = text.rfind("\n", 0, mid)
+    if cut < len(text) // 4:
+        cut = text.find("\n", mid)
+    if cut == -1:
+        cut = mid
+    return text[:cut], text[cut:]
+
+
+def call(model: str, page_no: int, text: str, key: str, thinking: bool, depth: int = 0) -> dict:
+    """Compile one page. A truncated answer is not retried as-is (it would truncate again): the page is split in
+    two and each half is compiled, up to two levels deep. Guards still check quotes against the whole page."""
     t = time.time()
+    err = ""
     for attempt in range(3):
         try:
-            with urllib.request.urlopen(req, timeout=300) as r:
-                out = json.load(r)
-                rid = r.headers.get("x-request-id", "")
-            content = out["choices"][0]["message"]["content"]
-            return {"page": page_no, "ok": True, "secs": round(time.time() - t, 2), "request_id": rid, "usage": out.get("usage", {}), "rules": json.loads(content).get("rules", [])}
+            rules, usage, rid = _request(model, page_no, text, key, thinking)
+            return {"page": page_no, "ok": True, "secs": round(time.time() - t, 2), "request_id": rid, "usage": usage, "rules": rules, "splits": depth}
+        except Truncated as e:
+            if depth >= 2:
+                err = f"Truncated even after splitting: {e}"
+                break
+            halves = [call(model, page_no, part, key, thinking, depth + 1) for part in split_text(text)]
+            usage = {k: sum((h.get("usage") or {}).get(k, 0) for h in halves) for k in ("prompt_tokens", "completion_tokens")}
+            ok = all(h["ok"] for h in halves)
+            return {
+                "page": page_no,
+                "ok": ok,
+                "secs": round(time.time() - t, 2),
+                "usage": usage,
+                "rules": [r for h in halves for r in h["rules"]],
+                "splits": max(h.get("splits", 0) for h in halves),
+                **({} if ok else {"error": "; ".join(h.get("error", "") for h in halves if not h["ok"])}),
+            }
         except urllib.error.HTTPError as e:
             err = f"HTTP {e.code}: {e.read().decode('utf-8', 'replace')[:300]}"
             if e.code in (402, 400, 401, 403):
