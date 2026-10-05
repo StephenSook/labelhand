@@ -43,18 +43,23 @@ flowchart LR
 
 Three real Georgia cotton defoliation labels: Folex 6 EC (EPA Reg. 5481-504, accepted 2026-03-04), Dropp SC (264-700) and Prep (264-418), 32 pages in total.
 
-| | Result |
-|---|---|
-| Rules accepted | 120 |
-| Rules rejected by the guards | 18 |
-| Token Factory cost, all three labels | $0.028 |
-| Time per label (pages in parallel) | about 10 s |
+**Accuracy against a gold set.** [`eval/gold_v0.json`](eval/gold_v0.json) holds 46 clauses the planner relies on (wind, inversion, rain, temperature, open-boll stage, buffers, release height, droplets, re-entry), annotated from the label text and checked against it by `eval/verify_gold.py`. It is our own annotation until an outside reviewer checks it. `eval/score.py` scores every configuration; each row below changed one thing and was kept or reverted on the numbers.
+
+| Configuration | Coverage | Typed recall | Value exact | Modality | Acting precision | Acting recall |
+|---|---|---|---|---|---|---|
+| Nemotron 3 Super, one pass | 0.652 | 0.565 | 0.941 | 0.654 | 0.824 | 0.900 |
+| + Nemotron 3 Ultra typing pass | 0.652 | 0.609 | 0.947 | 0.964 | 0.909 | 0.900 |
+| + Ultra second extraction pass (union) | 0.891 | 0.848 | 0.931 | 0.897 | 0.800 | 1.000 |
+| + typing v2 (stricter definitions) | 0.891 | 0.848 | 0.897 | 0.872 | 1.000 | **0.800** |
+| + typing v3 (types the constraint the first reading named) | **0.891** | **0.891** | 0.935 | 0.902 | **1.000** | **1.000** |
+
+*Acting* rules are the ones the planner can turn into BLOCKED or FIELD CHECK. Acting recall is the safety number: a missed wind or rain limit would mark a forbidden hour as permitted. Typing v2 raised precision but dropped a wind limit hidden in a sentence that also set a boom height, so v3 replaced it. The planner uses the last row. Token Factory cost for the whole pipeline on three labels: about $0.50 (Super pass $0.028, Ultra pass $0.18, typing $0.29).
 
 What the guards caught, in a real run:
 - The Folex label sets two restricted-entry intervals: **7 days** at rates at or below 0.75 lb ai/A and **10 days** above that rate. The model spliced the sentence with "..." into a single 10-day rule and dropped the rate condition. Rejected, because a spliced quote is not what the label says.
 - The model converted 3 feet to 36 inches and one-half mile to 2,640 feet. Rejected: conversions belong in code.
 
-Known limits we are working on, with numbers in [`SPIKE-01-label-compile.md`](SPIKE-01-label-compile.md): coverage varies between runs, some rules get the wrong parameter type, one font in the 2026 Folex PDF has no Unicode map for the "1/2" glyph, and the 2009 Dropp SC label is a scan with a poor text layer.
+Known limits we are working on, with details in [`SPIKE-01-label-compile.md`](SPIKE-01-label-compile.md): five gold clauses are still missed (two Folex re-entry intervals stated in one sentence with two rates; two Dropp SC night-temperature clauses in the poor text layer of its scanned 2009 label; and Dropp's one-half mile lettuce buffer, which both models convert to 2,640 feet, so the guard rejects it), one font in the 2026 Folex PDF has no Unicode map for the "1/2" glyph, and single passes vary between runs, which is why two are unioned.
 
 All four NVIDIA Nemotron models on Token Factory (3.5 Lightning, 3 Nano 30B, 3 Super 120B, 3 Ultra 550B) passed our capability probe for strict JSON schema output and tool calling, with time to first token between 0.44 and 0.78 s.
 
