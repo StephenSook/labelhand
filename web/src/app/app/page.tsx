@@ -3,7 +3,7 @@ import { Nav } from "@/ui";
 import { Planner } from "@/ui/planner/Planner";
 
 export const metadata: Metadata = {
-  title: "Check a tank | Labelhand",
+  title: "Check a tank", // the root layout's template appends "| Labelhand"
   description: "Check three EPA cotton defoliation labels against an NWS hourly forecast.",
 };
 

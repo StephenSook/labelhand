@@ -25,6 +25,14 @@ test("the recorded planner exposes every hour and its source quote", async ({ pa
   await expect(quoteCard).toContainText(/Page \d+/);
 });
 
+test("every page names the product exactly once in its title", async ({ page }) => {
+  for (const route of ["/", "/app", "/judge"]) {
+    await page.goto(route);
+    const title = await page.title();
+    expect(title.match(/Labelhand/g)?.length ?? 0, `${route}: "${title}"`).toBe(1);
+  }
+});
+
 test("all Tier 1 pages have zero axe violations and render the requested stills", async ({ page }) => {
   await mkdir(stillsDir, { recursive: true });
 
