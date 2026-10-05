@@ -65,6 +65,8 @@ async function writeLabelIndex() {
       product: label.product,
       accepted: label.accepted,
       url: label.url,
+      bytes: label.bytes,
+      sha256: label.sha256,
     };
   });
   await writeJson(path.join(publicData, "labels", "index.json"), labels);

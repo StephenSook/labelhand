@@ -4,6 +4,7 @@ import { useState } from "react";
 import { runAgentLoop, type AgentRunResult, type AgentTraceEntry } from "@/lib/agent/loop";
 import type { AgentCheckSnapshot } from "@/lib/agent/tools";
 import { WorkingCard, type WorkingStep } from "@/ui";
+import { ShowOnLabel } from "@/ui/ShowOnLabel";
 
 const EXAMPLES = [
   "When can I spray all three at Tift this week for a 4-hour job?",
@@ -167,9 +168,19 @@ export function AskTank({ onCheck, onClause, onWindow }: AskTankProps) {
             <div className="mt-5">
               <p className="text-xs font-extrabold uppercase tracking-[0.12em]">Cited clauses</p>
               <div className="mt-2 flex flex-wrap gap-2">
-                {result.answer.cited_rule_ids.map((ruleId) => (
-                  <button key={ruleId} type="button" onClick={() => onClause(ruleId)} className="min-h-11 rounded-full border-2 border-[#14213d] bg-white px-4 py-2 font-extrabold underline decoration-2 underline-offset-4">{ruleId}</button>
-                ))}
+                {result.answer.cited_rule_ids.map((ruleId) => {
+                  const rule = result.latestCheck?.ruleGroups.flatMap((group) => group.used).find((candidate) => candidate.id === ruleId);
+                  const label = rule?.reg ? result.latestCheck?.labels[rule.reg] : undefined;
+                  const page = Number(rule?.page);
+                  return (
+                    <span key={ruleId} className="inline-flex flex-wrap items-center gap-2 rounded-2xl border-2 border-[#14213d] bg-white p-2">
+                      <button type="button" onClick={() => onClause(ruleId)} className="min-h-11 rounded-full px-3 py-2 font-extrabold underline decoration-2 underline-offset-4">{ruleId}</button>
+                      {rule && label && Number.isInteger(page) && page > 0 ? (
+                        <ShowOnLabel source={{ reg: label.reg, product: label.product, accepted: label.accepted, url: label.url, page, quote: rule.quote, quoteCheck: rule.quote_check }} />
+                      ) : null}
+                    </span>
+                  );
+                })}
               </div>
             </div>
           ) : null}

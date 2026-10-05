@@ -5,6 +5,7 @@ import { evaluate } from "@/engine";
 import type {
   FilteredRules,
   ForecastPeriod,
+  LabelIndex,
   PlannerHour,
   PlannerRule,
 } from "@/lib/planner-data";
@@ -14,6 +15,7 @@ import {
   rankLimitingClauses,
   rankLimitingProducts,
 } from "@/lib/windows";
+import { ShowOnLabel } from "@/ui/ShowOnLabel";
 
 type Scenario = {
   id: string;
@@ -34,6 +36,7 @@ type WhyFewWindowsProps = {
   lat: number;
   lon: number;
   jobHours: number;
+  labels: LabelIndex;
 };
 
 function blockedByRule(hours: PlannerHour[], rule: PlannerRule, product: string): boolean {
@@ -84,7 +87,7 @@ function windowLabel(start: string, end: string): string {
   return `${formatter.format(new Date(start))} to ${formatter.format(new Date(end))}`;
 }
 
-export function WhyFewWindows({ hours, ruleGroups, periods, lat, lon, jobHours }: WhyFewWindowsProps) {
+export function WhyFewWindows({ hours, ruleGroups, periods, lat, lon, jobHours, labels }: WhyFewWindowsProps) {
   const clauses = rankLimitingClauses(hours).slice(0, 3);
   const scenarios = whatIfScenarios(hours, ruleGroups);
   const [outcomes, setOutcomes] = useState<Record<string, Outcome>>({});
@@ -124,8 +127,12 @@ export function WhyFewWindows({ hours, ruleGroups, periods, lat, lon, jobHours }
       </p>
 
       <ol aria-label="Top limiting clauses" className="mt-5 grid gap-4 lg:grid-cols-3">
-        {clauses.map((clause) => (
-          <li key={`${clause.product}-${clause.rule}-${clause.quote}`} className="rounded-2xl border-2 border-[#14213d] bg-[#fbf7ee] p-4">
+        {clauses.map((clause) => {
+          const rule = ruleGroups.flatMap((group) => group.used).find((candidate) => candidate.id === clause.rule && candidate.product === clause.product);
+          const label = rule?.reg ? labels[rule.reg] : undefined;
+          const page = Number(clause.page);
+          return (
+          <li data-quote-card key={`${clause.product}-${clause.rule}-${clause.quote}`} className="rounded-2xl border-2 border-[#14213d] bg-[#fbf7ee] p-4">
             <p className="text-xs font-black uppercase tracking-[0.12em]">{clause.hourCount} {clause.hourCount === 1 ? "hour" : "hours"}</p>
             <p className="mt-2 font-black">{clause.product} · Page {String(clause.page)}</p>
             <blockquote className="mt-3 border-l-4 border-[#8a5a2b] pl-3 text-sm font-semibold leading-relaxed">
@@ -134,8 +141,15 @@ export function WhyFewWindows({ hours, ruleGroups, periods, lat, lon, jobHours }
             <p className="mt-3 text-xs font-bold text-[#14213d]/70">
               {clause.blockedHours} blocked · {clause.fieldCheckHours} field check
             </p>
+            {label && Number.isInteger(page) && page > 0 ? (
+              <ShowOnLabel
+                className="mt-4"
+                source={{ reg: label.reg, product: label.product, accepted: label.accepted, url: label.url, page, quote: clause.quote, quoteCheck: rule?.quote_check }}
+              />
+            ) : null}
           </li>
-        ))}
+          );
+        })}
       </ol>
 
       {scenarios.length > 0 && (

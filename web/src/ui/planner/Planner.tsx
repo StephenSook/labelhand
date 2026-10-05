@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { evaluate, filterRules, type CompiledLabel } from "@/engine";
 import type { AgentCheckSnapshot } from "@/lib/agent/tools";
 import { forecastPermittedWindows } from "@/lib/windows";
+import { isRestrictedUseLabel } from "@/lib/label-restrictions";
+import type { SprayRecordClause, SprayRecordInput } from "@/lib/spray-record";
 import {
   PRODUCT_REGISTRATIONS,
   REPLAY_POINTS,
@@ -29,6 +31,7 @@ import { WorkingCard, type WorkingStep } from "@/ui";
 import { AskTank } from "./AskTank";
 import { HourDetail } from "./HourDetail";
 import { RulesDisclosure } from "./RulesDisclosure";
+import { SprayRecordButton } from "./SprayRecordButton";
 import { Timeline } from "./Timeline";
 import { WhyFewWindows } from "./WhyFewWindows";
 
@@ -49,6 +52,7 @@ type PlannerResult = {
   lon: number;
   hours: PlannerHour[];
   ruleGroups: FilteredRules[];
+  registrations: string[];
 };
 
 type Failure = {
@@ -172,7 +176,7 @@ export function Planner({ initialField, initialTank, initialReplay }: PlannerPro
         throw new Error(`The planner returned ${evaluated.length} hours for ${periods.length} forecast periods`);
       }
       setWorking(null);
-      setResult({ pointKey, source, fetchedAt, periods, lat: point.lat, lon: point.lon, hours: evaluated, ruleGroups });
+      setResult({ pointKey, source, fetchedAt, periods, lat: point.lat, lon: point.lon, hours: evaluated, ruleGroups, registrations });
     } catch (error) {
       const message = errorText(error);
       setWorking(null);
@@ -246,6 +250,7 @@ export function Planner({ initialField, initialTank, initialReplay }: PlannerPro
       lon: snapshot.lon,
       hours: snapshot.hours,
       ruleGroups: snapshot.ruleGroups,
+      registrations: snapshot.products,
     });
   }
 
@@ -399,6 +404,71 @@ export function Planner({ initialField, initialTank, initialReplay }: PlannerPro
 
 type PlannerWindow = ReturnType<typeof forecastPermittedWindows>[number];
 
+function shownRecordValue(value: unknown, suffix = ""): string {
+  return value === null || value === undefined || value === "" ? "Not supplied" : `${String(value)}${suffix}`;
+}
+
+function sprayRecordForWindow(
+  result: PlannerResult,
+  labels: LabelIndex,
+  fieldName: string,
+  window: PlannerWindow,
+): SprayRecordInput {
+  const startMs = Date.parse(window.start);
+  const endMs = Date.parse(window.end);
+  const hours = result.hours.filter((hour) => {
+    const time = Date.parse(hour.start);
+    return time >= startMs && time < endMs;
+  });
+  const first = hours[0];
+  if (!first) throw new Error(`No forecast hour was found at ${window.start}.`);
+
+  const clauses = new Map<string, SprayRecordClause>();
+  for (const hour of hours) {
+    for (const [kind, citations] of [
+      ["FIELD CHECK", hour.checks] as const,
+      ["ADVISORY", hour.advisories] as const,
+    ]) {
+      for (const citation of citations) {
+        const clause: SprayRecordClause = {
+          kind,
+          product: citation.product,
+          page: String(citation.page),
+          quote: citation.quote,
+        };
+        clauses.set(JSON.stringify(clause), clause);
+      }
+    }
+  }
+
+  return {
+    fieldName,
+    lat: result.lat,
+    lon: result.lon,
+    windowStart: window.start,
+    windowEnd: window.end,
+    source: result.source,
+    forecastFetchedAt: result.fetchedAt,
+    weather: {
+      temperature: shownRecordValue(first.temp_f, "°F"),
+      wind: shownRecordValue(first.wind),
+      rainChance: shownRecordValue(first.pop, "%"),
+      sunAltitude: `${first.sun_alt.toFixed(1)}°`,
+    },
+    products: result.registrations.map((reg) => {
+      const label = labels[reg];
+      if (!label) throw new Error(`No accepted label metadata was found for EPA Reg. ${reg}.`);
+      return {
+        product: label.product,
+        reg: label.reg,
+        accepted: label.accepted,
+        restrictedUse: isRestrictedUseLabel(label),
+      };
+    }),
+    clauses: [...clauses.values()],
+  };
+}
+
 function Results({ result, labels, pointName: selectedPointName, jobHours, windows, products, usedRules, selectedHour, onSelectHour, onSelectWindow }: {
   result: PlannerResult;
   labels: LabelIndex;
@@ -415,6 +485,17 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
     acc[hour.state] += 1;
     return acc;
   }, { PERMITTED: 0, FIELD_CHECK: 0, BLOCKED: 0 });
+  const allPermittedWindows = forecastPermittedWindows(result.hours, 1);
+  const selectedHourValue = selectedHour === null ? undefined : result.hours[selectedHour];
+  const selectedWindow = selectedHourValue?.state === "PERMITTED"
+    ? allPermittedWindows.find((window) => {
+        const selected = Date.parse(selectedHourValue.start);
+        return selected >= Date.parse(window.start) && selected < Date.parse(window.end);
+      })
+    : undefined;
+  const selectedSprayRecord = selectedWindow
+    ? sprayRecordForWindow(result, labels, selectedPointName, selectedWindow)
+    : undefined;
 
   return (
     <section aria-labelledby="results-heading" className="section-card mx-auto mt-5 max-w-[92rem] bg-[#fbf7ee] px-4 py-9 text-[#14213d] sm:px-8 lg:px-12">
@@ -442,15 +523,16 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
         ) : (
           <ol className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {windows.map((window, index) => (
-              <li key={`${window.start}-${index}`}>
+              <li key={`${window.start}-${index}`} className="rounded-2xl border-2 border-[#14213d] bg-[#fbf7ee] p-3 text-[#14213d]">
                 <button
                   type="button"
                   onClick={() => onSelectWindow(window.start)}
-                  className="min-h-20 w-full rounded-2xl border-2 border-[#14213d] bg-[#fbf7ee] px-4 py-3 text-left text-[#14213d] outline-offset-2 transition-transform hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-white"
+                  className="min-h-16 w-full rounded-xl px-2 py-2 text-left outline-offset-2 transition-transform hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#216a38]"
                 >
                   <span className="block text-sm font-black">{formatWindowTime(window.start)} to {formatWindowTime(window.end)}</span>
                   <span className="mt-1 block text-sm font-semibold">{window.length} consecutive {window.length === 1 ? "hour" : "hours"}</span>
                 </button>
+                <SprayRecordButton input={sprayRecordForWindow(result, labels, selectedPointName, window)} className="mt-2" />
               </li>
             ))}
           </ol>
@@ -466,14 +548,15 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
           lat={result.lat}
           lon={result.lon}
           jobHours={jobHours}
+          labels={labels}
         />
       )}
 
       <Timeline hours={result.hours} products={products} selectedIndex={selectedHour} onSelect={onSelectHour} />
       {selectedHour !== null && result.hours[selectedHour] && (
-        <HourDetail hour={result.hours[selectedHour]} labels={labels} usedRules={usedRules} />
+        <HourDetail hour={result.hours[selectedHour]} labels={labels} usedRules={usedRules} sprayRecord={selectedSprayRecord} />
       )}
-      <RulesDisclosure groups={result.ruleGroups} />
+      <RulesDisclosure groups={result.ruleGroups} labels={labels} />
     </section>
   );
 }

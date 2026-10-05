@@ -1,4 +1,6 @@
 import { Stamp } from "@/ui";
+import { ShowOnLabel, type LabelSource } from "@/ui/ShowOnLabel";
+import type { SprayRecordInput } from "@/lib/spray-record";
 import {
   displayState,
   type Citation,
@@ -6,11 +8,13 @@ import {
   type PlannerHour,
   type PlannerRule,
 } from "@/lib/planner-data";
+import { SprayRecordButton } from "./SprayRecordButton";
 
 type HourDetailProps = {
   hour: PlannerHour;
   labels: LabelIndex;
   usedRules: PlannerRule[];
+  sprayRecord?: SprayRecordInput;
 };
 
 const detailTime = new Intl.DateTimeFormat("en-US", {
@@ -26,14 +30,27 @@ function shown(value: unknown, suffix = ""): string {
   return value === null || value === undefined || value === "" ? "Not supplied" : `${String(value)}${suffix}`;
 }
 
-function labelUrl(citation: Citation, labels: LabelIndex, rules: PlannerRule[]): string | null {
+function labelSource(citation: Citation, labels: LabelIndex, rules: PlannerRule[]): LabelSource | null {
   const rule = rules.find((candidate) => candidate.id === citation.rule && candidate.product === citation.product);
-  if (rule?.reg && labels[rule.reg]) return labels[rule.reg].url;
+  const page = Number(citation.page);
+  if (!Number.isInteger(page) || page < 1) return null;
+  if (rule?.reg && labels[rule.reg]) {
+    const label = labels[rule.reg];
+    return {
+      reg: rule.reg,
+      product: label.product,
+      accepted: label.accepted,
+      url: label.url,
+      page,
+      quote: citation.quote,
+      quoteCheck: rule.quote_check,
+    };
+  }
   const label = Object.values(labels).find((candidate) => candidate.product === citation.product);
-  return label?.url ?? null;
+  return label ? { ...label, page, quote: citation.quote } : null;
 }
 
-export function HourDetail({ hour, labels, usedRules }: HourDetailProps) {
+export function HourDetail({ hour, labels, usedRules, sprayRecord }: HourDetailProps) {
   const stampState = displayState(hour.state);
   return (
     <section id="hour-detail" aria-labelledby="hour-detail-heading" className="mt-8 scroll-mt-28 rounded-[2rem] border-[3px] border-[#14213d] bg-white p-5 shadow-[6px_8px_0_#14213d] sm:p-7">
@@ -53,6 +70,8 @@ export function HourDetail({ hour, labels, usedRules }: HourDetailProps) {
         <WeatherFact term="Rain chance" value={shown(hour.pop, "%")} />
         <WeatherFact term="Sun altitude" value={`${hour.sun_alt.toFixed(1)}°`} />
       </dl>
+
+      {sprayRecord ? <SprayRecordButton input={sprayRecord} className="mt-5" /> : null}
 
       <CitationSection
         title="Blocking clauses"
@@ -112,7 +131,7 @@ function CitationSection({ title, empty, citations, kind, labels, usedRules }: {
       ) : (
         <div className="mt-3 grid gap-4 lg:grid-cols-2">
           {citations.map((citation, index) => {
-            const source = labelUrl(citation, labels, usedRules);
+            const source = labelSource(citation, labels, usedRules);
             return (
               <article
                 data-quote-card
@@ -131,14 +150,7 @@ function CitationSection({ title, empty, citations, kind, labels, usedRules }: {
                 </blockquote>
                 <p className="mt-3 text-sm font-bold"><span className="text-[#14213d]/60">Why: </span>{citation.why}</p>
                 {source ? (
-                  <a
-                    href={`${source}#page=${encodeURIComponent(String(citation.page))}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-4 inline-flex min-h-11 items-center rounded-full border-2 border-[#14213d] bg-white px-4 py-2 text-sm font-extrabold underline decoration-2 underline-offset-4 outline-offset-2 hover:bg-[#9fd3f2]/35 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#14213d]"
-                  >
-                    Open the EPA label, page {String(citation.page)}
-                  </a>
+                  <ShowOnLabel source={source} className="mt-4" />
                 ) : (
                   <p className="mt-4 text-sm font-bold text-[#d1433f]">No EPA source URL was supplied for this product.</p>
                 )}

@@ -1,4 +1,4 @@
-import { mkdir } from "node:fs/promises";
+import { mkdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
@@ -19,10 +19,43 @@ test("the recorded planner exposes every hour and its source quote", async ({ pa
   await expect(firstBlocked).toBeVisible();
   await firstBlocked.click();
 
-  const quoteCard = page.locator("[data-quote-card]").first();
+  const quoteCard = page.locator("#hour-detail [data-quote-card]").first();
   await expect(quoteCard).toBeVisible();
   await expect(quoteCard).toContainText("Exact label quote");
   await expect(quoteCard).toContainText(/Page \d+/);
+});
+
+test("the label dialog reports a proxy failure and returns focus", async ({ page }) => {
+  await page.route("**/api/label-pdf/**", (route) => route.fulfill({
+    status: 502,
+    contentType: "text/plain; charset=utf-8",
+    body: "The EPA response was not a PDF. The %PDF- signature was missing.",
+  }));
+  await openReplay(page);
+  await page.locator('[data-hour-cell][data-state="BLOCKED"]').first().click();
+
+  const trigger = page.locator("[data-quote-card]").first().getByRole("button", { name: /Show on the label, page/ });
+  await trigger.click();
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("alert")).toContainText("The EPA response was not a PDF");
+  await expect(dialog.getByRole("button", { name: "Close" })).toBeFocused();
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).not.toBeVisible();
+  await expect(trigger).toBeFocused();
+});
+
+test("a permitted window downloads a real PDF file", async ({ page }) => {
+  await openReplay(page);
+  const downloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Download spray record (PDF)" }).first().click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toMatch(/\.pdf$/u);
+  const file = await download.path();
+  expect(file).not.toBeNull();
+  const bytes = await readFile(file!);
+  expect(bytes.subarray(0, 5).toString("ascii")).toBe("%PDF-");
 });
 
 test("the constraint panel runs an in-memory what-if through the planner", async ({ page }) => {
@@ -82,7 +115,7 @@ test("the phone timeline groups hours into runs that open the existing detail", 
   await expect(firstRun).toBeVisible();
   await expect(firstRun).toHaveCSS("min-height", "44px");
   await firstRun.click();
-  await expect(page.locator("[data-quote-card]").first()).toContainText("Exact label quote");
+  await expect(page.locator("#hour-detail [data-quote-card]").first()).toContainText("Exact label quote");
 });
 
 test("the last hour of a full day stays inside its card", async ({ page }) => {

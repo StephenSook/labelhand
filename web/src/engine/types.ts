@@ -13,6 +13,7 @@ export interface Rule {
   unit: string | null;
   modality: string;
   quote: string;
+  quote_check?: string;
   [key: string]: unknown;
 }
 

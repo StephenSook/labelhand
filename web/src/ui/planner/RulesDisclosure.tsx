@@ -1,6 +1,7 @@
-import type { FilteredRules } from "@/lib/planner-data";
+import type { FilteredRules, LabelIndex } from "@/lib/planner-data";
+import { ShowOnLabel } from "@/ui/ShowOnLabel";
 
-export function RulesDisclosure({ groups }: { groups: FilteredRules[] }) {
+export function RulesDisclosure({ groups, labels }: { groups: FilteredRules[]; labels: LabelIndex }) {
   const usedCount = groups.reduce((sum, group) => sum + group.used.length, 0);
   const skippedCount = groups.reduce((sum, group) => sum + group.skipped.length, 0);
 
@@ -27,8 +28,11 @@ export function RulesDisclosure({ groups }: { groups: FilteredRules[] }) {
               <p className="mt-2 font-semibold">No rule from this product passed the topic check.</p>
             ) : (
               <div className="mt-2 grid gap-3 lg:grid-cols-2">
-                {group.used.map((rule) => (
-                  <article key={`${group.product}-${rule.id}`} className="rounded-2xl border-2 border-[#14213d] bg-white p-4">
+                {group.used.map((rule) => {
+                  const label = rule.reg ? labels[rule.reg] : undefined;
+                  const page = Number(rule.page);
+                  return (
+                  <article data-quote-card key={`${group.product}-${rule.id}`} className="rounded-2xl border-2 border-[#14213d] bg-white p-4">
                     <dl className="grid grid-cols-2 gap-x-3 gap-y-1 text-sm">
                       <RuleFact term="Rule" value={rule.id} />
                       <RuleFact term="Page" value={String(rule.page)} />
@@ -39,8 +43,23 @@ export function RulesDisclosure({ groups }: { groups: FilteredRules[] }) {
                     <blockquote className="mt-1 border-l-4 border-[#2f8f4e] pl-3 text-sm font-semibold leading-relaxed">
                       {rule.quote}
                     </blockquote>
+                    {label && Number.isInteger(page) && page > 0 ? (
+                      <ShowOnLabel
+                        className="mt-4"
+                        source={{
+                          reg: label.reg,
+                          product: label.product,
+                          accepted: label.accepted,
+                          url: label.url,
+                          page,
+                          quote: rule.quote,
+                          quoteCheck: rule.quote_check,
+                        }}
+                      />
+                    ) : null}
                   </article>
-                ))}
+                  );
+                })}
               </div>
             )}
 

@@ -17,7 +17,7 @@ Labelhand reads the full EPA label of every product in the tank and turns each r
 
 It never says a spray is legal. The applicator stays in charge.
 
-> Built for the **Nebius x NVIDIA Global AI Hackathon** (Best Apps & Agents). Work in progress: the label compiler and planner kernel run today; the web app, phone call, application record and mobile apps are being built.
+> Built for the **Nebius x NVIDIA Global AI Hackathon** (Best Apps & Agents). Work in progress: the label compiler, planner kernel, web app, source-label viewer and browser-generated application record run today. The phone call and mobile apps are being built.
 
 ## How it works
 
@@ -149,6 +149,26 @@ pytest -q
 ## Data sources
 - **EPA Pesticide Product Label System (PPLS)** for label PDFs. Labels are downloaded from EPA at run time and are not redistributed here; compiled rules keep short quoted clauses with page numbers and a link to the source PDF.
 - **National Weather Service API** (`api.weather.gov`) for hourly forecasts and station observations.
+
+### Spray record source and status
+
+The spray record uses the last effective text of 7 CFR 110.3 as a former federal checklist. USDA removed 7 CFR part 110 effective July 11, 2025, so Labelhand does not present the former 14-day deadline as a current federal requirement. The source record is the [July 10, 2025 eCFR XML](https://www.ecfr.gov/api/versioner/v1/full/2025-07-10/title-7.xml?part=110), and the rescission is [90 FR 20083](https://www.govinfo.gov/content/pkg/FR-2025-05-12/pdf/FR-2025-05-12.pdf).
+
+The former section required these elements exactly:
+
+> (1) The brand or product name, and the EPA registration number of the restricted use pesticide that was applied;
+>
+> (2) The total amount of the restricted use pesticide applied;
+>
+> (3) The location of the application, the size of area treated, and the crop, commodity, stored product, or site to which a restricted use pesticide was applied.
+>
+> (4) The month, day, and year on which the restricted use pesticide application occurred; and
+>
+> (5) The name and certification number (if applicable) of the certified applicator who applied or who supervised the application of the restricted use pesticide.
+
+Former 7 CFR 110.3(c) stated: "The information required in this section shall be recorded within 14 days following the pesticide application."
+
+The generated PDF includes those former checklist fields plus blank actual start and end times and wind measured at the boom. Users must follow current state and other applicable recordkeeping requirements. A pypdf reading of all 32 pages in the three accepted PDFs found no `RESTRICTED USE PESTICIDE` phrase in Folex 6 EC, Dropp SC, or Prep.
 
 ## License
 Apache-2.0. Not legal or agronomic advice: the label is the law, and the applicator decides.

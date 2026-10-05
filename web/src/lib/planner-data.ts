@@ -18,6 +18,8 @@ export type LabelRecord = {
   product: string;
   accepted: string;
   url: string;
+  bytes: number;
+  sha256: string;
 };
 
 export type LabelIndex = Record<string, LabelRecord>;
@@ -107,9 +109,18 @@ export function parseLabelIndex(value: unknown): LabelIndex {
       typeof reg === "string" &&
       typeof candidate.product === "string" &&
       typeof candidate.accepted === "string" &&
-      typeof candidate.url === "string"
+      typeof candidate.url === "string" &&
+      typeof candidate.bytes === "number" &&
+      typeof candidate.sha256 === "string"
     ) {
-      labels[reg] = { reg, product: candidate.product, accepted: candidate.accepted, url: candidate.url };
+      labels[reg] = {
+        reg,
+        product: candidate.product,
+        accepted: candidate.accepted,
+        url: candidate.url,
+        bytes: candidate.bytes,
+        sha256: candidate.sha256,
+      };
     }
   }
   if (Object.keys(labels).length === 0) {

@@ -105,6 +105,7 @@ export type AgentCheckSnapshot = {
   hours: PlannerHour[];
   ruleGroups: FilterRulesResult[];
   windows: ForecastWindow[];
+  labels: LabelIndex;
 };
 
 export type AgentToolRuntime = {
@@ -259,6 +260,7 @@ async function checkTank(args: unknown, runtime: AgentToolRuntime): Promise<Agen
     hours,
     ruleGroups,
     windows,
+    labels,
   };
 
   return {
