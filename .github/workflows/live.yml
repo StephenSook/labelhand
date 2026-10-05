@@ -1,0 +1,32 @@
+name: live
+
+# Probes the deployed judge door from a clean browser: the NWS forecast must be fetched live by the browser,
+# drawn on screen, labelled LIVE, with no console errors. Runs through judging (Dec 1-15). A scheduled run is not a
+# liveness guarantee (GitHub delays cron), so check the newest run's age, not only its colour.
+on:
+  schedule:
+    - cron: "17 11,23 * * *"
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.17.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: web/pnpm-lock.yaml
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Live check of the production judge door
+        run: node scripts/live-check.mjs https://labelhand-web.vercel.app
