@@ -1,6 +1,6 @@
 """Scorer regressions for planner rules whose modality changes behavior."""
 
-from eval.score import score_label
+from score import score_label  # eval/ is on pytest's pythonpath (pyproject.toml), like compiler/ and engine/
 
 
 def test_acting_rule_matching_only_advisory_gold_is_false_positive():
