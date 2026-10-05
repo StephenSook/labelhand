@@ -153,7 +153,8 @@ test("the constraint panel runs an in-memory what-if through the planner", async
 });
 
 test("the home, planner, and judge pages never overflow their viewports", async ({ page }) => {
-  for (const width of [390, 768, 1440]) {
+  // 768 switches phone runs to the grid; 1024 widens the grid to 24 hour columns.
+  for (const width of [390, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 });
 
     for (const route of ["/", replayPath, "/judge"]) {
