@@ -41,6 +41,7 @@ PLANNER = {
     "droplet_size",
     "reentry_hours",
 }
+ACTING = {"MUST", "MUST_NOT"}
 
 
 def group(param: str) -> frozenset:
@@ -79,17 +80,29 @@ def score_label(gold_items: list[dict], rules: list[dict]) -> dict:
     def matches_gold(r: dict) -> bool:
         return any(quote_matches(g["key"], r["quote"]) and group(g["param"]) == group(r["param"]) for g in gold_items)
 
+    def matching_gold(r: dict) -> list[dict]:
+        return [g for g in gold_items if quote_matches(g["key"], r["quote"]) and group(g["param"]) == group(r["param"])]
+
     planner_rules = [r for r in rules if r["param"] in PLANNER]
     good = [r for r in planner_rules if matches_gold(r)]
     false_pos = [{"id": r["id"], "param": r["param"], "modality": r["modality"], "quote": r["quote"][:120]} for r in planner_rules if r not in good]
     # Acting rules: the ones engine/windows.py can turn into BLOCKED or FIELD_CHECK (a parameter it evaluates,
     # a MUST or MUST_NOT modality, and the topic word in the quote). A wrong acting rule changes an hour's state;
     # a wrong advisory rule only adds a note. This is the precision that matters for harm.
-    acting = [r for r in rules if r["param"] in TOPIC and r["modality"] in ("MUST", "MUST_NOT") and all(w in r["quote"].lower() for w in TOPIC[r["param"]])]
-    acting_good = [r for r in acting if matches_gold(r)]
-    acting_fp = [{"id": r["id"], "param": r["param"], "quote": r["quote"][:120]} for r in acting if r not in acting_good]
+    acting = [r for r in rules if r["param"] in TOPIC and r["modality"] in ACTING and all(w in r["quote"].lower() for w in TOPIC[r["param"]])]
+    acting_good = [r for r in acting if any(g["modality"] in ACTING for g in matching_gold(r))]
+    acting_fp = [
+        {
+            "id": r["id"],
+            "param": r["param"],
+            "gold_modalities": sorted({g["modality"] for g in matching_gold(r)}),
+            "quote": r["quote"][:120],
+        }
+        for r in acting
+        if r not in acting_good
+    ]
     # Acting recall: gold clauses the planner must enforce, and whether an acting rule enforces each one.
-    gold_acting = [g for g in gold_items if g["param"] in TOPIC and g["modality"] in ("MUST", "MUST_NOT")]
+    gold_acting = [g for g in gold_items if g["param"] in TOPIC and g["modality"] in ACTING]
     gold_acting_hit = [g for g in gold_acting if any(quote_matches(g["key"], r["quote"]) and group(g["param"]) == group(r["param"]) for r in acting)]
     acting_missed = [g["id"] for g in gold_acting if g not in gold_acting_hit]
     n = len(gold_items)

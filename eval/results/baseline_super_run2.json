@@ -16,8 +16,8 @@
    "modality_acc": 0.692,
    "planner_precision": 0.696,
    "acting_rules": 7,
-   "acting_good": 5,
-   "acting_precision": 0.714,
+   "acting_good": 4,
+   "acting_precision": 0.571,
    "gold_acting": 5,
    "gold_acting_hit": 4,
    "acting_recall": 0.8,
@@ -102,12 +102,22 @@
     {
      "id": "5481-504-p7-9",
      "param": "wind_speed_mph",
+     "gold_modalities": [],
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use \u00bd swath displacement upwind at the downwind edge of "
     },
     {
      "id": "5481-504-p9-2",
      "param": "temperature_inversion",
+     "gold_modalities": [],
      "quote": "Temperature inversions are characterized by increasing temperature with altitude and are common on nights with limited c"
+    },
+    {
+     "id": "5481-504-p9-3",
+     "param": "wind_speed_mph",
+     "gold_modalities": [
+      "ADVISORY"
+     ],
+     "quote": "Application should be avoided belo w 2 mph due to variable wind direction and high inversion potential."
     }
    ],
    "model": "nvidia/nemotron-3-super-120b-a12b"
@@ -127,8 +137,8 @@
    "modality_acc": 0.6,
    "planner_precision": 0.625,
    "acting_rules": 3,
-   "acting_good": 3,
-   "acting_precision": 1.0,
+   "acting_good": 2,
+   "acting_precision": 0.667,
    "gold_acting": 2,
    "gold_acting_hit": 2,
    "acting_recall": 1.0,
@@ -167,7 +177,16 @@
      "quote": "Application to bottom 1/3 of plant only recommended."
     }
    ],
-   "acting_false_positives": [],
+   "acting_false_positives": [
+    {
+     "id": "264-700-p4-2",
+     "param": "rainfall_expected",
+     "gold_modalities": [
+      "ADVISORY"
+     ],
+     "quote": "Rainfall within 24 hours after application will reduce the effectiveness of Dropp\u00ae."
+    }
+   ],
    "model": "nvidia/nemotron-3-super-120b-a12b"
   },
   "264-418": {
@@ -185,8 +204,8 @@
    "modality_acc": 0.625,
    "planner_precision": 0.615,
    "acting_rules": 7,
-   "acting_good": 6,
-   "acting_precision": 0.857,
+   "acting_good": 4,
+   "acting_precision": 0.571,
    "gold_acting": 3,
    "gold_acting_hit": 3,
    "acting_recall": 1.0,
@@ -232,8 +251,25 @@
    ],
    "acting_false_positives": [
     {
+     "id": "264-418-p6-3",
+     "param": "temperature_inversion",
+     "gold_modalities": [
+      "ADVISORY"
+     ],
+     "quote": "Avoid applications during temperature inversions."
+    },
+    {
+     "id": "264-418-p6-4",
+     "param": "wind_speed_mph",
+     "gold_modalities": [
+      "ADVISORY"
+     ],
+     "quote": "AVOID APPLICATIONS DURING GUSTY WIND CONDITIONS."
+    },
+    {
      "id": "264-418-p11-1",
      "param": "rain_free_hours",
+     "gold_modalities": [],
      "quote": "Continuously pump or drain rinsate into application equipment or rinsate collection system while pressure rinsing."
     }
    ],
@@ -250,7 +286,7 @@
   "planner_rules": 44,
   "planner_good": 29,
   "acting_rules": 17,
-  "acting_good": 14,
+  "acting_good": 10,
   "gold_acting": 10,
   "gold_acting_hit": 9,
   "coverage_recall": 0.652,
@@ -258,7 +294,7 @@
   "value_exact": 0.941,
   "modality_acc": 0.654,
   "planner_precision": 0.659,
-  "acting_precision": 0.824,
+  "acting_precision": 0.588,
   "acting_recall": 0.9
  }
 }

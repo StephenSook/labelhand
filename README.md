@@ -58,15 +58,17 @@ Three real Georgia cotton defoliation labels: Folex 6 EC (EPA Reg. 5481-504, acc
 
 | Configuration | Coverage | Typed recall | Value exact | Modality | Acting precision | Acting recall |
 |---|---|---|---|---|---|---|
-| Nemotron 3 Super, one pass | 0.652 | 0.565 | 0.941 | 0.654 | 0.824 | 0.900 |
+| Nemotron 3 Super, one pass | 0.652 | 0.565 | 0.941 | 0.654 | 0.588 | 0.900 |
 | + Nemotron 3 Ultra typing pass | 0.652 | 0.609 | 0.947 | 0.964 | 0.909 | 0.900 |
-| + Ultra second extraction pass (union) | 0.891 | 0.848 | 0.931 | 0.897 | 0.800 | 1.000 |
+| + Ultra second extraction pass (union) | 0.891 | 0.848 | 0.931 | 0.897 | 0.458 | 1.000 |
 | + typing v2 (stricter definitions) | 0.891 | 0.848 | 0.897 | 0.872 | 1.000 | **0.800** |
 | + typing v3 (types the constraint the first reading named) | 0.891 | 0.891 | 0.935 | **0.902** | **1.000** | **1.000** |
-| + unit restore in code, extraction prompt p2 (one rule per constraint or alternative) | **0.957** | **0.957** | **0.941** | 0.841 | **1.000** | **1.000** |
-| **Shipped `.ship` merge of three p2 + typing v3 + OCR + modality-floor runs** | **1.000** | **1.000** | 0.944 | 0.848 | **1.000 (13/13)** | **1.000 (10/10)** |
+| + unit restore in code, extraction prompt p2 (one rule per constraint or alternative) | **0.957** | **0.957** | **0.941** | 0.841 | **0.909 (10/11)** | **1.000** |
+| **Shipped `.ship` merge of three p2 + typing v3 + OCR + modality-floor runs** | **1.000** | **1.000** | 0.944 | 0.848 | **0.923 (12/13)** | **1.000 (10/10)** |
 
 *Acting* rules are the ones the planner can turn into BLOCKED or FIELD CHECK. Acting recall is the safety number: a missed wind or rain limit would mark a forbidden hour as permitted. Typing v2 raised precision but dropped a wind limit hidden in a sentence that also set a boom height, so v3 replaced it.
+
+**Scorer correction, 2026-10-05.** Acting precision now requires an acting rule to match a gold clause whose modality is also MUST or MUST_NOT. Previously, Folex rule `5481-504-p10-5` was counted as correct because its temperature parameter and quote matched gold clause F-TEMP-60, even though gold marks that clause ADVISORY. In the numbers shown here, Super moved from 0.824 to 0.588, raw union from 0.800 to 0.458, p2 run 1 and its modality-floor and OCR variants from 1.000 to 0.909 (10/11), and the acting-wins `.ship` merge from 1.000 (13/13) to 0.923 (12/13). Planner precision is unchanged.
 
 The planner ships the `.ship` row. The pre-registered decision branch was `MERGED_SHIPS`: merge the three measured p2 + typing v3 + OCR + PR Notice 2000-5 modality-floor runs by clause, record every source run, and prefer an acting modality when repeated runs disagree. [`eval/results/ship.json`](eval/results/ship.json) is the committed score receipt. The p2 pipeline's Token Factory cost on three labels was $0.53 per run (Super pass $0.033, Ultra pass $0.18, typing $0.31).
 
@@ -88,7 +90,7 @@ The cold-condition unit case uses a 56°F night low. It blocks Folex in a mixed 
 
 | p2 run | Coverage | Value exact | Modality | Acting precision | Acting recall |
 |---|---|---|---|---|---|
-| 1 | 0.957 | 0.941 | 0.841 | 1.000 (11/11) | 1.000 (10/10) |
+| 1 | 0.957 | 0.941 | 0.841 | 0.909 (10/11) | 1.000 (10/10) |
 | 2 | 0.957 | 0.971 | 0.886 | 1.000 (11/11) | 1.000 (10/10) |
 | 3 | 0.957 | 0.941 | 0.864 | 1.000 (10/10) | **0.900 (9/10)** |
 
@@ -100,7 +102,7 @@ Coverage held, but run 3 missed an acting clause. Folex's "When minimum night te
 
 | p2 run, with the modality floor | Coverage | Value exact | Modality | Acting precision | Acting recall |
 |---|---|---|---|---|---|
-| 1 | 0.957 | 0.941 | 0.841 | 1.000 (11/11) | 1.000 (10/10) |
+| 1 | 0.957 | 0.941 | 0.841 | 0.909 (10/11) | 1.000 (10/10) |
 | 2 | 0.957 | 0.971 | 0.886 | 1.000 (12/12) | 1.000 (10/10) |
 | 3 | 0.957 | 0.941 | 0.886 | 1.000 (11/11) | **1.000 (10/10)** |
 
@@ -110,7 +112,7 @@ Command: `python compiler/modality.py 5481-504 264-700 264-418 --suffix .union.p
 
 | p2 run, modality floor + second reading | Coverage | Typed recall | Value exact | Modality | Acting precision | Acting recall |
 |---|---|---|---|---|---|---|
-| 1 | **1.000 (46/46)** | **1.000** | 0.944 | 0.848 | 1.000 (11/11) | 1.000 (10/10) |
+| 1 | **1.000 (46/46)** | **1.000** | 0.944 | 0.848 | 0.909 (10/11) | 1.000 (10/10) |
 | 2 | **1.000 (46/46)** | **1.000** | 0.972 | 0.891 | 1.000 (12/12) | 1.000 (10/10) |
 | 3 | **1.000 (46/46)** | **1.000** | 0.944 | 0.891 | 1.000 (11/11) | 1.000 (10/10) |
 

@@ -60,6 +60,7 @@
     {
      "id": "5481-504-p7-9",
      "param": "wind_speed_mph",
+     "gold_modalities": [],
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use \u00bd swath displacement upwind at the downwind edge of "
     }
    ],

@@ -16,8 +16,8 @@
    "modality_acc": 0.875,
    "planner_precision": 0.833,
    "acting_rules": 6,
-   "acting_good": 6,
-   "acting_precision": 1.0,
+   "acting_good": 5,
+   "acting_precision": 0.833,
    "gold_acting": 5,
    "gold_acting_hit": 5,
    "acting_recall": 1.0,
@@ -68,7 +68,16 @@
      "quote": "For best results, apply the combination to mature cotton plants with 60% or more open bolls."
     }
    ],
-   "acting_false_positives": [],
+   "acting_false_positives": [
+    {
+     "id": "5481-504-p10-5",
+     "param": "air_temperature_f",
+     "gold_modalities": [
+      "ADVISORY"
+     ],
+     "quote": "\u2022 Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after applic"
+    }
+   ],
    "model": "nvidia/nemotron-3-super-120b-a12b+nvidia/Nemotron-3-Ultra-550b-a55b"
   },
   "264-700": {
@@ -234,7 +243,7 @@
   "planner_rules": 82,
   "planner_good": 59,
   "acting_rules": 11,
-  "acting_good": 11,
+  "acting_good": 10,
   "gold_acting": 10,
   "gold_acting_hit": 10,
   "coverage_recall": 1.0,
@@ -242,7 +251,7 @@
   "value_exact": 0.944,
   "modality_acc": 0.848,
   "planner_precision": 0.72,
-  "acting_precision": 1.0,
+  "acting_precision": 0.909,
   "acting_recall": 1.0
  }
 }

@@ -149,8 +149,8 @@
    "modality_acc": 0.833,
    "planner_precision": 0.615,
    "acting_rules": 5,
-   "acting_good": 5,
-   "acting_precision": 1.0,
+   "acting_good": 4,
+   "acting_precision": 0.8,
    "gold_acting": 3,
    "gold_acting_hit": 3,
    "acting_recall": 1.0,
@@ -219,7 +219,16 @@
      "quote": "Cool, above 65\u00b0F"
     }
    ],
-   "acting_false_positives": [],
+   "acting_false_positives": [
+    {
+     "id": "264-418-p6-15",
+     "param": "temperature_inversion",
+     "gold_modalities": [
+      "ADVISORY"
+     ],
+     "quote": "Avoid applications during temperature inversions."
+    }
+   ],
    "model": "nvidia/nemotron-3-super-120b-a12b+nvidia/Nemotron-3-Ultra-550b-a55b"
   }
  },
@@ -233,7 +242,7 @@
   "planner_rules": 85,
   "planner_good": 63,
   "acting_rules": 11,
-  "acting_good": 11,
+  "acting_good": 10,
   "gold_acting": 10,
   "gold_acting_hit": 9,
   "coverage_recall": 0.957,
@@ -241,7 +250,7 @@
   "value_exact": 0.941,
   "modality_acc": 0.864,
   "planner_precision": 0.741,
-  "acting_precision": 1.0,
+  "acting_precision": 0.909,
   "acting_recall": 0.9
  }
 }

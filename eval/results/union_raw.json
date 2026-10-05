@@ -16,8 +16,12 @@
    "modality_acc": 0.706,
    "planner_precision": 0.556,
    "acting_rules": 11,
-   "acting_good": 7,
-   "acting_precision": 0.636,
+   "acting_good": 5,
+   "acting_precision": 0.455,
+   "gold_acting": 5,
+   "gold_acting_hit": 5,
+   "acting_recall": 1.0,
+   "acting_missed": [],
    "missed": [
     "F-REI-7",
     "F-REI-10"
@@ -180,21 +184,41 @@
     {
      "id": "5481-504-p7-9",
      "param": "wind_speed_mph",
+     "gold_modalities": [],
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use \u00bd swath displacement upwind at the downwind edge of "
     },
     {
      "id": "5481-504-p9-2",
      "param": "temperature_inversion",
+     "gold_modalities": [],
      "quote": "Temperature inversions are characterized by increasing temperature with altitude and are common on nights with limited c"
+    },
+    {
+     "id": "5481-504-p9-3",
+     "param": "wind_speed_mph",
+     "gold_modalities": [
+      "ADVISORY"
+     ],
+     "quote": "Application should be avoided belo w 2 mph due to variable wind direction and high inversion potential."
+    },
+    {
+     "id": "5481-504-p6-1",
+     "param": "rainfall_expected",
+     "gold_modalities": [
+      "ADVISORY"
+     ],
+     "quote": "Application of FOLEX 6 EC is not recommended when a heavy rainfall is expected within 1 hour after treatment."
     },
     {
      "id": "5481-504-p8-3",
      "param": "wind_speed_mph",
+     "gold_modalities": [],
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use \u00bd swath displacement upwind at the downwind edge of "
     },
     {
      "id": "5481-504-p9-7",
      "param": "wind_speed_mph",
+     "gold_modalities": [],
      "quote": "Applicators need to be familiar with local wind patterns and terrain that could affect spray drift."
     }
    ],
@@ -215,8 +239,12 @@
    "modality_acc": 0.5,
    "planner_precision": 0.462,
    "acting_rules": 5,
-   "acting_good": 4,
-   "acting_precision": 0.8,
+   "acting_good": 2,
+   "acting_precision": 0.4,
+   "gold_acting": 2,
+   "gold_acting_hit": 2,
+   "acting_recall": 1.0,
+   "acting_missed": [],
    "missed": [
     "D-LETTUCE-AIR",
     "D-NIGHT-ALONE",
@@ -276,8 +304,25 @@
    ],
    "acting_false_positives": [
     {
+     "id": "264-700-p4-2",
+     "param": "rainfall_expected",
+     "gold_modalities": [
+      "ADVISORY"
+     ],
+     "quote": "Rainfall within 24 hours after application will reduce the effectiveness of Dropp\u00ae."
+    },
+    {
+     "id": "264-700-p6-11",
+     "param": "night_temperature_f",
+     "gold_modalities": [
+      "ADVISORY"
+     ],
+     "quote": "If nighttime temperatures are expected to fall below 60\u00b0F, unsatisfactory defoliation and regrowth inhibition may result"
+    },
+    {
      "id": "264-700-p7-5",
      "param": "night_temperature_f",
+     "gold_modalities": [],
      "quote": "Less than ideal conditions are those when the nighttime temperatures are expected to be 60\u00b0F on the date of application "
     }
    ],
@@ -298,8 +343,12 @@
    "modality_acc": 0.636,
    "planner_precision": 0.306,
    "acting_rules": 8,
-   "acting_good": 6,
-   "acting_precision": 0.75,
+   "acting_good": 4,
+   "acting_precision": 0.5,
+   "gold_acting": 3,
+   "gold_acting_hit": 3,
+   "acting_recall": 1.0,
+   "acting_missed": [],
    "missed": [],
    "mistyped": [
     {
@@ -464,13 +513,31 @@
    ],
    "acting_false_positives": [
     {
+     "id": "264-418-p6-3",
+     "param": "temperature_inversion",
+     "gold_modalities": [
+      "ADVISORY"
+     ],
+     "quote": "Avoid applications during temperature inversions."
+    },
+    {
+     "id": "264-418-p6-4",
+     "param": "wind_speed_mph",
+     "gold_modalities": [
+      "ADVISORY"
+     ],
+     "quote": "AVOID APPLICATIONS DURING GUSTY WIND CONDITIONS."
+    },
+    {
      "id": "264-418-p11-1",
      "param": "rain_free_hours",
+     "gold_modalities": [],
      "quote": "Continuously pump or drain rinsate into application equipment or rinsate collection system while pressure rinsing."
     },
     {
      "id": "264-418-p6-17",
      "param": "wind_speed_mph",
+     "gold_modalities": [],
      "quote": "Applicators need to be familiar with local wind patterns and terrain that could affect spray drift."
     }
    ],
@@ -487,12 +554,15 @@
   "planner_rules": 94,
   "planner_good": 42,
   "acting_rules": 24,
-  "acting_good": 17,
+  "acting_good": 11,
+  "gold_acting": 10,
+  "gold_acting_hit": 10,
   "coverage_recall": 0.891,
   "typed_recall": 0.739,
   "value_exact": 0.917,
   "modality_acc": 0.647,
   "planner_precision": 0.447,
-  "acting_precision": 0.708
+  "acting_precision": 0.458,
+  "acting_recall": 1.0
  }
 }
