@@ -5,6 +5,9 @@ States (never the word "legal"):
   BLOCKED       at least one rule is violated; the reason carries the product, rule id, page and exact quote
   FIELD_CHECK   the forecast cannot decide (inversion, gusts, borderline rain chance); the applicator checks on site
 
+Advisories never change the state. They are label statements of effect ("unsatisfactory defoliation may
+result") whose weather condition the forecast meets, each with its quote and the window it was checked over.
+
 Rules reach the planner only after two deterministic filters:
   1. the compiler's guards (verbatim quote, numbers present in the quote), and
   2. a topic check here: the quote must contain the words of the parameter it was typed as. A clause about
@@ -46,6 +49,8 @@ TOPIC = {
 # the threshold is ours, shown to the user, and configurable. Between the two values the hour is a field check.
 RAIN_EXPECTED_POP = 50
 RAIN_UNSURE_POP = 20
+# Window for temperature advisories: the night low and the mean are taken over the next 24 forecast hours.
+ADVISORY_HOURS = 24
 
 
 # The rule set the planner uses: union of the Super and Ultra extraction passes, re-typed by typing pass v3.
@@ -108,35 +113,131 @@ def sun_altitude(lat: float, lon: float, t: dt.datetime) -> float:
     return math.degrees(math.asin(max(-1.0, min(1.0, cz))))
 
 
+def max_pop(periods: list[dict]) -> int:
+    return max(((q.get("probabilityOfPrecipitation") or {}).get("value") or 0 for q in periods), default=0)
+
+
+SYMBOL = {"lt": "<", "lte": "<=", "gt": ">", "gte": ">="}
+
+
+def holds(x: float, op: str, v: float) -> bool:
+    return {"lt": x < v, "lte": x <= v, "gt": x > v, "gte": x >= v}[op]
+
+
+def advisory(r: dict, i: int, periods: list[dict], wind: float = math.nan) -> str | None:
+    """Why the weather condition an ADVISORY clause names holds in the forecast at hour i, or None.
+
+    The kernel does not decide whether a clause is a warning or a recommendation; the quote says that, and it
+    travels with the advisory. Advisories never change the hour's state.
+    """
+    if r["param"] == "wind_speed_mph":
+        upper, upper_out, lower, lower_out = wind_limits(r)
+        if math.isnan(wind):
+            return None
+        if upper is not None and (wind > upper or (upper_out and wind == upper)):
+            return f"forecast wind up to {wind:g} mph {'>' if wind > upper else '='} {upper:g} mph"
+        if lower is not None and (wind < lower or (lower_out and wind == lower)):
+            return f"forecast wind {wind:g} mph {'<' if wind < lower else '='} {lower:g} mph"
+        return None
+    if r["value"] is None:
+        return None
+    v = float(r["value"])
+    ahead = periods[i : i + ADVISORY_HOURS]
+    if r["param"] in ("night_temperature_f", "air_temperature_f") and r["op"] in SYMBOL:
+        if r["param"] == "night_temperature_f":
+            temps = [q["temperature"] for q in ahead if q.get("isDaytime") is False and q.get("temperature") is not None]
+            x, what = (min(temps), "night low") if temps else (None, "")
+        else:
+            temps = [q["temperature"] for q in ahead if q.get("temperature") is not None]
+            if "mean" in r["quote"].lower():
+                x, what = (sum(temps) / len(temps), "mean") if temps else (None, "")
+            else:
+                x, what = (float(temps[0]), "temperature now") if temps else (None, "")
+        if x is not None and holds(x, r["op"], v):
+            span = "this hour" if what == "temperature now" else f"over the next {len(ahead)} h"
+            return f"forecast {what} {x:.0f} F {SYMBOL[r['op']]} {v:g} F {span}"
+    elif r["param"] in ("rain_free_hours", "rainfall_expected"):
+        n = int(v)
+        pop = max_pop(periods[i : i + n + 1])
+        if pop >= RAIN_UNSURE_POP:
+            return f"rain chance up to {pop}% within {n} h"
+    return None
+
+
+def wind_limits(r: dict) -> tuple[float | None, bool, float | None, bool]:
+    """(upper, at_upper_is_out, lower, at_lower_is_out): the wind bounds a clause sets.
+
+    Bounds are read by magnitude, because the typing model is not consistent about operator direction
+    ("Do not apply when wind speeds exceed 10 mph" arrives as gt 10 and as lte 10). The operator still says
+    whether the bound itself is allowed: "exceed 10" (gt, lte) allows 10; "less than 10" (lt) and
+    "10 or more" (gte) do not.
+    """
+    op = r["op"]
+    v = None if r["value"] is None else float(r["value"])
+    v2 = None if r.get("value2") is None else float(r["value2"])
+    if op == "between" and v is not None and v2 is not None:
+        return v2, False, v, False
+    if v is None or op not in ("gt", "gte", "lt", "lte"):
+        return None, False, None, False
+    if v >= 5:
+        return v, op in ("lt", "gte"), None, False
+    if v <= 3:
+        return None, False, v, op in ("gt", "lte")
+    return None, False, None, False
+
+
+def gate(r: dict, i: int, periods: list[dict], wind: float, alt: float) -> tuple[str, str] | None:
+    """("BLOCKED" or "FIELD_CHECK", why) for a MUST or MUST_NOT clause at hour i, or None when it is satisfied.
+
+    A clause the kernel cannot evaluate is a FIELD_CHECK that says so: an acting clause is never silently skipped.
+    """
+    param = r["param"]
+    if param == "wind_speed_mph":
+        upper, upper_out, lower, lower_out = wind_limits(r)
+        if upper is None and lower is None:
+            return "FIELD_CHECK", "wind clause the planner cannot read as a limit; check the label on site"
+        if math.isnan(wind):
+            return "FIELD_CHECK", "no wind in the forecast for this hour"
+        if upper is not None and (wind > upper or (upper_out and wind == upper)):
+            return "BLOCKED", f"forecast wind up to {wind:g} mph {'>' if wind > upper else '='} {upper:g} mph"
+        if lower is not None and (wind < lower or (lower_out and wind == lower)):
+            return "FIELD_CHECK", f"forecast wind {wind:g} mph {'<' if wind < lower else '='} {lower:g} mph: variable direction, inversion potential"
+        return None
+    if param == "temperature_inversion":
+        if alt < 3 or (alt < 20 and (math.isnan(wind) or wind < 3)):
+            w = "unknown" if math.isnan(wind) else f"{wind:g} mph"
+            return "FIELD_CHECK", f"sun {alt:.0f} deg, wind {w}: inversion possible, confirm on site"
+        return None
+    if param in ("rain_free_hours", "rainfall_expected"):
+        if not r["value"]:
+            return "FIELD_CHECK", "rain clause without a number of hours; check the label"
+        n = int(r["value"])
+        pop = max_pop(periods[i : i + n + 1])
+        if pop >= RAIN_EXPECTED_POP:
+            return "BLOCKED", f"rain chance up to {pop}% within {n} h (rain expected = {RAIN_EXPECTED_POP}%+)"
+        if pop >= RAIN_UNSURE_POP:
+            return "FIELD_CHECK", f"rain chance up to {pop}% within {n} h"
+        return None
+    return "FIELD_CHECK", f"{param} limit on the label; the planner does not evaluate it yet, check it on site"
+
+
 def evaluate(rules: list[dict], periods: list[dict], lat: float, lon: float, hours: int) -> list[dict]:
     out = []
     for i, p in enumerate(periods[:hours]):
         t = dt.datetime.fromisoformat(p["startTime"])
         wind = mph(p.get("windSpeed", ""))
-        pop_ahead = {}
-        blocked, checks = [], []
+        blocked, checks, advisories = [], [], []
         alt = sun_altitude(lat, lon, t)
         for r in rules:
             cite = {"product": r["product"], "rule": r["id"], "page": r["page"], "quote": r["quote"]}
-            if r["param"] == "wind_speed_mph" and r["value"] is not None and not math.isnan(wind):
-                limit = float(r["value"])
-                if r["op"] in ("gt", "lte") and r["value"] >= 5 and wind > limit:
-                    blocked.append({**cite, "why": f"forecast wind up to {wind:g} mph > {limit:g} mph"})
-                elif r["op"] in ("lt",) and limit <= 3 and wind < limit:
-                    checks.append({**cite, "why": f"forecast wind {wind:g} mph < {limit:g} mph: variable direction, inversion potential"})
-            elif r["param"] == "temperature_inversion" and r["modality"] == "MUST_NOT":
-                if alt < 3 or (alt < 20 and not math.isnan(wind) and wind < 3):
-                    checks.append({**cite, "why": f"sun {alt:.0f} deg, wind {wind:g} mph: inversion possible, confirm on site"})
-            elif r["param"] in ("rain_free_hours", "rainfall_expected") and r["modality"] == "MUST_NOT" and r["value"]:
-                n = int(r["value"])
-                if n not in pop_ahead:
-                    window = periods[i : i + n + 1]
-                    pop_ahead[n] = max((q.get("probabilityOfPrecipitation") or {}).get("value") or 0 for q in window)
-                pop = pop_ahead[n]
-                if pop >= RAIN_EXPECTED_POP:
-                    blocked.append({**cite, "why": f"rain chance up to {pop}% within {n} h (rain expected = {RAIN_EXPECTED_POP}%+)"})
-                elif pop >= RAIN_UNSURE_POP:
-                    checks.append({**cite, "why": f"rain chance up to {pop}% within {n} h"})
+            if r["modality"] == "ADVISORY":
+                why = advisory(r, i, periods, wind)
+                if why:
+                    advisories.append({**cite, "why": why})
+                continue
+            verdict = gate(r, i, periods, wind, alt)
+            if verdict:
+                (blocked if verdict[0] == "BLOCKED" else checks).append({**cite, "why": verdict[1]})
         state = "BLOCKED" if blocked else ("FIELD_CHECK" if checks else "PERMITTED")
         out.append(
             {
@@ -148,6 +249,7 @@ def evaluate(rules: list[dict], periods: list[dict], lat: float, lon: float, hou
                 "sun_alt": round(alt, 1),
                 "blocked": blocked,
                 "checks": checks,
+                "advisories": advisories,
             }
         )
     return out
@@ -176,7 +278,8 @@ def main() -> int:
     for h in hours:
         first = (h["blocked"] or h["checks"] or [{}])[0]
         why = f"{first.get('product', '')[:12]} p{first.get('page', '')}: {first.get('why', '')}" if first else ""
-        print(f"{h['start'][5:16]} {h['state']:11} {str(h['temp_f']):>3}F {h['wind']:>12} pop {str(h['pop']):>3}% sun {h['sun_alt']:>5} | {why}")
+        adv = f" | +{len(h['advisories'])} advisory" if h["advisories"] else ""
+        print(f"{h['start'][5:16]} {h['state']:11} {str(h['temp_f']):>3}F {h['wind']:>12} pop {str(h['pop']):>3}% sun {h['sun_alt']:>5} | {why}{adv}")
     permitted = sum(h["state"] == "PERMITTED" for h in hours)
     print(f"PERMITTED {permitted} / FIELD_CHECK {sum(h['state'] == 'FIELD_CHECK' for h in hours)} / BLOCKED {sum(h['state'] == 'BLOCKED' for h in hours)} of {len(hours)} hours")
     return 0

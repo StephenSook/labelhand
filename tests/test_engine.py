@@ -66,3 +66,72 @@ def test_tank_mix_strictest_rule_wins():
 def test_sun_altitude_is_sane():
     assert windows.sun_altitude(LAT, LON, windows.dt.datetime.fromisoformat(NOON)) > 45
     assert windows.sun_altitude(LAT, LON, windows.dt.datetime.fromisoformat("2026-10-07T02:00:00-04:00")) < -30
+
+
+def hour(start, temp, daytime, pop=0, wind="5 mph"):
+    return {"startTime": start, "windSpeed": wind, "temperature": temp, "isDaytime": daytime, "probabilityOfPrecipitation": {"value": pop}}
+
+
+NIGHT_ADV = r("night_temperature_f", "lt", 60, "ADVISORY", "If nighttime temperatures are expected to fall below 60F, unsatisfactory defoliation may result.", "t-3")
+MEAN_ADV = r("air_temperature_f", "gt", 60, "ADVISORY", "Activity is maximum when the mean 24-hour temperature is above 60F.", "t-4")
+RAIN_ADV = r("rainfall_expected", "lt", 24, "ADVISORY", "Rainfall within 24 hours after application will reduce effectiveness.", "t-5")
+
+
+def test_advisory_reports_a_cold_night_without_changing_the_state():
+    ps = [hour(NOON, 75, True)] + [hour("2026-10-08T02:00:00-04:00", 55, False)]
+    out = windows.evaluate([NIGHT_ADV], ps, LAT, LON, 1)[0]
+    assert out["state"] == "PERMITTED"
+    assert out["advisories"][0]["why"].startswith("forecast night low 55 F < 60 F")
+    assert out["advisories"][0]["quote"] == NIGHT_ADV["quote"]
+
+
+def test_warm_night_gives_no_advisory():
+    ps = [hour(NOON, 75, True), hour("2026-10-08T02:00:00-04:00", 65, False)]
+    assert windows.evaluate([NIGHT_ADV], ps, LAT, LON, 1)[0]["advisories"] == []
+
+
+def test_mean_temperature_advisory_uses_the_forecast_mean():
+    ps = [hour(NOON, 70, True), hour(NOON, 60, False)]
+    out = windows.evaluate([MEAN_ADV], ps, LAT, LON, 1)[0]
+    assert out["advisories"][0]["why"].startswith("forecast mean 65 F > 60 F")
+
+
+def test_advisory_rain_never_blocks():
+    out = windows.evaluate([RAIN_ADV], [hour(NOON, 75, True, pop=90)], LAT, LON, 1)[0]
+    assert out["state"] == "PERMITTED" and out["advisories"]
+
+
+def test_must_rain_rule_blocks_like_must_not():
+    must = r("rain_free_hours", "gte", 6, "MUST", "Apply only if no rain is expected within 6 hours.", "t-6")
+    assert windows.evaluate([must], [hour(NOON, 75, True, pop=80)], LAT, LON, 1)[0]["state"] == "BLOCKED"
+
+
+def test_acting_clause_the_kernel_cannot_evaluate_is_a_field_check_not_silence():
+    hot = r("air_temperature_f", "gt", 90, "MUST_NOT", "Do not apply when temperatures exceed 90F.", "t-7")
+    out = windows.evaluate([hot], [hour(NOON, 75, True)], LAT, LON, 1)[0]
+    assert out["state"] == "FIELD_CHECK" and "does not evaluate it yet" in out["checks"][0]["why"]
+
+
+def test_less_than_ten_blocks_at_exactly_ten():
+    lt10 = r("wind_speed_mph", "lt", 10, "MUST", "Apply only when wind speed is less than 10 mph.", "t-8")
+    assert windows.evaluate([lt10], [period(NOON, "10 mph", 0)], LAT, LON, 1)[0]["state"] == "BLOCKED"
+    assert windows.evaluate([lt10], [period(NOON, "9 mph", 0)], LAT, LON, 1)[0]["state"] == "PERMITTED"
+
+
+def test_between_sets_both_bounds():
+    band = r("wind_speed_mph", "between", 2, "MUST", "Apply only when wind speed is between 2 and 10 mph.", "t-9")
+    band["value2"] = 10
+    assert windows.evaluate([band], [period(NOON, "12 mph", 0)], LAT, LON, 1)[0]["state"] == "BLOCKED"
+    assert windows.evaluate([band], [period(NOON, "1 mph", 0)], LAT, LON, 1)[0]["state"] == "FIELD_CHECK"
+    assert windows.evaluate([band], [period(NOON, "6 mph", 0)], LAT, LON, 1)[0]["state"] == "PERMITTED"
+
+
+def test_advisory_wind_never_gates():
+    calm = r("wind_speed_mph", "lt", 2, "ADVISORY", "Application should be avoided below 2 mph.", "t-10")
+    assert windows.evaluate([calm], [period(NOON, "0 mph", 0)], LAT, LON, 1)[0]["state"] == "PERMITTED"
+
+
+def test_advisory_wind_is_reported():
+    calm = r("wind_speed_mph", "lt", 2, "ADVISORY", "Application should be avoided below 2 mph.", "t-11")
+    out = windows.evaluate([calm], [period(NOON, "0 mph", 0)], LAT, LON, 1)[0]
+    assert out["advisories"][0]["why"] == "forecast wind 0 mph < 2 mph"
