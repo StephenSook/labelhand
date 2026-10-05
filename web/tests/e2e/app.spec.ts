@@ -17,6 +17,21 @@ async function waitForAutoRun(page: Page) {
   await expect(page.locator("[data-forecast-source]")).toHaveAttribute("data-forecast-source", /LIVE|RECORDED/);
 }
 
+function contrastRatio(foreground: string, background: string): number {
+  const luminance = (value: string) => {
+    const channels = value.match(/[\d.]+/gu)?.slice(0, 3).map(Number);
+    if (!channels || channels.length !== 3) throw new Error(`Could not parse color: ${value}`);
+    const linear = channels.map((channel) => {
+      const normalized = channel / 255;
+      return normalized <= 0.04045 ? normalized / 12.92 : ((normalized + 0.055) / 1.055) ** 2.4;
+    });
+    return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
+  };
+  const lighter = Math.max(luminance(foreground), luminance(background));
+  const darker = Math.min(luminance(foreground), luminance(background));
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
 test("the planner runs on first load without a click", async ({ page }) => {
   await page.goto("/app");
   await waitForAutoRun(page);
@@ -203,6 +218,22 @@ test("Ask the tank renders all example questions without calling the model", asy
   ]) {
     await expect(page.getByRole("button", { name: example })).toBeVisible();
   }
+});
+
+test("the disabled Ask the tank button keeps readable contrast", async ({ page }) => {
+  await page.goto("/app");
+  const button = page.getByRole("button", { name: "Run Ask the tank" });
+  await expect(button).toBeDisabled();
+  const styles = await button.evaluate((element) => {
+    const computed = getComputedStyle(element);
+    return {
+      color: computed.color,
+      backgroundColor: computed.backgroundColor,
+      opacity: computed.opacity,
+    };
+  });
+  expect(styles.opacity).toBe("1");
+  expect(contrastRatio(styles.color, styles.backgroundColor)).toBeGreaterThanOrEqual(4.5);
 });
 
 test("every page names the product exactly once in its title", async ({ page }) => {

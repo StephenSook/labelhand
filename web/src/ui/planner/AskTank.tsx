@@ -133,7 +133,7 @@ export function AskTank({ initialQuestion, onCheck, onClause, onWindow }: AskTan
           <button
             type="submit"
             disabled={!question.trim() || startedAt !== null}
-            className="mt-5 min-h-14 w-full rounded-full border-[3px] border-[#14213d] bg-[#216a38] px-6 text-lg font-black text-white shadow-[4px_5px_0_#14213d] outline-offset-2 transition-transform hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#14213d] disabled:cursor-not-allowed disabled:opacity-50"
+            className="mt-5 min-h-14 w-full rounded-full border-[3px] border-[#14213d] bg-[#216a38] px-6 text-lg font-black text-white shadow-[4px_5px_0_#14213d] outline-offset-2 transition-transform hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#14213d] disabled:cursor-not-allowed disabled:translate-y-0 disabled:bg-[#d7d2c8] disabled:text-[#3d3d39] disabled:shadow-none disabled:opacity-100"
           >
             Run Ask the tank
           </button>
