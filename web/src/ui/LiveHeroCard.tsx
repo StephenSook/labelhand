@@ -117,6 +117,7 @@ export function LiveHeroCard() {
         <div className="hero-live-window">
           <strong>{formatDay(nextWindow.start)}</strong>
           <span>{formatClock(nextWindow.start)} to {formatClock(nextWindow.end)}</span>
+          <small>Eastern time, the field&apos;s local time</small>
           <small>{nextWindow.length} permitted hours in this run</small>
         </div>
       ) : (

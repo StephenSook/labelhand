@@ -193,8 +193,8 @@ export function Timeline({ hours, products, selectedIndex, onSelect }: TimelineP
       </div>
 
       <p className="mt-3 max-w-3xl font-semibold text-[#14213d]/75">
-        <span className="hidden md:inline">Use the arrow keys to move between hours. Each product lane shows which label controls an hour.</span>
-        <span className="md:hidden">Open a day to review its runs. Tap a run to see the forecast and exact label clauses.</span>
+        <span className="hidden md:inline">Hours are Eastern time. Use the arrow keys to move between hours. Each product lane shows which label controls an hour.</span>
+        <span className="md:hidden">Hours are Eastern time. Open a day to review its runs. Tap a run to see the forecast and exact label clauses.</span>
       </p>
 
       <div className="mt-5 space-y-5">

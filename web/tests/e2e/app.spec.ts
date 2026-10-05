@@ -36,6 +36,7 @@ test("the planner runs on first load without a click", async ({ page }) => {
   await page.goto("/app");
   await waitForAutoRun(page);
   await expect(page.locator("[data-hour-cell]")).toHaveCount(156);
+  await expect(page.locator("#timeline")).toContainText("Hours are Eastern time");
 });
 
 test("a field, product, and job-length deep link reproduces its state", async ({ page }) => {
@@ -66,6 +67,8 @@ test("the home hero runs a live or recorded planner check with a source time", a
   await expect(card).toHaveAttribute("data-permitted-hours", /\d+/);
   await expect(card).toHaveAttribute("data-field-check-hours", /\d+/);
   await expect(card).toHaveAttribute("data-blocked-hours", /\d+/);
+  // A window's clock times must say which timezone they are in; with no window there are no times.
+  await expect(card).toContainText(/Eastern time|No three-hour permitted window/);
 });
 
 test("every judge step resolves to its app target", async ({ page }) => {

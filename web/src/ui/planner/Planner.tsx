@@ -592,7 +592,9 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
               <p className="display mt-1 text-4xl sm:text-5xl">
                 {formatWindowClock(nextWindow.start)} to {formatWindowClock(nextWindow.end)}
               </p>
-              <p className="mt-2 text-lg font-bold">{nextWindow.length} consecutive {nextWindow.length === 1 ? "hour" : "hours"}</p>
+              <p className="mt-2 text-lg font-bold">
+                {nextWindow.length} consecutive {nextWindow.length === 1 ? "hour" : "hours"}, Eastern time
+              </p>
               <button
                 type="button"
                 onClick={() => onSelectWindow(nextWindow.start)}
