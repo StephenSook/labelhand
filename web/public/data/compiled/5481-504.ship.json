@@ -52,6 +52,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -82,6 +85,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -112,6 +118,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -142,6 +151,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -172,6 +184,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -202,6 +217,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -233,6 +251,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -263,6 +284,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -293,6 +317,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -321,6 +348,9 @@
    "modality_by_run": {
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 2
    }
   },
   {
@@ -354,6 +384,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -385,6 +418,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -416,6 +452,10 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1,
+    "MUST_NOT": 2
    }
   },
   {
@@ -447,6 +487,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -478,6 +521,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -509,6 +555,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -540,6 +589,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -571,6 +623,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -602,6 +657,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -632,6 +690,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -663,6 +724,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -693,6 +757,9 @@
    "modality_by_run": {
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -723,6 +790,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -753,6 +823,10 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2,
+    "MUST_NOT": 1
    }
   },
   {
@@ -781,6 +855,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 1
    }
   },
   {
@@ -812,6 +889,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -840,6 +920,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -871,6 +954,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -902,6 +988,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -933,6 +1022,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -964,6 +1056,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -995,6 +1090,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -1026,6 +1124,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -1056,21 +1157,24 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
    "kind": "field_obligation",
-   "modality": "MUST",
+   "modality": "ADVISORY",
    "param": "air_temperature_f",
    "op": "gt",
    "value": 60,
    "value2": null,
    "unit": "F",
    "applies_to": "tank mix activity",
-   "summary": "Mean 24-hour temperature before and after application must be above 60°F for maximum tank mix activity",
+   "summary": "Tank mix activity is maximum when the mean 24-hour temperature before and after application is above 60°F.",
    "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
    "page": 10,
-   "id": "5481-504-p10-5",
+   "id": "5481-504-p10-6",
    "found_by": [
     "nvidia/nemotron-3-super-120b-a12b"
    ],
@@ -1086,6 +1190,10 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2,
+    "MUST": 1
    }
   },
   {
@@ -1117,6 +1225,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -1148,6 +1259,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -1178,6 +1292,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -1209,6 +1326,10 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST": 2,
+    "MUST_NOT": 1
    }
   },
   {
@@ -1235,6 +1356,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -1265,6 +1389,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -1295,6 +1422,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -1321,6 +1451,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -1351,6 +1484,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -1381,6 +1517,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -1411,6 +1550,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -1441,6 +1583,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -1469,6 +1614,9 @@
    "modality_by_run": {
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -1499,6 +1647,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -1529,6 +1680,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -1560,6 +1714,10 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST": 1,
+    "MUST_NOT": 2
    }
   },
   {
@@ -1592,6 +1750,9 @@
    "modality_by_run": {
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2
    }
   },
   {
@@ -1622,6 +1783,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -1652,6 +1816,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -1682,6 +1849,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -1712,6 +1882,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -1742,6 +1915,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -1772,6 +1948,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -1802,6 +1981,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -1830,6 +2012,9 @@
    "modality_by_run": {
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -1860,6 +2045,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -1890,6 +2078,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -1920,6 +2111,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -1950,6 +2144,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -1980,6 +2177,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -2010,6 +2210,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -2040,6 +2243,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -2071,6 +2277,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -2101,6 +2310,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -2132,6 +2344,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -2162,6 +2377,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -2193,6 +2411,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -2223,6 +2444,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -2253,21 +2477,24 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
    "kind": "field_obligation",
-   "modality": "MUST",
+   "modality": "ADVISORY",
    "param": "application_method",
    "op": "none",
    "value": null,
    "value2": null,
-   "unit": "none",
+   "unit": null,
    "applies_to": "ground_boom_application",
    "summary": "Use lowest spray pressure recommended for nozzle to produce target spray volume and droplet size",
    "quote": "Use the lowest spray pressure recommended for the nozzle to produce the target spray volume and droplet size.",
    "page": 8,
-   "id": "5481-504-p8-18",
+   "id": "5481-504-p8-17",
    "found_by": [
     "nvidia/Nemotron-3-Ultra-550b-a55b"
    ],
@@ -2283,6 +2510,10 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "ADVISORY": 2,
+    "MUST": 1
    }
   },
   {
@@ -2313,6 +2544,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -2343,6 +2577,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -2371,6 +2608,9 @@
    "modality_by_run": {
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -2399,6 +2639,9 @@
    "modality_by_run": {
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -2427,6 +2670,9 @@
    "modality_by_run": {
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -2457,6 +2703,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -2485,6 +2734,9 @@
    "modality_by_run": {
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -2513,6 +2765,9 @@
    "modality_by_run": {
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -2543,21 +2798,24 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
    "kind": "field_obligation",
-   "modality": "MUST",
+   "modality": "ADVISORY",
    "param": "other",
    "op": "none",
    "value": null,
    "value2": null,
    "unit": "none",
    "applies_to": "all applications",
-   "summary": "requirement for applicators to be familiar with local wind patterns and terrain affecting spray drift",
+   "summary": "Applicators need to be familiar with local wind patterns and terrain that could affect spray drift.",
    "quote": "Applicators need to be familiar with local wind patterns and terrain that could affect spray drift.",
    "page": 9,
-   "id": "5481-504-p9-5",
+   "id": "5481-504-p9-6",
    "found_by": [
     "nvidia/Nemotron-3-Ultra-550b-a55b"
    ],
@@ -2573,6 +2831,10 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "ADVISORY": 2,
+    "MUST": 1
    }
   },
   {
@@ -2599,6 +2861,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 1
    }
   },
   {
@@ -2625,6 +2890,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -2653,6 +2921,9 @@
    "modality_by_run": {
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2
    }
   },
   {
@@ -2681,6 +2952,9 @@
    "modality_by_run": {
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2
    }
   },
   {
@@ -2711,6 +2985,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -2741,6 +3018,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -2771,6 +3051,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -2801,6 +3084,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -2831,6 +3117,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -2861,6 +3150,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -2891,6 +3183,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -2921,6 +3216,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -2952,6 +3250,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -2982,6 +3283,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -3012,6 +3316,9 @@
     "5481-504.union.p2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -3038,6 +3345,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -3066,6 +3376,10 @@
    "modality_by_run": {
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "ADVISORY": 1,
+    "MUST": 1
    }
   },
   {
@@ -3094,6 +3408,9 @@
    "modality_by_run": {
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -3120,6 +3437,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -3146,6 +3466,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -3174,6 +3497,9 @@
    "modality_by_run": {
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 2
    }
   },
   {
@@ -3202,6 +3528,9 @@
    "modality_by_run": {
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2
    }
   },
   {
@@ -3230,6 +3559,9 @@
    "modality_by_run": {
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2
    }
   },
   {
@@ -3258,6 +3590,9 @@
    "modality_by_run": {
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2
    }
   },
   {
@@ -3286,6 +3621,9 @@
    "modality_by_run": {
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2
    }
   },
   {
@@ -3314,6 +3652,9 @@
    "modality_by_run": {
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2
    }
   },
   {
@@ -3342,6 +3683,9 @@
    "modality_by_run": {
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2
    }
   },
   {
@@ -3370,6 +3714,9 @@
    "modality_by_run": {
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2
    }
   },
   {
@@ -3398,6 +3745,9 @@
    "modality_by_run": {
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2
    }
   },
   {
@@ -3426,6 +3776,9 @@
    "modality_by_run": {
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -3452,6 +3805,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -3478,6 +3834,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -3504,6 +3863,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -3530,6 +3892,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -3556,6 +3921,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -3582,6 +3950,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -3609,6 +3980,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -3636,6 +4010,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -3663,6 +4040,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -3689,6 +4069,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -3715,6 +4098,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -3742,6 +4128,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -3768,6 +4157,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -3794,6 +4186,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -3820,6 +4215,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -3846,6 +4244,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -3872,6 +4273,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -3898,6 +4302,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -3924,6 +4331,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -3950,6 +4360,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -3976,6 +4389,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -4002,6 +4418,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -4028,6 +4447,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -4054,6 +4476,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -4080,6 +4505,9 @@
    ],
    "modality_by_run": {
     "5481-504.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   }
  ],

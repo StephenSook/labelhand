@@ -53,9 +53,9 @@ RAIN_UNSURE_POP = 20
 ADVISORY_HOURS = 24
 
 
-# Shipped configuration: three p2 + typing v3 + OCR + PR 2000-5 modality-floor runs merged by clause.
-# Gold v0 (eval/results/ship.json): coverage recall 1.0, typed recall 1.0, value exact 0.944, modality 0.848,
-# planner precision 0.635, acting precision 1.0 (13/13), and acting recall 1.0 (10/10).
+# Shipped configuration: majority modality vote across three p2 + typing v3 + OCR + PR 2000-5 floor runs.
+# Gold v0 (eval/results/ship.json): coverage recall 1.0, typed recall 1.0, value exact 0.944, modality 0.87,
+# planner precision 0.635, strict acting precision 1.0 (12/12), and acting recall 1.0 (10/10).
 DEFAULT_RULES = ".ship"
 
 

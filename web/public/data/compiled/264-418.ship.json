@@ -55,6 +55,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -86,6 +89,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -117,6 +123,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -148,6 +157,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -176,6 +188,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -204,6 +219,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2
    }
   },
   {
@@ -235,6 +253,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -263,6 +284,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 2
    }
   },
   {
@@ -294,6 +318,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -325,6 +352,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -356,6 +386,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -387,6 +420,10 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2,
+    "MUST_NOT": 1
    }
   },
   {
@@ -415,6 +452,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2
    }
   },
   {
@@ -446,6 +486,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -477,6 +520,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -509,6 +555,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -542,6 +591,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -573,6 +625,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -604,6 +659,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -637,6 +695,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -670,6 +731,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -701,6 +765,10 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2,
+    "MUST_NOT": 1
    }
   },
   {
@@ -731,6 +799,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -761,6 +832,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -791,6 +865,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -821,6 +898,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -851,27 +931,30 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
    "kind": "field_obligation",
-   "modality": "MUST",
+   "modality": "ADVISORY",
    "param": "application_method",
    "op": "none",
    "value": null,
    "value2": null,
-   "unit": "none",
-   "applies_to": "ground_boom",
-   "summary": "Use the lowest spray pressure recommended for the nozzle to produce the target spray volume and droplet size",
+   "unit": null,
+   "applies_to": "ground boom applications",
+   "summary": "Use the lowest spray pressure recommended for the nozzle to produce the target spray volume and droplet size.",
    "quote": "Use the lowest spray pressure recommended for the nozzle to produce the target spray volume and droplet size.",
    "page": 6,
-   "id": "264-418-p6-3",
+   "id": "264-418-p6-6",
    "found_by": [
-    "nvidia/Nemotron-3-Ultra-550b-a55b"
+    "nvidia/nemotron-3-super-120b-a12b"
    ],
-   "first_pass_param": "spray_volume_gal_per_acre",
+   "first_pass_param": "application_method",
    "typed_by": "nvidia/Nemotron-3-Ultra-550b-a55b",
-   "agreed": false,
+   "agreed": true,
    "found_in_runs": [
     "264-418.union.p2.typed.v3.ocr.mf.json",
     "264-418.union.p2r2.typed.v3.ocr.mf.json",
@@ -881,6 +964,10 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "ADVISORY": 2,
+    "MUST": 1
    }
   },
   {
@@ -911,6 +998,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -939,6 +1029,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -970,6 +1063,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -999,6 +1095,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -1030,6 +1129,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -1058,6 +1160,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -1089,6 +1194,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -1119,6 +1227,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -1149,6 +1260,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -1179,6 +1293,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -1209,6 +1326,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -1239,6 +1359,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -1267,6 +1390,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -1295,6 +1421,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -1323,6 +1452,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -1353,6 +1485,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -1383,6 +1518,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -1412,6 +1550,10 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1,
+    "MUST_NOT": 1
    }
   },
   {
@@ -1442,6 +1584,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -1470,6 +1615,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -1498,6 +1646,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 2
    }
   },
   {
@@ -1528,6 +1679,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -1558,6 +1712,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -1588,6 +1745,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -1618,6 +1778,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -1648,6 +1811,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -1678,6 +1844,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -1708,25 +1877,28 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
    "kind": "field_obligation",
-   "modality": "MUST",
+   "modality": "MUST_NOT",
    "param": "crop_stage",
    "op": "none",
    "value": null,
    "value2": null,
    "unit": "none",
    "applies_to": "defoliation timing",
-   "summary": "require sufficient mature unopened bolls before defoliant use",
-   "quote": "Do no t use a defoliant before there is sufficient mature unopened boll s to produce the desired yield (see  General Information section on how to test for boll maturity.",
+   "summary": "do not use defoliant before sufficient mature unopened bolls exist",
+   "quote": "Do no t use a defoliant before there is sufficient mature unopened boll s to produce the desired yield (see General Information section on how to test for boll maturity.",
    "page": 9,
    "id": "264-418-p9-4",
    "found_by": [
     "nvidia/nemotron-3-super-120b-a12b"
    ],
-   "first_pass_param": "buffer_ft",
+   "first_pass_param": "tank_mix",
    "typed_by": "nvidia/Nemotron-3-Ultra-550b-a55b",
    "agreed": false,
    "found_in_runs": [
@@ -1738,6 +1910,10 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST": 1,
+    "MUST_NOT": 2
    }
   },
   {
@@ -1770,6 +1946,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -1803,6 +1982,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -1834,6 +2016,10 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST": 1,
+    "MUST_NOT": 2
    }
   },
   {
@@ -1865,6 +2051,10 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1,
+    "MUST_NOT": 2
    }
   },
   {
@@ -1891,6 +2081,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -1917,6 +2110,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -1948,6 +2144,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -1977,6 +2176,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 2
    }
   },
   {
@@ -2005,6 +2207,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 2
    }
   },
   {
@@ -2035,6 +2240,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -2066,6 +2274,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -2096,6 +2307,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -2127,6 +2341,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -2158,6 +2375,10 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "ADVISORY": 1,
+    "MUST": 2
    }
   },
   {
@@ -2189,6 +2410,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -2220,6 +2444,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -2250,16 +2477,19 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
    "kind": "field_obligation",
-   "modality": "MUST",
+   "modality": "ADVISORY",
    "param": "other",
    "op": "none",
    "value": null,
    "value2": null,
-   "unit": null,
+   "unit": "none",
    "applies_to": "cotton and tobacco",
    "summary": "Prepare test spray by mixing one teaspoon of product in 1 quart of water.",
    "quote": "Prepare your test spray by mixing one teaspoon of PREP™ brand Ethephon for Cotton and Tobacco in 1 quart of water.",
@@ -2280,6 +2510,10 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2,
+    "MUST": 1
    }
   },
   {
@@ -2310,6 +2544,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -2340,6 +2577,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -2372,6 +2612,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -2403,6 +2646,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -2433,6 +2679,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -2463,6 +2712,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -2491,6 +2743,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -2521,6 +2776,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -2551,6 +2809,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -2581,6 +2842,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -2609,6 +2873,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -2637,6 +2904,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -2667,6 +2937,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -2697,6 +2970,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -2727,6 +3003,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -2757,6 +3036,10 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1,
+    "MUST": 2
    }
   },
   {
@@ -2785,6 +3068,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -2815,6 +3101,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -2845,6 +3134,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -2875,6 +3167,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -2905,6 +3200,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -2935,6 +3233,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -2965,6 +3266,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -2995,6 +3299,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -3025,6 +3332,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -3051,6 +3361,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -3077,6 +3390,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -3105,6 +3421,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 2
    }
   },
   {
@@ -3135,6 +3454,10 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "ADVISORY": 1,
+    "MUST": 2
    }
   },
   {
@@ -3165,6 +3488,10 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "ADVISORY": 1,
+    "MUST": 2
    }
   },
   {
@@ -3195,6 +3522,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -3224,6 +3554,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2
    }
   },
   {
@@ -3253,6 +3586,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2
    }
   },
   {
@@ -3283,6 +3619,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -3313,6 +3652,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -3343,6 +3685,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -3373,6 +3718,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -3403,6 +3751,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -3433,6 +3784,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -3463,6 +3817,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -3489,6 +3846,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -3515,6 +3875,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -3543,6 +3906,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2
    }
   },
   {
@@ -3569,6 +3935,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -3599,6 +3968,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -3629,6 +4001,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -3657,6 +4032,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2
    }
   },
   {
@@ -3685,6 +4063,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2
    }
   },
   {
@@ -3715,6 +4096,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 3
    }
   },
   {
@@ -3743,6 +4127,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 2
    }
   },
   {
@@ -3773,6 +4160,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -3803,6 +4193,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -3831,6 +4224,9 @@
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -3861,6 +4257,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -3891,6 +4290,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 3
    }
   },
   {
@@ -3921,6 +4323,10 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "ADVISORY": 1,
+    "MUST": 2
    }
   },
   {
@@ -3947,6 +4353,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -3973,6 +4382,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -3999,6 +4411,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -4025,6 +4440,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -4051,6 +4469,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -4077,6 +4498,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -4103,6 +4527,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -4133,6 +4560,9 @@
     "264-418.union.p2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 3
    }
   },
   {
@@ -4159,6 +4589,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -4187,6 +4620,9 @@
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 2
    }
   },
   {
@@ -4214,6 +4650,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -4240,6 +4679,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -4266,6 +4708,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -4292,6 +4737,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -4318,6 +4766,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -4344,6 +4795,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -4374,6 +4828,9 @@
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2
    }
   },
   {
@@ -4400,6 +4857,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -4426,6 +4886,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 1
    }
   },
   {
@@ -4454,6 +4917,9 @@
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 2
    }
   },
   {
@@ -4480,6 +4946,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -4507,6 +4976,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -4533,6 +5005,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -4559,6 +5034,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -4588,6 +5066,9 @@
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST_NOT",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 2
    }
   },
   {
@@ -4617,6 +5098,9 @@
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -4643,6 +5127,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -4669,6 +5156,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -4695,6 +5185,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -4721,6 +5214,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -4747,6 +5243,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -4773,6 +5272,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -4799,6 +5301,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -4827,6 +5332,9 @@
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "ADVISORY",
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 2
    }
   },
   {
@@ -4853,6 +5361,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r2.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -4879,6 +5390,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -4905,6 +5419,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   },
   {
@@ -4931,6 +5448,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -4957,6 +5477,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 1
    }
   },
   {
@@ -4983,6 +5506,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -5009,6 +5535,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -5035,6 +5564,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST"
+   },
+   "modality_vote": {
+    "MUST": 1
    }
   },
   {
@@ -5061,6 +5593,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "MUST_NOT"
+   },
+   "modality_vote": {
+    "MUST_NOT": 1
    }
   },
   {
@@ -5087,6 +5622,9 @@
    ],
    "modality_by_run": {
     "264-418.union.p2r3.typed.v3.ocr.mf.json": "ADVISORY"
+   },
+   "modality_vote": {
+    "ADVISORY": 1
    }
   }
  ],

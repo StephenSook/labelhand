@@ -3,7 +3,7 @@
  "lat": 31.5,
  "lon": -83.9,
  "hours": 156,
- "forecast_fetched_utc": "2026-10-05T16:07:02+00:00",
+ "forecast_fetched_utc": "2026-10-05T17:07:01+00:00",
  "rules_suffix": ".ship",
  "tank": [
   "5481-504",
@@ -90,7 +90,7 @@
    "quote": "Application should be avoided belo w 2 mph due to variable wind direction and high inversion potential."
   },
   {
-   "id": "5481-504-p10-5",
+   "id": "5481-504-p10-6",
    "page": 10,
    "product": "FOLEX® 6 EC",
    "reg": "5481-504",
@@ -99,7 +99,7 @@
    "value": 60,
    "value2": null,
    "unit": "F",
-   "modality": "MUST",
+   "modality": "ADVISORY",
    "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F."
   },
   {
@@ -429,16 +429,6 @@
   }
  ],
  "periods": [
-  {
-   "startTime": "2026-10-05T12:00:00-04:00",
-   "isDaytime": true,
-   "temperature": 75,
-   "windSpeed": "5 mph",
-   "probabilityOfPrecipitation": {
-    "unitCode": "wmoUnit:percent",
-    "value": 63
-   }
-  },
   {
    "startTime": "2026-10-05T13:00:00-04:00",
    "isDaytime": true,
@@ -1988,72 +1978,19 @@
     "unitCode": "wmoUnit:percent",
     "value": 45
    }
+  },
+  {
+   "startTime": "2026-10-12T00:00:00-04:00",
+   "isDaytime": false,
+   "temperature": 69,
+   "windSpeed": "10 mph",
+   "probabilityOfPrecipitation": {
+    "unitCode": "wmoUnit:percent",
+    "value": 45
+   }
   }
  ],
  "expected": [
-  {
-   "start": "2026-10-05T12:00:00-04:00",
-   "state": "BLOCKED",
-   "temp_f": 75,
-   "wind": "5 mph",
-   "pop": 63,
-   "sun_alt": 48.9,
-   "blocked": [
-    {
-     "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
-     "rule": "264-418-p9-5",
-     "page": 9,
-     "quote": "DO NOT APPLY PREP™ BRAND ETHEPHON FOR COTTON AND TOBACCO IF RAIN IS EXPECTED WITHIN 6 HOURS.  Rainfall  within 6 hours of application may reduce product performance.",
-     "why": "rain chance up to 63% within 6 h (rain expected = 50%+)"
-    },
-    {
-     "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
-     "rule": "264-418-p9-5",
-     "page": 9,
-     "quote": "DO NOT APPLY PREP™ BRAND ETHEPHON FOR COTTON AND TOBACCO IF RAIN IS EXPECTED WITHIN 6 HOURS.",
-     "why": "rain chance up to 63% within 6 h (rain expected = 50%+)"
-    }
-   ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
-   "advisories": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p6-1",
-     "page": 6,
-     "quote": "Application of FOLEX 6 EC is not recommended when a heavy rainfall is expected within 1 hour after treatment.",
-     "why": "rain chance up to 63% within 1 h"
-    },
-    {
-     "product": "DROPP SC COTTON DEFOLIANT",
-     "rule": "264-700-p4-2",
-     "page": 4,
-     "quote": "Rainfall within 24 hours after application will reduce the effectiveness of Dropp®.",
-     "why": "rain chance up to 63% within 24 h"
-    },
-    {
-     "product": "DROPP SC COTTON DEFOLIANT",
-     "rule": "264-700-p5-14",
-     "page": 5,
-     "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 68 F > 60 F over the next 24 h"
-    },
-    {
-     "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
-     "rule": "264-418-p9-6",
-     "page": 9,
-     "quote": "Rainfall within 6 hours of application may reduce product performance.",
-     "why": "rain chance up to 63% within 6 h"
-    }
-   ]
-  },
   {
    "start": "2026-10-05T13:00:00-04:00",
    "state": "BLOCKED",
@@ -2077,16 +2014,15 @@
      "why": "rain chance up to 57% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
+   "checks": [],
+   "advisories": [
     {
      "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
+     "rule": "5481-504-p10-6",
      "page": 10,
      "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
-   "advisories": [
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
@@ -2147,16 +2083,15 @@
      "why": "rain chance up to 52% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
+   "checks": [],
+   "advisories": [
     {
      "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
+     "rule": "5481-504-p10-6",
      "page": 10,
      "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
-   "advisories": [
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
@@ -2204,13 +2139,6 @@
    "blocked": [],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -2226,6 +2154,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
@@ -2273,13 +2208,6 @@
    "blocked": [],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -2295,6 +2223,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
@@ -2342,13 +2277,6 @@
    "blocked": [],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -2364,6 +2292,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
@@ -2411,13 +2346,6 @@
    "blocked": [],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -2433,6 +2361,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p4-2",
@@ -2480,13 +2415,6 @@
      "why": "sun 3 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -2516,6 +2444,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
@@ -2606,13 +2541,6 @@
      "why": "sun -10 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -2648,6 +2576,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -2710,13 +2645,6 @@
      "why": "sun -23 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -2746,6 +2674,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
@@ -2800,13 +2735,6 @@
      "why": "sun -35 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -2836,6 +2764,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
@@ -2890,13 +2825,6 @@
      "why": "sun -47 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -2926,6 +2854,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
@@ -2980,13 +2915,6 @@
      "why": "sun -57 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -3016,6 +2944,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
@@ -3070,13 +3005,6 @@
      "why": "sun -63 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -3106,6 +3034,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
@@ -3160,13 +3095,6 @@
      "why": "sun -62 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -3196,6 +3124,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
@@ -3250,13 +3185,6 @@
      "why": "sun -55 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -3286,6 +3214,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
@@ -3340,13 +3275,6 @@
      "why": "sun -45 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -3376,6 +3304,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
@@ -3430,13 +3365,6 @@
      "why": "sun -33 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -3466,6 +3394,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
@@ -3556,13 +3491,6 @@
      "why": "sun -20 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -3598,6 +3526,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -3696,13 +3631,6 @@
      "why": "sun -8 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -3738,6 +3666,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -3829,13 +3764,6 @@
    ],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -3857,6 +3785,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -3948,13 +3883,6 @@
    ],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -3976,6 +3904,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -4067,13 +4002,6 @@
    ],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -4095,6 +4023,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -4179,13 +4114,6 @@
    ],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -4207,6 +4135,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -4291,13 +4226,6 @@
    ],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -4319,6 +4247,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -4403,13 +4338,6 @@
    ],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -4431,6 +4359,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -4515,13 +4450,6 @@
    ],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -4543,6 +4471,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -4634,13 +4569,6 @@
    ],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -4662,6 +4590,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -4753,13 +4688,6 @@
    ],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -4781,6 +4709,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -4872,13 +4807,6 @@
    ],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -4900,6 +4828,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -4991,13 +4926,6 @@
    ],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -5019,6 +4947,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -5117,13 +5052,6 @@
      "why": "sun 2 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -5159,6 +5087,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -5257,13 +5192,6 @@
      "why": "sun -10 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -5285,6 +5213,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -5362,13 +5297,6 @@
      "why": "sun -23 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -5390,6 +5318,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -5467,13 +5402,6 @@
      "why": "sun -36 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -5495,6 +5423,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -5536,13 +5471,6 @@
      "why": "sun -47 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -5558,6 +5486,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-2",
@@ -5591,13 +5526,6 @@
      "why": "sun -57 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -5613,6 +5541,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-2",
@@ -5646,13 +5581,6 @@
      "why": "sun -63 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -5668,6 +5596,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-2",
@@ -5701,13 +5636,6 @@
      "why": "sun -62 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -5723,6 +5651,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-2",
@@ -5756,13 +5691,6 @@
      "why": "sun -55 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -5778,6 +5706,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-2",
@@ -5811,13 +5746,6 @@
      "why": "sun -45 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -5833,6 +5761,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-2",
@@ -5902,13 +5837,6 @@
      "why": "sun -33 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -5930,6 +5858,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -6007,13 +5942,6 @@
      "why": "sun -20 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -6035,6 +5963,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -6112,13 +6047,6 @@
      "why": "sun -8 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -6140,6 +6068,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -6208,15 +6143,7 @@
      "why": "forecast wind up to 15 mph > 10 mph"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -6224,6 +6151,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -6292,15 +6226,7 @@
      "why": "forecast wind up to 15 mph > 10 mph"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -6308,6 +6234,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -6376,15 +6309,7 @@
      "why": "forecast wind up to 15 mph > 10 mph"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -6392,6 +6317,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -6460,15 +6392,7 @@
      "why": "forecast wind up to 15 mph > 10 mph"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -6476,6 +6400,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -6544,15 +6475,7 @@
      "why": "forecast wind up to 15 mph > 10 mph"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -6560,6 +6483,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -6628,15 +6558,7 @@
      "why": "forecast wind up to 15 mph > 10 mph"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -6644,6 +6566,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -6712,15 +6641,7 @@
      "why": "forecast wind up to 15 mph > 10 mph"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -6728,6 +6649,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -6796,15 +6724,7 @@
      "why": "forecast wind up to 15 mph > 10 mph"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -6812,6 +6732,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -6838,22 +6765,21 @@
   },
   {
    "start": "2026-10-07T16:00:00-04:00",
-   "state": "FIELD_CHECK",
+   "state": "PERMITTED",
    "temp_f": 79,
    "wind": "10 mph",
    "pop": 2,
    "sun_alt": 37.5,
    "blocked": [],
-   "checks": [
+   "checks": [],
+   "advisories": [
     {
      "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
+     "rule": "5481-504-p10-6",
      "page": 10,
      "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
-   "advisories": [
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-2",
@@ -6872,22 +6798,21 @@
   },
   {
    "start": "2026-10-07T17:00:00-04:00",
-   "state": "FIELD_CHECK",
+   "state": "PERMITTED",
    "temp_f": 79,
    "wind": "10 mph",
    "pop": 2,
    "sun_alt": 26.6,
    "blocked": [],
-   "checks": [
+   "checks": [],
+   "advisories": [
     {
      "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
+     "rule": "5481-504-p10-6",
      "page": 10,
      "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
-   "advisories": [
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-2",
@@ -6906,22 +6831,21 @@
   },
   {
    "start": "2026-10-07T18:00:00-04:00",
-   "state": "FIELD_CHECK",
+   "state": "PERMITTED",
    "temp_f": 78,
    "wind": "10 mph",
    "pop": 2,
    "sun_alt": 14.6,
    "blocked": [],
-   "checks": [
+   "checks": [],
+   "advisories": [
     {
      "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
+     "rule": "5481-504-p10-6",
      "page": 10,
      "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
-   "advisories": [
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-2",
@@ -6955,13 +6879,6 @@
      "why": "sun 2 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -6977,6 +6894,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-2",
@@ -7010,13 +6934,6 @@
      "why": "sun -11 deg, wind 5 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -7032,6 +6949,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-14",
@@ -7058,13 +6982,6 @@
      "why": "sun -23 deg, wind 5 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -7080,6 +6997,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-14",
@@ -7106,13 +7030,6 @@
      "why": "sun -36 deg, wind 5 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -7128,6 +7045,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-14",
@@ -7154,13 +7078,6 @@
      "why": "sun -48 deg, wind 5 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -7176,6 +7093,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-14",
@@ -7202,13 +7126,6 @@
      "why": "sun -57 deg, wind 5 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -7224,6 +7141,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-14",
@@ -7250,13 +7174,6 @@
      "why": "sun -63 deg, wind 5 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -7272,6 +7189,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-14",
@@ -7298,13 +7222,6 @@
      "why": "sun -63 deg, wind 5 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -7320,6 +7237,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-14",
@@ -7346,13 +7270,6 @@
      "why": "sun -55 deg, wind 5 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -7368,6 +7285,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-14",
@@ -7394,13 +7318,6 @@
      "why": "sun -45 deg, wind 5 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -7416,6 +7333,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-14",
@@ -7442,13 +7366,6 @@
      "why": "sun -33 deg, wind 5 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -7464,6 +7381,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-14",
@@ -7490,13 +7414,6 @@
      "why": "sun -21 deg, wind 5 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -7512,6 +7429,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-14",
@@ -7538,13 +7462,6 @@
      "why": "sun -8 deg, wind 5 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -7561,6 +7478,13 @@
    ],
    "advisories": [
     {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
+    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-14",
      "page": 5,
@@ -7571,22 +7495,21 @@
   },
   {
    "start": "2026-10-08T08:00:00-04:00",
-   "state": "FIELD_CHECK",
+   "state": "PERMITTED",
    "temp_f": 59,
    "wind": "5 mph",
    "pop": 1,
    "sun_alt": 4.9,
    "blocked": [],
-   "checks": [
+   "checks": [],
+   "advisories": [
     {
      "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
+     "rule": "5481-504-p10-6",
      "page": 10,
      "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
-   "advisories": [
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-14",
@@ -7598,22 +7521,21 @@
   },
   {
    "start": "2026-10-08T09:00:00-04:00",
-   "state": "FIELD_CHECK",
+   "state": "PERMITTED",
    "temp_f": 63,
    "wind": "5 mph",
    "pop": 1,
    "sun_alt": 17.3,
    "blocked": [],
-   "checks": [
+   "checks": [],
+   "advisories": [
     {
      "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
+     "rule": "5481-504-p10-6",
      "page": 10,
      "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
-   "advisories": [
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-14",
@@ -7625,22 +7547,21 @@
   },
   {
    "start": "2026-10-08T10:00:00-04:00",
-   "state": "FIELD_CHECK",
+   "state": "PERMITTED",
    "temp_f": 68,
    "wind": "5 mph",
    "pop": 1,
    "sun_alt": 29.1,
    "blocked": [],
-   "checks": [
+   "checks": [],
+   "advisories": [
     {
      "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
+     "rule": "5481-504-p10-6",
      "page": 10,
      "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
-   "advisories": [
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-14",
@@ -7652,22 +7573,21 @@
   },
   {
    "start": "2026-10-08T11:00:00-04:00",
-   "state": "FIELD_CHECK",
+   "state": "PERMITTED",
    "temp_f": 73,
    "wind": "10 mph",
    "pop": 1,
    "sun_alt": 39.6,
    "blocked": [],
-   "checks": [
+   "checks": [],
+   "advisories": [
     {
      "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
+     "rule": "5481-504-p10-6",
      "page": 10,
      "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
-   "advisories": [
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-2",
@@ -7686,22 +7606,21 @@
   },
   {
    "start": "2026-10-08T12:00:00-04:00",
-   "state": "FIELD_CHECK",
+   "state": "PERMITTED",
    "temp_f": 76,
    "wind": "10 mph",
    "pop": 1,
    "sun_alt": 47.9,
    "blocked": [],
-   "checks": [
+   "checks": [],
+   "advisories": [
     {
      "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
+     "rule": "5481-504-p10-6",
      "page": 10,
      "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
-   "advisories": [
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-2",
@@ -7720,22 +7639,21 @@
   },
   {
    "start": "2026-10-08T13:00:00-04:00",
-   "state": "FIELD_CHECK",
+   "state": "PERMITTED",
    "temp_f": 79,
    "wind": "10 mph",
    "pop": 1,
    "sun_alt": 52.5,
    "blocked": [],
-   "checks": [
+   "checks": [],
+   "advisories": [
     {
      "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
+     "rule": "5481-504-p10-6",
      "page": 10,
      "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
-   "advisories": [
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-2",
@@ -7754,22 +7672,21 @@
   },
   {
    "start": "2026-10-08T14:00:00-04:00",
-   "state": "FIELD_CHECK",
+   "state": "PERMITTED",
    "temp_f": 80,
    "wind": "10 mph",
    "pop": 1,
    "sun_alt": 51.8,
    "blocked": [],
-   "checks": [
+   "checks": [],
+   "advisories": [
     {
      "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
+     "rule": "5481-504-p10-6",
      "page": 10,
      "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
-   "advisories": [
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p4-2",
@@ -7795,22 +7712,21 @@
   },
   {
    "start": "2026-10-08T15:00:00-04:00",
-   "state": "FIELD_CHECK",
+   "state": "PERMITTED",
    "temp_f": 81,
    "wind": "10 mph",
    "pop": 1,
    "sun_alt": 46.2,
    "blocked": [],
-   "checks": [
+   "checks": [],
+   "advisories": [
     {
      "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
+     "rule": "5481-504-p10-6",
      "page": 10,
      "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
-   "advisories": [
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p4-2",
@@ -7836,22 +7752,21 @@
   },
   {
    "start": "2026-10-08T16:00:00-04:00",
-   "state": "FIELD_CHECK",
+   "state": "PERMITTED",
    "temp_f": 81,
    "wind": "10 mph",
    "pop": 1,
    "sun_alt": 37.2,
    "blocked": [],
-   "checks": [
+   "checks": [],
+   "advisories": [
     {
      "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
+     "rule": "5481-504-p10-6",
      "page": 10,
      "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
-   "advisories": [
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p4-2",
@@ -7877,22 +7792,21 @@
   },
   {
    "start": "2026-10-08T17:00:00-04:00",
-   "state": "FIELD_CHECK",
+   "state": "PERMITTED",
    "temp_f": 80,
    "wind": "10 mph",
    "pop": 1,
    "sun_alt": 26.3,
    "blocked": [],
-   "checks": [
+   "checks": [],
+   "advisories": [
     {
      "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
+     "rule": "5481-504-p10-6",
      "page": 10,
      "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
-   "advisories": [
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p4-2",
@@ -7918,22 +7832,21 @@
   },
   {
    "start": "2026-10-08T18:00:00-04:00",
-   "state": "FIELD_CHECK",
+   "state": "PERMITTED",
    "temp_f": 79,
    "wind": "5 mph",
    "pop": 1,
    "sun_alt": 14.4,
    "blocked": [],
-   "checks": [
+   "checks": [],
+   "advisories": [
     {
      "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
+     "rule": "5481-504-p10-6",
      "page": 10,
      "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
-   "advisories": [
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p4-2",
@@ -7967,13 +7880,6 @@
      "why": "sun 2 deg, wind 5 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -7989,6 +7895,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p4-2",
@@ -8022,13 +7935,6 @@
      "why": "sun -11 deg, wind 5 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -8044,6 +7950,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p4-2",
@@ -8077,13 +7990,6 @@
      "why": "sun -24 deg, wind 5 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -8099,6 +8005,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p4-2",
@@ -8132,13 +8045,6 @@
      "why": "sun -36 deg, wind 5 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -8154,6 +8060,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p4-2",
@@ -8187,13 +8100,6 @@
      "why": "sun -48 deg, wind 5 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -8209,6 +8115,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p4-2",
@@ -8242,13 +8155,6 @@
      "why": "sun -58 deg, wind 5 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -8264,6 +8170,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p4-2",
@@ -8297,13 +8210,6 @@
      "why": "sun -64 deg, wind 0 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -8325,6 +8231,13 @@
      "page": 9,
      "quote": "Application should be avoided belo w 2 mph due to variable wind direction and high inversion potential.",
      "why": "forecast wind 0 mph < 2 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -8366,13 +8279,6 @@
      "why": "sun -63 deg, wind 0 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -8394,6 +8300,13 @@
      "page": 9,
      "quote": "Application should be avoided belo w 2 mph due to variable wind direction and high inversion potential.",
      "why": "forecast wind 0 mph < 2 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -8435,13 +8348,6 @@
      "why": "sun -56 deg, wind 0 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -8463,6 +8369,13 @@
      "page": 9,
      "quote": "Application should be avoided belo w 2 mph due to variable wind direction and high inversion potential.",
      "why": "forecast wind 0 mph < 2 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -8504,13 +8417,6 @@
      "why": "sun -45 deg, wind 5 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -8526,6 +8432,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p4-2",
@@ -8559,13 +8472,6 @@
      "why": "sun -33 deg, wind 5 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -8581,6 +8487,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p4-2",
@@ -8614,13 +8527,6 @@
      "why": "sun -21 deg, wind 5 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -8636,6 +8542,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p4-2",
@@ -8669,13 +8582,6 @@
      "why": "sun -8 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -8691,6 +8597,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p4-2",
@@ -8724,13 +8637,6 @@
    "blocked": [],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -8746,6 +8652,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p4-2",
@@ -8786,13 +8699,6 @@
    "blocked": [],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -8808,6 +8714,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p4-2",
@@ -8848,13 +8761,6 @@
    "blocked": [],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -8870,6 +8776,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p4-2",
@@ -8910,13 +8823,6 @@
    "blocked": [],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -8932,6 +8838,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
+    },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p4-2",
@@ -9008,13 +8921,6 @@
    ],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -9036,6 +8942,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -9120,13 +9033,6 @@
    ],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -9148,6 +9054,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -9239,13 +9152,6 @@
    ],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -9267,6 +9173,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -9358,13 +9271,6 @@
    ],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -9386,6 +9292,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -9477,13 +9390,6 @@
    ],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -9505,6 +9411,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -9560,13 +9473,6 @@
    "blocked": [],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -9582,6 +9488,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
@@ -9665,13 +9578,6 @@
    ],
    "checks": [
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
      "rule": "264-418-p9-5",
      "page": 9,
@@ -9693,6 +9599,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -9791,13 +9704,6 @@
      "why": "sun 2 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -9833,6 +9739,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -9931,13 +9844,6 @@
      "why": "sun -11 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -9973,6 +9879,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -10071,13 +9984,6 @@
      "why": "sun -24 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -10113,6 +10019,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -10175,13 +10088,6 @@
      "why": "sun -36 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -10211,6 +10117,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
@@ -10265,13 +10178,6 @@
      "why": "sun -48 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -10301,6 +10207,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
@@ -10355,13 +10268,6 @@
      "why": "sun -58 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -10391,6 +10297,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
@@ -10445,13 +10358,6 @@
      "why": "sun -64 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -10481,6 +10387,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
@@ -10550,13 +10463,6 @@
      "why": "sun -63 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -10572,6 +10478,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
@@ -10641,13 +10554,6 @@
      "why": "sun -56 deg, wind 10 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -10663,6 +10569,13 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
@@ -10767,13 +10680,6 @@
      "why": "sun -45 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -10795,6 +10701,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -10907,13 +10820,6 @@
      "why": "sun -33 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -10935,6 +10841,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -11047,13 +10960,6 @@
      "why": "sun -21 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -11075,6 +10981,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -11187,13 +11100,6 @@
      "why": "sun -8 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -11215,6 +11121,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -11318,15 +11231,7 @@
      "why": "rain chance up to 66% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -11334,6 +11239,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -11437,15 +11349,7 @@
      "why": "rain chance up to 66% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -11453,6 +11357,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -11556,15 +11467,7 @@
      "why": "rain chance up to 66% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -11572,6 +11475,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 20 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -11675,15 +11585,7 @@
      "why": "rain chance up to 66% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -11691,6 +11593,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 20 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -11794,15 +11703,7 @@
      "why": "rain chance up to 66% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -11810,6 +11711,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 20 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -11913,15 +11821,7 @@
      "why": "rain chance up to 66% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -11929,6 +11829,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -12032,15 +11939,7 @@
      "why": "rain chance up to 67% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -12048,6 +11947,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -12151,15 +12057,7 @@
      "why": "rain chance up to 67% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -12167,6 +12065,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -12270,15 +12175,7 @@
      "why": "rain chance up to 67% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -12286,6 +12183,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 20 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -12389,15 +12293,7 @@
      "why": "rain chance up to 67% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -12405,6 +12301,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 20 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -12508,15 +12411,7 @@
      "why": "rain chance up to 67% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -12524,6 +12419,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 20 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -12636,13 +12538,6 @@
      "why": "sun 1 deg, wind 20 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -12664,6 +12559,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 20 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -12776,13 +12678,6 @@
      "why": "sun -11 deg, wind 20 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -12804,6 +12699,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 20 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -12916,13 +12818,6 @@
      "why": "sun -24 deg, wind 20 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -12944,6 +12839,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 20 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -13056,13 +12958,6 @@
      "why": "sun -37 deg, wind 20 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -13084,6 +12979,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 20 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -13196,13 +13098,6 @@
      "why": "sun -48 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -13224,6 +13119,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -13336,13 +13238,6 @@
      "why": "sun -59 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 24 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -13364,6 +13259,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -13476,13 +13378,6 @@
      "why": "sun -65 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 23 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -13504,6 +13399,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 24 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -13538,7 +13440,7 @@
      "rule": "264-700-p5-14",
      "page": 5,
      "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 66 F > 60 F over the next 23 h"
+     "why": "forecast night low 66 F > 60 F over the next 24 h"
     },
     {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
@@ -13616,13 +13518,6 @@
      "why": "sun -64 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 22 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -13644,6 +13539,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 23 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -13678,7 +13580,7 @@
      "rule": "264-700-p5-14",
      "page": 5,
      "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 66 F > 60 F over the next 22 h"
+     "why": "forecast night low 66 F > 60 F over the next 23 h"
     },
     {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
@@ -13756,13 +13658,6 @@
      "why": "sun -56 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 21 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -13784,6 +13679,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 22 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -13818,7 +13720,7 @@
      "rule": "264-700-p5-14",
      "page": 5,
      "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 66 F > 60 F over the next 21 h"
+     "why": "forecast night low 66 F > 60 F over the next 22 h"
     },
     {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
@@ -13896,13 +13798,6 @@
      "why": "sun -46 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 72 F > 60 F over the next 20 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -13924,6 +13819,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 72 F > 60 F over the next 21 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -13958,7 +13860,7 @@
      "rule": "264-700-p5-14",
      "page": 5,
      "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 66 F > 60 F over the next 20 h"
+     "why": "forecast night low 66 F > 60 F over the next 21 h"
     },
     {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
@@ -14036,13 +13938,6 @@
      "why": "sun -34 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 72 F > 60 F over the next 19 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -14064,6 +13959,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 72 F > 60 F over the next 20 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -14098,7 +14000,7 @@
      "rule": "264-700-p5-14",
      "page": 5,
      "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 66 F > 60 F over the next 19 h"
+     "why": "forecast night low 66 F > 60 F over the next 20 h"
     },
     {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
@@ -14176,13 +14078,6 @@
      "why": "sun -21 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 72 F > 60 F over the next 18 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -14204,6 +14099,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 72 F > 60 F over the next 19 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -14238,7 +14140,7 @@
      "rule": "264-700-p5-14",
      "page": 5,
      "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 69 F > 60 F over the next 18 h"
+     "why": "forecast night low 69 F > 60 F over the next 19 h"
     },
     {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
@@ -14316,13 +14218,6 @@
      "why": "sun -8 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 73 F > 60 F over the next 17 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -14344,6 +14239,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 72 F > 60 F over the next 18 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -14378,7 +14280,7 @@
      "rule": "264-700-p5-14",
      "page": 5,
      "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 69 F > 60 F over the next 17 h"
+     "why": "forecast night low 69 F > 60 F over the next 18 h"
     },
     {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
@@ -14447,15 +14349,7 @@
      "why": "rain chance up to 76% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 73 F > 60 F over the next 16 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -14463,6 +14357,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 73 F > 60 F over the next 17 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -14497,7 +14398,7 @@
      "rule": "264-700-p5-14",
      "page": 5,
      "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 69 F > 60 F over the next 16 h"
+     "why": "forecast night low 69 F > 60 F over the next 17 h"
     },
     {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
@@ -14566,15 +14467,7 @@
      "why": "rain chance up to 76% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 74 F > 60 F over the next 15 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -14582,6 +14475,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 73 F > 60 F over the next 16 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -14616,7 +14516,7 @@
      "rule": "264-700-p5-14",
      "page": 5,
      "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 69 F > 60 F over the next 15 h"
+     "why": "forecast night low 69 F > 60 F over the next 16 h"
     },
     {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
@@ -14685,15 +14585,7 @@
      "why": "rain chance up to 76% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 74 F > 60 F over the next 14 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -14701,6 +14593,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 20 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 74 F > 60 F over the next 15 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -14735,7 +14634,7 @@
      "rule": "264-700-p5-14",
      "page": 5,
      "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 69 F > 60 F over the next 14 h"
+     "why": "forecast night low 69 F > 60 F over the next 15 h"
     },
     {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
@@ -14804,15 +14703,7 @@
      "why": "rain chance up to 76% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 74 F > 60 F over the next 13 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -14820,6 +14711,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 20 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 74 F > 60 F over the next 14 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -14854,7 +14752,7 @@
      "rule": "264-700-p5-14",
      "page": 5,
      "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 69 F > 60 F over the next 13 h"
+     "why": "forecast night low 69 F > 60 F over the next 14 h"
     },
     {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
@@ -14923,15 +14821,7 @@
      "why": "rain chance up to 76% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 74 F > 60 F over the next 12 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -14939,6 +14829,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 74 F > 60 F over the next 13 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -14973,7 +14870,7 @@
      "rule": "264-700-p5-14",
      "page": 5,
      "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 69 F > 60 F over the next 12 h"
+     "why": "forecast night low 69 F > 60 F over the next 13 h"
     },
     {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
@@ -15042,15 +14939,7 @@
      "why": "rain chance up to 76% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 74 F > 60 F over the next 11 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -15058,6 +14947,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 74 F > 60 F over the next 12 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -15092,7 +14988,7 @@
      "rule": "264-700-p5-14",
      "page": 5,
      "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 69 F > 60 F over the next 11 h"
+     "why": "forecast night low 69 F > 60 F over the next 12 h"
     },
     {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
@@ -15161,15 +15057,7 @@
      "why": "rain chance up to 76% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 74 F > 60 F over the next 10 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -15177,6 +15065,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 74 F > 60 F over the next 11 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -15211,7 +15106,7 @@
      "rule": "264-700-p5-14",
      "page": 5,
      "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 69 F > 60 F over the next 10 h"
+     "why": "forecast night low 69 F > 60 F over the next 11 h"
     },
     {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
@@ -15280,15 +15175,7 @@
      "why": "rain chance up to 76% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 74 F > 60 F over the next 9 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -15296,6 +15183,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 74 F > 60 F over the next 10 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -15330,7 +15224,7 @@
      "rule": "264-700-p5-14",
      "page": 5,
      "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 69 F > 60 F over the next 9 h"
+     "why": "forecast night low 69 F > 60 F over the next 10 h"
     },
     {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
@@ -15399,15 +15293,7 @@
      "why": "rain chance up to 76% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 74 F > 60 F over the next 8 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -15415,6 +15301,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 73 F > 60 F over the next 9 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -15449,7 +15342,7 @@
      "rule": "264-700-p5-14",
      "page": 5,
      "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 69 F > 60 F over the next 8 h"
+     "why": "forecast night low 69 F > 60 F over the next 9 h"
     },
     {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
@@ -15518,15 +15411,7 @@
      "why": "rain chance up to 76% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 73 F > 60 F over the next 7 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -15534,6 +15419,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 15 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 73 F > 60 F over the next 8 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -15568,7 +15460,7 @@
      "rule": "264-700-p5-14",
      "page": 5,
      "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 69 F > 60 F over the next 7 h"
+     "why": "forecast night low 69 F > 60 F over the next 8 h"
     },
     {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
@@ -15637,15 +15529,7 @@
      "why": "rain chance up to 76% within 6 h (rain expected = 50%+)"
     }
    ],
-   "checks": [
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 73 F > 60 F over the next 6 h: the label sets a requirement at this temperature"
-    }
-   ],
+   "checks": [],
    "advisories": [
     {
      "product": "FOLEX® 6 EC",
@@ -15653,6 +15537,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 20 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 72 F > 60 F over the next 7 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -15687,7 +15578,7 @@
      "rule": "264-700-p5-14",
      "page": 5,
      "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 69 F > 60 F over the next 6 h"
+     "why": "forecast night low 69 F > 60 F over the next 7 h"
     },
     {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
@@ -15765,13 +15656,6 @@
      "why": "sun 1 deg, wind 20 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 72 F > 60 F over the next 5 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -15793,6 +15677,13 @@
      "page": 8,
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use ½ swath displacement upwind at the downwind edge of the field.",
      "why": "forecast wind up to 20 mph > 10 mph"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 72 F > 60 F over the next 6 h"
     },
     {
      "product": "FOLEX® 6 EC",
@@ -15827,7 +15718,7 @@
      "rule": "264-700-p5-14",
      "page": 5,
      "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 69 F > 60 F over the next 5 h"
+     "why": "forecast night low 69 F > 60 F over the next 6 h"
     },
     {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
@@ -15891,13 +15782,6 @@
      "why": "sun -12 deg, wind 20 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 71 F > 60 F over the next 4 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -15936,6 +15820,13 @@
     },
     {
      "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 71 F > 60 F over the next 5 h"
+    },
+    {
+     "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
      "page": 6,
      "quote": "Application of FOLEX 6 EC is not recommended when a heavy rainfall is expected within 1 hour after treatment.",
@@ -15967,7 +15858,7 @@
      "rule": "264-700-p5-14",
      "page": 5,
      "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 69 F > 60 F over the next 4 h"
+     "why": "forecast night low 69 F > 60 F over the next 5 h"
     },
     {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
@@ -16031,13 +15922,6 @@
      "why": "sun -24 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 3 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -16076,6 +15960,13 @@
     },
     {
      "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 70 F > 60 F over the next 4 h"
+    },
+    {
+     "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
      "page": 6,
      "quote": "Application of FOLEX 6 EC is not recommended when a heavy rainfall is expected within 1 hour after treatment.",
@@ -16107,7 +15998,7 @@
      "rule": "264-700-p5-14",
      "page": 5,
      "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 69 F > 60 F over the next 3 h"
+     "why": "forecast night low 69 F > 60 F over the next 4 h"
     },
     {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
@@ -16171,13 +16062,6 @@
      "why": "sun -37 deg, wind 15 mph: inversion possible, confirm on site"
     },
     {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 70 F > 60 F over the next 2 h: the label sets a requirement at this temperature"
-    },
-    {
      "product": "DROPP SC COTTON DEFOLIANT",
      "rule": "264-700-p5-3",
      "page": 5,
@@ -16216,6 +16100,13 @@
     },
     {
      "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 3 h"
+    },
+    {
+     "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",
      "page": 6,
      "quote": "Application of FOLEX 6 EC is not recommended when a heavy rainfall is expected within 1 hour after treatment.",
@@ -16247,7 +16138,7 @@
      "rule": "264-700-p5-14",
      "page": 5,
      "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
-     "why": "forecast night low 69 F > 60 F over the next 2 h"
+     "why": "forecast night low 69 F > 60 F over the next 3 h"
     },
     {
      "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
@@ -16273,13 +16164,6 @@
      "page": 8,
      "quote": "Do not apply during temperature inversions.",
      "why": "sun -49 deg, wind 10 mph: inversion possible, confirm on site"
-    },
-    {
-     "product": "FOLEX® 6 EC",
-     "rule": "5481-504-p10-5",
-     "page": 10,
-     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
-     "why": "forecast mean 69 F > 60 F over the next 1 h: the label sets a requirement at this temperature"
     },
     {
      "product": "DROPP SC COTTON DEFOLIANT",
@@ -16311,6 +16195,103 @@
     }
    ],
    "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 2 h"
+    },
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p6-1",
+     "page": 6,
+     "quote": "Application of FOLEX 6 EC is not recommended when a heavy rainfall is expected within 1 hour after treatment.",
+     "why": "rain chance up to 45% within 1 h"
+    },
+    {
+     "product": "DROPP SC COTTON DEFOLIANT",
+     "rule": "264-700-p4-2",
+     "page": 4,
+     "quote": "Rainfall within 24 hours after application will reduce the effectiveness of Dropp®.",
+     "why": "rain chance up to 45% within 24 h"
+    },
+    {
+     "product": "DROPP SC COTTON DEFOLIANT",
+     "rule": "264-700-p5-2",
+     "page": 5,
+     "quote": "Follow local recommendations if wind speeds of less than ten (10) miles per hour are specified in those recommendations.",
+     "why": "forecast wind up to 10 mph = 10 mph"
+    },
+    {
+     "product": "DROPP SC COTTON DEFOLIANT",
+     "rule": "264-700-p5-14",
+     "page": 5,
+     "quote": "Ideally, nighttime temperatures 2-3 days prior to and following application should be above 60°F or total defoliation and regrowth inhibition can be reduced.",
+     "why": "forecast night low 69 F > 60 F over the next 2 h"
+    },
+    {
+     "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
+     "rule": "264-418-p9-6",
+     "page": 9,
+     "quote": "Rainfall within 6 hours of application may reduce product performance.",
+     "why": "rain chance up to 45% within 6 h"
+    }
+   ]
+  },
+  {
+   "start": "2026-10-12T00:00:00-04:00",
+   "state": "FIELD_CHECK",
+   "temp_f": 69,
+   "wind": "10 mph",
+   "pop": 45,
+   "sun_alt": -58.9,
+   "blocked": [],
+   "checks": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p8-7",
+     "page": 8,
+     "quote": "Do not apply during temperature inversions.",
+     "why": "sun -59 deg, wind 10 mph: inversion possible, confirm on site"
+    },
+    {
+     "product": "DROPP SC COTTON DEFOLIANT",
+     "rule": "264-700-p5-3",
+     "page": 5,
+     "quote": "Do not apply Dropp® SC when a temperature inversion is present or when conditions favor an inversion prior to completing application(s).",
+     "why": "sun -59 deg, wind 10 mph: inversion possible, confirm on site"
+    },
+    {
+     "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
+     "rule": "264-418-p5-14",
+     "page": 5,
+     "quote": "Do not apply during temperature inversions.",
+     "why": "sun -59 deg, wind 10 mph: inversion possible, confirm on site"
+    },
+    {
+     "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
+     "rule": "264-418-p9-5",
+     "page": 9,
+     "quote": "DO NOT APPLY PREP™ BRAND ETHEPHON FOR COTTON AND TOBACCO IF RAIN IS EXPECTED WITHIN 6 HOURS.  Rainfall  within 6 hours of application may reduce product performance.",
+     "why": "rain chance up to 45% within 6 h"
+    },
+    {
+     "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
+     "rule": "264-418-p9-5",
+     "page": 9,
+     "quote": "DO NOT APPLY PREP™ BRAND ETHEPHON FOR COTTON AND TOBACCO IF RAIN IS EXPECTED WITHIN 6 HOURS.",
+     "why": "rain chance up to 45% within 6 h"
+    }
+   ],
+   "advisories": [
+    {
+     "product": "FOLEX® 6 EC",
+     "rule": "5481-504-p10-6",
+     "page": 10,
+     "quote": "• Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60°F.",
+     "why": "forecast mean 69 F > 60 F over the next 1 h"
+    },
     {
      "product": "FOLEX® 6 EC",
      "rule": "5481-504-p6-1",

@@ -64,27 +64,27 @@ Three real Georgia cotton defoliation labels: Folex 6 EC (EPA Reg. 5481-504, acc
 | + typing v2 (stricter definitions) | 0.891 | 0.848 | 0.897 | 0.872 | 1.000 | **0.800** |
 | + typing v3 (types the constraint the first reading named) | 0.891 | 0.891 | 0.935 | **0.902** | **1.000** | **1.000** |
 | + unit restore in code, extraction prompt p2 (one rule per constraint or alternative) | **0.957** | **0.957** | **0.941** | 0.841 | **0.909 (10/11)** | **1.000** |
-| **Shipped `.ship` merge of three p2 + typing v3 + OCR + modality-floor runs** | **1.000** | **1.000** | 0.944 | 0.848 | **0.923 (12/13)** | **1.000 (10/10)** |
+| **Shipped majority `.ship` merge of three p2 + typing v3 + OCR + modality-floor runs** | **1.000** | **1.000** | 0.944 | 0.870 | **1.000 (12/12)** | **1.000 (10/10)** |
 
 *Acting* rules are the ones the planner can turn into BLOCKED or FIELD CHECK. Acting recall is the safety number: a missed wind or rain limit would mark a forbidden hour as permitted. Typing v2 raised precision but dropped a wind limit hidden in a sentence that also set a boom height, so v3 replaced it.
 
 **Scorer correction, 2026-10-05.** Acting precision now requires an acting rule to match a gold clause whose modality is also MUST or MUST_NOT. Previously, Folex rule `5481-504-p10-5` was counted as correct because its temperature parameter and quote matched gold clause F-TEMP-60, even though gold marks that clause ADVISORY. In the numbers shown here, Super moved from 0.824 to 0.588, raw union from 0.800 to 0.458, p2 run 1 and its modality-floor and OCR variants from 1.000 to 0.909 (10/11), and the acting-wins `.ship` merge from 1.000 (13/13) to 0.923 (12/13). Planner precision is unchanged.
 
-The planner ships the `.ship` row. The pre-registered decision branch was `MERGED_SHIPS`: merge the three measured p2 + typing v3 + OCR + PR Notice 2000-5 modality-floor runs by clause, record every source run, and prefer an acting modality when repeated runs disagree. [`eval/results/ship.json`](eval/results/ship.json) is the committed score receipt. The p2 pipeline's Token Factory cost on three labels was $0.53 per run (Super pass $0.033, Ultra pass $0.18, typing $0.31).
+The planner ships the majority `.ship` row. Each duplicate clause gets one modality vote per run; two matching votes win, a clause found in only one run keeps that modality, and a three-way split keeps the first acting modality. The fixed decision rule selected this merge because coverage recall, strict acting precision, and acting recall are all 1.0. Every source modality and vote count stays in the compiled rule. [`eval/results/ship.json`](eval/results/ship.json) is the committed score receipt. The p2 pipeline's Token Factory cost on three labels was $0.53 per run (Super pass $0.033, Ultra pass $0.18, typing $0.31).
 
 ### Tank-composition clauses
 
 The Folex clause &quot;When minimum night temperature is below 60°F use FOLEX 6 EC alone&quot; controls what may be in the tank. It is not a general temperature limit. The Python reference kernel and Rust port now recognize a MUST or MUST_NOT temperature clause matching `\buse\b[^.]*\balone\b`. When the temperature condition holds, a mixed tank is BLOCKED with the other products named; the named product by itself satisfies the clause. When the condition does not hold, the clause does not change the verdict.
 
-The committed Tift replay has 156 hours and a recorded night minimum of 61°F, so this condition never holds there. The before and after totals are therefore identical, which is the correct measured result:
+The committed Tift replay has 156 hours and a recorded night minimum of 61°F, so this condition never holds there. The earlier `.union.typed.v3` rules and the majority `.ship` set therefore produce the same measured totals:
 
-| Tift tank | Before | After |
+| Tift tank | `.union.typed.v3` | Majority `.ship` |
 |---|---|---|
-| Folex + Dropp + Prep | 0 permitted, 79 field check, 77 blocked | 0 permitted, 79 field check, 77 blocked |
-| Folex alone | 0 permitted, 85 field check, 71 blocked | 0 permitted, 85 field check, 71 blocked |
-| Dropp + Prep | 17 permitted, 62 field check, 77 blocked | 17 permitted, 62 field check, 77 blocked |
+| Folex + Dropp + Prep | 17 permitted, 63 field check, 76 blocked | 17 permitted, 63 field check, 76 blocked |
+| Folex alone | 31 permitted, 54 field check, 71 blocked | 31 permitted, 54 field check, 71 blocked |
+| Dropp + Prep | 17 permitted, 63 field check, 76 blocked | 17 permitted, 63 field check, 76 blocked |
 
-The cold-condition unit case uses a 56°F night low. It blocks Folex in a mixed tank, permits the same hour when Folex is the only product, and does nothing for a warm night. The results view also exposes real in-browser what-ifs: on the Tift replay, removing Folex produces 17 forecast-permitted hours in two windows of 6 and 11 hours.
+The cold-condition unit case uses a 56°F night low. It blocks Folex in a mixed tank, permits the same hour when Folex is the only product, and does nothing for a warm night. The results view also exposes real in-browser what-ifs: on the Tift replay, removing Prep produces 31 forecast-permitted hours in five windows of 6, 6, 11, 5 and 3 hours.
 
 **Run-to-run variance.** One run is one draw, so the p2 pipeline was run three times with the same prompts at temperature 0:
 

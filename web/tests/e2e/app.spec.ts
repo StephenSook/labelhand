@@ -35,11 +35,11 @@ test("the constraint panel runs an in-memory what-if through the planner", async
   page.on("request", (request) => {
     if (new URL(request.url()).pathname.startsWith("/data/")) dataRequests.push(request.url());
   });
-  await panel.getByRole("button", { name: /^Check without FOLEX/ }).click();
+  await panel.getByRole("button", { name: /^Check without PREP/ }).click();
 
   const outcome = panel.locator("[data-what-if-result]");
-  await expect(outcome).toContainText("17 of 156 forecast-permitted hours");
-  await expect(outcome).toContainText("2 windows at least 3 hours long");
+  await expect(outcome).toContainText("31 of 156 forecast-permitted hours");
+  await expect(outcome).toContainText("5 windows at least 3 hours long");
   expect(dataRequests).toEqual([]);
 });
 
