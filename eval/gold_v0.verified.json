@@ -1,0 +1,303 @@
+{
+ "gold_version": "v0",
+ "labels": {
+  "5481-504": {
+   "label_sha256": "184a62d6439c0aa76356fc8d0edad2bd23825de0e6865c7bc5663993e6f0fe2a",
+   "items": {
+    "F-REI-7": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      5
+     ]
+    },
+    "F-REI-10": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      5
+     ]
+    },
+    "F-REI-7B": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      10
+     ]
+    },
+    "F-REI-10B": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      10
+     ]
+    },
+    "F-RAIN-1": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      6
+     ]
+    },
+    "F-DROP-G": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      7,
+      8
+     ]
+    },
+    "F-DROP-A": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      7,
+      8
+     ]
+    },
+    "F-REL-G": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      7,
+      8
+     ]
+    },
+    "F-BUF-25": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      7,
+      8
+     ]
+    },
+    "F-BUF-50": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      7,
+      8
+     ]
+    },
+    "F-WIND-G1": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      7
+     ]
+    },
+    "F-REL-A": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      7,
+      8
+     ]
+    },
+    "F-BUF-200": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      7,
+      8
+     ]
+    },
+    "F-WIND-A": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      8
+     ]
+    },
+    "F-WIND-G2": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      8
+     ]
+    },
+    "F-INV": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      8
+     ]
+    },
+    "F-CALM": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      9
+     ]
+    },
+    "F-DROP-HOT": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      9
+     ]
+    },
+    "F-BOLL-50": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      9
+     ]
+    },
+    "F-BOLL-30-60": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      10
+     ]
+    },
+    "F-BOLL-60": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      10
+     ]
+    },
+    "F-TEMP-60": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      10
+     ]
+    },
+    "F-NIGHT-60": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      10
+     ]
+    },
+    "F-IMMATURE": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      10
+     ]
+    }
+   }
+  },
+  "264-700": {
+   "label_sha256": "a54368ee21fda49047de78578937c093c573c472848a46d2342510117f9b403e",
+   "items": {
+    "D-RAIN-24": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      4
+     ]
+    },
+    "D-WIND": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      5
+     ]
+    },
+    "D-INV": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      5
+     ]
+    },
+    "D-LETTUCE-AIR": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      5
+     ]
+    },
+    "D-LETTUCE-GROUND": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      5
+     ]
+    },
+    "D-CITRUS": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      5
+     ]
+    },
+    "D-REI": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      5
+     ]
+    },
+    "D-NIGHT-ALONE": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      5
+     ]
+    },
+    "D-NIGHT-IDEAL": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      5
+     ]
+    },
+    "D-NIGHT-UNSAT": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      6
+     ]
+    }
+   }
+  },
+  "264-418": {
+   "label_sha256": "0416a94124e908f51623869612cb1f180a850488de04773fb86f3e1b63372770",
+   "items": {
+    "P-REI-48": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      5
+     ]
+    },
+    "P-REI-72": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      5
+     ]
+    },
+    "P-NOZZLE": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      5
+     ]
+    },
+    "P-DROP": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      5
+     ]
+    },
+    "P-WIND": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      5
+     ]
+    },
+    "P-INV1": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      5
+     ]
+    },
+    "P-HOT-DROP": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      6
+     ]
+    },
+    "P-INV2": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      6
+     ]
+    },
+    "P-GUST": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      6
+     ]
+    },
+    "P-RAIN-6": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      9
+     ]
+    },
+    "P-RAIN-6B": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      9
+     ]
+    },
+    "P-COOL": {
+     "found_on_listed_page": true,
+     "pages_found": [
+      10
+     ]
+    }
+   }
+  }
+ }
+}

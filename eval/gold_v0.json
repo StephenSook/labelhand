@@ -1,0 +1,62 @@
+{
+ "version": "v0",
+ "created": "2026-10-05",
+ "annotator": "Labelhand build (Claude, for Stephen Sookra), read directly from the EPA label text extracted by tools/ppls_fetch.py; not derived from model output",
+ "review_status": "not yet reviewed by an outside expert; labelled as our own annotation until it is",
+ "scope": "clauses the spray-window planner uses: wind, temperature inversion, rain, air and night temperature, open-boll stage, buffers, release or nozzle height, droplet size, re-entry interval. Rate tables, first aid, storage, mixing order and aerial boom geometry are out of scope for v0.",
+ "matching": "a compiled rule matches a gold clause when the whitespace-free, lowercased gold key is contained in the whitespace-free, lowercased rule quote (or the reverse)",
+ "labels": {
+  "5481-504": [
+   {"id": "F-REI-7", "pages": [5], "key": "(rei) of 7 days for fields treated at application rates at or below 0.75", "param": "reentry_hours", "op": "eq", "value": 7, "unit": "days", "modality": "MUST_NOT"},
+   {"id": "F-REI-10", "pages": [5], "key": "or 10 days for fields treated at application rates above 0.75", "param": "reentry_hours", "op": "eq", "value": 10, "unit": "days", "modality": "MUST_NOT"},
+   {"id": "F-REI-7B", "pages": [10], "key": "rei is 7 days after applications of 16 fl oz/a or less", "param": "reentry_hours", "op": "eq", "value": 7, "unit": "days", "modality": "MUST_NOT"},
+   {"id": "F-REI-10B", "pages": [10], "key": "rei is 10 days after applications of 16 fl oz/a or greater", "param": "reentry_hours", "op": "eq", "value": 10, "unit": "days", "modality": "MUST_NOT"},
+   {"id": "F-RAIN-1", "pages": [6], "key": "not recommended when a heavy rainfall is expected within 1 hour after treatment", "param": "rain_free_hours", "op": "lt", "value": 1, "unit": "hour", "modality": "ADVISORY"},
+   {"id": "F-DROP-G", "pages": [7, 8], "key": "medium or coarser droplets in accordance with american society of agricultural & biological engineers standard 572", "param": "droplet_size", "op": "none", "value": null, "unit": null, "modality": "MUST"},
+   {"id": "F-DROP-A", "pages": [7, 8], "key": "medium or coarser droplets in accordance with american society of agricultural & biological engineers standard 641", "param": "droplet_size", "op": "none", "value": null, "unit": null, "modality": "MUST"},
+   {"id": "F-REL-G", "pages": [7, 8], "key": "do not release spray at a height greater than 4 feet above the ground or crop canopy", "param": "release_height_ft", "op": "gt", "value": 4, "unit": "feet", "modality": "MUST_NOT"},
+   {"id": "F-BUF-25", "pages": [7, 8], "key": "do not apply within 25 feet of residential areas with a low boom", "param": "buffer_ft", "op": "lt", "value": 25, "unit": "feet", "modality": "MUST_NOT"},
+   {"id": "F-BUF-50", "pages": [7, 8], "key": "do not apply within 50 feet of residential areas with a high boom", "param": "buffer_ft", "op": "lt", "value": 50, "unit": "feet", "modality": "MUST_NOT"},
+   {"id": "F-WIND-G1", "pages": [7], "key": "only when wind speed is 10 mph or less at the application site as measured by an anemometer", "param": "wind_speed_mph", "op": "lte", "value": 10, "unit": "mph", "modality": "MUST"},
+   {"id": "F-REL-A", "pages": [7, 8], "key": "do not release spray at a height greater than 10 ft above the ground or vegetative canopy", "param": "release_height_ft", "op": "gt", "value": 10, "unit": "ft", "modality": "MUST_NOT"},
+   {"id": "F-BUF-200", "pages": [7, 8], "key": "do not apply within 200 feet of residential areas", "param": "buffer_ft", "op": "lt", "value": 200, "unit": "feet", "modality": "MUST_NOT"},
+   {"id": "F-WIND-A", "pages": [8], "key": "do not apply when wind speeds exceed 10 miles per hour at the application site", "param": "wind_speed_mph", "op": "gt", "value": 10, "unit": "mph", "modality": "MUST_NOT"},
+   {"id": "F-WIND-G2", "pages": [8], "key": "do not apply when wind speeds exceed 10 mph at the application site", "param": "wind_speed_mph", "op": "gt", "value": 10, "unit": "mph", "modality": "MUST_NOT"},
+   {"id": "F-INV", "pages": [8], "key": "do not apply during temperature inversions", "param": "temperature_inversion", "op": "none", "value": null, "unit": null, "modality": "MUST_NOT"},
+   {"id": "F-CALM", "pages": [9], "key": "application should be avoided below 2 mph", "param": "wind_speed_mph", "op": "lt", "value": 2, "unit": "mph", "modality": "ADVISORY"},
+   {"id": "F-DROP-HOT", "pages": [9], "key": "when making applications in hot and dry conditions, use larger droplets", "param": "droplet_size", "op": "none", "value": null, "unit": null, "modality": "ADVISORY"},
+   {"id": "F-BOLL-50", "pages": [9], "key": "apply when 50% or more of the bolls are open", "param": "open_boll_pct", "op": "gte", "value": 50, "unit": "%", "modality": "MUST"},
+   {"id": "F-BOLL-30-60", "pages": [10], "key": "when 30% to 60% of the cotton bolls are open", "param": "open_boll_pct", "op": "between", "value": 30, "value2": 60, "unit": "%", "modality": "ADVISORY"},
+   {"id": "F-BOLL-60", "pages": [10], "key": "applied to mature cotton plants when 60% or more bolls are open", "param": "open_boll_pct", "op": "gte", "value": 60, "unit": "%", "modality": "ADVISORY"},
+   {"id": "F-TEMP-60", "pages": [10], "key": "mean 24-hour temperature before and after application is above 60", "param": "air_temperature_f", "op": "gt", "value": 60, "unit": "F", "modality": "ADVISORY"},
+   {"id": "F-NIGHT-60", "pages": [10], "key": "when minimum night temperature is below 60", "param": "night_temperature_f", "op": "lt", "value": 60, "unit": "F", "modality": "MUST"},
+   {"id": "F-IMMATURE", "pages": [10], "key": "to immature cotton (less than 60% bolls open)", "param": "open_boll_pct", "op": "lt", "value": 60, "unit": "%", "modality": "MUST_NOT"}
+  ],
+  "264-700": [
+   {"id": "D-RAIN-24", "pages": [4], "key": "rainfall within 24 hours after application will reduce the effectiveness", "param": "rainfall_expected", "op": "lt", "value": 24, "unit": "hours", "modality": "ADVISORY"},
+   {"id": "D-WIND", "pages": [5], "key": "by ground or air when wind speeds exceed ten (10) miles per hour", "param": "wind_speed_mph", "op": "gt", "value": 10, "unit": "mph", "modality": "MUST_NOT"},
+   {"id": "D-INV", "pages": [5], "key": "when a temperature inversion is present or when conditions favor an inversion prior to completing application", "param": "temperature_inversion", "op": "none", "value": null, "unit": null, "modality": "MUST_NOT"},
+   {"id": "D-LETTUCE-AIR", "pages": [5], "key": "by air within one-half (1/2) mile of lettuce", "param": "buffer_ft", "op": "lt", "value": 0.5, "unit": "mile", "modality": "MUST_NOT"},
+   {"id": "D-LETTUCE-GROUND", "pages": [5], "key": "by ground equipment within 100 feet of lettuce", "param": "buffer_ft", "op": "lt", "value": 100, "unit": "feet", "modality": "MUST_NOT"},
+   {"id": "D-CITRUS", "pages": [5], "key": "when citrus in flush is within one-half (1/2) mile downwind", "param": "buffer_ft", "op": "lt", "value": 0.5, "unit": "mile", "modality": "MUST_NOT"},
+   {"id": "D-REI", "pages": [5], "key": "restricted entry interval (rei) of 24 hours", "param": "reentry_hours", "op": "eq", "value": 24, "unit": "hours", "modality": "MUST_NOT"},
+   {"id": "D-NIGHT-ALONE", "pages": [5], "key": "(without a tank mix partner) when nighttime temperatures are expected to fall below 60", "param": "night_temperature_f", "op": "lt", "value": 60, "unit": "F", "modality": "ADVISORY"},
+   {"id": "D-NIGHT-IDEAL", "pages": [5], "key": "ideally, nighttime temperatures 2-3 days prior to", "param": "night_temperature_f", "op": "gt", "value": 60, "unit": "F", "modality": "ADVISORY"},
+   {"id": "D-NIGHT-UNSAT", "pages": [6], "key": "if nighttime temperatures are expected to fall below 60", "param": "night_temperature_f", "op": "lt", "value": 60, "unit": "F", "modality": "ADVISORY"}
+  ],
+  "264-418": [
+   {"id": "P-REI-48", "pages": [5], "key": "restricted-entry interval (rei) of 48 hours", "param": "reentry_hours", "op": "eq", "value": 48, "unit": "hours", "modality": "MUST_NOT"},
+   {"id": "P-REI-72", "pages": [5], "key": "the rei is 72 hours in areas where average rainfall is less than 25 inches", "param": "reentry_hours", "op": "eq", "value": 72, "unit": "hours", "modality": "MUST_NOT"},
+   {"id": "P-NOZZLE", "pages": [5], "key": "no more than 3 feet above the ground or crop canopy", "param": "release_height_ft", "op": "lte", "value": 3, "unit": "feet", "modality": "MUST"},
+   {"id": "P-DROP", "pages": [5], "key": "applicators are required to use a fine to medium or coarser droplet size", "param": "droplet_size", "op": "none", "value": null, "unit": null, "modality": "MUST"},
+   {"id": "P-WIND", "pages": [5], "key": "do not apply when wind speeds exceed 10 miles per hour at the application site", "param": "wind_speed_mph", "op": "gt", "value": 10, "unit": "mph", "modality": "MUST_NOT"},
+   {"id": "P-INV1", "pages": [5], "key": "do not apply during temperature inversions", "param": "temperature_inversion", "op": "none", "value": null, "unit": null, "modality": "MUST_NOT"},
+   {"id": "P-HOT-DROP", "pages": [6], "key": "when making applications in hot and dry conditions, use larger droplets", "param": "droplet_size", "op": "none", "value": null, "unit": null, "modality": "ADVISORY"},
+   {"id": "P-INV2", "pages": [6], "key": "avoid applications during temperature inversions", "param": "temperature_inversion", "op": "none", "value": null, "unit": null, "modality": "ADVISORY"},
+   {"id": "P-GUST", "pages": [6], "key": "avoid applications during gusty wind conditions", "param": "wind_speed_mph", "op": "none", "value": null, "unit": null, "modality": "ADVISORY"},
+   {"id": "P-RAIN-6", "pages": [9], "key": "if rain is expected within 6 hours", "param": "rain_free_hours", "op": "lt", "value": 6, "unit": "hours", "modality": "MUST_NOT"},
+   {"id": "P-RAIN-6B", "pages": [9], "key": "rainfall within 6 hours of application may reduce product performance", "param": "rainfall_expected", "op": "lt", "value": 6, "unit": "hours", "modality": "ADVISORY"},
+   {"id": "P-COOL", "pages": [10], "key": "limit use of higher rates to cool (below 65", "param": "air_temperature_f", "op": "lt", "value": 65, "unit": "F", "modality": "ADVISORY"}
+  ]
+ }
+}
