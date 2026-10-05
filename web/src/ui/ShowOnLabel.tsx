@@ -18,9 +18,10 @@ type LoadState =
   | { kind: "ready"; highlighted: boolean }
   | { kind: "error"; message: string };
 
-export function ShowOnLabel({ source, className = "" }: {
+export function ShowOnLabel({ source, className = "", id }: {
   source: LabelSource;
   className?: string;
+  id?: string;
 }) {
   const titleId = useId();
   const descriptionId = useId();
@@ -125,6 +126,7 @@ export function ShowOnLabel({ source, className = "" }: {
   return (
     <>
       <button
+        id={id}
         ref={triggerRef}
         type="button"
         onClick={() => {

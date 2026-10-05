@@ -13,6 +13,7 @@ const EXAMPLES = [
 ] as const;
 
 type AskTankProps = {
+  initialQuestion?: string;
   onCheck: (snapshot: AgentCheckSnapshot) => void;
   onClause: (ruleId: string) => void;
   onWindow: (index: number) => void;
@@ -66,8 +67,8 @@ function TraceRow({ entry }: { entry: AgentTraceEntry }) {
   );
 }
 
-export function AskTank({ onCheck, onClause, onWindow }: AskTankProps) {
-  const [question, setQuestion] = useState("");
+export function AskTank({ initialQuestion, onCheck, onClause, onWindow }: AskTankProps) {
+  const [question, setQuestion] = useState(initialQuestion ?? "");
   const [startedAt, setStartedAt] = useState<number | null>(null);
   const [status, setStatus] = useState("Calling Nemotron");
   const [result, setResult] = useState<AgentRunResult | null>(null);

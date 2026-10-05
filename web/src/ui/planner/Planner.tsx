@@ -36,6 +36,8 @@ type PlannerProps = {
   initialProducts?: string;
   initialHours?: string;
   initialReplay?: string;
+  initialHour?: string;
+  initialQuestion?: string;
 };
 
 type Failure = {
@@ -77,7 +79,7 @@ function workingSteps(current: number, measured: Array<string | undefined>): Wor
   }));
 }
 
-export function Planner({ initialField, initialProducts, initialHours, initialReplay }: PlannerProps) {
+export function Planner({ initialField, initialProducts, initialHours, initialReplay, initialHour, initialQuestion }: PlannerProps) {
   const replayPoint = initialReplay && REPLAY_POINTS.has(initialReplay) ? initialReplay : undefined;
   const [field, setField] = useState(replayPoint ?? initialField ?? DEFAULT_FIELD);
   const [selectedRegs, setSelectedRegs] = useState<Set<ProductRegistration>>(() => selectedFromQuery(initialProducts));
@@ -93,6 +95,8 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
   const [selectedHour, setSelectedHour] = useState<number | null>(null);
   const [validation, setValidation] = useState<string | null>(null);
   const autoRan = useRef(false);
+  const initialHourApplied = useRef(false);
+  const deepLinkScrolled = useRef(false);
 
   useEffect(() => {
     let current = true;
@@ -159,6 +163,11 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
       });
       setActiveReplay(checked.source === "RECORDED" ? pointKey : undefined);
       setWorking(null);
+      if (!initialHourApplied.current && initialHour === "first-blocked") {
+        const blockedIndex = checked.hours.findIndex((hour) => hour.state === "BLOCKED");
+        if (blockedIndex >= 0) setSelectedHour(blockedIndex);
+        initialHourApplied.current = true;
+      }
       setResult(checked);
     } catch (error) {
       const message = errorText(error);
@@ -174,7 +183,7 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
         setFailure({ message, pointKey });
       }
     }
-  }, [labels, points, selectedRegs]);
+  }, [initialHour, labels, points, selectedRegs]);
 
   useEffect(() => {
     if (!points || !labels || !configReady || autoRan.current) return;
@@ -200,6 +209,21 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
     else params.delete("replay");
     window.history.replaceState(null, "", `${window.location.pathname}?${params.toString()}${window.location.hash}`);
   }, [activeReplay, configReady, field, jobHours, selectedRegs]);
+
+  useEffect(() => {
+    if (!result || deepLinkScrolled.current || !window.location.hash) return;
+    if (initialHour === "first-blocked" && selectedHour === null) return;
+    const targetId = decodeURIComponent(window.location.hash.slice(1));
+    requestAnimationFrame(() => {
+      const target = document.getElementById(targetId);
+      if (!target) return;
+      target.scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+        block: "start",
+      });
+      deepLinkScrolled.current = true;
+    });
+  }, [initialHour, result, selectedHour]);
 
   const pointEntries = useMemo(() => points ? orderedPointEntries(points) : [], [points]);
   const selectedProducts = result && labels
@@ -428,7 +452,7 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
         />
       )}
 
-      <AskTank onCheck={useAgentCheck} onClause={openAgentClause} onWindow={openAgentWindow} />
+      <AskTank initialQuestion={initialQuestion} onCheck={useAgentCheck} onClause={openAgentClause} onWindow={openAgentWindow} />
     </main>
   );
 }

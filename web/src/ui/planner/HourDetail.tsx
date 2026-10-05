@@ -150,7 +150,11 @@ function CitationSection({ title, empty, citations, kind, labels, usedRules }: {
                 </blockquote>
                 <p className="mt-3 text-sm font-bold"><span className="text-[#14213d]/60">Why: </span>{citation.why}</p>
                 {source ? (
-                  <ShowOnLabel source={source} className="mt-4" />
+                  <ShowOnLabel
+                    source={source}
+                    className="mt-4 scroll-mt-28"
+                    id={kind === "blocked" && index === 0 ? "show-on-label" : undefined}
+                  />
                 ) : (
                   <p className="mt-4 text-sm font-bold text-[#d1433f]">No EPA source URL was supplied for this product.</p>
                 )}

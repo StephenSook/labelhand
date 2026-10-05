@@ -53,6 +53,26 @@ test("the home hero runs a live or recorded planner check with a source time", a
   await expect(card).toHaveAttribute("data-blocked-hours", /\d+/);
 });
 
+test("every judge step resolves to its app target", async ({ page }) => {
+  await page.goto("/judge");
+  const links = await page.locator(".judge-step a[href^='/app']").evaluateAll((anchors) => (
+    anchors.map((anchor) => (anchor as HTMLAnchorElement).getAttribute("href")).filter((href): href is string => Boolean(href))
+  ));
+  expect(links).toHaveLength(7);
+
+  for (const href of links) {
+    const response = await page.goto(href);
+    expect(response?.status(), href).toBeLessThan(400);
+    await waitForAutoRun(page);
+    const target = decodeURIComponent(new URL(page.url()).hash.slice(1));
+    expect(target, href).not.toBe("");
+    await expect(page.locator(`#${target}`), href).toBeAttached();
+  }
+
+  await page.goto(`${replayPath}&question=${encodeURIComponent("Which label sets the strictest wind limit in this tank?")}#ask-the-tank`);
+  await expect(page.locator("#tank-question")).toHaveValue("Which label sets the strictest wind limit in this tank?");
+});
+
 test("the recorded planner exposes every hour and its source quote", async ({ page }) => {
   await openReplay(page);
 
