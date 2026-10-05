@@ -27,37 +27,41 @@ from compile_label import BASE, PARAMS, PRICES, guard, norm
 from compile_label import OUT as COMPILED
 
 DEFAULT_MODEL = "nvidia/Nemotron-3-Ultra-550b-a55b"
+TYPING_VERSION = "v3"  # v2: limits vs conditional duties and educational text; v3: types the one constraint the first pass named
 
 DEFINITIONS = {
-    "wind_speed_mph": "a limit or condition on wind speed or gusts at application time",
+    "wind_speed_mph": "a limit on the wind speed or gusts under which the product may be applied (not a duty that only applies at some wind speed)",
     "air_temperature_f": "a daytime, current or mean air temperature condition (not an inversion)",
     "night_temperature_f": "a nighttime or minimum night temperature condition",
     "rain_free_hours": "do not apply, or apply only, if rain is or is not expected within N hours of application",
     "rainfall_expected": "a statement that rain within N hours reduces performance (advice, not a prohibition)",
-    "temperature_inversion": "applying during a temperature inversion, or conditions that favor one",
+    "temperature_inversion": "a rule about applying during a temperature inversion or conditions that favor one (not a description of what inversions are)",
     "relative_humidity_pct": "a humidity condition",
     "droplet_size": "required or advised spray droplet size or quality",
     "boom_height_in": "height of a ground boom or nozzles above ground or canopy",
     "release_height_ft": "spray release height above ground or canopy, ground or aerial",
     "open_boll_pct": "percent of cotton bolls open when applying",
     "crop_stage": "any crop growth stage other than a percent of bolls open",
-    "days_before_harvest": "minimum days between application and harvest",
+    "days_before_harvest": "minimum time between application and harvest, in days or hours (harvest can commence after N)",
     "application_interval_days": "minimum days between applications",
     "max_applications": "maximum number of applications",
-    "rate_per_acre": "product rate per acre for one application",
+    "rate_per_acre": "product rate per acre for one application, including rate-table rows that pick a rate by weather or crop condition",
     "max_rate_per_season": "maximum product per acre per season or year",
     "spray_volume_gal_per_acre": "spray volume in gallons per acre",
-    "buffer_ft": "a minimum distance from a sensitive area, crop, water or residence",
+    "buffer_ft": "a minimum distance from a sensitive area, other crop, water or residence, in any unit (feet, miles)",
     "reentry_hours": "the restricted-entry interval (REI) before workers may enter treated areas, in hours or days",
     "grazing_restriction": "grazing or feeding restrictions",
     "irrigation_restriction": "application through irrigation systems",
     "tank_mix": "whether or how the product may be mixed with other products",
     "adjuvant": "adjuvants, oils or surfactants",
-    "application_method": "application equipment or method other than height and droplets (aerial setup, nozzles, pressure, swath)",
+    "application_method": (
+        "equipment or procedure other than height and droplets (aerial setup, boom length, nozzles, pressure, swath displacement), "
+        "including duties that apply only at some wind speed"
+    ),
     "aerial_restriction": "a restriction that applies only to aerial application and fits no other parameter",
     "ppe": "personal protective equipment",
     "sensitive_area": "a sensitive area named without a distance",
-    "other": "anything else, including cleaning, rinsing, storage and general statements",
+    "other": "anything else: cleaning, rinsing, storage, and educational statements that describe drift, weather or inversions without telling the applicator what to do",
 }
 SCHEMA = {
     "type": "object",
@@ -73,7 +77,8 @@ SCHEMA = {
     "additionalProperties": False,
 }
 SYSTEM = (
-    "You type one clause from a U.S. EPA pesticide label. Choose the single parameter whose definition fits the clause best.\n"
+    "You type one constraint from a U.S. EPA pesticide label clause. A clause can state several constraints "
+    "(a height and a wind limit in one sentence): type only the CONSTRAINT TO TYPE, with the parameter whose definition fits it.\n"
     + "\n".join(f"- {k}: {v}" for k, v in DEFINITIONS.items())
     + "\nvalue and value2 are numbers exactly as written in the clause, in the clause's own unit; never convert units. "
     "Use null and op none when the clause states no number. modality: MUST_NOT for prohibitions (do not, must not), "
@@ -87,7 +92,10 @@ def call(model: str, rule: dict, key: str) -> dict:
         "model": model,
         "temperature": 0,
         "max_tokens": 400,
-        "messages": [{"role": "system", "content": SYSTEM}, {"role": "user", "content": f"CLAUSE: {rule['quote']}"}],
+        "messages": [
+            {"role": "system", "content": SYSTEM},
+            {"role": "user", "content": f"CLAUSE: {rule['quote']}\nCONSTRAINT TO TYPE: {rule.get('summary') or 'the main constraint of the clause'}"},
+        ],
         "response_format": {"type": "json_schema", "json_schema": {"name": "typed_rule", "schema": SCHEMA, "strict": True}},
         "chat_template_kwargs": {"enable_thinking": False},
     }
@@ -108,7 +116,7 @@ def call(model: str, rule: dict, key: str) -> dict:
     return {"ok": False, "error": err, "usage": {}}
 
 
-def retype(reg: str, model: str, suffix: str) -> dict:
+def retype(reg: str, model: str, suffix: str, out_tag: str = "") -> dict:
     key = os.environ.get("NEBIUS_API_KEY", "").strip()
     if not key:
         raise SystemExit("NEBIUS_API_KEY missing")
@@ -145,7 +153,8 @@ def retype(reg: str, model: str, suffix: str) -> dict:
         "accepted": accepted,
         "rejected": rejected,
     }
-    tag = "" if model == DEFAULT_MODEL else "." + model.split("/")[-1]
+    tag = ("" if model == DEFAULT_MODEL else "." + model.split("/")[-1]) + out_tag
+    out["typing_version"] = TYPING_VERSION
     (COMPILED / f"{reg}{suffix}.typed{tag}.json").write_text(json.dumps(out, indent=1), encoding="utf-8")
     return out
 
@@ -155,9 +164,10 @@ def main() -> int:
     ap.add_argument("regs", nargs="+")
     ap.add_argument("--model", default=DEFAULT_MODEL)
     ap.add_argument("--suffix", default="")
+    ap.add_argument("--tag", default="", help="appended to the output name, so typing versions can be compared side by side")
     a = ap.parse_args()
     for reg in a.regs:
-        o = retype(reg, a.model, a.suffix)
+        o = retype(reg, a.model, a.suffix, a.tag)
         agreed = sum(1 for r in o["accepted"] if r.get("agreed"))
         print(f"{reg}: retyped {len(o['accepted'])} agreed {agreed} failed {o['retype_failed']} tokens {o['retype_tokens_in']}/{o['retype_tokens_out']} ${o['retype_cost_usd']}")
     return 0
