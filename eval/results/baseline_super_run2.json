@@ -1,0 +1,200 @@
+{
+ "suffix": "",
+ "labels": {
+  "5481-504": {
+   "gold": 24,
+   "coverage": 16,
+   "typed": 13,
+   "value_n": 9,
+   "value_ok": 9,
+   "modality_ok": 9,
+   "planner_rules": 23,
+   "planner_good": 16,
+   "coverage_recall": 0.667,
+   "typed_recall": 0.542,
+   "value_exact": 1.0,
+   "modality_acc": 0.692,
+   "planner_precision": 0.696,
+   "missed": [
+    "F-REI-7",
+    "F-REI-10",
+    "F-REI-7B",
+    "F-REI-10B",
+    "F-RAIN-1",
+    "F-WIND-G2",
+    "F-BOLL-50",
+    "F-BOLL-30-60"
+   ],
+   "mistyped": [
+    {
+     "gold": "F-BOLL-60",
+     "got": [
+      "crop_stage"
+     ]
+    },
+    {
+     "gold": "F-TEMP-60",
+     "got": [
+      "temperature_inversion"
+     ]
+    },
+    {
+     "gold": "F-IMMATURE",
+     "got": [
+      "crop_stage"
+     ]
+    }
+   ],
+   "planner_false_positives": [
+    {
+     "id": "5481-504-p5-7",
+     "param": "droplet_size",
+     "quote": "Do not apply this product in a way that will contact workers or other persons, either directly or through drift."
+    },
+    {
+     "id": "5481-504-p6-3",
+     "param": "buffer_ft",
+     "quote": "Observe buffer zones and other restrictions on the FOLEX 6 EC label and/or in the manufacturer\u2019s recommendations for FOL"
+    },
+    {
+     "id": "5481-504-p7-9",
+     "param": "wind_speed_mph",
+     "quote": "If the windspeed is 10 miles per hour or less, applicators must use \u00bd swath displacement upwind at the downwind edge of "
+    },
+    {
+     "id": "5481-504-p7-10",
+     "param": "boom_height_in",
+     "quote": "The boom length must not exceed 65% of the wingspan for airplanes or 75% of the rotor blade diameter for helicopters."
+    },
+    {
+     "id": "5481-504-p7-11",
+     "param": "boom_height_in",
+     "quote": "The boom length must not exceed 65% of the wingspan for airplanes or 75% of the rotor blade diameter for helicopters."
+    },
+    {
+     "id": "5481-504-p9-2",
+     "param": "temperature_inversion",
+     "quote": "Temperature inversions are characterized by increasing temperature with altitude and are common on nights with limited c"
+    },
+    {
+     "id": "5481-504-p10-4",
+     "param": "temperature_inversion",
+     "quote": "Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after applicat"
+    }
+   ],
+   "model": "nvidia/nemotron-3-super-120b-a12b"
+  },
+  "264-700": {
+   "gold": 10,
+   "coverage": 6,
+   "typed": 5,
+   "value_n": 4,
+   "value_ok": 3,
+   "modality_ok": 3,
+   "planner_rules": 8,
+   "planner_good": 5,
+   "coverage_recall": 0.6,
+   "typed_recall": 0.5,
+   "value_exact": 0.75,
+   "modality_acc": 0.6,
+   "planner_precision": 0.625,
+   "missed": [
+    "D-LETTUCE-AIR",
+    "D-NIGHT-ALONE",
+    "D-NIGHT-IDEAL",
+    "D-NIGHT-UNSAT"
+   ],
+   "mistyped": [
+    {
+     "gold": "D-CITRUS",
+     "got": [
+      "crop_stage"
+     ]
+    }
+   ],
+   "planner_false_positives": [
+    {
+     "id": "264-700-p5-2",
+     "param": "wind_speed_mph",
+     "quote": "Follow local recommendations if wind speeds of less than ten (10) miles per hour are specified in those recommendations."
+    },
+    {
+     "id": "264-700-p6-1",
+     "param": "temperature_inversion",
+     "quote": "PRECAUTION: The addition of adjuvants can cause desiccation and/or leaf freezing during periods of high temperatures."
+    },
+    {
+     "id": "264-700-p6-3",
+     "param": "buffer_ft",
+     "quote": "Application to bottom 1/3 of plant only recommended."
+    }
+   ],
+   "model": "nvidia/nemotron-3-super-120b-a12b"
+  },
+  "264-418": {
+   "gold": 12,
+   "coverage": 8,
+   "typed": 8,
+   "value_n": 4,
+   "value_ok": 4,
+   "modality_ok": 5,
+   "planner_rules": 13,
+   "planner_good": 8,
+   "coverage_recall": 0.667,
+   "typed_recall": 0.667,
+   "value_exact": 1.0,
+   "modality_acc": 0.625,
+   "planner_precision": 0.615,
+   "missed": [
+    "P-REI-48",
+    "P-REI-72",
+    "P-DROP",
+    "P-COOL"
+   ],
+   "mistyped": [],
+   "planner_false_positives": [
+    {
+     "id": "264-418-p7-4",
+     "param": "night_temperature_f",
+     "quote": "Use of a nurse tank is highly re commended for avoiding possible spills of concentrated formulation on spray equipment o"
+    },
+    {
+     "id": "264-418-p9-4",
+     "param": "buffer_ft",
+     "quote": "Do no t use a defoliant before there is sufficient mature unopened boll s to produce the desired yield (see General Info"
+    },
+    {
+     "id": "264-418-p9-8",
+     "param": "buffer_ft",
+     "quote": "Directed Spray Application\n1 1/3 50 Use drop nozzles.  Choose TG or OC spray tips de signed to apply 50 - 60 gpa at 35 -"
+    },
+    {
+     "id": "264-418-p11-1",
+     "param": "rain_free_hours",
+     "quote": "Continuously pump or drain rinsate into application equipment or rinsate collection system while pressure rinsing."
+    },
+    {
+     "id": "264-418-p11-2",
+     "param": "rain_free_hours",
+     "quote": "Continue pressure rinsing for 2 minutes or until rinsate becomes clear."
+    }
+   ],
+   "model": "nvidia/nemotron-3-super-120b-a12b"
+  }
+ },
+ "overall": {
+  "gold": 46,
+  "coverage": 30,
+  "typed": 26,
+  "value_n": 17,
+  "value_ok": 16,
+  "modality_ok": 17,
+  "planner_rules": 44,
+  "planner_good": 29,
+  "coverage_recall": 0.652,
+  "typed_recall": 0.565,
+  "value_exact": 0.941,
+  "modality_acc": 0.654,
+  "planner_precision": 0.659
+ }
+}
