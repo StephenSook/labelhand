@@ -458,8 +458,6 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
         )}
       </section>
 
-      <AskTank onCheck={useAgentCheck} onClause={openAgentClause} onWindow={openAgentWindow} />
-
       {result && labels && (
         <Results
           result={result}
@@ -474,6 +472,8 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
           onSelectWindow={scrollToWindow}
         />
       )}
+
+      <AskTank onCheck={useAgentCheck} onClause={openAgentClause} onWindow={openAgentWindow} />
     </main>
   );
 }
@@ -572,87 +572,111 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
   const selectedSprayRecord = selectedWindow
     ? sprayRecordForWindow(result, labels, selectedPointName, selectedWindow)
     : undefined;
+  const nextWindow = windows[0];
+  const tankLabel = products.map((product) => product.shortName).join(", ");
+  const tankDescription = products
+    .map((product) => product.reg ? `${product.fullName}, EPA Reg. ${product.reg}` : product.fullName)
+    .join("; ");
 
   return (
     <section
       id="planner-results"
       data-forecast-source={result.source}
-      aria-labelledby="results-heading"
+      aria-labelledby="next-window-heading"
       className="section-card mx-auto mt-5 max-w-[92rem] bg-[#fbf7ee] px-4 py-9 text-[#14213d] sm:px-8 lg:px-12"
     >
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <p className="hand -rotate-1 text-3xl text-[#8a5a2b]">{selectedPointName}</p>
-          <h2 id="results-heading" className="display text-5xl sm:text-6xl">The forecast window</h2>
+      <section
+        id="next-window"
+        aria-labelledby="next-window-heading"
+        className={`scroll-mt-28 rounded-[1.7rem] border-[3px] border-[#14213d] p-5 shadow-[5px_6px_0_#14213d] sm:p-7 ${nextWindow ? "bg-[#216a38] text-white" : "bg-[#ffc53d]"}`}
+      >
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p className={`hand -rotate-1 text-3xl ${nextWindow ? "text-[#ffc53d]" : "text-[#8a5a2b]"}`}>{selectedPointName}</p>
+            <h2 id="next-window-heading" className="display mt-1 text-5xl sm:text-6xl">Next window</h2>
+          </div>
+          <span className={`rounded-full border-[3px] px-4 py-2 text-sm font-black ${nextWindow ? "border-white bg-white text-[#155b2c]" : "border-[#14213d] bg-[#fbf7ee]"}`}>
+            {result.source}
+          </span>
         </div>
-        <span className={`rounded-full border-[3px] border-[#14213d] px-4 py-2 text-sm font-black ${result.source === "LIVE" ? "bg-[#216a38] text-white" : "bg-[#ffc53d]"}`}>
-          {result.source}
-        </span>
-      </div>
 
-      <p className="mt-4 font-bold">
-        {counts.PERMITTED} FORECAST-PERMITTED · {counts.FIELD_CHECK} FIELD CHECK · {counts.BLOCKED} BLOCKED hours
-      </p>
-      <p className="mt-1 text-sm font-semibold text-[#14213d]/70">
-        {result.source === "LIVE" ? "NWS response received" : "NWS forecast recorded"} at {formatForecastTime(result.fetchedAt)}. Source: {result.source === "LIVE" ? "api.weather.gov, fetched by this browser" : "committed NWS replay fixture"}.
-      </p>
-      {result.liveFailure ? (
-        <p className="mt-3 rounded-xl border-2 border-[#8a5a2b] bg-[#ffc53d]/25 p-3 text-sm font-bold">
-          The live NWS request failed, so this first check uses the recorded forecast: {result.liveFailure}
+        <p className={`mt-4 text-sm font-semibold ${nextWindow ? "text-white/85" : "text-[#14213d]/75"}`}>
+          {result.source === "LIVE" ? "NWS response received" : "NWS forecast recorded"} at {formatForecastTime(result.fetchedAt)}
         </p>
-      ) : null}
+        <p className="mt-3 font-bold" title={tankDescription} aria-label={`Tank products: ${tankDescription}`}>
+          Tank: {tankLabel}
+        </p>
 
-      <section aria-labelledby="windows-heading" className="mt-8 rounded-[1.7rem] border-[3px] border-[#14213d] bg-[#216a38] p-5 text-white shadow-[5px_6px_0_#14213d] sm:p-7">
-        <h3 id="windows-heading" className="display text-3xl">Windows at least {jobHours} {jobHours === 1 ? "hour" : "hours"} long</h3>
-        {windows.length === 0 ? (
-          <p className="mt-3 font-bold">No run of FORECAST-PERMITTED hours is long enough for this job.</p>
+        {nextWindow ? (
+          <div className="mt-5 grid items-end gap-5 lg:grid-cols-[1fr_auto]">
+            <div>
+              <p className="text-sm font-black uppercase tracking-[0.12em]">{formatWindowDay(nextWindow.start)}</p>
+              <p className="display mt-1 text-4xl sm:text-5xl">
+                {formatWindowClock(nextWindow.start)} to {formatWindowClock(nextWindow.end)}
+              </p>
+              <p className="mt-2 text-lg font-bold">{nextWindow.length} consecutive {nextWindow.length === 1 ? "hour" : "hours"}</p>
+              <button
+                type="button"
+                onClick={() => onSelectWindow(nextWindow.start)}
+                className="mt-3 min-h-11 rounded-full border-2 border-white px-4 py-2 text-sm font-black underline decoration-2 underline-offset-4 outline-offset-2 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#ffc53d]"
+              >
+                Show this window in the timeline
+              </button>
+            </div>
+            <SprayRecordButton
+              id="spray-record"
+              input={sprayRecordForWindow(result, labels, selectedPointName, nextWindow)}
+            />
+          </div>
         ) : (
-          <ol className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {windows.map((window, index) => (
-              <li key={`${window.start}-${index}`} className="rounded-2xl border-2 border-[#14213d] bg-[#fbf7ee] p-3 text-[#14213d]">
-                <button
-                  type="button"
-                  onClick={() => onSelectWindow(window.start)}
-                  className="min-h-16 w-full rounded-xl px-2 py-2 text-left outline-offset-2 transition-transform hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#216a38]"
-                >
-                  <span className="block text-sm font-black">{formatWindowTime(window.start)} to {formatWindowTime(window.end)}</span>
-                  <span className="mt-1 block text-sm font-semibold">{window.length} consecutive {window.length === 1 ? "hour" : "hours"}</span>
-                </button>
-                <SprayRecordButton input={sprayRecordForWindow(result, labels, selectedPointName, window)} className="mt-2" />
-              </li>
-            ))}
-          </ol>
+          <p className="mt-5 text-lg font-black">
+            No forecast-permitted window fits this {jobHours}-hour job in the forecast.{" "}
+            <a href="#why-few-windows" className="underline decoration-4 underline-offset-4">Why so few windows?</a>
+          </p>
         )}
-      </section>
 
-      {(windows.length === 0 || counts.PERMITTED * 4 < result.hours.length) && (
-        <WhyFewWindows
-          key={`${result.pointKey}-${result.fetchedAt}-${result.ruleGroups.map((group) => group.product).join("|")}-${jobHours}`}
-          hours={result.hours}
-          ruleGroups={result.ruleGroups}
-          periods={result.periods}
-          lat={result.lat}
-          lon={result.lon}
-          jobHours={jobHours}
-          labels={labels}
-        />
-      )}
+        <p className={`mt-5 border-t-2 pt-4 text-sm font-bold ${nextWindow ? "border-white/45" : "border-[#14213d]/35"}`}>
+          {counts.PERMITTED} FORECAST-PERMITTED · {counts.FIELD_CHECK} FIELD CHECK · {counts.BLOCKED} BLOCKED hours
+        </p>
+        {result.liveFailure ? (
+          <p className={`mt-3 rounded-xl border-2 p-3 text-sm font-bold ${nextWindow ? "border-white bg-white/10" : "border-[#8a5a2b] bg-[#fbf7ee]/55"}`}>
+            The live NWS request failed, so this first check uses the recorded forecast: {result.liveFailure}
+          </p>
+        ) : null}
+      </section>
 
       <Timeline hours={result.hours} products={products} selectedIndex={selectedHour} onSelect={onSelectHour} />
       {selectedHour !== null && result.hours[selectedHour] && (
         <HourDetail hour={result.hours[selectedHour]} labels={labels} usedRules={usedRules} sprayRecord={selectedSprayRecord} />
       )}
+      <WhyFewWindows
+        key={`${result.pointKey}-${result.fetchedAt}-${result.ruleGroups.map((group) => group.product).join("|")}-${jobHours}`}
+        hours={result.hours}
+        ruleGroups={result.ruleGroups}
+        periods={result.periods}
+        lat={result.lat}
+        lon={result.lon}
+        jobHours={jobHours}
+        labels={labels}
+      />
       <RulesDisclosure groups={result.ruleGroups} labels={labels} />
     </section>
   );
 }
 
-function formatWindowTime(value: string): string {
+function formatWindowDay(value: string): string {
   return new Intl.DateTimeFormat("en-US", {
     timeZone: "America/New_York",
-    weekday: "short",
-    month: "short",
+    weekday: "long",
+    month: "long",
     day: "numeric",
+  }).format(new Date(value));
+}
+
+function formatWindowClock(value: string): string {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/New_York",
     hour: "numeric",
+    minute: "2-digit",
   }).format(new Date(value));
 }

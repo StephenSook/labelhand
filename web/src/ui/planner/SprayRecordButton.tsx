@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { downloadSprayRecord, type SprayRecordInput } from "@/lib/spray-record";
 
-export function SprayRecordButton({ input, className = "" }: {
+export function SprayRecordButton({ input, className = "", id }: {
   input: SprayRecordInput;
   className?: string;
+  id?: string;
 }) {
   const [error, setError] = useState<string | null>(null);
   const [working, setWorking] = useState(false);
@@ -23,7 +24,7 @@ export function SprayRecordButton({ input, className = "" }: {
   }
 
   return (
-    <div className={className}>
+    <div id={id} className={className}>
       <button
         type="button"
         disabled={working}

@@ -124,6 +124,7 @@ export function WhyFewWindows({ hours, ruleGroups, periods, lat, lon, jobHours, 
 
   return (
     <section
+      id="why-few-windows"
       aria-labelledby="few-windows-heading"
       className="mt-8 rounded-[1.7rem] border-[3px] border-[#14213d] bg-[#9fd3f2] p-5 shadow-[5px_6px_0_#14213d] sm:p-7"
     >
