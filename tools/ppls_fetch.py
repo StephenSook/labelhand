@@ -29,6 +29,14 @@ INDEX = LABELS / "index.json"
 UA = "labelhand-research/0.1 (github.com/StephenSook)"
 PAGE = "https://ordspub.epa.gov/ords/pesticides/f?p=PPLS:102:::NO::P102_REG_NUM:{reg}"
 PDF_RE = re.compile(r"chem_search/ppls/(\d{6})-(\d{5})-(\d{8})\.pdf")
+# Fields a person writes into index.json by hand; a re-fetch must keep them.
+CURATED = ("shortName",)
+
+
+def merge_record(prev: dict | None, rec: dict) -> dict:
+    """Return the fetched record plus any hand-curated fields from the previous entry."""
+    kept = {key: prev[key] for key in CURATED if prev and key in prev}
+    return {**rec, **kept}
 
 
 def _get(url: str, timeout: int = 60) -> bytes:
@@ -84,7 +92,7 @@ def main(regs: list[str]) -> int:
             rec = fetch(reg)
             prev = index.get(reg)
             changed = prev is None or prev.get("sha256") != rec["sha256"]
-            index[reg] = rec
+            index[reg] = merge_record(prev, rec)
             print(f"{reg} {rec['product']!r} accepted {rec['accepted']} {rec['bytes']} bytes sha256 {rec['sha256'][:12]} {'NEW/CHANGED' if changed else 'unchanged'}")
         except Exception as e:  # a failed fetch is reported, never recorded as "no label"
             failed += 1
