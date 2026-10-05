@@ -88,6 +88,10 @@ def score_label(gold_items: list[dict], rules: list[dict]) -> dict:
     acting = [r for r in rules if r["param"] in TOPIC and r["modality"] in ("MUST", "MUST_NOT") and all(w in r["quote"].lower() for w in TOPIC[r["param"]])]
     acting_good = [r for r in acting if matches_gold(r)]
     acting_fp = [{"id": r["id"], "param": r["param"], "quote": r["quote"][:120]} for r in acting if r not in acting_good]
+    # Acting recall: gold clauses the planner must enforce, and whether an acting rule enforces each one.
+    gold_acting = [g for g in gold_items if g["param"] in TOPIC and g["modality"] in ("MUST", "MUST_NOT")]
+    gold_acting_hit = [g for g in gold_acting if any(quote_matches(g["key"], r["quote"]) and group(g["param"]) == group(r["param"]) for r in acting)]
+    acting_missed = [g["id"] for g in gold_acting if g not in gold_acting_hit]
     n = len(gold_items)
     return {
         "gold": n,
@@ -106,6 +110,10 @@ def score_label(gold_items: list[dict], rules: list[dict]) -> dict:
         "acting_rules": len(acting),
         "acting_good": len(acting_good),
         "acting_precision": round(len(acting_good) / len(acting), 3) if acting else None,
+        "gold_acting": len(gold_acting),
+        "gold_acting_hit": len(gold_acting_hit),
+        "acting_recall": round(len(gold_acting_hit) / len(gold_acting), 3) if gold_acting else None,
+        "acting_missed": acting_missed,
         "missed": misses,
         "mistyped": mistyped,
         "planner_false_positives": false_pos,
@@ -125,7 +133,20 @@ def main() -> int:
         s = score_label(items, comp["accepted"])
         s["model"] = comp.get("model")
         report["labels"][reg] = s
-        for k in ("gold", "coverage", "typed", "value_n", "value_ok", "modality_ok", "planner_rules", "planner_good", "acting_rules", "acting_good"):
+        for k in (
+            "gold",
+            "coverage",
+            "typed",
+            "value_n",
+            "value_ok",
+            "modality_ok",
+            "planner_rules",
+            "planner_good",
+            "acting_rules",
+            "acting_good",
+            "gold_acting",
+            "gold_acting_hit",
+        ):
             tot[k] = tot.get(k, 0) + s[k]
         print(
             f"{reg}: coverage {s['coverage']}/{s['gold']} typed {s['typed']} value {s['value_ok']}/{s['value_n']} "
@@ -139,12 +160,13 @@ def main() -> int:
         "modality_acc": round(tot["modality_ok"] / tot["typed"], 3) if tot["typed"] else None,
         "planner_precision": round(tot["planner_good"] / tot["planner_rules"], 3) if tot["planner_rules"] else None,
         "acting_precision": round(tot["acting_good"] / tot["acting_rules"], 3) if tot["acting_rules"] else None,
+        "acting_recall": round(tot["gold_acting_hit"] / tot["gold_acting"], 3) if tot["gold_acting"] else None,
     }
     o = report["overall"]
     print(
         f"OVERALL coverage recall {o['coverage_recall']} | typed recall {o['typed_recall']} | value exact {o['value_exact']} | "
         f"modality {o['modality_acc']} | planner precision {o['planner_precision']} | acting precision {o['acting_precision']} "
-        f"({o['acting_good']}/{o['acting_rules']})"
+        f"({o['acting_good']}/{o['acting_rules']}) | acting recall {o['acting_recall']} ({o['gold_acting_hit']}/{o['gold_acting']})"
     )
     if a.out:
         pathlib.Path(a.out).parent.mkdir(parents=True, exist_ok=True)

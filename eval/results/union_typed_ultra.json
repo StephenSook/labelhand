@@ -18,6 +18,10 @@
    "acting_rules": 9,
    "acting_good": 6,
    "acting_precision": 0.667,
+   "gold_acting": 5,
+   "gold_acting_hit": 5,
+   "acting_recall": 1.0,
+   "acting_missed": [],
    "missed": [
     "F-REI-7",
     "F-REI-10"
@@ -134,6 +138,10 @@
    "acting_rules": 2,
    "acting_good": 2,
    "acting_precision": 1.0,
+   "gold_acting": 2,
+   "gold_acting_hit": 2,
+   "acting_recall": 1.0,
+   "acting_missed": [],
    "missed": [
     "D-LETTUCE-AIR",
     "D-NIGHT-ALONE",
@@ -205,6 +213,10 @@
    "acting_rules": 4,
    "acting_good": 4,
    "acting_precision": 1.0,
+   "gold_acting": 3,
+   "gold_acting_hit": 3,
+   "acting_recall": 1.0,
+   "acting_missed": [],
    "missed": [],
    "mistyped": [],
    "planner_false_positives": [
@@ -284,11 +296,14 @@
   "planner_good": 52,
   "acting_rules": 15,
   "acting_good": 12,
+  "gold_acting": 10,
+  "gold_acting_hit": 10,
   "coverage_recall": 0.891,
   "typed_recall": 0.848,
   "value_exact": 0.931,
   "modality_acc": 0.897,
   "planner_precision": 0.658,
-  "acting_precision": 0.8
+  "acting_precision": 0.8,
+  "acting_recall": 1.0
  }
 }

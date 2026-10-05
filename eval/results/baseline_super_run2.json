@@ -18,6 +18,12 @@
    "acting_rules": 7,
    "acting_good": 5,
    "acting_precision": 0.714,
+   "gold_acting": 5,
+   "gold_acting_hit": 4,
+   "acting_recall": 0.8,
+   "acting_missed": [
+    "F-WIND-G2"
+   ],
    "missed": [
     "F-REI-7",
     "F-REI-10",
@@ -123,6 +129,10 @@
    "acting_rules": 3,
    "acting_good": 3,
    "acting_precision": 1.0,
+   "gold_acting": 2,
+   "gold_acting_hit": 2,
+   "acting_recall": 1.0,
+   "acting_missed": [],
    "missed": [
     "D-LETTUCE-AIR",
     "D-NIGHT-ALONE",
@@ -177,6 +187,10 @@
    "acting_rules": 7,
    "acting_good": 6,
    "acting_precision": 0.857,
+   "gold_acting": 3,
+   "gold_acting_hit": 3,
+   "acting_recall": 1.0,
+   "acting_missed": [],
    "missed": [
     "P-REI-48",
     "P-REI-72",
@@ -237,11 +251,14 @@
   "planner_good": 29,
   "acting_rules": 17,
   "acting_good": 14,
+  "gold_acting": 10,
+  "gold_acting_hit": 9,
   "coverage_recall": 0.652,
   "typed_recall": 0.565,
   "value_exact": 0.941,
   "modality_acc": 0.654,
   "planner_precision": 0.659,
-  "acting_precision": 0.824
+  "acting_precision": 0.824,
+  "acting_recall": 0.9
  }
 }
