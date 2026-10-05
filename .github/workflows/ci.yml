@@ -32,3 +32,23 @@ jobs:
           if git ls-files -z -- '*.md' '*.py' '*.yml' ':(exclude)data/**' | xargs -0 grep -l $'\xe2\x80\x94' ; then
             echo "em-dash found"; exit 1
           fi
+
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+          target: wasm32-unknown-unknown
+          components: rustfmt, clippy
+      - name: Install wasm-pack
+        run: cargo install wasm-pack --version 0.15.0 --locked
+      - name: Format
+        run: cargo fmt --check
+      - name: Clippy
+        run: cargo clippy --all-targets --all-features -- -D warnings
+      - name: Tests
+        run: cargo test
+      - name: Build WASM
+        run: wasm-pack build core --target web --release -- --features wasm

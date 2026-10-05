@@ -1,0 +1,22 @@
+[package]
+name = "labelhand-core"
+version = "0.1.0"
+edition = "2024"
+description = "Labelhand planner kernel: compiled pesticide label rules + NWS hourly forecast -> hour-by-hour spray states"
+license = "Apache-2.0"
+repository = "https://github.com/StephenSook/labelhand"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = []
+wasm = ["dep:wasm-bindgen"]
+
+[dependencies]
+chrono = { version = "0.4", default-features = false, features = ["std"] }
+regex = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+wasm-bindgen = { version = "0.2", optional = true }
+

@@ -26,3 +26,8 @@ Thumbs.db
 # EPA label PDFs are fetched from EPA PPLS at run time (tools/ppls_fetch.py), not redistributed
 data/labels/*.pdf
 data/text/
+
+# Rust
+/target/
+core/target/
+core/pkg/

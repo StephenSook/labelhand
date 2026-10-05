@@ -39,6 +39,17 @@ flowchart LR
 4. **Plan.** `engine/windows.py` evaluates every product's rules against each forecast hour. A rule only drives the planner if its quote names its own topic (a wind rule must mention wind), which stops a mislabeled rule from deciding anything.
 5. **Record.** `tools/nws_recorder.py` saves the NWS forecast and nearest station observation for ten Georgia cotton-county points every hour, because NWS keeps no forecast archive and every result must be replayable.
 
+### Rust core
+
+`core/` is the shared planner kernel for browser WASM and later UniFFI phone bindings. It reproduces the Python kernel exactly on the three frozen Georgia fixtures, covering 3 x 156 forecast hours.
+
+```bash
+cargo fmt --check
+cargo clippy --all-targets --all-features -- -D warnings
+cargo test
+wasm-pack build core --target web --release -- --features wasm
+```
+
 ## Measured so far
 
 Three real Georgia cotton defoliation labels: Folex 6 EC (EPA Reg. 5481-504, accepted 2026-03-04), Dropp SC (264-700) and Prep (264-418), 32 pages in total.
