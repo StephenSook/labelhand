@@ -15,6 +15,9 @@
    "value_exact": 1.0,
    "modality_acc": 1.0,
    "planner_precision": 0.9,
+   "acting_rules": 5,
+   "acting_good": 4,
+   "acting_precision": 0.8,
    "missed": [
     "F-REI-7",
     "F-REI-10",
@@ -37,12 +40,21 @@
     {
      "id": "5481-504-p7-9",
      "param": "wind_speed_mph",
+     "modality": "MUST",
      "quote": "If the windspeed is 10 miles per hour or less, applicators must use \u00bd swath displacement upwind at the downwind edge of "
     },
     {
      "id": "5481-504-p9-2",
      "param": "temperature_inversion",
+     "modality": "ADVISORY",
      "quote": "Temperature inversions are characterized by increasing temperature with altitude and are common on nights with limited c"
+    }
+   ],
+   "acting_false_positives": [
+    {
+     "id": "5481-504-p7-9",
+     "param": "wind_speed_mph",
+     "quote": "If the windspeed is 10 miles per hour or less, applicators must use \u00bd swath displacement upwind at the downwind edge of "
     }
    ],
    "model": "nvidia/nemotron-3-super-120b-a12b"
@@ -61,6 +73,9 @@
    "value_exact": 0.75,
    "modality_acc": 1.0,
    "planner_precision": 0.714,
+   "acting_rules": 2,
+   "acting_good": 2,
+   "acting_precision": 1.0,
    "missed": [
     "D-LETTUCE-AIR",
     "D-NIGHT-ALONE",
@@ -79,14 +94,17 @@
     {
      "id": "264-700-p5-2",
      "param": "wind_speed_mph",
+     "modality": "ADVISORY",
      "quote": "Follow local recommendations if wind speeds of less than ten (10) miles per hour are specified in those recommendations."
     },
     {
      "id": "264-700-p5-6",
      "param": "buffer_ft",
+     "modality": "MUST_NOT",
      "quote": "In addition, for citrus crops, do not apply Dropp\u00ae SC by air when citrus in flush is within five (5) miles downwind of t"
     }
    ],
+   "acting_false_positives": [],
    "model": "nvidia/nemotron-3-super-120b-a12b"
   },
   "264-418": {
@@ -103,6 +121,9 @@
    "value_exact": 1.0,
    "modality_acc": 0.875,
    "planner_precision": 1.0,
+   "acting_rules": 4,
+   "acting_good": 4,
+   "acting_precision": 1.0,
    "missed": [
     "P-REI-48",
     "P-REI-72",
@@ -111,6 +132,7 @@
    ],
    "mistyped": [],
    "planner_false_positives": [],
+   "acting_false_positives": [],
    "model": "nvidia/nemotron-3-super-120b-a12b"
   }
  },
@@ -123,10 +145,13 @@
   "modality_ok": 27,
   "planner_rules": 35,
   "planner_good": 31,
+  "acting_rules": 11,
+  "acting_good": 10,
   "coverage_recall": 0.652,
   "typed_recall": 0.609,
   "value_exact": 0.947,
   "modality_acc": 0.964,
-  "planner_precision": 0.886
+  "planner_precision": 0.886,
+  "acting_precision": 0.909
  }
 }

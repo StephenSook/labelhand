@@ -20,7 +20,9 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "compiler"))
+sys.path.insert(0, str(ROOT / "engine"))
 from compile_label import norm, num_str, squash  # noqa: E402
+from windows import TOPIC  # noqa: E402  (the same filter the planner applies)
 
 GOLD = ROOT / "eval" / "gold_v0.json"
 COMPILED = ROOT / "data" / "compiled"
@@ -67,17 +69,25 @@ def score_label(gold_items: list[dict], rules: list[dict]) -> dict:
             mistyped.append({"gold": g["id"], "got": sorted({r["param"] for r in hits})})
             continue
         typed += 1
-        best = right[0]
         if any(r["modality"] == g["modality"] for r in right):
             mod_ok += 1
         if g.get("value") is not None:
             val_n += 1
             if any(r["value"] is not None and num_str(float(r["value"])) == num_str(float(g["value"])) for r in right):
                 val_ok += 1
-        del best
+
+    def matches_gold(r: dict) -> bool:
+        return any(quote_matches(g["key"], r["quote"]) and group(g["param"]) == group(r["param"]) for g in gold_items)
+
     planner_rules = [r for r in rules if r["param"] in PLANNER]
-    good = [r for r in planner_rules if any(quote_matches(g["key"], r["quote"]) and group(g["param"]) == group(r["param"]) for g in gold_items)]
-    false_pos = [{"id": r["id"], "param": r["param"], "quote": r["quote"][:120]} for r in planner_rules if r not in good]
+    good = [r for r in planner_rules if matches_gold(r)]
+    false_pos = [{"id": r["id"], "param": r["param"], "modality": r["modality"], "quote": r["quote"][:120]} for r in planner_rules if r not in good]
+    # Acting rules: the ones engine/windows.py can turn into BLOCKED or FIELD_CHECK (a parameter it evaluates,
+    # a MUST or MUST_NOT modality, and the topic word in the quote). A wrong acting rule changes an hour's state;
+    # a wrong advisory rule only adds a note. This is the precision that matters for harm.
+    acting = [r for r in rules if r["param"] in TOPIC and r["modality"] in ("MUST", "MUST_NOT") and all(w in r["quote"].lower() for w in TOPIC[r["param"]])]
+    acting_good = [r for r in acting if matches_gold(r)]
+    acting_fp = [{"id": r["id"], "param": r["param"], "quote": r["quote"][:120]} for r in acting if r not in acting_good]
     n = len(gold_items)
     return {
         "gold": n,
@@ -93,9 +103,13 @@ def score_label(gold_items: list[dict], rules: list[dict]) -> dict:
         "value_exact": round(val_ok / val_n, 3) if val_n else None,
         "modality_acc": round(mod_ok / typed, 3) if typed else None,
         "planner_precision": round(len(good) / len(planner_rules), 3) if planner_rules else None,
+        "acting_rules": len(acting),
+        "acting_good": len(acting_good),
+        "acting_precision": round(len(acting_good) / len(acting), 3) if acting else None,
         "missed": misses,
         "mistyped": mistyped,
         "planner_false_positives": false_pos,
+        "acting_false_positives": acting_fp,
     }
 
 
@@ -111,7 +125,7 @@ def main() -> int:
         s = score_label(items, comp["accepted"])
         s["model"] = comp.get("model")
         report["labels"][reg] = s
-        for k in ("gold", "coverage", "typed", "value_n", "value_ok", "modality_ok", "planner_rules", "planner_good"):
+        for k in ("gold", "coverage", "typed", "value_n", "value_ok", "modality_ok", "planner_rules", "planner_good", "acting_rules", "acting_good"):
             tot[k] = tot.get(k, 0) + s[k]
         print(
             f"{reg}: coverage {s['coverage']}/{s['gold']} typed {s['typed']} value {s['value_ok']}/{s['value_n']} "
@@ -124,11 +138,13 @@ def main() -> int:
         "value_exact": round(tot["value_ok"] / tot["value_n"], 3) if tot["value_n"] else None,
         "modality_acc": round(tot["modality_ok"] / tot["typed"], 3) if tot["typed"] else None,
         "planner_precision": round(tot["planner_good"] / tot["planner_rules"], 3) if tot["planner_rules"] else None,
+        "acting_precision": round(tot["acting_good"] / tot["acting_rules"], 3) if tot["acting_rules"] else None,
     }
     o = report["overall"]
     print(
         f"OVERALL coverage recall {o['coverage_recall']} | typed recall {o['typed_recall']} | value exact {o['value_exact']} | "
-        f"modality {o['modality_acc']} | planner precision {o['planner_precision']}"
+        f"modality {o['modality_acc']} | planner precision {o['planner_precision']} | acting precision {o['acting_precision']} "
+        f"({o['acting_good']}/{o['acting_rules']})"
     )
     if a.out:
         pathlib.Path(a.out).parent.mkdir(parents=True, exist_ok=True)
