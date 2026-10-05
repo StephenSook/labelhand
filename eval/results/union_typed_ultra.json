@@ -1,0 +1,294 @@
+{
+ "suffix": ".union.typed",
+ "labels": {
+  "5481-504": {
+   "gold": 24,
+   "coverage": 22,
+   "typed": 21,
+   "value_n": 17,
+   "value_ok": 16,
+   "modality_ok": 19,
+   "planner_rules": 43,
+   "planner_good": 32,
+   "coverage_recall": 0.917,
+   "typed_recall": 0.875,
+   "value_exact": 0.941,
+   "modality_acc": 0.905,
+   "planner_precision": 0.744,
+   "acting_rules": 9,
+   "acting_good": 6,
+   "acting_precision": 0.667,
+   "missed": [
+    "F-REI-7",
+    "F-REI-10"
+   ],
+   "mistyped": [
+    {
+     "gold": "F-TEMP-60",
+     "got": [
+      "tank_mix"
+     ]
+    }
+   ],
+   "planner_false_positives": [
+    {
+     "id": "5481-504-p7-9",
+     "param": "wind_speed_mph",
+     "modality": "MUST",
+     "quote": "If the windspeed is 10 miles per hour or less, applicators must use \u00bd swath displacement upwind at the downwind edge of "
+    },
+    {
+     "id": "5481-504-p9-2",
+     "param": "temperature_inversion",
+     "modality": "ADVISORY",
+     "quote": "Temperature inversions are characterized by increasing temperature with altitude and are common on nights with limited c"
+    },
+    {
+     "id": "5481-504-p6-2",
+     "param": "night_temperature_f",
+     "modality": "ADVISORY",
+     "quote": "Diesel oil (3 to 5 gallons by air or 5 to 10 gallons by ground) may be helpful when night temperatures drop below 60\u00b0F, "
+    },
+    {
+     "id": "5481-504-p7-25",
+     "param": "wind_speed_mph",
+     "modality": "MUST",
+     "quote": "If the windspeed is 10 miles per hour or less, applicators must use \u00bd swath displacement upwind at the downwind edge of "
+    },
+    {
+     "id": "5481-504-p8-3",
+     "param": "wind_speed_mph",
+     "modality": "MUST",
+     "quote": "If the windspeed is 10 miles per hour or less, applicators must use \u00bd swath displacement upwind at the downwind edge of "
+    },
+    {
+     "id": "5481-504-p9-1",
+     "param": "temperature_inversion",
+     "modality": "ADVISORY",
+     "quote": "Drift potential is high during a temperature inversion."
+    },
+    {
+     "id": "5481-504-p9-3",
+     "param": "temperature_inversion",
+     "modality": "ADVISORY",
+     "quote": "The presence of an inversion can be indicated by ground fog or by the movement of smoke from a ground source or an aircr"
+    },
+    {
+     "id": "5481-504-p9-4",
+     "param": "temperature_inversion",
+     "modality": "ADVISORY",
+     "quote": "Smoke that layers and moves laterally in a concentrated cloud (under low wind conditions) indicates an inversion, while "
+    },
+    {
+     "id": "5481-504-p9-5",
+     "param": "wind_speed_mph",
+     "modality": "ADVISORY",
+     "quote": "Drift potential is lowest between wind speeds of 2 -10 mph."
+    },
+    {
+     "id": "5481-504-p9-7",
+     "param": "wind_speed_mph",
+     "modality": "ADVISORY",
+     "quote": "Applicators need to be familiar with local wind patterns and terrain that could affect spray drift."
+    },
+    {
+     "id": "5481-504-p9-22",
+     "param": "open_boll_pct",
+     "modality": "ADVISORY",
+     "quote": "For best results, apply the combination to mature cotton plants with 60% or more open bolls."
+    }
+   ],
+   "acting_false_positives": [
+    {
+     "id": "5481-504-p7-9",
+     "param": "wind_speed_mph",
+     "quote": "If the windspeed is 10 miles per hour or less, applicators must use \u00bd swath displacement upwind at the downwind edge of "
+    },
+    {
+     "id": "5481-504-p7-25",
+     "param": "wind_speed_mph",
+     "quote": "If the windspeed is 10 miles per hour or less, applicators must use \u00bd swath displacement upwind at the downwind edge of "
+    },
+    {
+     "id": "5481-504-p8-3",
+     "param": "wind_speed_mph",
+     "quote": "If the windspeed is 10 miles per hour or less, applicators must use \u00bd swath displacement upwind at the downwind edge of "
+    }
+   ],
+   "model": "nvidia/nemotron-3-super-120b-a12b+nvidia/Nemotron-3-Ultra-550b-a55b"
+  },
+  "264-700": {
+   "gold": 10,
+   "coverage": 7,
+   "typed": 6,
+   "value_n": 5,
+   "value_ok": 4,
+   "modality_ok": 6,
+   "planner_rules": 12,
+   "planner_good": 6,
+   "coverage_recall": 0.7,
+   "typed_recall": 0.6,
+   "value_exact": 0.8,
+   "modality_acc": 1.0,
+   "planner_precision": 0.5,
+   "acting_rules": 2,
+   "acting_good": 2,
+   "acting_precision": 1.0,
+   "missed": [
+    "D-LETTUCE-AIR",
+    "D-NIGHT-ALONE",
+    "D-NIGHT-IDEAL"
+   ],
+   "mistyped": [
+    {
+     "gold": "D-CITRUS",
+     "got": [
+      "crop_stage"
+     ]
+    }
+   ],
+   "planner_false_positives": [
+    {
+     "id": "264-700-p5-2",
+     "param": "wind_speed_mph",
+     "modality": "ADVISORY",
+     "quote": "Follow local recommendations if wind speeds of less than ten (10) miles per hour are specified in those recommendations."
+    },
+    {
+     "id": "264-700-p5-6",
+     "param": "buffer_ft",
+     "modality": "MUST_NOT",
+     "quote": "In addition, for citrus crops, do not apply Dropp\u00ae SC by air when citrus in flush is within five (5) miles downwind of t"
+    },
+    {
+     "id": "264-700-p5-8",
+     "param": "droplet_size",
+     "modality": "ADVISORY",
+     "quote": "Use the largest nozzle orifice possible which permits proper deposition and coverage of product."
+    },
+    {
+     "id": "264-700-p7-5",
+     "param": "night_temperature_f",
+     "modality": "ADVISORY",
+     "quote": "Less than ideal conditions are those when the nighttime temperatures are expected to be 60\u00b0F on the date of application "
+    },
+    {
+     "id": "264-700-p7-6",
+     "param": "open_boll_pct",
+     "modality": "ADVISORY",
+     "quote": "Best activity will be obtained when the tank mix is applied to mature cotton plants with 60% or more open bolls."
+    },
+    {
+     "id": "264-700-p7-11",
+     "param": "night_temperature_f",
+     "modality": "ADVISORY",
+     "quote": "Use lower rate of Def \u00ae 6 or Folex\u00ae 6 EC under ideal nighttime temperature conditions (65\u00b0F); higher rate during less th"
+    }
+   ],
+   "acting_false_positives": [],
+   "model": "nvidia/nemotron-3-super-120b-a12b+nvidia/Nemotron-3-Ultra-550b-a55b"
+  },
+  "264-418": {
+   "gold": 12,
+   "coverage": 12,
+   "typed": 12,
+   "value_n": 7,
+   "value_ok": 7,
+   "modality_ok": 10,
+   "planner_rules": 24,
+   "planner_good": 14,
+   "coverage_recall": 1.0,
+   "typed_recall": 1.0,
+   "value_exact": 1.0,
+   "modality_acc": 0.833,
+   "planner_precision": 0.583,
+   "acting_rules": 4,
+   "acting_good": 4,
+   "acting_precision": 1.0,
+   "missed": [],
+   "mistyped": [],
+   "planner_false_positives": [
+    {
+     "id": "264-418-p5-2",
+     "param": "release_height_ft",
+     "modality": "MUST_NOT",
+     "quote": "Do not release spray at a height greater than 10 feet above the vegetative canopy, unless a greater application height i"
+    },
+    {
+     "id": "264-418-p6-1",
+     "param": "droplet_size",
+     "modality": "ADVISORY",
+     "quote": "Use the largest droplets that provide target pest control."
+    },
+    {
+     "id": "264-418-p6-10",
+     "param": "boom_height_in",
+     "modality": "ADVISORY",
+     "quote": "Setting nozzles at the lowest effective height will help to reduce the potential for spray drift."
+    },
+    {
+     "id": "264-418-p6-11",
+     "param": "release_height_ft",
+     "modality": "ADVISORY",
+     "quote": "Higher release heights increase the potential for spray drift."
+    },
+    {
+     "id": "264-418-p8-1",
+     "param": "air_temperature_f",
+     "modality": "ADVISORY",
+     "quote": "Hot and dry 80\u00b0F or higher"
+    },
+    {
+     "id": "264-418-p8-2",
+     "param": "air_temperature_f",
+     "modality": "ADVISORY",
+     "quote": "Dry and 75 to 80\u00b0F"
+    },
+    {
+     "id": "264-418-p8-3",
+     "param": "air_temperature_f",
+     "modality": "MUST",
+     "quote": "Cool but above 65\u00b0F"
+    },
+    {
+     "id": "264-418-p8-10",
+     "param": "air_temperature_f",
+     "modality": "ADVISORY",
+     "quote": "Hot, dry, above 80\u00b0F"
+    },
+    {
+     "id": "264-418-p8-11",
+     "param": "air_temperature_f",
+     "modality": "MUST",
+     "quote": "Cool, above 65\u00b0F"
+    },
+    {
+     "id": "264-418-p10-11",
+     "param": "reentry_hours",
+     "modality": "MUST",
+     "quote": "Harvest can commence 48 hours after PREP\u2122 brand Ethephon for Cott on and Tobacco application."
+    }
+   ],
+   "acting_false_positives": [],
+   "model": "nvidia/nemotron-3-super-120b-a12b+nvidia/Nemotron-3-Ultra-550b-a55b"
+  }
+ },
+ "overall": {
+  "gold": 46,
+  "coverage": 41,
+  "typed": 39,
+  "value_n": 29,
+  "value_ok": 27,
+  "modality_ok": 35,
+  "planner_rules": 79,
+  "planner_good": 52,
+  "acting_rules": 15,
+  "acting_good": 12,
+  "coverage_recall": 0.891,
+  "typed_recall": 0.848,
+  "value_exact": 0.931,
+  "modality_acc": 0.897,
+  "planner_precision": 0.658,
+  "acting_precision": 0.8
+ }
+}

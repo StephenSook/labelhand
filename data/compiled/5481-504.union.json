@@ -1,0 +1,2604 @@
+{
+ "reg": "5481-504",
+ "product": "FOLEX\u00ae 6 EC",
+ "label_accepted": "2026-03-04",
+ "label_sha256": "184a62d6439c0aa76356fc8d0edad2bd23825de0e6865c7bc5663993e6f0fe2a",
+ "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/005481-00504-20260304.pdf",
+ "thinking": false,
+ "compiled_utc": "2026-10-05T02:03:18+00:00",
+ "pages": 11,
+ "failed_pages": [],
+ "wall_secs_max_page": 11.14,
+ "union_of": [
+  "nvidia/nemotron-3-super-120b-a12b",
+  "nvidia/Nemotron-3-Ultra-550b-a55b"
+ ],
+ "union_utc": "2026-10-05T02:23:25+00:00",
+ "model": "nvidia/nemotron-3-super-120b-a12b+nvidia/Nemotron-3-Ultra-550b-a55b",
+ "cost_usd": 0.0841,
+ "accepted": [
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton",
+   "summary": "Apply this product only as specified on this label.",
+   "quote": "Apply this product only as specified on this label.",
+   "page": 5,
+   "id": "5481-504-p5-1",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST_NOT",
+   "param": "grazing_restriction",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "treated fields",
+   "summary": "Do not graze treated fields.",
+   "quote": "Do not graze treated fields.",
+   "page": 5,
+   "id": "5481-504-p5-2",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "other crops used for food or forage",
+   "summary": "Do not use on other crops used for food or forage.",
+   "quote": "Do not use on other crops used for food or forage.",
+   "page": 5,
+   "id": "5481-504-p5-3",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "geometry_buffer",
+   "modality": "ADVISORY",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "susceptible plants other than cotton",
+   "summary": "Avoid spray drift to susceptible plants other than cotton as this product may injure or defoliate other crops.",
+   "quote": "Avoid spray drift to susceptible plants other than cotton as this product may injure or defoliate other crops.",
+   "page": 5,
+   "id": "5481-504-p5-4",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton treated with this product",
+   "summary": "Cotton treated with this product must be mechanically harvested.",
+   "quote": "Cotton treated with this product must be mechanically harvested.",
+   "page": 5,
+   "id": "5481-504-p5-5",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "hand harvesting",
+   "summary": "Hand harvesting is prohibited.",
+   "quote": "Hand harvesting is prohibited.",
+   "page": 5,
+   "id": "5481-504-p5-6",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "droplet_size",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "workers or other persons",
+   "summary": "Do not apply this product in a way that will contact workers or other persons, either directly or through drift.",
+   "quote": "Do not apply this product in a way that will contact workers or other persons, either directly or through drift.",
+   "page": 5,
+   "id": "5481-504-p5-7",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "ppe",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "area during application",
+   "summary": "Only protected handlers may be in the area during application.",
+   "quote": "Only protected handlers may be in the area during application.",
+   "page": 5,
+   "id": "5481-504-p5-8",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST_NOT",
+   "param": "irrigation_restriction",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "any type of irrigation system",
+   "summary": "Do not apply FOLEX 6 EC through any type of irrigation system.",
+   "quote": "Do not apply FOLEX 6 EC through any type of irrigation system.",
+   "page": 5,
+   "id": "5481-504-p5-9",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "geometry_buffer",
+   "modality": "ADVISORY",
+   "param": "buffer_ft",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "areas near citrus",
+   "summary": "",
+   "quote": "Observe buffer zones and other restrictions on the FOLEX 6 EC label and/or in the manufacturer\u2019s recommendations for FOLEX 6 EC.",
+   "page": 6,
+   "id": "5481-504-p6-3",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "droplet_size",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "ground application",
+   "summary": "Select nozzle and pressure delivering medium or coarser droplets per ASABE S572.",
+   "quote": "Applicators must select nozzle and pressure that deliver medium or coarser droplets in accordance with American Society of Agricultural & Biological Engineers Standard 572 (ASABE S572).",
+   "page": 7,
+   "id": "5481-504-p7-1",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "geometry_buffer",
+   "modality": "MUST_NOT",
+   "param": "release_height_ft",
+   "op": "gt",
+   "value": 4,
+   "value2": null,
+   "unit": "feet",
+   "applies_to": "ground application",
+   "summary": "Do not release spray at a height greater than 4 feet above the ground or crop canopy.",
+   "quote": "Do not release spray at a height greater than 4 feet above the ground or crop canopy.",
+   "page": 7,
+   "id": "5481-504-p7-2",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "geometry_buffer",
+   "modality": "MUST_NOT",
+   "param": "buffer_ft",
+   "op": "lt",
+   "value": 25,
+   "value2": null,
+   "unit": "feet",
+   "applies_to": "ground application near residential areas with low boom (up to 2 feet)",
+   "summary": "Do not apply within 25 feet of residential areas with a low boom (up to 2 feet above ground/canopy).",
+   "quote": "Do not apply within 25 feet of residential areas with a low boom (up to 2 feet above the ground or crop canopy).",
+   "page": 7,
+   "id": "5481-504-p7-3",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "geometry_buffer",
+   "modality": "MUST_NOT",
+   "param": "buffer_ft",
+   "op": "lt",
+   "value": 50,
+   "value2": null,
+   "unit": "feet",
+   "applies_to": "ground application near residential areas with high boom (up to 4 feet)",
+   "summary": "Do not apply within 50 feet of residential areas with a high boom release height (up to 4 feet above ground/canopy).",
+   "quote": "Do not apply within 50 feet of residential areas with a high boom release height (up to 4 feet above the ground or crop canopy).",
+   "page": 7,
+   "id": "5481-504-p7-4",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "ADVISORY",
+   "param": "spray_volume_gal_per_acre",
+   "op": "gte",
+   "value": 10,
+   "value2": null,
+   "unit": "gallons per acre",
+   "applies_to": "ground application with water",
+   "summary": "Minimum spray volume of 10 gallons per acre recommended when applied with water.",
+   "quote": "A minimum spray volume of 10 gallons per acre is recommended when FOLEX 6 EC is applied with water and a minimum of 5 gallons per acre is recommended when FOLEX 6 EC is applied with diesel oil.",
+   "page": 7,
+   "id": "5481-504-p7-5",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "droplet_size",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "aerial application",
+   "summary": "Select nozzle and pressure delivering medium or coarser droplets per ASABE S641.",
+   "quote": "Applicators must select nozzle and pressure that deliver medium or coarser droplets in accordance with American Society of Agricultural & Biological Engineers Standard 641 (ASABE S641).",
+   "page": 7,
+   "id": "5481-504-p7-7",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "wind_speed_mph",
+   "op": "lte",
+   "value": 10,
+   "value2": null,
+   "unit": "mph",
+   "applies_to": "ground rig applications",
+   "summary": "Apply only when wind speed is 10 mph or less at the application site as measured by an anemometer.",
+   "quote": "For ground rig applications, apply product no more than 4 feet above the ground or the crop canopy and only when wind speed is 10 mph or less at the application site as measured by an anemometer.",
+   "page": 7,
+   "id": "5481-504-p7-8",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "wind_speed_mph",
+   "op": "lte",
+   "value": 10,
+   "value2": null,
+   "unit": "mph",
+   "applies_to": "aerial application",
+   "summary": "If windspeed is 10 mph or less, applicators must use \u00bd swath displacement upwind at the downwind edge of the field.",
+   "quote": "If the windspeed is 10 miles per hour or less, applicators must use \u00bd swath displacement upwind at the downwind edge of the field.",
+   "page": 7,
+   "id": "5481-504-p7-9",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "boom_height_in",
+   "op": "lte",
+   "value": 65,
+   "value2": null,
+   "unit": "% of wingspan",
+   "applies_to": "airplane aerial application",
+   "summary": "Boom length must not exceed 65% of the wingspan for airplanes.",
+   "quote": "The boom length must not exceed 65% of the wingspan for airplanes or 75% of the rotor blade diameter for helicopters.",
+   "page": 7,
+   "id": "5481-504-p7-10",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "geometry_buffer",
+   "modality": "MUST_NOT",
+   "param": "release_height_ft",
+   "op": "gt",
+   "value": 10,
+   "value2": null,
+   "unit": "feet",
+   "applies_to": "aerial application",
+   "summary": "Do not release spray at a height greater than 10 ft above the ground or vegetative canopy, unless greater height needed for pilot safety.",
+   "quote": "Do not release spray at a height greater than 10 ft above the ground or vegetative canopy, unless a greater application height is necessary for pilot safety.",
+   "page": 7,
+   "id": "5481-504-p7-12",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "geometry_buffer",
+   "modality": "MUST_NOT",
+   "param": "buffer_ft",
+   "op": "lt",
+   "value": 200,
+   "value2": null,
+   "unit": "feet",
+   "applies_to": "aerial application near residential areas",
+   "summary": "Do not apply within 200 feet of residential areas.",
+   "quote": "Do not apply within 200 feet of residential areas.",
+   "page": 7,
+   "id": "5481-504-p7-13",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "ADVISORY",
+   "param": "spray_volume_gal_per_acre",
+   "op": "gte",
+   "value": 5,
+   "value2": null,
+   "unit": "gallons per acre",
+   "applies_to": "aerial application with water (or tank mix)",
+   "summary": "Minimum spray volume of 5 gallons per acre should be used when applied with water.",
+   "quote": "A minimum spray volume of 5 gallons per acre should be used when FOLEX 6 EC and tank mixtures with FOLEX 6 EC are applied with water.",
+   "page": 7,
+   "id": "5481-504-p7-14",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "ADVISORY",
+   "param": "spray_volume_gal_per_acre",
+   "op": "gte",
+   "value": 3,
+   "value2": null,
+   "unit": "gallons per acre",
+   "applies_to": "aerial application with diesel oil (non-California)",
+   "summary": "FOLEX 6 EC alone may be applied in a minimum of 3 gallons of spray volume per acre when using diesel oil.",
+   "quote": "FOLEX 6 EC alone may be applied in a minimum of 3 gallons of spray volume per acre when using diesel oil (minimum of 5 GPA in California).",
+   "page": 7,
+   "id": "5481-504-p7-15",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "lte",
+   "value": 100,
+   "value2": null,
+   "unit": "gallons of product per day per person",
+   "applies_to": "mixers, loaders, and applicators",
+   "summary": "Limit the amount handled per person to 100 gallons of product per day.",
+   "quote": "Mixers, loaders, and applicators must limit the amount handled per person to 100 gallons of product per day.",
+   "page": 7,
+   "id": "5481-504-p7-18",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "geometry_buffer",
+   "modality": "MUST_NOT",
+   "param": "buffer_ft",
+   "op": "gte",
+   "value": 200,
+   "value2": null,
+   "unit": "feet",
+   "applies_to": "aerial applications near residential areas",
+   "summary": "Do not apply within 200 feet of residential areas.",
+   "quote": "Do not apply within 200 feet of residential areas.",
+   "page": 8,
+   "id": "5481-504-p8-1",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "MUST_NOT",
+   "param": "wind_speed_mph",
+   "op": "gt",
+   "value": 10,
+   "value2": null,
+   "unit": "mph",
+   "applies_to": "aerial applications",
+   "summary": "Do not apply when wind speeds exceed 10 miles per hour at the application site.",
+   "quote": "Do not apply when wind speeds exceed 10 miles per hour at the application site.",
+   "page": 8,
+   "id": "5481-504-p8-2",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "release_height_ft",
+   "op": "lte",
+   "value": 10,
+   "value2": null,
+   "unit": "feet",
+   "applies_to": "aerial applications",
+   "summary": "Do not release spray at a height greater than 10 ft above the ground or vegetative canopy, unless a greater application height is necessary for pilot safety.",
+   "quote": "Do not release spray at a height greater than 10 ft above the ground or vegetative canopy, unless a greater application height is necessary for pilot safety.",
+   "page": 8,
+   "id": "5481-504-p8-3",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "boom_height_in",
+   "op": "lte",
+   "value": 4,
+   "value2": null,
+   "unit": "feet",
+   "applies_to": "ground boom applications",
+   "summary": "Do not release spray at a height greater than 4 feet above the ground or crop canopy.",
+   "quote": "Do not release spray at a height greater than 4 feet above the ground or crop canopy.",
+   "page": 8,
+   "id": "5481-504-p8-4",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "MUST_NOT",
+   "param": "temperature_inversion",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": "present",
+   "applies_to": "all applications",
+   "summary": "Do not apply during temperature inversions.",
+   "quote": "Do not apply during temperature inversions.",
+   "page": 8,
+   "id": "5481-504-p8-5",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "droplet_size",
+   "op": "gte",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "hot and dry conditions",
+   "summary": "use larger droplets to reduce effects of evaporation",
+   "quote": "When making applications in hot and dry conditions, use larger droplets to reduce effects of evaporation.",
+   "page": 9,
+   "id": "5481-504-p9-1",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "MUST_NOT",
+   "param": "temperature_inversion",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "any application",
+   "summary": "avoid application during temperature inversion",
+   "quote": "Temperature inversions are characterized by increasing temperature with altitude and are common on nights with limited cloud cover and light to no wind.",
+   "page": 9,
+   "id": "5481-504-p9-2",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "MUST_NOT",
+   "param": "wind_speed_mph",
+   "op": "lt",
+   "value": 2,
+   "value2": null,
+   "unit": "mph",
+   "applies_to": "any application",
+   "summary": "Application should be avoided below 2 mph due to variable wind direction and high inversion potential.",
+   "quote": "Application should be avoided belo w 2 mph due to variable wind direction and high inversion potential.",
+   "page": 9,
+   "id": "5481-504-p9-3",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "lte",
+   "value": 40,
+   "value2": null,
+   "unit": "fl oz/A",
+   "applies_to": "Rank Cotton",
+   "summary": "total cannot exceed 2 \u00bd pints/A per year (40 fl oz/A per year)",
+   "quote": "Treatment can consist of two applications (example: tank mix) but the total cannot exceed 2 \u00bd pints/A per year (40 fl oz/A per year).",
+   "page": 9,
+   "id": "5481-504-p9-4",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "eq",
+   "value": 10,
+   "value2": null,
+   "unit": "gallons per acre",
+   "applies_to": "aerial application",
+   "summary": "Recommended spray volume (gallons per acre): 10 gallons for aerial application",
+   "quote": "Recommended spray volume (gallons per acre): 10 gallons for aerial application and 5 gallons for ground application.",
+   "page": 9,
+   "id": "5481-504-p9-5",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "lte",
+   "value": 16,
+   "value2": null,
+   "unit": "fl oz/A",
+   "applies_to": "aerial application",
+   "summary": "The maximum single application rate of FOLEX 6 EC for aerial application is 16 fl oz/A (0.750 lb ai/A)",
+   "quote": "Note: The maximum single application rate of FOLEX 6 EC for aerial application is 16 fl oz/A (0.750 lb ai/A), and for ground application is 24 fl oz/A (1.125 lb ai/A).",
+   "page": 9,
+   "id": "5481-504-p9-7",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST_NOT",
+   "param": "max_rate_per_season",
+   "op": "lt",
+   "value": 2.5,
+   "value2": null,
+   "unit": "pints/A/year",
+   "applies_to": "California and Arizona",
+   "summary": "Do not exceed 2 \u00bd pints/A/Year of FOLEX 6 EC for California and Arizona.",
+   "quote": "Do not exceed 2 \u00bd pints/A/Year of FOLEX 6 EC for California and Arizona",
+   "page": 10,
+   "id": "5481-504-p10-1",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "crop_stage",
+   "op": "gte",
+   "value": 60,
+   "value2": null,
+   "unit": "% bolls open",
+   "applies_to": "cotton",
+   "summary": "Defoliation and inhibition of regrowth is obtained when the tank mixture is applied to mature cotton plants when 60% or more bolls are open.",
+   "quote": "Defoliation and inhibition of regrowth is obtained when the tank mixture is applied to mature cotton plants when 60% or more bolls are open",
+   "page": 10,
+   "id": "5481-504-p10-3",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "MUST",
+   "param": "temperature_inversion",
+   "op": "gt",
+   "value": 60,
+   "value2": null,
+   "unit": "\u00b0F",
+   "applies_to": "tank mix activity",
+   "summary": "Tank mix activity is maximum when ... the mean 24-hour temperature before and after application is above 60\u00b0F.",
+   "quote": "Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after application is above 60\u00b0F",
+   "page": 10,
+   "id": "5481-504-p10-4",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "rate_per_acre",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "favorable conditions",
+   "summary": "Use the lower rate of each product when conditions are favorable, for example, high temperatures and high humidity.",
+   "quote": "Use the lower rate of each product when conditions are favorable, for example, high temperatures and high humidity",
+   "page": 10,
+   "id": "5481-504-p10-5",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "rate_per_acre",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "environmental conditions favoring heavy regrowth",
+   "summary": "Use the high rate of thidiazuron when environmental conditions favor heavy regrowth.",
+   "quote": "Use the high rate of t hidiazuron when environmental conditions favor heavy regrowth",
+   "page": 10,
+   "id": "5481-504-p10-6",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "night_temperature_f",
+   "op": "lt",
+   "value": 60,
+   "value2": null,
+   "unit": "\u00b0F",
+   "applies_to": "application of FOLEX 6 EC plus thidiazuron",
+   "summary": "When minimum night temperature is below 60\u00b0F use FOLEX 6 EC alone.",
+   "quote": "When minimum night temperature is below 60\u00b0F use FOLEX 6 EC alone",
+   "page": 10,
+   "id": "5481-504-p10-7",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "crop_stage",
+   "op": "gte",
+   "value": 60,
+   "value2": null,
+   "unit": "% bolls open",
+   "applies_to": "immature cotton prohibition",
+   "summary": "Do not apply FOLEX 6 EC plus thidiazuron to immature cotton (less than 60% bolls open)",
+   "quote": "Do not apply FOLEX 6 EC plus thidiazuron to immature cotton (less than 60% bolls open)",
+   "page": 10,
+   "id": "5481-504-p10-8",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all handlers",
+   "summary": "Applicators and other handlers must wear coveralls over long-sleeved shirt and long pants.",
+   "quote": "Applicators and other handlers must wear: \u2022 Coveralls over long-sleeved shirt and long pants",
+   "page": 4,
+   "id": "5481-504-p4-1",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all handlers",
+   "summary": "Applicators and other handlers must wear chemical-resistant gloves made of waterproof materials such as barrier laminate, Viton\u00ae, butyl rubber >14 mils, or nitrile rubber >14 mils.",
+   "quote": "\u2022 Chemical-resistant gloves, made of waterproof materials, such as barrier laminate, Viton\u00ae, butyl rubber >14 mils, or nitrile rubber >14 mils",
+   "page": 4,
+   "id": "5481-504-p4-2",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all handlers",
+   "summary": "Applicators and other handlers must wear chemical-resistant footwear plus socks.",
+   "quote": "\u2022 Chemical-resistant footwear plus socks",
+   "page": 4,
+   "id": "5481-504-p4-3",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all handlers",
+   "summary": "Applicators and other handlers must wear protective eyewear such as chemical goggles or face shield.",
+   "quote": "\u2022 Protective eyewear such as chemical goggles or face shield",
+   "page": 4,
+   "id": "5481-504-p4-4",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all handlers",
+   "summary": "Applicators and other handlers must wear chemical-resistant headgear for overhead exposure.",
+   "quote": "\u2022 Chemical-resistant headgear for overhead exposure",
+   "page": 4,
+   "id": "5481-504-p4-5",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all handlers",
+   "summary": "Applicators and other handlers must wear chemical-resistant apron when cleaning equipment, mixing or loading.",
+   "quote": "\u2022 Chemical-resistant apron when cleaning equipment, mixing or loading",
+   "page": 4,
+   "id": "5481-504-p4-6",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "handlers in enclosed areas",
+   "summary": "For exposure in enclosed areas, handlers must wear a NIOSH approved half-mask or full facepiece respirator equipped with organic vapor/HE or P-100 particulate filter cartridge with NIOSH approval number prefix TC-23C, or a NIOSH approved gas mask equipped with organic vapor/HE or P-100 particulate filter canister with NIOSH approval number prefix TC-14G.",
+   "quote": "\u2022 For exposure in enclosed areas, a NIOSH approved half -mask or a full facepiece respirator equipped with a combination of organic vapor/HE or P-100 particulate filter cartridge with NIOSH approval number prefix TC-23C, or a NIOSH approved gas mask equipped with a combination of organic vapor/HE or P -100 particulate filter canister with NIOSH approval number prefix TC-14G.",
+   "page": 4,
+   "id": "5481-504-p4-7",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "handlers outdoors",
+   "summary": "For exposure outdoors, handlers must wear a NIOSH approved respirator equipped with R, P, HE-series particulate filters with NIOSH approval number prefix TC-84A.",
+   "quote": "\u2022 For exposure outdoors, a NIOSH approved respirator equipped with R, P, HE-series particulate filters with NIOSH approval number prefix TC-84A.",
+   "page": 4,
+   "id": "5481-504-p4-8",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all handlers",
+   "summary": "Discard clothing and other absorbent materials that have been drenched or heavily contaminated with this product's concentrate. Do not reuse them.",
+   "quote": "Discard clothing and other absorbent materials that have been drenched or heavily contaminated with this products\u2019 concentrate. Do not reuse them.",
+   "page": 4,
+   "id": "5481-504-p4-9",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all handlers",
+   "summary": "Follow manufacturer's instructions for cleaning/maintaining PPE. If no such instructions for washables, use detergent and hot water. Keep and wash PPE separately from other laundry.",
+   "quote": "Follow manufacturer's instructions for cleaning/maintaining PPE. If no such instructions for washables, use detergent and hot water. Keep and wash PPE separately from other laundry.",
+   "page": 4,
+   "id": "5481-504-p4-10",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "mixers and loaders",
+   "summary": "Mixers and loaders must use a mechanical transfer system that meets the requirements listed in the Worker Protection Standard (WPS) for agricultural pesticides [40 CFR 170.607(d)] for providing dermal protection.",
+   "quote": "Mixers and loaders must use a mechanical transfer system that meets the requirements listed in the Worker Protection Standard (WPS) for agricultural pesticides [40 CFR 170.607(d)] for providing dermal protection.",
+   "page": 4,
+   "id": "5481-504-p4-11",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "mixers and loaders",
+   "summary": "The mechanical transfer system must be capable of removing the pesticide from the shipping container and transferring it into mixing tanks and/or application equipment.",
+   "quote": "The system must be capable of removing the pesticide from the shipping container and transferring it into mixing tanks and/or application equipment.",
+   "page": 4,
+   "id": "5481-504-p4-12",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": 2,
+   "value2": null,
+   "unit": "ml",
+   "applies_to": "mixers and loaders",
+   "summary": "At any disconnect point, the system must be equipped with a dry disconnect or dry couple shut-off device that is warranted by the manufacturer to minimize drippage to not more than 2 ml per disconnect point.",
+   "quote": "At any disconnect point, the system must be equipped with a dry disconnect or dry couple shut-off device that is warranted by the manufacturer to minimize drippage to not more than 2 ml. per disconnect point.",
+   "page": 4,
+   "id": "5481-504-p4-13",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all handlers",
+   "summary": "In addition to wearing the specified PPE, all handlers of this product must wear chemical-resistant gloves and a chemical-resistant apron.",
+   "quote": "In addition to wearing the specified PPE, all handlers of this product must wear chemical -resistant gloves and a chemical-resistant apron.",
+   "page": 4,
+   "id": "5481-504-p4-14",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "persons using a closed system that operates under pressure",
+   "summary": "Persons using a closed system that operates under pressure shall wear protective eyewear.",
+   "quote": "Persons using a closed system that operates under pressure shall wear protective eyewear.",
+   "page": 4,
+   "id": "5481-504-p4-15",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "pilots",
+   "summary": "Pilots must use an enclosed cockpit that meets the requirements listed in the Worker Protection Standard (WPS) for agricultural pesticides [40 CFR 170.240(d)(6)].",
+   "quote": "Pilots must use an enclosed cockpit that meets the requirements listed in the Worker Protection Standard (WPS) for agricultural pesticides [40 CFR 170.240(d)(6)].",
+   "page": 4,
+   "id": "5481-504-p4-16",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "geometry_buffer",
+   "modality": "MUST_NOT",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Do not apply directly to water, or to areas where surface water is present or to intertidal areas below the mean high water mark.",
+   "quote": "Do not apply directly to water, or to areas where surface water is present or to intertidal areas below the mean high water mark.",
+   "page": 5,
+   "id": "5481-504-p5-1",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "MUST_NOT",
+   "param": "droplet_size",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Do not apply when weather conditions favor drift from the treated area.",
+   "quote": "Do not apply when weather conditions favor drift from the treated area.",
+   "page": 5,
+   "id": "5481-504-p5-2",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Do not apply FOLEX 6 EC through any type of irrigation system.",
+   "quote": "Do not apply FOLEX 6 EC through any type of irrigation system.",
+   "page": 5,
+   "id": "5481-504-p5-3",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "droplet_size",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Avoid spray drift to susceptible plants other than cotton as this product may injure or defoliate other crops.",
+   "quote": "Avoid spray drift to susceptible plants other than cotton as this product may injure or defoliate other crops.",
+   "page": 5,
+   "id": "5481-504-p5-6",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Do not apply this product in a way that will contact workers or other persons, either directly or through drift.",
+   "quote": "Do not apply this product in a way that will contact workers or other persons, either directly or through drift.",
+   "page": 5,
+   "id": "5481-504-p5-9",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "MUST_NOT",
+   "param": "rainfall_expected",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton",
+   "summary": "Application of FOLEX 6 EC is not recommended when a heavy rainfall is expected within 1 hour after treatment.",
+   "quote": "Application of FOLEX 6 EC is not recommended when a heavy rainfall is expected within 1 hour after treatment.",
+   "page": 6,
+   "id": "5481-504-p6-1",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "MUST",
+   "param": "temperature_inversion",
+   "op": "lt",
+   "value": 60,
+   "value2": null,
+   "unit": "\u00b0F",
+   "applies_to": "cotton",
+   "summary": "Diesel oil (3 to 5 gallons by air or 5 to 10 gallons by ground) may be helpful when night temperatures drop below 60\u00b0F.",
+   "quote": "Diesel oil (3 to 5 gallons by air or 5 to 10 gallons by ground) may be helpful when night temperatures drop below 60\u00b0F, plants are under moisture stress or on storm-proof cotton varieties.",
+   "page": 6,
+   "id": "5481-504-p6-2",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton",
+   "summary": "Use the higher FOLEX 6 EC rate under conditions of low temperature, low humidity, or plant stress.",
+   "quote": "Use the higher FOLEX 6 EC rate under conditions of low temperature, low humidity, or plant stress.",
+   "page": 6,
+   "id": "5481-504-p6-4",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton",
+   "summary": "When these conditions prevail, use diesel oil instead of water.",
+   "quote": "When these conditions prevail, use diesel oil instead of water.",
+   "page": 6,
+   "id": "5481-504-p6-5",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton",
+   "summary": "FOLEX 6 EC must be applied in sufficient water or diesel oil to give thorough coverage of the leaves.",
+   "quote": "FOLEX 6 EC must be applied in sufficient water or diesel oil to give thorough coverage of the leaves.",
+   "page": 6,
+   "id": "5481-504-p6-6",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton",
+   "summary": "Mixing and loading must be done with engineering controls (closed system).",
+   "quote": "Mixing and loading must be done with engineering controls (closed system).",
+   "page": 6,
+   "id": "5481-504-p6-7",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton",
+   "summary": "Do not use diesel oil when FOLEX 6 EC is used in a tank mixture with other products.",
+   "quote": "Do not use diesel oil when FOLEX 6 EC is used in a tank mixture with other products.",
+   "page": 6,
+   "id": "5481-504-p6-8",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton",
+   "summary": "Only adjuvants which are exempt from tolerance requirements under 40 CFR 180.1001 may be used.",
+   "quote": "Only adjuvants which are exempt from tolerance requirements under 40 CFR 180.1001 may be used.",
+   "page": 6,
+   "id": "5481-504-p6-9",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton",
+   "summary": "Test the compatibility of FOLEX 6 EC plus thidiazuron with the selected adjuvant prior to mixing in the spray tank (see compatibility section).",
+   "quote": "Test the compatibility of FOLEX 6 EC plus thidiazuron with the selected adjuvant prior to mixing in the spray tank (see compatibility section).",
+   "page": 6,
+   "id": "5481-504-p6-10",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton",
+   "summary": "Observe all cautions and limitations on labels of all products used in mixtures specifically when FOLEX 6 EC is tank mixed with products for use on cotton in areas where citrus is grown.",
+   "quote": "Observe all cautions and limitations on labels of all products used in mixtures specifically when FOLEX 6 EC is tank mixed with products for use on cotton in areas where citrus is grown.",
+   "page": 6,
+   "id": "5481-504-p6-11",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton",
+   "summary": "Observe buffer zones and other restrictions on the FOLEX 6 EC label and/or in the manufacturer\u2019s recommendations for FOLEX 6 EC.",
+   "quote": "Observe buffer zones and other restrictions on the FOLEX 6 EC label and/or in the manufacturer\u2019s recommendations for FOLEX 6 EC.",
+   "page": 6,
+   "id": "5481-504-p6-12",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton",
+   "summary": "A second application of FOLEX 6 EC will be effective in defoliation of this second growth if excessive regrowth occurs between the first application and first and/or second harvest.",
+   "quote": "A second application of FOLEX 6 EC will be effective in defoliation of this second growth if excessive regrowth occurs between the first application and first and/or second harvest.",
+   "page": 6,
+   "id": "5481-504-p6-13",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Do not allow pesticide mixtures to dry in spray equipment.",
+   "quote": "Do not allow pesticide mixtures to dry in spray equipment.",
+   "page": 7,
+   "id": "5481-504-p7-1",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Thoroughly clean the spray equipment with a chemical cleaner before using for other products.",
+   "quote": "Thoroughly clean the spray equipment with a chemical cleaner before using for other products.",
+   "page": 7,
+   "id": "5481-504-p7-2",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Use a cleaner such as \u201cSpic and Span\u201d, \u201cFantastic\u201d, or \u201cFormula 409\u201d.",
+   "quote": "Use a cleaner such as \u201cSpic and Span\u201d, \u201cFantastic\u201d, or \u201cFormula 409\u201d.",
+   "page": 7,
+   "id": "5481-504-p7-3",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "If chlorate type chemicals have been used in the same spray equipment, thoroughly wash spray tank and particularly dried deposits on aircraft fabric.",
+   "quote": "If chlorate type chemicals have been used in the same spray equipment, thoroughly wash spray tank and particularly dried deposits on aircraft fabric.",
+   "page": 7,
+   "id": "5481-504-p7-4",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Immediately after applying FOLEX 6 EC, remove all unused spray mixture and follow directions on this label for disposal.",
+   "quote": "Immediately after applying FOLEX 6 EC, remove all unused spray mixture and follow directions on this label for disposal.",
+   "page": 7,
+   "id": "5481-504-p7-5",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Thoroughly clean the spray tank, lines, nozzles, and exterior surfaces of spray equipment.",
+   "quote": "Thoroughly clean the spray tank, lines, nozzles, and exterior surfaces of spray equipment.",
+   "page": 7,
+   "id": "5481-504-p7-6",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Use one of the cleaners listed above.",
+   "quote": "Use one of the cleaners listed above.",
+   "page": 7,
+   "id": "5481-504-p7-7",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Follow directions on this label for disposal of wash and rinse water.",
+   "quote": "Follow directions on this label for disposal of wash and rinse water.",
+   "page": 7,
+   "id": "5481-504-p7-8",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Do not apply FOLEX 6 EC through any type of irrigation system.",
+   "quote": "Do not apply FOLEX 6 EC through any type of irrigation system.",
+   "page": 7,
+   "id": "5481-504-p7-9",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "ground and aerial applications",
+   "summary": "FOLEX 6 EC alone and in a tank mixture with thidiazuron can be applied by both ground and aerial equipment.",
+   "quote": "FOLEX 6 EC alone and in a tank mixture with thidiazuron can be applied by both ground and aerial equipment.",
+   "page": 7,
+   "id": "5481-504-p7-10",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "California ground applications",
+   "summary": "DO NOT irrigate or hand weed after application in California.",
+   "quote": "CALIFORNIA USERS: DO NOT irrigate or hand weed after application in California.",
+   "page": 7,
+   "id": "5481-504-p7-11",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST_NOT",
+   "param": "max_rate_per_season",
+   "op": "lte",
+   "value": 50,
+   "value2": null,
+   "unit": "acres per day",
+   "applies_to": "California ground applications when application rate is greater than 0.75 lb ai/A",
+   "summary": "DO NOT treat more than 50 acres per day in California when the application rate is greater than 0.75 lb ai/A.",
+   "quote": "CALIFORNIA USERS: For ground applications, DO NOT treat more than 50 acres per day in California when the application rate is greater than 0.75 lb ai/A.",
+   "page": 7,
+   "id": "5481-504-p7-12",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST_NOT",
+   "param": "max_rate_per_season",
+   "op": "lte",
+   "value": 70,
+   "value2": null,
+   "unit": "acres per day",
+   "applies_to": "California ground applications when application rate is at or below 0.75 lb ai/A",
+   "summary": "DO NOT treat more than 70 acres per day in California when the application rate is at or below 0.75 lb ai/A.",
+   "quote": "DO NOT treat more than 70 acres per day in California when the application rate is at or below 0.75 lb ai/A.",
+   "page": 7,
+   "id": "5481-504-p7-13",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "ground applications",
+   "summary": "Use a standard high clearance sprayer that provides a uniform accurate application.",
+   "quote": "Use a standard high clearance sprayer that provides a uniform accurate application.",
+   "page": 7,
+   "id": "5481-504-p7-14",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "ADVISORY",
+   "param": "spray_volume_gal_per_acre",
+   "op": "gte",
+   "value": 5,
+   "value2": null,
+   "unit": "gallons per acre",
+   "applies_to": "ground applications with diesel oil",
+   "summary": "A minimum of 5 gallons per acre is recommended when FOLEX 6 EC is applied with diesel oil.",
+   "quote": "A minimum of 5 gallons per acre is recommended when FOLEX 6 EC is applied with diesel oil.",
+   "page": 7,
+   "id": "5481-504-p7-20",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "droplet_size",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Do not allow sprays to drift from the application site and contact people, structures people occupy at any time and nontarget crops, aquatic and wetland areas, woodlands, pastures, rangelands, or animals.",
+   "quote": "Do not allow sprays to drift from the application site and contact people, structures people occupy at any time and nontarget crops, aquatic and wetland areas, woodlands, pastures, rangelands, or animals.",
+   "page": 7,
+   "id": "5481-504-p7-21",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "aerial applications when windspeed is 10 mph or less",
+   "summary": "If the windspeed is 10 miles per hour or less, applicators must use \u00bd swath displacement upwind at the downwind edge of the field.",
+   "quote": "If the windspeed is 10 miles per hour or less, applicators must use \u00bd swath displacement upwind at the downwind edge of the field.",
+   "page": 7,
+   "id": "5481-504-p7-25",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "aerial applications",
+   "summary": "Aerial applicators must be in enclosed cockpits.",
+   "quote": "Aerial applicators must be in enclosed cockpits.",
+   "page": 7,
+   "id": "5481-504-p7-33",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "droplet_size",
+   "op": "gte",
+   "value": null,
+   "value2": null,
+   "unit": "ASABE_S641_category",
+   "applies_to": "aerial_application",
+   "summary": "Applicators must select nozzle and pressure that deliver medium or coarser droplets in accordance with ASABE S641.",
+   "quote": "Applicators must select nozzle and pressure that deliver medium or coarser droplets in accordance with American Society of Agricultural & Biological Engineers Standard 641 (ASABE S641).",
+   "page": 8,
+   "id": "5481-504-p8-2",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "geometry_buffer",
+   "modality": "MUST",
+   "param": "wind_speed_mph",
+   "op": "lte",
+   "value": 10,
+   "value2": null,
+   "unit": "mph",
+   "applies_to": "aerial_application",
+   "summary": "If the windspeed is 10 miles per hour or less, applicators must use \u00bd swath displacement upwind at the downwind edge of the field.",
+   "quote": "If the windspeed is 10 miles per hour or less, applicators must use \u00bd swath displacement upwind at the downwind edge of the field.",
+   "page": 8,
+   "id": "5481-504-p8-3",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "geometry_buffer",
+   "modality": "MUST_NOT",
+   "param": "boom_height_in",
+   "op": "gt",
+   "value": 65,
+   "value2": null,
+   "unit": "percent_wingspan",
+   "applies_to": "aerial_application_airplane",
+   "summary": "The boom length must not exceed 65% of the wingspan for airplanes.",
+   "quote": "The boom length must not exceed 65% of the wingspan for airplanes or 75% of the rotor blade diameter for helicopters.",
+   "page": 8,
+   "id": "5481-504-p8-5",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "geometry_buffer",
+   "modality": "MUST_NOT",
+   "param": "release_height_ft",
+   "op": "gt",
+   "value": 4,
+   "value2": null,
+   "unit": "feet",
+   "applies_to": "ground_boom_application",
+   "summary": "Do not release spray at a height greater than 4 feet above the ground or crop canopy.",
+   "quote": "Do not release spray at a height greater than 4 feet above the ground or crop canopy.",
+   "page": 8,
+   "id": "5481-504-p8-9",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "droplet_size",
+   "op": "gte",
+   "value": null,
+   "value2": null,
+   "unit": "ASABE_S572_category",
+   "applies_to": "ground_boom_application",
+   "summary": "Applicators must select nozzle and pressure that deliver medium or coarser droplets in accordance with ASABE S572.",
+   "quote": "Applicators must select nozzle and pressure that deliver medium or coarser droplets in accordance with American Society of Agricultural & Biological Engineers Standard 572 (ASABE S572).",
+   "page": 8,
+   "id": "5481-504-p8-10",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "MUST_NOT",
+   "param": "wind_speed_mph",
+   "op": "gt",
+   "value": 10,
+   "value2": null,
+   "unit": "mph",
+   "applies_to": "ground_boom_application",
+   "summary": "Do not apply when wind speeds exceed 10 mph at the application site.",
+   "quote": "Do not apply when wind speeds exceed 10 mph at the application site.",
+   "page": 8,
+   "id": "5481-504-p8-11",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "geometry_buffer",
+   "modality": "MUST_NOT",
+   "param": "buffer_ft",
+   "op": "lt",
+   "value": 25,
+   "value2": null,
+   "unit": "feet",
+   "applies_to": "ground_boom_application_low_boom",
+   "summary": "Do not apply within 25 feet of residential areas with a low boom (up to 2 feet above the ground or crop canopy).",
+   "quote": "Do not apply within 25 feet of residential areas with a low boom (up to 2 feet above the ground or crop canopy).",
+   "page": 8,
+   "id": "5481-504-p8-13",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "geometry_buffer",
+   "modality": "MUST_NOT",
+   "param": "buffer_ft",
+   "op": "lt",
+   "value": 50,
+   "value2": null,
+   "unit": "feet",
+   "applies_to": "ground_boom_application_high_boom",
+   "summary": "Do not apply within 50 feet of residential areas with a high boom release height (up to 4 feet above the ground or crop canopy).",
+   "quote": "Do not apply within 50 feet of residential areas with a high boom release height (up to 4 feet above the ground or crop canopy).",
+   "page": 8,
+   "id": "5481-504-p8-14",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "boom_height_in",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": "level_with_crop",
+   "applies_to": "ground_boom_application",
+   "summary": "For ground equipment, the boom should remain level with the crop and have minimal bounce.",
+   "quote": "For ground equipment, the boom should remain level with the crop and have minimal bounce.",
+   "page": 8,
+   "id": "5481-504-p8-15",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "spray_volume_gal_per_acre",
+   "op": "gte",
+   "value": null,
+   "value2": null,
+   "unit": "highest_practical",
+   "applies_to": "ground_boom_application",
+   "summary": "Use the highest practical spray volume for the application.",
+   "quote": "Use the highest practical spray volume for the application.",
+   "page": 8,
+   "id": "5481-504-p8-16",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "spray_volume_gal_per_acre",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": "higher_flow_rate_nozzle",
+   "applies_to": "ground_boom_application",
+   "summary": "If a greater spray volume is needed, consider using a nozzle with a higher flow rate.",
+   "quote": "If a greater spray volume is needed, consider using a nozzle with a higher flow rate.",
+   "page": 8,
+   "id": "5481-504-p8-17",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "spray_volume_gal_per_acre",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": "lowest_recommended_pressure",
+   "applies_to": "ground_boom_application",
+   "summary": "Use the lowest spray pressure recommended for the nozzle to produce the target spray volume and droplet size.",
+   "quote": "Use the lowest spray pressure recommended for the nozzle to produce the target spray volume and droplet size.",
+   "page": 8,
+   "id": "5481-504-p8-18",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "spray_volume_gal_per_acre",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": "nozzle_designed_for_application",
+   "applies_to": "ground_boom_application",
+   "summary": "Use a spray nozzle that is designed for the intended application.",
+   "quote": "Use a spray nozzle that is designed for the intended application.",
+   "page": 8,
+   "id": "5481-504-p8-19",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "spray_volume_gal_per_acre",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": "nozzle_designed_to_reduce_drift",
+   "applies_to": "ground_boom_application",
+   "summary": "Consider using nozzles designed to reduce drift.",
+   "quote": "Consider using nozzles designed to reduce drift.",
+   "page": 8,
+   "id": "5481-504-p8-20",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "spray_volume_gal_per_acre",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": "nozzle_manufacturer_recommendations",
+   "applies_to": "aerial_application",
+   "summary": "Follow nozzle manufacturers' recommendations for setting up nozzles.",
+   "quote": "Follow nozzle manufacturers' recommendations for setting up nozzles.",
+   "page": 8,
+   "id": "5481-504-p8-21",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "spray_volume_gal_per_acre",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": "nozzles_oriented_parallel_with_airflow",
+   "applies_to": "aerial_application",
+   "summary": "Generally, to reduce fine droplets, nozzles should be oriented parallel with the airflow in flight.",
+   "quote": "Generally, to reduce fine droplets, nozzles should be oriented parallel with the airflow in flight.",
+   "page": 8,
+   "id": "5481-504-p8-22",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "spray_volume_gal_per_acre",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": "shielded_sprayer",
+   "applies_to": "aerial_application",
+   "summary": "Consider using shielded sprayers.",
+   "quote": "Consider using shielded sprayers.",
+   "page": 8,
+   "id": "5481-504-p8-23",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "spray_volume_gal_per_acre",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": "verify_shields_not_interfering",
+   "applies_to": "aerial_application",
+   "summary": "Verify that the shields are not interfering with the uniform deposition of the spray on the target area.",
+   "quote": "Verify that the shields are not interfering with the uniform deposition of the spray on the target area.",
+   "page": 8,
+   "id": "5481-504-p8-24",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "ADVISORY",
+   "param": "temperature_inversion",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Drift potential is high during a temperature inversion.",
+   "quote": "Drift potential is high during a temperature inversion.",
+   "page": 9,
+   "id": "5481-504-p9-1",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "temperature_inversion",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "The presence of an inversion can be indicated by ground fog or by the movement of smoke from a ground source or an aircraft smoke generator.",
+   "quote": "The presence of an inversion can be indicated by ground fog or by the movement of smoke from a ground source or an aircraft smoke generator.",
+   "page": 9,
+   "id": "5481-504-p9-3",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "temperature_inversion",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Smoke that layers and moves laterally in a concentrated cloud (under low wind conditions) indicates an inversion, while smoke that moves upward and rapidly dissipates indicates good vertical air mixing.",
+   "quote": "Smoke that layers and moves laterally in a concentrated cloud (under low wind conditions) indicates an inversion, while smoke that moves upward and rapidly dissipates indicates good vertical air mixing.",
+   "page": 9,
+   "id": "5481-504-p9-4",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "ADVISORY",
+   "param": "wind_speed_mph",
+   "op": "between",
+   "value": 2,
+   "value2": 10,
+   "unit": "mph",
+   "applies_to": "all applications",
+   "summary": "Drift potential is lowest between wind speeds of 2 -10 mph.",
+   "quote": "Drift potential is lowest between wind speeds of 2 -10 mph.",
+   "page": 9,
+   "id": "5481-504-p9-5",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "wind_speed_mph",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Applicators need to be familiar with local wind patterns and terrain that could affect spray drift.",
+   "quote": "Applicators need to be familiar with local wind patterns and terrain that could affect spray drift.",
+   "page": 9,
+   "id": "5481-504-p9-7",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "application_interval_days",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton defoliation",
+   "summary": "Application rates and timing are determined on a field-by-field basis depending on crop size, maturity, environmental conditions, and overall defoliation program.",
+   "quote": "Application rates and timing are determined on a field-by-field basis depending on crop size, maturity, environmental conditions, and overall defoliation program.",
+   "page": 9,
+   "id": "5481-504-p9-8",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "Bottom Defoliation",
+   "summary": "Apply when bottom bolls are mature or when youngest bolls cannot be dented by pressure between the thumb and the forefinger or cut through with a sharp knife.",
+   "quote": "Apply when bottom bolls are mature or when youngest bolls cannot be dented by pressure between the thumb and the forefinger or cut through with a sharp knife.",
+   "page": 9,
+   "id": "5481-504-p9-13",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "Bottom Defoliation",
+   "summary": "Direct spray to thoroughly cover the leaves on the desired portion of plants to be defoliated.",
+   "quote": "Direct spray to thoroughly cover the leaves on the desired portion of plants to be defoliated.",
+   "page": 9,
+   "id": "5481-504-p9-14",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "Bottom Defoliation of Seed Cotton",
+   "summary": "Use shielded drop nozzles to direct spray to the lower leaves.",
+   "quote": "Use shielded drop nozzles to direct spray to the lower leaves.",
+   "page": 9,
+   "id": "5481-504-p9-15",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "Bottom Defoliation of Seed Cotton",
+   "summary": "Remove the picker\u2019s top 8 to 12 rows of spindles to harvest the lower bolls.",
+   "quote": "Remove the picker\u2019s top 8 to 12 rows of spindles to harvest the lower bolls.",
+   "page": 9,
+   "id": "5481-504-p9-16",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "Complete Defoliation",
+   "summary": "Apply when fiber quality of top bolls will not be damaged by loss of top leaves, or when top bolls are firm to thumb pressure.",
+   "quote": "Apply when fiber quality of top bolls will not be damaged by loss of top leaves, or when top bolls are firm to thumb pressure.",
+   "page": 9,
+   "id": "5481-504-p9-17",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "solar_window",
+   "modality": "MUST",
+   "param": "application_interval_days",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "Complete Defoliation",
+   "summary": "Application can be made up until first frost.",
+   "quote": "Application can be made up until first frost.",
+   "page": 9,
+   "id": "5481-504-p9-18",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "crop_stage",
+   "op": "gte",
+   "value": 50,
+   "value2": null,
+   "unit": "% open bolls",
+   "applies_to": "Defoliation of Rank Cotton",
+   "summary": "Apply when 50% or more of the bolls are open.",
+   "quote": "Apply when 50% or more of the bolls are open.",
+   "page": 9,
+   "id": "5481-504-p9-19",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "solar_window",
+   "modality": "MUST",
+   "param": "application_interval_days",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "Defoliation of Rank Cotton",
+   "summary": "Applications can be made until first frost.",
+   "quote": "Applications can be made until first frost.",
+   "page": 9,
+   "id": "5481-504-p9-20",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "tank_mix",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "Long Staple (Pima) Cotton Defoliation",
+   "summary": "Apply specified dosage as a tank mix with 0.2 to 0.4 lb. thidiazuron per acre.",
+   "quote": "Apply specified dosage as a tank mix with 0.2 to 0.4 lb. thidiazuron per acre.",
+   "page": 9,
+   "id": "5481-504-p9-21",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "crop_stage",
+   "op": "gte",
+   "value": 60,
+   "value2": null,
+   "unit": "% open bolls",
+   "applies_to": "Long Staple (Pima) Cotton Defoliation",
+   "summary": "For best results, apply the combination to mature cotton plants with 60% or more open bolls.",
+   "quote": "For best results, apply the combination to mature cotton plants with 60% or more open bolls.",
+   "page": 9,
+   "id": "5481-504-p9-22",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "days_before_harvest",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": "days",
+   "applies_to": "cotton harvest-aid",
+   "summary": "Sequential applications may be made 7 days after the initial application when using 16 fl oz or less of FOLEX 6 EC and 10 days after the initial application when using rates of FOLEX 6 EC greater than 16 fl oz/A.",
+   "quote": "Sequential applications may be made 7 days after the initial application when using 16 fl oz or less of FOLEX 6 EC and 10 days after the initial application when using rates of FOLEX 6 EC greater than 16 fl oz/A.",
+   "page": 10,
+   "id": "5481-504-p10-1",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": "percent_open_bolls",
+   "applies_to": "cotton defoliation and boll opening",
+   "summary": "FOLEX 6 EC + ethephon tank mixtures or sequential applications should be applied to cotton when there is sufficient mature unopened bolls to produce the desired yield and when 30% to 60% of the cotton bolls are open.",
+   "quote": "FOLEX 6 EC + ethephon tank mixtures or sequential applications should be applied to cotton when there is sufficient mature unopened bolls to produce the desired yield and when 30% to 60% of the cotton bolls are open.",
+   "page": 10,
+   "id": "5481-504-p10-3",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": "percent_open_bolls",
+   "applies_to": "cotton defoliation and inhibition of regrowth",
+   "summary": "Defoliation and inhibition of regrowth is obtained when the tank mixture is applied to mature cotton plants when 60% or more bolls are open.",
+   "quote": "Defoliation and inhibition of regrowth is obtained when the tank mixture is applied to mature cotton plants when 60% or more bolls are open.",
+   "page": 10,
+   "id": "5481-504-p10-4",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "none",
+   "value": 2.5,
+   "value2": null,
+   "unit": "pints/A/Year",
+   "applies_to": "cotton in California and Arizona",
+   "summary": "Do not exceed 2 \u00bd pints/A/Year of FOLEX 6 EC for California and Arizona, and 1 \u00bd pints/A/Year for all other states.",
+   "quote": "Do not exceed 2 \u00bd pints/A/Year of FOLEX 6 EC for California and Arizona, and 1 \u00bd pints/A/Year for all other states.",
+   "page": 10,
+   "id": "5481-504-p10-5",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": "percent_open_bolls",
+   "applies_to": "cotton defoliation with thidiazuron",
+   "summary": "Do not apply FOLEX 6 EC plus thidiazuron to immature cotton (less than 60% bolls open) or higher than recommended product dosages, as desiccation and leaf freezing may occur.",
+   "quote": "Do not apply FOLEX 6 EC plus thidiazuron to immature cotton (less than 60% bolls open) or higher than recommended product dosages, as desiccation and leaf freezing may occur.",
+   "page": 10,
+   "id": "5481-504-p10-9",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "reentry_hours",
+   "op": "none",
+   "value": 7,
+   "value2": null,
+   "unit": "days",
+   "applies_to": "applications of 16 fl oz/A or less per application",
+   "summary": "REI is 7 days after applications of 16 fl oz/A or less per application (0.75 lb ai/A).",
+   "quote": "REI is 7 days after applications of 16 fl oz/A or less per application (0.75 lb ai/A).",
+   "page": 10,
+   "id": "5481-504-p10-10",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "reentry_hours",
+   "op": "none",
+   "value": 10,
+   "value2": null,
+   "unit": "days",
+   "applies_to": "applications of 16 fl oz/A or greater per application",
+   "summary": "REI is 10 days after applications of 16 fl oz/A or greater per application (0.75 lb ai/A).",
+   "quote": "REI is 10 days after applications of 16 fl oz/A or greater per application (0.75 lb ai/A).",
+   "page": 10,
+   "id": "5481-504-p10-11",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "ADVISORY",
+   "param": "temperature_inversion",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": "F",
+   "applies_to": "tank mix of FOLEX 6 EC + thidiazuron",
+   "summary": "Tank mix activity is maximum when 60% or more bolls are open and the mean 24-hour temperature before and after application is above 60\u00b0F.",
+   "quote": "Tank mix activity is maximum when 60% or more bolls are open and the mean 24-hour temperature before and after application is above 60\u00b0F.",
+   "page": 10,
+   "id": "5481-504-p10-12",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "ADVISORY",
+   "param": "temperature_inversion",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": "F",
+   "applies_to": "tank mix of FOLEX 6 EC + thidiazuron",
+   "summary": "When minimum night temperature is below 60\u00b0F use FOLEX 6 EC alone.",
+   "quote": "When minimum night temperature is below 60\u00b0F use FOLEX 6 EC alone.",
+   "page": 10,
+   "id": "5481-504-p10-13",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "none",
+   "value": 16,
+   "value2": null,
+   "unit": "fl oz/A",
+   "applies_to": "aerial application of FOLEX 6 EC",
+   "summary": "The maximum single application rate of FOLEX 6 EC for aerial application is 16 fl oz/A (0.750 lb ai/A), and for ground application is 24 fl oz/A (1.125 lb ai/A).",
+   "quote": "The maximum single application rate of FOLEX 6 EC for aerial application is 16 fl oz/A (0.750 lb ai/A), and for ground application is 24 fl oz/A (1.125 lb ai/A).",
+   "page": 10,
+   "id": "5481-504-p10-14",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  }
+ ],
+ "rejected": [
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton",
+   "summary": "",
+   "quote": "",
+   "page": 6,
+   "id": "5481-504-p6-1",
+   "reject_reason": "QUOTE_TOO_SHORT"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "max_applications",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton",
+   "summary": "",
+   "quote": "",
+   "page": 6,
+   "id": "5481-504-p6-2",
+   "reject_reason": "QUOTE_TOO_SHORT"
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "max_applications",
+   "op": "eq",
+   "value": 1,
+   "value2": null,
+   "unit": "enclosed cockpit required",
+   "applies_to": "aerial applicators",
+   "summary": "Aerial applicators must be in enclosed cockpits.",
+   "quote": "Aerial applicators must be in enclosed cockpits.",
+   "page": 7,
+   "id": "5481-504-p7-17",
+   "reject_reason": "NUMBER_NOT_IN_QUOTE:value=1"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST_NOT",
+   "param": "max_rate_per_season",
+   "op": "lt",
+   "value": 1.5,
+   "value2": null,
+   "unit": "pints/A/year",
+   "applies_to": "all other states",
+   "summary": "Do not exceed 1 \u00bd pints/A/Year of FOLEX 6 EC for all other states.",
+   "quote": "Do not exceed 1 \u00bd pints/A/Year of FOLEX 6 EC for all other states",
+   "page": 10,
+   "id": "5481-504-p10-2",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "reentry_hours",
+   "op": "eq",
+   "value": 168,
+   "value2": null,
+   "unit": "hours",
+   "applies_to": "applications of 16 fl oz/A or less per application",
+   "summary": "REI is 7 days after applications of 16 fl oz/A or less per application (0.75 lb ai/A).",
+   "quote": "REI is 7 days after applications of 16 fl oz/A or less per application (0.75 lb ai/A)",
+   "page": 10,
+   "id": "5481-504-p10-9",
+   "reject_reason": "NUMBER_NOT_IN_QUOTE:value=168"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "reentry_hours",
+   "op": "eq",
+   "value": 240,
+   "value2": null,
+   "unit": "hours",
+   "applies_to": "applications of 16 fl oz/A or greater per application",
+   "summary": "REI is 10 days after applications of 16 fl oz/A or greater per application (0.75 lb ai/A).",
+   "quote": "REI is 10 days after applications of 16 fl oz/A or greater per application (0.75 lb ai/A)",
+   "page": 10,
+   "id": "5481-504-p10-10",
+   "reject_reason": "NUMBER_NOT_IN_QUOTE:value=240"
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "reentry_hours",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "fields treated at application rates at or below 0.75 lb ai/A (16 fl oz /A)",
+   "summary": "Do not enter or allow worker entry into treated areas during the restricted-entry interval (REI) of 7 days for fields treated at application rates at or below 0.75 lb ai/A (16 fl oz /A).",
+   "quote": "Do not enter or allow worker entry into treated areas during the restricted-entry interval (REI) of 7 days for fields treated at application rates at or below 0.75 lb ai/A (16 fl oz /A).",
+   "page": 5,
+   "id": "5481-504-p5-10",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "reentry_hours",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "fields treated at application rates above 0.75 lbs ai/A",
+   "summary": "Do not enter or allow worker entry into treated areas during the restricted-entry interval (REI) of 10 days for fields treated at application rates above 0.75 lbs ai/A.",
+   "quote": "Do not enter or allow worker entry into treated areas during the restricted-entry interval (REI) of 10 days for fields treated at application rates above 0.75 lbs ai/A.",
+   "page": 5,
+   "id": "5481-504-p5-11",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "ppe",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "early entry to treated areas",
+   "summary": "PPE required for early entry to treated areas that is permitted under the Worker Protection Standard and that involves contact with anything that has been treated, such as plants, soil, or water, is: Coveralls over long-sleeved shirt and long pants; Chemical-resistant gloves, made of waterproof materials, such as barrier laminate, viton, butyl rubber > 14 mils, or nitrile rubber >14 mils or neoprene rubber >14 mils; Chemical resistant footwear plus socks; Protective eyewear; Chemical-resistant headgear for overhead exposure.",
+   "quote": "PPE required for early entry to treated areas that is permitted under the Worker Protection Standard and that involves contact with anything that has been treated, such as plants, soil, or water, is: Coveralls over long-sleeved shirt and long pants; Chemical-resistant gloves, made of waterproof materials, such as barrier laminate, viton, butyl rubber > 14 mils, or nitrile rubber >14 mils or neoprene rubber >14 mils; Chemical resistant footwear plus socks; Protective eyewear; Chemical-resistant headgear for overhead exposure.",
+   "page": 5,
+   "id": "5481-504-p5-12",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "MUST",
+   "param": "temperature_inversion",
+   "op": "lt",
+   "value": 60,
+   "value2": null,
+   "unit": "\u00b0F",
+   "applies_to": "cotton",
+   "summary": "Use the higher FOLEX 6 EC rate under conditions of low temperature, low humidity, or plant stress.",
+   "quote": "Use the higher FOLEX 6 EC rate under conditions of low temperature, low humidity, or plant stress.",
+   "page": 6,
+   "id": "5481-504-p6-3",
+   "reject_reason": "NUMBER_NOT_IN_QUOTE:value=60"
+  },
+  {
+   "kind": "counter",
+   "modality": "ADVISORY",
+   "param": "spray_volume_gal_per_acre",
+   "op": "gte",
+   "value": 10,
+   "value2": null,
+   "unit": "gallons per acre",
+   "applies_to": "ground applications with water",
+   "summary": "A minimum spray volume of 10 gallons per acre is recommended when FOLEX 6 EC is applied with water.",
+   "quote": "A minimum spray volume of 10 gallons per acre is recommended when FOLEX 6 EC is applied with water.",
+   "page": 7,
+   "id": "5481-504-p7-19",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "geometry_buffer",
+   "modality": "MUST_NOT",
+   "param": "release_height_ft",
+   "op": "gt",
+   "value": 4,
+   "value2": null,
+   "unit": "feet",
+   "applies_to": "ground rig applications",
+   "summary": "For ground rig applications, apply product no more than 4 feet above the ground or the crop canopy.",
+   "quote": "For ground rig applications, apply product no more than 4 feet above the ground or the crop canopy.",
+   "page": 7,
+   "id": "5481-504-p7-22",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "lte",
+   "value": 16,
+   "value2": null,
+   "unit": "fl oz/A",
+   "applies_to": "aerial application",
+   "summary": "The maximum single application rate of FOLEX 6 EC for aerial application is 16 fl oz/A (0.750 lb ai/A).",
+   "quote": "The maximum single application rate of FOLEX 6 EC for aerial application is 16 fl oz/A (0.750 lb ai/A).",
+   "page": 9,
+   "id": "5481-504-p9-11",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "lte",
+   "value": 24,
+   "value2": null,
+   "unit": "fl oz/A",
+   "applies_to": "ground application",
+   "summary": "The maximum single application rate of FOLEX 6 EC for ground application is 24 fl oz/A (1.125 lb ai/A).",
+   "quote": "The maximum single application rate of FOLEX 6 EC for ground application is 24 fl oz/A (1.125 lb ai/A).",
+   "page": 9,
+   "id": "5481-504-p9-12",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  }
+ ]
+}
