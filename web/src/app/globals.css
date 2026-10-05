@@ -425,6 +425,11 @@ a {
   padding: clamp(2.2rem, 5vw, 5rem);
 }
 
+.measured-card,
+.architecture-card {
+  padding: clamp(2.2rem, 5vw, 5rem);
+}
+
 .section-heading {
   max-width: 48rem;
 }
@@ -476,6 +481,58 @@ a {
 
 .home-step h3 { font-size: 1.7rem; margin: 2rem 0 0; }
 .home-step p { color: var(--ink-soft); font-weight: 650; line-height: 1.5; margin: 1rem 0 0; }
+
+.measured-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 2.5rem 0 0;
+}
+
+.measured-grid div {
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: var(--radius-card);
+  box-shadow: 5px 6px 0 var(--ink);
+  padding: 1.4rem;
+}
+
+.measured-grid div:nth-child(1) { transform: rotate(-1deg); }
+.measured-grid div:nth-child(3) { transform: rotate(1deg); }
+.measured-grid dt { font-size: 0.78rem; font-weight: 850; letter-spacing: 0.08em; text-transform: uppercase; }
+.measured-grid dd { color: var(--field-deep); font-size: clamp(3rem, 7vw, 6rem); margin: 0.7rem 0 0; }
+.measured-grid span { color: var(--ink-soft); display: block; font-size: 1.15rem; font-weight: 850; margin-top: 0.35rem; }
+.measured-link { margin-top: 2rem; }
+
+.architecture-card { border: 3px solid var(--ink); }
+.architecture-card .section-heading .hand { color: var(--soil); }
+.architecture-diagram {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-areas:
+    "pdf compile vote"
+    "parse compile vote"
+    "weather wasm agent";
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 2.5rem;
+  min-height: 32rem;
+  position: relative;
+}
+
+.architecture-paths { height: 100%; inset: 0; overflow: visible; position: absolute; width: 100%; z-index: 0; }
+.architecture-paths path { fill: none; marker-end: url(#architecture-arrow); stroke: var(--soil); stroke-dasharray: 8 7; stroke-linecap: round; stroke-width: 4; }
+.architecture-paths marker path { fill: var(--soil); stroke: none; }
+.architecture-node { align-self: center; background: var(--paper); border: 3px solid var(--ink); border-radius: 1.3rem; box-shadow: 5px 6px 0 var(--ink); min-width: 0; padding: 1.2rem; position: relative; z-index: 1; }
+.architecture-node p { color: var(--soil); font-size: 0.68rem; font-weight: 900; letter-spacing: 0.1em; margin: 0; text-transform: uppercase; }
+.architecture-node h3 { font-size: clamp(1.45rem, 2.4vw, 2.3rem); margin: 0.5rem 0 0; }
+.architecture-node span { color: var(--ink-soft); display: block; font-size: 0.82rem; font-weight: 650; line-height: 1.45; margin-top: 0.7rem; }
+.architecture-pdf { grid-area: pdf; transform: rotate(-1deg); }
+.architecture-compile { background: var(--sky-soft); grid-area: compile; }
+.architecture-parse { grid-area: parse; transform: rotate(1deg); }
+.architecture-vote { background: var(--sun-soft); grid-area: vote; }
+.architecture-weather { background: var(--sky); grid-area: weather; transform: rotate(-1deg); }
+.architecture-wasm { background: var(--field-soft); grid-area: wasm; }
+.architecture-agent { background: var(--sun); grid-area: agent; transform: rotate(1deg); }
 
 .stamp {
   align-items: center;
@@ -659,6 +716,12 @@ a {
   .hero-title { max-width: 12ch; }
   .hero-live-card { transform: none; }
   .home-steps { grid-template-columns: 1fr; }
+  .measured-grid { grid-template-columns: 1fr; }
+  .measured-grid div { transform: none !important; }
+  .architecture-diagram { display: grid; grid-template-areas: none; grid-template-columns: 1fr; min-height: auto; }
+  .architecture-node { grid-area: auto; transform: none; }
+  .architecture-node:not(:last-child)::after { bottom: -1.1rem; color: var(--soil); content: "↓"; font-size: 1.3rem; font-weight: 900; left: 50%; position: absolute; }
+  .architecture-paths { display: none; }
   .home-step { min-height: 13rem; transform: none !important; }
 }
 
@@ -671,6 +734,8 @@ a {
   .nav-pill { font-size: 0.7rem; padding-inline: 0.67rem; }
   .hero-card,
   .steps-card,
+  .measured-card,
+  .architecture-card,
   .judge-hero,
   .deployment-card { padding: 1.5rem; }
   .hero-title { font-size: clamp(2.85rem, 14vw, 4.7rem); }

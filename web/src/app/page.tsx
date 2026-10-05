@@ -1,5 +1,7 @@
 import { Chip, Nav, SectionCard, SquashButton } from "@/ui";
+import { ArchitectureDiagram } from "@/ui/ArchitectureDiagram";
 import { LiveHeroCard } from "@/ui/LiveHeroCard";
+import shipEval from "../../public/data/eval/ship.json";
 
 const steps = [
   {
@@ -16,6 +18,27 @@ const steps = [
     title: "Read the clause behind the hour",
     copy: "Every blocked hour and field check names the product, label page, exact quote, and reason.",
     icon: "≡",
+  },
+];
+
+const measured = [
+  {
+    label: "Coverage",
+    value: shipEval.overall.coverage_recall,
+    numerator: shipEval.overall.coverage,
+    denominator: shipEval.overall.gold,
+  },
+  {
+    label: "Strict acting precision",
+    value: shipEval.overall.acting_precision,
+    numerator: shipEval.overall.acting_good,
+    denominator: shipEval.overall.acting_rules,
+  },
+  {
+    label: "Acting recall",
+    value: shipEval.overall.acting_recall,
+    numerator: shipEval.overall.gold_acting_hit,
+    denominator: shipEval.overall.gold_acting,
   },
 ];
 
@@ -64,7 +87,41 @@ export default function HomePage() {
             ))}
           </ol>
         </SectionCard>
+
+        <SectionCard className="measured-card" tone="sun">
+          <div className="section-heading">
+            <p className="hand">from the committed ship receipt</p>
+            <h2 className="display">Measured</h2>
+          </div>
+          <dl className="measured-grid">
+            {measured.map((metric) => (
+              <div key={metric.label} data-measured-metric={metric.label}>
+                <dt>{metric.label}</dt>
+                <dd className="display">{formatPercent(metric.value)}</dd>
+                <span>{metric.numerator}/{metric.denominator}</span>
+              </div>
+            ))}
+          </dl>
+          <a className="text-link measured-link" href="https://github.com/StephenSook/labelhand#measured-so-far">
+            Read the full measured table <span aria-hidden="true">→</span>
+          </a>
+        </SectionCard>
+
+        <SectionCard className="architecture-card" tone="paper">
+          <div className="section-heading">
+            <p className="hand">only code that runs</p>
+            <h2 className="display">How it is built</h2>
+          </div>
+          <ArchitectureDiagram />
+        </SectionCard>
       </main>
     </>
   );
+}
+
+function formatPercent(value: number): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "percent",
+    maximumFractionDigits: 1,
+  }).format(value);
 }

@@ -96,10 +96,20 @@ async function writeReplayForecasts() {
   }
 }
 
+async function copyEvalResult() {
+  const target = path.join(publicData, "eval");
+  await mkdir(target, { recursive: true });
+  await copyFile(
+    path.join(repoRoot, "eval", "results", "ship.json"),
+    path.join(target, "ship.json"),
+  );
+}
+
 await copyEngine();
 await copyCompiledLabels();
 await writeLabelIndex();
 await writePointCache();
 await writeReplayForecasts();
+await copyEvalResult();
 
-console.log("Synced the Rust WASM engine, labels, points, and replay forecasts.");
+console.log("Synced the Rust WASM engine, labels, points, replay forecasts, and ship evaluation.");
