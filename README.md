@@ -58,11 +58,21 @@ Three real Georgia cotton defoliation labels: Folex 6 EC (EPA Reg. 5481-504, acc
 
 The planner still uses the typing v3 row. The p2 row finds three more gold clauses (the two Folex re-entry intervals and Dropp's one-half mile lettuce buffer), none of which the hourly planner acts on, and its acting numbers are the same, but its modality accuracy is lower (0.841 against 0.902). Token Factory cost for the p2 pipeline on three labels: $0.53 (Super pass $0.033, Ultra pass $0.18, typing $0.31).
 
+**Run-to-run variance.** One run is one draw, so the p2 pipeline was run three times with the same prompts at temperature 0:
+
+| p2 run | Coverage | Value exact | Modality | Acting precision | Acting recall |
+|---|---|---|---|---|---|
+| 1 | 0.957 | 0.941 | 0.841 | 1.000 (11/11) | 1.000 (10/10) |
+| 2 | 0.957 | 0.971 | 0.886 | 1.000 (11/11) | 1.000 (10/10) |
+| 3 | 0.957 | 0.941 | 0.864 | 1.000 (10/10) | **0.900 (9/10)** |
+
+Coverage held, but run 3 missed an acting clause. Folex's "When minimum night temperature is below 60F use FOLEX 6 EC alone" reached the typing pass with the same quote and summary in every run, and Nemotron 3 Ultra typed it MUST in run 1 and ADVISORY in runs 2 and 3. Run 2 kept recall only because a second, longer quote of the same sentence was typed MUST. Identical requests at temperature 0 do not always return the same modality, so a single typing pass is not enough for the safety number.
+
 What the guards caught, in a real run:
 - The Folex label sets two restricted-entry intervals: **7 days** at rates at or below 0.75 lb ai/A and **10 days** above that rate. The model spliced the sentence with "..." into a single 10-day rule and dropped the rate condition. Rejected, because a spliced quote is not what the label says.
 - The model converted 3 feet to 36 inches and one-half mile to 2,640 feet. Conversions belong in code, so `restore_units` now maps such a value back to the number and unit in the quote when it can reproduce the conversion exactly, and records what it undid. Anything it cannot reproduce is still rejected by the number guard.
 
-Known limits we are working on, with details in [`SPIKE-01-label-compile.md`](SPIKE-01-label-compile.md): the p2 row still misses two gold clauses, both Dropp SC night-temperature clauses in the poor text layer of its scanned 2009 label (OCR is the planned fix); one font in the 2026 Folex PDF has no Unicode map for the "1/2" glyph; and single passes vary between runs, which is why two are unioned.
+Known limits we are working on, with details in [`SPIKE-01-label-compile.md`](SPIKE-01-label-compile.md): the p2 row still misses two gold clauses, both Dropp SC night-temperature clauses in the poor text layer of its scanned 2009 label (OCR is the planned fix); one font in the 2026 Folex PDF has no Unicode map for the "1/2" glyph; and passes vary between runs (table above), which is why two extraction passes are unioned.
 
 All four NVIDIA Nemotron models on Token Factory (3.5 Lightning, 3 Nano 30B, 3 Super 120B, 3 Ultra 550B) passed our capability probe for strict JSON schema output and tool calling, with time to first token between 0.44 and 0.78 s.
 

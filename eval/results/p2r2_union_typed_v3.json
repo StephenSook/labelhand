@@ -1,0 +1,245 @@
+{
+ "suffix": ".union.p2r2.typed.v3",
+ "labels": {
+  "5481-504": {
+   "gold": 24,
+   "coverage": 24,
+   "typed": 24,
+   "value_n": 20,
+   "value_ok": 20,
+   "modality_ok": 21,
+   "planner_rules": 45,
+   "planner_good": 37,
+   "coverage_recall": 1.0,
+   "typed_recall": 1.0,
+   "value_exact": 1.0,
+   "modality_acc": 0.875,
+   "planner_precision": 0.822,
+   "acting_rules": 5,
+   "acting_good": 5,
+   "acting_precision": 1.0,
+   "gold_acting": 5,
+   "gold_acting_hit": 5,
+   "acting_recall": 1.0,
+   "acting_missed": [],
+   "missed": [],
+   "mistyped": [],
+   "planner_false_positives": [
+    {
+     "id": "5481-504-p9-2",
+     "param": "temperature_inversion",
+     "modality": "ADVISORY",
+     "quote": "Temperature inversions are characterized by increasing temperature with altitude and are common on nights with limited c"
+    },
+    {
+     "id": "5481-504-p10-7",
+     "param": "open_boll_pct",
+     "modality": "ADVISORY",
+     "quote": "\u2022 Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after applic"
+    },
+    {
+     "id": "5481-504-p6-3",
+     "param": "droplet_size",
+     "modality": "ADVISORY",
+     "quote": "Larger droplets more effectively reach the lower leaves."
+    },
+    {
+     "id": "5481-504-p7-8",
+     "param": "boom_height_in",
+     "modality": "MUST",
+     "quote": "For ground rig applications, apply product no more than 4 feet above the ground or the crop canopy and only when wind sp"
+    },
+    {
+     "id": "5481-504-p8-20",
+     "param": "boom_height_in",
+     "modality": "ADVISORY",
+     "quote": "For ground equipment, the boom should remain level with the crop and have minimal bounce."
+    },
+    {
+     "id": "5481-504-p9-2",
+     "param": "temperature_inversion",
+     "modality": "ADVISORY",
+     "quote": "Drift potential is high during a temperature inversion."
+    },
+    {
+     "id": "5481-504-p9-7",
+     "param": "wind_speed_mph",
+     "modality": "ADVISORY",
+     "quote": "Drift potential is lowest between wind speeds of 2 -10 mph."
+    },
+    {
+     "id": "5481-504-p9-22",
+     "param": "open_boll_pct",
+     "modality": "ADVISORY",
+     "quote": "For best results, apply the combination to mature cotton plants with 60% or more open bolls."
+    }
+   ],
+   "acting_false_positives": [],
+   "model": "nvidia/nemotron-3-super-120b-a12b+nvidia/Nemotron-3-Ultra-550b-a55b"
+  },
+  "264-700": {
+   "gold": 10,
+   "coverage": 8,
+   "typed": 8,
+   "value_n": 7,
+   "value_ok": 6,
+   "modality_ok": 7,
+   "planner_rules": 14,
+   "planner_good": 8,
+   "coverage_recall": 0.8,
+   "typed_recall": 0.8,
+   "value_exact": 0.857,
+   "modality_acc": 0.875,
+   "planner_precision": 0.571,
+   "acting_rules": 2,
+   "acting_good": 2,
+   "acting_precision": 1.0,
+   "gold_acting": 2,
+   "gold_acting_hit": 2,
+   "acting_recall": 1.0,
+   "acting_missed": [],
+   "missed": [
+    "D-NIGHT-ALONE",
+    "D-NIGHT-IDEAL"
+   ],
+   "mistyped": [],
+   "planner_false_positives": [
+    {
+     "id": "264-700-p5-10",
+     "param": "buffer_ft",
+     "modality": "MUST_NOT",
+     "quote": "In addition, for citrus crops, do not apply Dropp\u00ae SC by air when citrus in flush is within five (5) miles downwind of t"
+    },
+    {
+     "id": "264-700-p5-2",
+     "param": "wind_speed_mph",
+     "modality": "ADVISORY",
+     "quote": "Follow local recommendations if wind speeds of less than ten (10) miles per hour are specified in those recommendations."
+    },
+    {
+     "id": "264-700-p7-9",
+     "param": "night_temperature_f",
+     "modality": "ADVISORY",
+     "quote": "Less than ideal conditions are those when the nighttime temperatures are expected to be 60\u00b0F on the date of application "
+    },
+    {
+     "id": "264-700-p7-10",
+     "param": "open_boll_pct",
+     "modality": "ADVISORY",
+     "quote": "Best activity will be obtained when the tank mix is applied to mature cotton plants with 60% or more open bolls."
+    },
+    {
+     "id": "264-700-p7-17",
+     "param": "night_temperature_f",
+     "modality": "ADVISORY",
+     "quote": "Use lower rate of Def \u00ae 6 or Folex\u00ae 6 EC under ideal nighttime temperature conditions (65\u00b0F); higher rate during less th"
+    },
+    {
+     "id": "264-700-p7-18",
+     "param": "air_temperature_f",
+     "modality": "ADVISORY",
+     "quote": "Maximum rates of Dropp\u00ae and phosphate defoliants applied in a tank mix during very high air temperatures can cause desic"
+    }
+   ],
+   "acting_false_positives": [],
+   "model": "nvidia/nemotron-3-super-120b-a12b+nvidia/Nemotron-3-Ultra-550b-a55b"
+  },
+  "264-418": {
+   "gold": 12,
+   "coverage": 12,
+   "typed": 12,
+   "value_n": 7,
+   "value_ok": 7,
+   "modality_ok": 11,
+   "planner_rules": 23,
+   "planner_good": 15,
+   "coverage_recall": 1.0,
+   "typed_recall": 1.0,
+   "value_exact": 1.0,
+   "modality_acc": 0.917,
+   "planner_precision": 0.652,
+   "acting_rules": 4,
+   "acting_good": 4,
+   "acting_precision": 1.0,
+   "gold_acting": 3,
+   "gold_acting_hit": 3,
+   "acting_recall": 1.0,
+   "acting_missed": [],
+   "missed": [],
+   "mistyped": [],
+   "planner_false_positives": [
+    {
+     "id": "264-418-p5-1",
+     "param": "release_height_ft",
+     "modality": "MUST_NOT",
+     "quote": "Do not release spray at a height greater than 10 feet above the vegetative canopy, unless a greater application height i"
+    },
+    {
+     "id": "264-418-p6-3",
+     "param": "droplet_size",
+     "modality": "ADVISORY",
+     "quote": "Use the largest droplets that provide target pest control."
+    },
+    {
+     "id": "264-418-p10-13",
+     "param": "reentry_hours",
+     "modality": "MUST",
+     "quote": "Harvest can commence 48 hours after PREP\u2122 brand Ethephon for Cott on and Tobacco application."
+    },
+    {
+     "id": "264-418-p8-1",
+     "param": "air_temperature_f",
+     "modality": "ADVISORY",
+     "quote": "Hot and dry 80\u00b0F or higher"
+    },
+    {
+     "id": "264-418-p8-2",
+     "param": "air_temperature_f",
+     "modality": "ADVISORY",
+     "quote": "Dry and 75 to 80\u00b0F"
+    },
+    {
+     "id": "264-418-p8-3",
+     "param": "air_temperature_f",
+     "modality": "MUST",
+     "quote": "Cool but above 65\u00b0F"
+    },
+    {
+     "id": "264-418-p8-8",
+     "param": "air_temperature_f",
+     "modality": "ADVISORY",
+     "quote": "Hot, dry, above 80\u00b0F"
+    },
+    {
+     "id": "264-418-p8-9",
+     "param": "air_temperature_f",
+     "modality": "MUST",
+     "quote": "Cool, above 65\u00b0F"
+    }
+   ],
+   "acting_false_positives": [],
+   "model": "nvidia/nemotron-3-super-120b-a12b+nvidia/Nemotron-3-Ultra-550b-a55b"
+  }
+ },
+ "overall": {
+  "gold": 46,
+  "coverage": 44,
+  "typed": 44,
+  "value_n": 34,
+  "value_ok": 33,
+  "modality_ok": 39,
+  "planner_rules": 82,
+  "planner_good": 60,
+  "acting_rules": 11,
+  "acting_good": 11,
+  "gold_acting": 10,
+  "gold_acting_hit": 10,
+  "coverage_recall": 0.957,
+  "typed_recall": 0.957,
+  "value_exact": 0.971,
+  "modality_acc": 0.886,
+  "planner_precision": 0.732,
+  "acting_precision": 1.0,
+  "acting_recall": 1.0
+ }
+}

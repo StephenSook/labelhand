@@ -1,0 +1,3054 @@
+{
+ "reg": "264-418",
+ "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
+ "label_accepted": "2021-02-24",
+ "label_sha256": "0416a94124e908f51623869612cb1f180a850488de04773fb86f3e1b63372770",
+ "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000264-00418-20210224.pdf",
+ "thinking": false,
+ "prompt_version": "p2",
+ "compiled_utc": "2026-10-05T03:11:46+00:00",
+ "pages": 12,
+ "failed_pages": [],
+ "wall_secs_max_page": 13.82,
+ "union_of": [
+  "nvidia/nemotron-3-super-120b-a12b",
+  "nvidia/Nemotron-3-Ultra-550b-a55b"
+ ],
+ "union_utc": "2026-10-05T03:12:51+00:00",
+ "model": "nvidia/nemotron-3-super-120b-a12b+nvidia/Nemotron-3-Ultra-550b-a55b",
+ "cost_usd": 0.0784,
+ "accepted": [
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "ppe",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Applicators and other handlers must wear specified personal protective equipment.",
+   "quote": "Applicators and other handlers must wear coveralls over short-sleeved shirts and short pants, chemical resistant gloves made out of any waterproof material (barrier laminate, butyl rubber \u2265 14 mils, nitrile rubber \u2265 14 mils, neoprene rubber \u2265 14 mils, natural rubber \u2265 14 mils, polyethylene, polyvinyl chloride \u2265 14 mils, or viton \u2265 14 mils), chemical-resistant footwear plus socks, protective eyewear, chemical-resistant headgear for overhead exposure and chemical-resistant apron when cleaning equipment or mixing and loading.",
+   "page": 4,
+   "id": "264-418-p4-1",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "ppe",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cleaning equipment or mixing and loading",
+   "summary": "Chemical-resistant apron required during cleaning equipment or mixing and loading.",
+   "quote": "chemical-resistant headgear for overhead exposure and chemical-resistant apron when cleaning equipment or mixing and loading.",
+   "page": 4,
+   "id": "264-418-p4-2",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "ppe",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "handlers using closed systems, enclosed cabs, or aircraft meeting WPS requirements",
+   "summary": "Handler PPE requirements may be reduced or modified as specified in the WPS when using closed systems, enclosed cabs, or aircraft meeting WPS requirements.",
+   "quote": "When handlers use closed systems, enclosed cabs, or aircraft in a manner that meets the requirements listed in the Worker Protection Standard (WPS) for agricultural pesticides [40 CFR 170.240 (d) (4 -6)], the handler PPE requirements may be reduced or modified as specified in the WPS.",
+   "page": 4,
+   "id": "264-418-p4-3",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "ppe",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "users",
+   "summary": "Users should wash hands before eating, drinking, chewing gum, using tobacco or using the toilet.",
+   "quote": "Users should wash hands before eating, drinking, chewing gum, using tobacco or using the toilet.",
+   "page": 4,
+   "id": "264-418-p4-4",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "ppe",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "users",
+   "summary": "Users should remove clothing immediately if pesticide gets inside, then wash body thoroughly and put on clean clothing.",
+   "quote": "Users should remove clothing immediately if pesticide gets inside. Then wash body thoroughly and put on clean clothing.",
+   "page": 4,
+   "id": "264-418-p4-5",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "ppe",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "users",
+   "summary": "Users should remove PPE immediately after handling this product, then wash thoroughly and change into clean clothing.",
+   "quote": "Users should remove PPE immediately after handling this product. As soon as possible, wash thoroughly and change into clean clothing.",
+   "page": 4,
+   "id": "264-418-p4-6",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "ppe",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "users",
+   "summary": "Wash the outside of gloves before removing.",
+   "quote": "Wash the outside of gloves before removing.",
+   "page": 4,
+   "id": "264-418-p4-7",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "application_method",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "irrigation systems",
+   "summary": "Do not apply through any type of irrigation system.",
+   "quote": "Do not apply PREP\u2122 brand Ethephon for Cotton and Tobacco through any type of irrigation system.",
+   "page": 4,
+   "id": "264-418-p4-8",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "spray_volume_gal_per_acre",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "mixing",
+   "summary": "Mix only the amount of spray you expect to use each day.",
+   "quote": "Mix only the amount of spray you expect to use each day.",
+   "page": 4,
+   "id": "264-418-p4-9",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "max_applications",
+   "op": "gt",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "standing solutions",
+   "summary": "Do not allow mixed solution to stand overnight.",
+   "quote": "Do not allow mixed solution to stand overnight.",
+   "page": 4,
+   "id": "264-418-p4-10",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "geometry_buffer",
+   "modality": "MUST_NOT",
+   "param": "release_height_ft",
+   "op": "gt",
+   "value": 10,
+   "value2": null,
+   "unit": "feet",
+   "applies_to": "Aerial Applications",
+   "summary": "Release height cannot exceed 10 feet above vegetative canopy",
+   "quote": "Do not release spray at a height greater than 10 feet above the vegetative canopy, unless a greater application height is necessary for pilot safety.",
+   "page": 5,
+   "id": "264-418-p5-1",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "droplet_size",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "All applications",
+   "summary": "Applicators must use fine to medium or coarser droplet size",
+   "quote": "For all applications, applicators are required to use a fine to medium or coarser droplet size (ASABE S572.1).",
+   "page": 5,
+   "id": "264-418-p5-2",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "geometry_buffer",
+   "modality": "MUST_NOT",
+   "param": "boom_height_in",
+   "op": "gt",
+   "value": 65,
+   "value2": null,
+   "unit": "%",
+   "applies_to": "Aerial Applications - Airplanes",
+   "summary": "Boom length must not exceed 65% of wingspan for airplanes",
+   "quote": "The boom length must not exceed 65% of the wingspan for airplanes or 75% of the rotor blade diameter for helicopters.",
+   "page": 5,
+   "id": "264-418-p5-3",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "Aerial Applications",
+   "summary": "Must use 1/2 swath displacement upwind at downwind edge of field",
+   "quote": "Applicators must use 1/2 swath displacement upwind at the downwind edge of the field.",
+   "page": 5,
+   "id": "264-418-p5-5",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "Aerial Applications",
+   "summary": "Nozzles must be oriented so spray is directed toward back of aircraft",
+   "quote": "Nozzles must be oriented so the spray is directed toward the back of the aircraft.",
+   "page": 5,
+   "id": "264-418-p5-6",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "MUST_NOT",
+   "param": "wind_speed_mph",
+   "op": "gt",
+   "value": 10,
+   "value2": null,
+   "unit": "miles per hour",
+   "applies_to": "Aerial Applications",
+   "summary": "Wind speed must not exceed 10 mph at application site",
+   "quote": "Do not apply when wind speeds exceed 10 miles per hour at the application site.",
+   "page": 5,
+   "id": "264-418-p5-7",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "solar_window",
+   "modality": "MUST_NOT",
+   "param": "temperature_inversion",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "Aerial Applications",
+   "summary": "Application prohibited during temperature inversions",
+   "quote": "Do not apply during temperature inversions.",
+   "page": 5,
+   "id": "264-418-p5-8",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "geometry_buffer",
+   "modality": "MUST_NOT",
+   "param": "release_height_ft",
+   "op": "gt",
+   "value": 3,
+   "value2": null,
+   "unit": "feet",
+   "applies_to": "Ground Boom Applications",
+   "summary": "Nozzle height must not exceed 3 feet above ground or crop canopy",
+   "quote": "Apply with the nozzle height recommended by the manufacturer, but no more than 3 feet above the ground or crop canopy.",
+   "page": 5,
+   "id": "264-418-p5-9",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "The applicator is responsible for avoiding off-site spray drift.",
+   "quote": "THE APPLICATOR IS RESPONSIBLE FOR AVOIDING OFF-SITE SPRAY DRIFT.",
+   "page": 6,
+   "id": "264-418-p6-1",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "sensitive_area",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Be aware of nearby non-target sites and environmental conditions.",
+   "quote": "BE AWARE OF NEARBY NON-TARGET SITES AND ENVIRONMENTAL CONDITIONS.",
+   "page": 6,
+   "id": "264-418-p6-2",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "droplet_size",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Use the largest droplets that provide target pest control to reduce spray drift.",
+   "quote": "Use the largest droplets that provide target pest control.",
+   "page": 6,
+   "id": "264-418-p6-3",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "ground boom",
+   "summary": "Increase spray volume to produce larger droplets to reduce spray drift; use the highest practical spray volume for the application.",
+   "quote": "Increasing the spray volume so that larger droplets are produced will reduce spray drift. Use the highest practical spray volume for the application.",
+   "page": 6,
+   "id": "264-418-p6-4",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "ground boom",
+   "summary": "If a greater spray volume is needed, consider using a nozzle with a higher flow rate.",
+   "quote": "If a greater spray volume is needed, consider using a nozzle with a higher flow rate.",
+   "page": 6,
+   "id": "264-418-p6-5",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "ground boom",
+   "summary": "Use the lowest spray pressure recommended for the nozzle to produce the target spray volume and droplet size.",
+   "quote": "Use the lowest spray pressure recommended for the nozzle to produce the target spray volume and droplet size.",
+   "page": 6,
+   "id": "264-418-p6-6",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "ground boom",
+   "summary": "Use a spray nozzle that is designed for the intended application; consider using nozzles designed to reduce drift.",
+   "quote": "Use a spray nozzle that is designed for the intended application. Consider using nozzles designed to reduce drift.",
+   "page": 6,
+   "id": "264-418-p6-7",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "aircraft",
+   "summary": "Follow nozzle manufacturers' recommendations for setting up nozzles; orient nozzles parallel with the airflow in flight to reduce fine droplets.",
+   "quote": "Adjust Nozzles - Follow nozzle manufacturers\u2019 recommendations for setting up nozzles. Generally, to reduce fine droplets, nozzles should be oriented parallel with the airflow in flight.",
+   "page": 6,
+   "id": "264-418-p6-8",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "boom_height_in",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "ground boom",
+   "summary": "For ground equipment, the boom should remain level with the crop and have minimal bounce.",
+   "quote": "For ground equipment, the boom should remain level with the crop and have minimal bounce.",
+   "page": 6,
+   "id": "264-418-p6-9",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "release_height_ft",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "boom-less ground applications",
+   "summary": "Setting nozzles at the lowest effective height will help to reduce the potential for spray drift.",
+   "quote": "Setting nozzles at the lowest effective height will help to reduce the potential for spray drift.",
+   "page": 6,
+   "id": "264-418-p6-10",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "release_height_ft",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "aircraft",
+   "summary": "Higher release heights increase the potential for spray drift.",
+   "quote": "Higher release heights increase the potential for spray drift.",
+   "page": 6,
+   "id": "264-418-p6-11",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "shielded sprayers",
+   "summary": "Shielding the boom or individual nozzles can reduce spray drift; verify that the shields are not interfering with the uniform deposition of the spray on the target area.",
+   "quote": "Shielding the boom or individual nozzles can reduce spray drift. Consider using shielded sprayers. Verify that the shields are not interfering with the uniform deposition of the spray on the target area.",
+   "page": 6,
+   "id": "264-418-p6-12",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "temperature_inversion",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Avoid applications during temperature inversions.",
+   "quote": "Avoid applications during temperature inversions.",
+   "page": 6,
+   "id": "264-418-p6-13",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "MUST_NOT",
+   "param": "grazing_restriction",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Avoid applications during gusty wind conditions.",
+   "quote": "AVOID APPLICATIONS DURING GUSTY WIND CONDITIONS.",
+   "page": 6,
+   "id": "264-418-p6-14",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "add 1/2 to 3/4 of the required amount of water to the spray tank before adding product",
+   "quote": "Add 1/2 to 3/4 of the required amount of water to the spray tank. Start agitation. Add the required amount of PREP\u2122 brand Ethephon for Cotton and Tobacco, and the remaining amount of water.",
+   "page": 7,
+   "id": "264-418-p7-2",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "prepare only as much spray solution as can be used on the day of mixing",
+   "quote": "Prepare only as much spray solution as can be used on the day of mixing.",
+   "page": 7,
+   "id": "264-418-p7-3",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "do not allow spray solution to stand overnight",
+   "quote": "Do not allow spray solution to stand overnight.",
+   "page": 7,
+   "id": "264-418-p7-4",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "do not spill the concentrated product on spray equipment or any airplane parts",
+   "quote": "Do not spill the concentrated product on spray equipment, or any airplane parts.",
+   "page": 7,
+   "id": "264-418-p7-5",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "any spills should be rinsed immediately with plenty of water",
+   "quote": "ANY SPILLS SHOULD BE RINSED IMMEDIATELY WITH PLENTY OF WATER.",
+   "page": 7,
+   "id": "264-418-p7-6",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "tank_mix",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "prep\u2122 brand ethephon for cotton and tobacco is compatible with listed defoliants and insecticides",
+   "quote": "PREP\u2122 brand Ethephon for Cotton and Tobacco is compatible with DEF \u00ae, FOLEX\u00ae, Dropp\u00ae, Dropp\u00ae Ultra\u2122, Ginstar \u00ae, Harvade\u00ae, Methyl Parathion, Guthion\u00ae, and Malathion\u2122.",
+   "page": 7,
+   "id": "264-418-p7-8",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "tank_mix",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "may be applied in sequence or as a tank mixture",
+   "quote": "PREP\u2122 brand Ethephon for Cotton and Tobacco may be applied in sequence or as a tank mixture",
+   "page": 7,
+   "id": "264-418-p7-9",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "tank_mix",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton spindle harvested",
+   "summary": "do not tank mix with desiccants if cotton is to be spindle harvested",
+   "quote": "(DO NOT TANK MIX WITH DESICCANTS IF COTTON IS TO BE SPINDLE HARVESTED)",
+   "page": 7,
+   "id": "264-418-p7-10",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "rate_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "follow all applicable use precautions and rate per acre recommendations on labels of products applied as tank mixtures or in sequence",
+   "quote": "Follow all applicable use precautions and rate per acre recommendations on labels of products applied as tank mixtures or in sequence with PREP\u2122 brand Ethephon for Cotton and Tobacco.",
+   "page": 7,
+   "id": "264-418-p7-11",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "buffer_ft",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "in some cases slight reduction in boll opening response has been observed when tank mixes with defoliants were used",
+   "quote": "In some cases slight reduction in boll opening response has been observed when tank mixes with defoliants were used.",
+   "page": 7,
+   "id": "264-418-p7-12",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "tank_mix",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "good agitation in the spray tank is essential and a tank mixture should not be allowed to stand without agitation for more than 5 to 10 minutes",
+   "quote": "Good agitation in the spray tank is essential and a tank mixture should not be allowed to stand without agitation for more than 5 to 10 minutes.",
+   "page": 7,
+   "id": "264-418-p7-13",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "rate_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "read and observe all appropriate label use directions and precautions for the defoliants and insecticides used",
+   "quote": "Read and observe all appropriate label use directions and precautions for the defoliants and insecticides used.",
+   "page": 7,
+   "id": "264-418-p7-14",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "tank_mix",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "under certain conditions, tank mixtures of prep\u2122 brand ethephon for cotton and tobacco with desiccants containing sodium chlorate could result in formation of hypochlorous acids which on heating will emit toxic chloride fumes",
+   "quote": "NOTE: UNDER CERTAIN CONDITIONS, TANK MIXTURES OF PREP\u2122 BRAND ETHEPHON FOR COTTON AND TOBACCO WITH DESICCANTS CONTAINING SODIUM CHLORATE COULD RESULT IN THE FORMATION OF HYPOCHLOROUS ACIDS WHICH ON HEATING WILL EMIT TOXIC CHLORIDE FUMES.",
+   "page": 7,
+   "id": "264-418-p7-15",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "tank_mix",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "do not mix prep\u2122 brand ethephon for cotton and tobacco with ammonium thiosulfate. such tank mixtures may result in formation of toxic fumes.",
+   "quote": "DO NOT MIX PREP\u2122 BRAND ETHEPHON FOR COTTON AND TOBACCO WITH AMMONIUM THIOSULFATE. SUCH TANK MIXTURES MAY RESULT IN FORMATION OF TOXIC FUMES.",
+   "page": 7,
+   "id": "264-418-p7-16",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "aircraft windshields and painted surfaces",
+   "summary": "rinse thoroughly with a detergent and water all exposed acrylic plastic-type materials (e.g., aircraft windshields), and painted surfaces within an hour after exposure to spray deposits",
+   "quote": "Rinse thoroughly with a detergent and water all exposed acrylic plastic-type materials (e.g., aircraft windshields), and painted surfaces within an hour after exposure to spray deposits.",
+   "page": 7,
+   "id": "264-418-p7-17",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "metal parts of aircraft and associated spray equipment",
+   "summary": "at the end of each day, rinse thoroughly with a detergent and water all the metal parts of the aircraft and the associated spray equipment exposed to the spray deposits",
+   "quote": "At the end of each day, rinse thoroughly with a detergent and water all the metal parts of the aircraft and the associated spray equipment exposed to the spray deposits.",
+   "page": 7,
+   "id": "264-418-p7-18",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "For best performance, by ground or air application, choose equipment and spray volumes that will ensure uniform coverage of foliage and bolls.",
+   "quote": "* For best performance, by ground or air application, choose equipment and spray volumes that will insure uniform coverage of foliage and bolls.",
+   "page": 8,
+   "id": "264-418-p8-1",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "geometry_buffer",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "gte",
+   "value": 5,
+   "value2": null,
+   "unit": "gallons per acre",
+   "applies_to": "aerial applications in California and Arizona",
+   "summary": "In California and Arizona use a volume of no less than 5 gallons per acre for aerial applications.",
+   "quote": "**** In California and Arizona use a volume of no less than 5 gallons per acre for aerial applications.",
+   "page": 8,
+   "id": "264-418-p8-2",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST_NOT",
+   "param": "max_rate_per_season",
+   "op": "lte",
+   "value": 2.0,
+   "value2": null,
+   "unit": "lb ai/acre/year",
+   "applies_to": "cotton and tobacco",
+   "summary": "annual max rate of ethephon AI",
+   "quote": "Do not exceed a maximum of 2. 0 lb. ethephon active ingredient per acre per year through combined or repeated uses of any ethephon products.",
+   "page": 9,
+   "id": "264-418-p9-1",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "tank_mix",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "spindle-harvested cotton",
+   "summary": "prohibit tank mixing with desiccant for spindle-harvested cotton",
+   "quote": "Boll Opening:  Do not tank mix PREP\u2122 brand Ethephon for Cotton and Tobacco with a desiccant if the cotton is to be spindle harvested.",
+   "page": 9,
+   "id": "264-418-p9-2",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "tank_mix",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "pre-condition for defoliation",
+   "summary": "do not tank mix with desiccants unless plant desiccation is required",
+   "quote": "Pre- Condition for Defoliation:  Do not tank mix PREP\u2122 brand Ethe phon for Cotton and Tobacco with desiccants unless plant desiccation is required.",
+   "page": 9,
+   "id": "264-418-p9-3",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "tank_mix",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "defoliation timing",
+   "summary": "do not use defoliant before sufficient mature unopened bolls exist",
+   "quote": "Do no t use a defoliant before there is sufficient mature unopened boll s to produce the desired yield (see General Information section on how to test for boll maturity.",
+   "page": 9,
+   "id": "264-418-p9-4",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "MUST_NOT",
+   "param": "rain_free_hours",
+   "op": "gte",
+   "value": 6,
+   "value2": null,
+   "unit": "hours",
+   "applies_to": "cotton and tobacco",
+   "summary": "do not apply if rain expected within 6 hours",
+   "quote": "DO NOT APPLY PREP\u2122 BRAND ETHEPHON FOR COTTON AND TOBACCO IF RAIN IS EXPECTED WITHIN 6 HOURS.  Rainfall within 6 hours of application may reduce product performance.",
+   "page": 9,
+   "id": "264-418-p9-5",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST_NOT",
+   "param": "reentry_hours",
+   "op": "lt",
+   "value": 30,
+   "value2": null,
+   "unit": "days",
+   "applies_to": "planting subsequent crops",
+   "summary": "do not plant another crop within 30 days after treatment",
+   "quote": "Do not plant another crop within 30 days after treatment.",
+   "page": 9,
+   "id": "264-418-p9-6",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "tobacco (flue-cured)",
+   "summary": "use small grains as cover crops only if planted <1 month or intercropped",
+   "quote": "Sma ll grains planted earlier than 1 month or intercropped with the cotton crop to which PREP\u2122 brand Ethephon for Cotton an d Tobacco will be applied may only be used as cover crops and may not be harvested for food or feed.",
+   "page": 9,
+   "id": "264-418-p9-7",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "reentry_hours",
+   "op": "gte",
+   "value": 7,
+   "value2": null,
+   "unit": "days",
+   "applies_to": "cotton harvest",
+   "summary": "do not harvest cotton sooner than 7 days after treatment",
+   "quote": "Do not harvest cotton sooner than 7 days after a treatment with PREP\u2122 brand Ethephon for Cotton and Tobacco.",
+   "page": 9,
+   "id": "264-418-p9-9",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "directed spray application tobacco",
+   "summary": "use drop nozzles with TG or OC spray tips for directed spray",
+   "quote": "Directed Spray Application  1 1/3 50 Use drop nozzles.  Choose TG or OC spray tips de signed to apply 50 - 60 gpa at 35 -40 psi and at tractor speed of 2- 3 mph.",
+   "page": 9,
+   "id": "264-418-p9-10",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "directed spray application tobacco",
+   "summary": "use 2 nozzles per row, one on each side",
+   "quote": "Use   2 nozzles per row; one on each side of the row dropped low enough to direct the spray to the leaves to be ripened and harvested.",
+   "page": 9,
+   "id": "264-418-p9-11",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "eq",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "over-the-top application tobacco",
+   "summary": "apply as fine mist using three nozzles (center and sides)",
+   "quote": "Apply over-the-top PREP\u2122 brand Ethephon for Cotton and Tobacco spray as a fine mist using three nozzles (one no zzle tip over the center of the plant, and one on each side) so all leaves are covered thoroughly,",
+   "page": 9,
+   "id": "264-418-p9-12",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "gte",
+   "value": 40,
+   "value2": null,
+   "unit": "gallons/acre",
+   "applies_to": "over-the-top application tobacco",
+   "summary": "minimum spray volume 40 gpa for over-the-top",
+   "quote": "Over-The-Top Application  1 1/3 \u2013 2 2/3 40",
+   "page": 9,
+   "id": "264-418-p9-13",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "lte",
+   "value": 60,
+   "value2": null,
+   "unit": "gallons/acre",
+   "applies_to": "directed spray application tobacco",
+   "summary": "directed spray designed for 50-60 gpa",
+   "quote": "Choose TG or OC spray tips de signed to apply 50 - 60 gpa at 35 -40 psi and at tractor speed of 2- 3 mph.",
+   "page": 9,
+   "id": "264-418-p9-14",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "gte",
+   "value": 40,
+   "value2": null,
+   "unit": "gallons/acre",
+   "applies_to": "over-the-top application tobacco",
+   "summary": "use spray pressure 40-60 psi for over-the-top",
+   "quote": "Use a spray pressure of 40 to 60 psi.",
+   "page": 9,
+   "id": "264-418-p9-17",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "tobacco leaves",
+   "summary": "do not apply to immature leaves",
+   "quote": "Do not apply PREP\u2122 brand Ethephon for Cotton and Tobacco to immature leaves as this can result in unsatisfactory coloring, weight loss and reduced leaf quality.",
+   "page": 9,
+   "id": "264-418-p9-19",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "tobacco crop",
+   "summary": "do not allow crop to over ripen in field after treatment",
+   "quote": "Do not allow the crop to over ripen in the field after using PREP\u2122 brand Ethephon fo r Cotton and Tobacco, since this may cause some reduction in yield and quality.",
+   "page": 9,
+   "id": "264-418-p9-20",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "tobacco crop",
+   "summary": "do not treat before anticipated major storm",
+   "quote": "Do not treat before anticipated major storm which could prevent harvest and result in crop loss.",
+   "page": 9,
+   "id": "264-418-p9-21",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "adjuvant",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "do not use additives other than recommended",
+   "quote": "Do not use PREP\u2122 brand Ethephon for Cotton and Tobacco wi th additives other than recommended on this label.",
+   "page": 9,
+   "id": "264-418-p9-23",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST_NOT",
+   "param": "max_rate_per_season",
+   "op": "lte",
+   "value": 2,
+   "value2": null,
+   "unit": "lb ai/acre/year",
+   "applies_to": "cotton and tobacco",
+   "summary": "annual max rate of ethephon AI (tobacco section)",
+   "quote": "Do not exceed a maximum of 2 lbs ethephon active ingredient per acre per year through repeated uses of any ethephon products.",
+   "page": 9,
+   "id": "264-418-p9-25",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "crop_stage",
+   "op": "gte",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "Treat when leaves are mature, not overly rank green.",
+   "quote": "Successful results with PREP\u2122 brand Ethephon for Cotton and Tobacco call for treatment when leaves are mature, not overly rank green when sprayed.",
+   "page": 10,
+   "id": "264-418-p10-1",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "ADVISORY",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "Test spray several plants in more than one location in each field to determine proper treatment timing and number of leaves per stalk ready for harvest.",
+   "quote": "To easily determine the proper treatment timing and the number of leaves per stalk ready for harvest, test spray several plants in more than one location in each field and observe the response.",
+   "page": 10,
+   "id": "264-418-p10-2",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "crop_stage",
+   "op": "lte",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "Leaves that fail to yellow in 72 hours are not mature and are not ready for treatment.",
+   "quote": "Test leaves that fail to yellow in 72 hours are not ma ture and are not ready for PR EP\u2122 brand Ethephon for Cotton  and Tobacco treatment.",
+   "page": 10,
+   "id": "264-418-p10-3",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "Wait a few days to permit further natural maturing, then make another test spray or 'maturity' check.",
+   "quote": "Wait a few days to permit further natural maturing, then make another test spray or \"maturity\" check.",
+   "page": 10,
+   "id": "264-418-p10-4",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "Harvest any yellowed leaves prior to application to avoid quality loss and/or possible leaf drop.",
+   "quote": "To avoid quality loss and or possible leaf drop, harvest any yellowed leaves prior to application.",
+   "page": 10,
+   "id": "264-418-p10-5",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "rate_per_acre",
+   "op": "lte",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "Use lower rates under most conditions.",
+   "quote": "Use lower rates under most conditions.",
+   "page": 10,
+   "id": "264-418-p10-6",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "temperature_inversion",
+   "op": "lt",
+   "value": 65,
+   "value2": null,
+   "unit": "degF",
+   "applies_to": "cotton and tobacco",
+   "summary": "Limit use of higher rates to cool (below 65\u00b0F at the time of treatment) slow ripening conditions.",
+   "quote": "Limit use of higher rates to cool (below 65\u00b0F at the time of treatment) slow ripening conditions.",
+   "page": 10,
+   "id": "264-418-p10-7",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "Determine the number of acres to treat based on confirmed number of leaves per plant that will color to fill the barn.",
+   "quote": "When you have confirmed the desired number of leaves per plant that will color, you can determine the number of acres to treat in order to fill the barn.",
+   "page": 10,
+   "id": "264-418-p10-8",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "Prepare test spray by mixing one teaspoon of product in 1 quart of water.",
+   "quote": "Prepare your test spray by mixing one teaspoon of PREP\u2122 brand Ethephon for Cotton and Tobacco in 1 quart of water.",
+   "page": 10,
+   "id": "264-418-p10-9",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "Spray each test plant with about 1 oz. of the test mixture, covering all leaves with a fine mist.",
+   "quote": "Spray each test plant with about 1 oz. of this mixture, covering all leaves with a fine mist.",
+   "page": 10,
+   "id": "264-418-p10-10",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "reentry_hours",
+   "op": "gte",
+   "value": 24,
+   "value2": 72,
+   "unit": "hours",
+   "applies_to": "cotton and tobacco",
+   "summary": "All mature, sprayed leaves will begin to color within 24 to 72 hours after application.",
+   "quote": "All mature, sprayed leaves will begin to color within 24 to 72  hours after PREP\u2122 brand Ethephon for Cotton and Tobacco applic ation.",
+   "page": 10,
+   "id": "264-418-p10-11",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "temperature_inversion",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "Yellowing process is weather dependent; cool weather delays, hot sunny weather speeds up the process.",
+   "quote": "The yellowing process is weather dependent; co ol weather will delay , while hot, sunny we ather can speed up the process.",
+   "page": 10,
+   "id": "264-418-p10-12",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "reentry_hours",
+   "op": "gte",
+   "value": 48,
+   "value2": null,
+   "unit": "hours",
+   "applies_to": "cotton and tobacco",
+   "summary": "Harvest can commence 48 hours after application.",
+   "quote": "Harvest can commence 48 hours after PREP\u2122 brand Ethephon for Cott on and Tobacco application.",
+   "page": 10,
+   "id": "264-418-p10-13",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "Closely monitor treated crop and weather conditions to determine harvest timing and avoid quality loss or leaf drop.",
+   "quote": "To  determine harvest timing and   avoid quality loss or leaf drop, closely monitor treated crop and weather conditions.",
+   "page": 10,
+   "id": "264-418-p10-14",
+   "found_by": [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "ppe",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "applicators and other handlers",
+   "summary": "Discard clothing and other absorbent materials that have been drenched or heavily contaminated with this product's concentrate. Do not reuse them.",
+   "quote": "Discard clothing and other absorbent materials that have been drenched or heavily contaminated with this products concentrate. Do not reuse them.",
+   "page": 4,
+   "id": "264-418-p4-2",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "ppe",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "applicators and other handlers",
+   "summary": "Follow manufacturer's instructions for cleaning/maintaining PPE. If no such instructions for washables, use detergent and hot water. Keep and wash PPE separately from other laundry.",
+   "quote": "Follow manufacturer\u2019s instructions for cleaning/maintaining PPE. If no such instructions for washables, use detergent and hot water. Keep and wash PPE separately from other laundry.",
+   "page": 4,
+   "id": "264-418-p4-3",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Do not apply directly to water, or to areas where surface water is present or to intertidal areas below the mean high water mark.",
+   "quote": "Do not apply directly to water, or to areas where surface water is present or to intertidal areas below the mean high water mark.",
+   "page": 4,
+   "id": "264-418-p4-6",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Do not contaminate water when disposing of equipment washwaters.",
+   "quote": "Do not contaminate water when disposing of equipment washwaters.",
+   "page": 4,
+   "id": "264-418-p4-7",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Do not contaminate water used for irrigation or domestic purposes.",
+   "quote": "Do not contaminate water used for irrigation or domestic purposes.",
+   "page": 4,
+   "id": "264-418-p4-8",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Avoid spray drift to nearby crops as this product will cause modifications in plant growth. Plant injury or reduced yields will result.",
+   "quote": "Avoid spray drift to nearby crops as this product will cause modifications in plant growth. Plant injury or reduced yields will result.",
+   "page": 4,
+   "id": "264-418-p4-9",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "max_applications",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Mix only the amount of spray you expect to use each day. Do not allow mixed solution to stand overnight.",
+   "quote": "Mix only the amount of spray you expect to use each day. Do not allow mixed solution to stand overnight.",
+   "page": 4,
+   "id": "264-418-p4-10",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Prohibits applying product in a way that contacts workers or other persons directly or through drift",
+   "quote": "Do not apply this product in a way that will contact workers or other persons, either directly or through drift.",
+   "page": 5,
+   "id": "264-418-p5-1",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Requires only protected handlers in area during application",
+   "quote": "Only protected handlers may be in the area during application.",
+   "page": 5,
+   "id": "264-418-p5-2",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST_NOT",
+   "param": "reentry_hours",
+   "op": "none",
+   "value": 48,
+   "value2": null,
+   "unit": "hours",
+   "applies_to": "treated areas",
+   "summary": "Prohibits worker entry during 48-hour restricted-entry interval",
+   "quote": "Do not enter or allow worker entry into treated areas during the restricted-entry interval (REI) of 48 hours.",
+   "page": 5,
+   "id": "264-418-p5-3",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST_NOT",
+   "param": "reentry_hours",
+   "op": "none",
+   "value": 72,
+   "value2": null,
+   "unit": "hours",
+   "applies_to": "treated areas where average rainfall is less than 25 inches per year",
+   "summary": "Prohibits worker entry during 72-hour restricted-entry interval in low rainfall areas",
+   "quote": "The REI is 72 hours in areas where average rainfall is less than 25 inches per year.",
+   "page": 5,
+   "id": "264-418-p5-4",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "ppe",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "early entry to treated areas",
+   "summary": "Requires specific PPE for early entry involving contact with treated surfaces",
+   "quote": "PPE required for early entry to treated areas that is permitted under the Worker Protection Standard and that involves contact with anything that has been treated such as plants, soil or water is coveralls over long-sleeved shirt and long pants, chemical resistant gloves made of any waterproof material, such as nitrile, butyl, neopren e, or barrier laminate, chemical  resistant footwear plus socks,  and  protective eyewear.",
+   "page": 5,
+   "id": "264-418-p5-5",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "ppe",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "early entry with overhead exposure",
+   "summary": "Requires chemical-resistant headgear for overhead exposure during early entry",
+   "quote": "For overhead exposure, chemical-resistant headgear is also required.",
+   "page": 5,
+   "id": "264-418-p5-6",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all applications",
+   "summary": "Requires oral warning and posted signs at entrances to treated areas",
+   "quote": "Notify workers of the application by warning them orally and posting warning signs at entrances to treated areas.",
+   "page": 5,
+   "id": "264-418-p5-7",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "aerial applications",
+   "summary": "Requires nozzles oriented so spray directed toward back of aircraft",
+   "quote": "Nozzles must be oriented so the spray is directed toward the back of the aircraft.",
+   "page": 5,
+   "id": "264-418-p5-13",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "airblast applications",
+   "summary": "Requires directing spray into the canopy",
+   "quote": "Direct spray into the canopy.",
+   "page": 5,
+   "id": "264-418-p5-20",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "airblast applications",
+   "summary": "Requires turning off outward pointing nozzles at row ends and when spraying outer rows",
+   "quote": "Tum off outward pointing nozzles at ro w ends and when spraying outer rows.",
+   "page": 5,
+   "id": "264-418-p5-21",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "ground_boom",
+   "summary": "Use the highest practical spray volume for the application to produce larger droplets and reduce drift.",
+   "quote": "Increasing the spray volume so that larger droplets are produced will reduce spray drift. Use the highest practical spray volume for the application.",
+   "page": 6,
+   "id": "264-418-p6-1",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "ground_boom",
+   "summary": "If a greater spray volume is needed, consider using a nozzle with a higher flow rate.",
+   "quote": "If a greater spray volume is needed, consider using a nozzle with a higher flow rate.",
+   "page": 6,
+   "id": "264-418-p6-2",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "ground_boom",
+   "summary": "Use the lowest spray pressure recommended for the nozzle to produce the target spray volume and droplet size.",
+   "quote": "Use the lowest spray pressure recommended for the nozzle to produce the target spray volume and droplet size.",
+   "page": 6,
+   "id": "264-418-p6-3",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "ground_boom",
+   "summary": "Use a spray nozzle that is designed for the intended application.",
+   "quote": "Use a spray nozzle that is designed for the intended application.",
+   "page": 6,
+   "id": "264-418-p6-4",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "ground_boom",
+   "summary": "Consider using nozzles designed to reduce drift.",
+   "quote": "Consider using nozzles designed to reduce drift.",
+   "page": 6,
+   "id": "264-418-p6-5",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "aircraft",
+   "summary": "Follow nozzle manufacturers\u2019 recommendations for setting up nozzles.",
+   "quote": "Follow nozzle manufacturers\u2019 recommendations for setting up nozzles.",
+   "page": 6,
+   "id": "264-418-p6-6",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "aircraft",
+   "summary": "Generally, to reduce fine droplets, nozzles should be oriented parallel with the airflow in flight.",
+   "quote": "Generally, to reduce fine droplets, nozzles should be oriented parallel with the airflow in flight.",
+   "page": 6,
+   "id": "264-418-p6-7",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all",
+   "summary": "Consider using shielded sprayers.",
+   "quote": "Consider using shielded sprayers.",
+   "page": 6,
+   "id": "264-418-p6-11",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all",
+   "summary": "Verify that the shields are not interfering with the uniform deposition of the spray on the target area.",
+   "quote": "Verify that the shields are not interfering with the uniform deposition of the spray on the target area.",
+   "page": 6,
+   "id": "264-418-p6-12",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "ADVISORY",
+   "param": "temperature_inversion",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all",
+   "summary": "When making applications in hot and dry conditions, use larger droplets to reduce effects of evaporation.",
+   "quote": "When making applications in hot and dry conditions, use larger droplets to reduce effects of evaporation.",
+   "page": 6,
+   "id": "264-418-p6-13",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "MUST_NOT",
+   "param": "wind_speed_mph",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all",
+   "summary": "AVOID APPLICATIONS DURING GUSTY WIND CONDITIONS.",
+   "quote": "AVOID APPLICATIONS DURING GUSTY WIND CONDITIONS.",
+   "page": 6,
+   "id": "264-418-p6-15",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "wind_speed_mph",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "all",
+   "summary": "Applicators need to be familiar with local wind patterns and terrain that could affect spray drift.",
+   "quote": "Applicators need to be familiar with local wind patterns and terrain that could affect spray drift.",
+   "page": 6,
+   "id": "264-418-p6-16",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "MUST",
+   "param": "temperature_inversion",
+   "op": "gte",
+   "value": 80,
+   "value2": null,
+   "unit": "\u00b0F",
+   "applies_to": "cotton boll opener application",
+   "summary": "temperature condition hot and dry 80\u00b0F or higher for boll opener rate 1 1/3 pints/A",
+   "quote": "Hot and dry 80\u00b0F or higher",
+   "page": 8,
+   "id": "264-418-p8-1",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "MUST",
+   "param": "temperature_inversion",
+   "op": "between",
+   "value": 75,
+   "value2": 80,
+   "unit": "\u00b0F",
+   "applies_to": "cotton boll opener application",
+   "summary": "temperature condition dry and 75 to 80\u00b0F for boll opener rate 2 pints/A",
+   "quote": "Dry and 75 to 80\u00b0F",
+   "page": 8,
+   "id": "264-418-p8-2",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "MUST",
+   "param": "temperature_inversion",
+   "op": "gt",
+   "value": 65,
+   "value2": null,
+   "unit": "\u00b0F",
+   "applies_to": "cotton boll opener application",
+   "summary": "temperature condition cool but above 65\u00b0F for boll opener rate 2 2/3 pints/A",
+   "quote": "Cool but above 65\u00b0F",
+   "page": 8,
+   "id": "264-418-p8-3",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton boll opener application",
+   "summary": "apply when number of mature unopened bolls is sufficient to produce desired crop",
+   "quote": "Apply when the number of mature unopened bolls is sufficient to produce the desired crop.",
+   "page": 8,
+   "id": "264-418-p8-4",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton boll opener application",
+   "summary": "see below for test of boll maturity",
+   "quote": "See below for test of boll maturity.",
+   "page": 8,
+   "id": "264-418-p8-5",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "tank_mix",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton PREP + FOLEX tank mix",
+   "summary": "apply 4 to 7 days prior to PREP boll opening application as sequential treatment",
+   "quote": "Apply 4 to 7 days prior to PREP\u2122 brand Ethephon for Cotton and Tobacco boll opening application. To be used as a sequential treatment with, not in place of PREP\u2122 brand Ethephon for Cotton and Tobacco boll opening treatment.",
+   "page": 8,
+   "id": "264-418-p8-6",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "MUST",
+   "param": "temperature_inversion",
+   "op": "gt",
+   "value": 80,
+   "value2": null,
+   "unit": "\u00b0F",
+   "applies_to": "cotton pre-conditioner for defoliation",
+   "summary": "temperature condition hot dry above 80\u00b0F for pre-conditioner rate 2/3 pints/A",
+   "quote": "Hot, dry, above 80\u00b0F",
+   "page": 8,
+   "id": "264-418-p8-8",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "MUST",
+   "param": "temperature_inversion",
+   "op": "gt",
+   "value": 65,
+   "value2": null,
+   "unit": "\u00b0F",
+   "applies_to": "cotton pre-conditioner for defoliation",
+   "summary": "temperature condition cool above 65\u00b0F for pre-conditioner rate 1 1/3 pints/A",
+   "quote": "Cool, above 65\u00b0F",
+   "page": 8,
+   "id": "264-418-p8-9",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_interval_days",
+   "op": "between",
+   "value": 4,
+   "value2": 7,
+   "unit": "days",
+   "applies_to": "cotton pre-conditioner for defoliation",
+   "summary": "apply 4 to 7 days prior to defoliant",
+   "quote": "Apply 4 to 7 days prior to defoliant.",
+   "page": 8,
+   "id": "264-418-p8-10",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton ground or air application",
+   "summary": "choose equipment and spray volumes that will insure uniform coverage of foliage and bolls for best performance",
+   "quote": "For best performance, by ground or air application, choose equipment and spray volumes that will insure uniform coverage of foliage and bolls.",
+   "page": 8,
+   "id": "264-418-p8-11",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "tank_mix",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton PREP + defoliant pretreatment",
+   "summary": "use dosage rates of PREP recommended for boll opening; read and observe all appropriate label use directions and precautions for the defoliant used",
+   "quote": "Use dosage rates of PREP\u2122 brand Ethephon for Cotton and Tobacco recommended for boll opening. Read and observe all appropriate label use directions and precautions for the defoliant used.",
+   "page": 8,
+   "id": "264-418-p8-12",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "tank_mix",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton PREP + FOLEX or Dropp tank mix",
+   "summary": "can use up to full label rate for each product",
+   "quote": "Can use up to full label rate for each product.",
+   "page": 8,
+   "id": "264-418-p8-13",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "geometry_buffer",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "gte",
+   "value": 5,
+   "value2": null,
+   "unit": "gallons per acre",
+   "applies_to": "cotton aerial application in California and Arizona",
+   "summary": "use a volume of no less than 5 gallons per acre for aerial applications in California and Arizona",
+   "quote": "In California and Arizona use a volume of no less than 5 gallons per acre for aerial applications.",
+   "page": 8,
+   "id": "264-418-p8-14",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton boll maturity test",
+   "summary": "boll is mature when too hard to be dented when squeezed between thumb and fingers, too hard to be sliced with a sharp knife, and when seed coat becomes light brown in color",
+   "quote": "A boll is mature when it is too hard to be dented when squeezed between thumb and fingers, too hard to be sliced with a sharp knife, and when the seed coat becomes light brown in color.",
+   "page": 8,
+   "id": "264-418-p8-15",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST_NOT",
+   "param": "max_applications",
+   "op": "lte",
+   "value": 2.0,
+   "value2": null,
+   "unit": "lb ethephon active ingredient per acre per year",
+   "applies_to": "combined or repeated uses of any ethephon products",
+   "summary": "annual active-ingredient cap",
+   "quote": "Do not exceed a maximum of 2. 0 lb. ethephon active ingredient per acre per year through combined or repeated uses of any ethephon products.",
+   "page": 9,
+   "id": "264-418-p9-1",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "tank_mix",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton spindle harvested",
+   "summary": "prohibit desiccant tank-mix for spindle-harvested cotton",
+   "quote": "Do not tank mix PREP\u2122 brand Ethephon for Cotton and Tobacco with a desiccant if the cotton is to be spindle harvested.",
+   "page": 9,
+   "id": "264-418-p9-2",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "tank_mix",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton defoliation",
+   "summary": "prohibit desiccant tank-mix unless plant desiccation is required",
+   "quote": "Do not tank mix PREP\u2122 brand Ethephon for Cotton and Tobacco with desiccants unless plant desiccation is required.",
+   "page": 9,
+   "id": "264-418-p9-3",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton defoliation",
+   "summary": "do not use a defoliant before sufficient mature unopened bolls",
+   "quote": "Do not use a defoliant before there is sufficient mature unopened bolls to produce the desired yield (see General Information section on how to test for boll maturity.",
+   "page": 9,
+   "id": "264-418-p9-4",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "forecast_series",
+   "modality": "MUST_NOT",
+   "param": "rain_free_hours",
+   "op": "lt",
+   "value": 6,
+   "value2": null,
+   "unit": "hours",
+   "applies_to": "cotton and tobacco",
+   "summary": "rain-free window after application",
+   "quote": "DO NOT APPLY PREP\u2122 BRAND ETHEPHON FOR COTTON AND TOBACCO IF RAIN IS EXPECTED WITHIN 6 HOURS.",
+   "page": 9,
+   "id": "264-418-p9-5",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST_NOT",
+   "param": "reentry_hours",
+   "op": "lt",
+   "value": 6,
+   "value2": null,
+   "unit": "hours",
+   "applies_to": "cotton and tobacco",
+   "summary": "rainfall within 6 hours may reduce product performance",
+   "quote": "Rainfall within 6 hours of application may reduce product performance.",
+   "page": 9,
+   "id": "264-418-p9-6",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "small grains",
+   "summary": "ethephon may cause yellowing and growth inhibition of treated small grains",
+   "quote": "PREP\u2122 brand Ethephon for Cotton and Tobacco may cause yellowing and growth inhibition of treated small grains.",
+   "page": 9,
+   "id": "264-418-p9-9",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton harvest",
+   "summary": "harvest when optimum boll opening reached",
+   "quote": "Observe the treated crop and harvest when optimum boll opening has been reached.",
+   "page": 9,
+   "id": "264-418-p9-11",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton harvest",
+   "summary": "too early harvest might reduce full advantage; too late may reduce quality and lint loss",
+   "quote": "Too early harvest might reduce the full advantage of the treatment and too late a harvest may result in reduced quality and loss of lint which will drop from the plant.",
+   "page": 9,
+   "id": "264-418-p9-12",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "tobacco directed spray",
+   "summary": "use drop nozzles with TG or OC spray tips",
+   "quote": "Use drop nozzles. Choose TG or OC spray tips designed to apply 50 - 60 gpa at 35 -40 psi and at tractor speed of 2- 3 mph.",
+   "page": 9,
+   "id": "264-418-p9-13",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "tobacco directed spray",
+   "summary": "thorough spray coverage is essential",
+   "quote": "Thorough spray coverage is essential.",
+   "page": 9,
+   "id": "264-418-p9-15",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "tobacco directed spray",
+   "summary": "harvest all leaves with 20% or more yellowing",
+   "quote": "With a directed spray, be sure to harvest all leaves with 20% or more yellowing.",
+   "page": 9,
+   "id": "264-418-p9-16",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "tobacco over-the-top",
+   "summary": "treat only when leaves remaining on stalk are mature",
+   "quote": "Treat only when leaves remaining on the stalk are mature.",
+   "page": 9,
+   "id": "264-418-p9-17",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "tobacco over-the-top",
+   "summary": "test spray several tobacco plants to ensure maturity",
+   "quote": "To ensure remaining leaves are mature, test spray several tobacco plants as described under the section \"Proper Time of Treatment.\"",
+   "page": 9,
+   "id": "264-418-p9-18",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "rate_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "tobacco over-the-top",
+   "summary": "use lower rate in normally mature crop when minimum ripening inducement required",
+   "quote": "Use the lower rate in a normally mature crop when experience indicates that minimum ripening inducement is required.",
+   "page": 9,
+   "id": "264-418-p9-19",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "rate_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "tobacco over-the-top",
+   "summary": "use higher rate when crop is heavy and rank or temperatures lower than normal",
+   "quote": "Use the higher rate when the crop is heavy and has a tendency to be more rank or when temperatures are lower than normal.",
+   "page": 9,
+   "id": "264-418-p9-20",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "tobacco over-the-top",
+   "summary": "always test spray to determine if tobacco is mature enough to respond to treatment",
+   "quote": "Always test spray to determine if the tobacco is mature enough to respond to treatment with PREP\u2122 brand Ethephon for Cotton and Tobacco.",
+   "page": 9,
+   "id": "264-418-p9-21",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "tobacco over-the-top",
+   "summary": "apply as fine mist using three nozzles (one over center, one each side) for thorough coverage",
+   "quote": "Apply over-the-top PREP\u2122 brand Ethephon for Cotton and Tobacco spray as a fine mist using three nozzles (one nozzle tip over the center of the plant, and one on each side) so all leaves are covered thoroughly, similar to the application pattern of systemic sucker control agents.",
+   "page": 9,
+   "id": "264-418-p9-22",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "application_method",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "tobacco over-the-top",
+   "summary": "use spray pressure of 40 to 60 psi",
+   "quote": "Use a spray pressure of 40 to 60 psi.",
+   "page": 9,
+   "id": "264-418-p9-23",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "tobacco",
+   "summary": "do not treat before anticipated major storm which could prevent harvest",
+   "quote": "Do not treat before anticipated major storm which could prevent harvest and result in crop loss.",
+   "page": 9,
+   "id": "264-418-p9-26",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "tank_mix",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "do not use with additives other than recommended on this label",
+   "quote": "Do not use PREP\u2122 brand Ethephon for Cotton and Tobacco with additives other than recommended on this label.",
+   "page": 9,
+   "id": "264-418-p9-29",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST_NOT",
+   "param": "max_applications",
+   "op": "lte",
+   "value": 2,
+   "value2": null,
+   "unit": "lbs ethephon active ingredient per acre per year",
+   "applies_to": "repeated uses of any ethephon products",
+   "summary": "annual active-ingredient cap (tobacco section)",
+   "quote": "Do not exceed a maximum of 2 lbs ethephon active ingredient per acre per year through repeated uses of any ethephon products.",
+   "page": 9,
+   "id": "264-418-p9-31",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "Cotton and Tobacco",
+   "summary": "Test spray several plants in more than one location in each field and observe the response to determine proper treatment timing and number of leaves per stalk ready for harvest",
+   "quote": "To easily determine the proper treatment timing and the number of leaves per stalk ready for harvest, test spray several plants in more than one location in each field and observe the response.",
+   "page": 10,
+   "id": "264-418-p10-2",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "ADVISORY",
+   "param": "crop_stage",
+   "op": "between",
+   "value": 24,
+   "value2": 72,
+   "unit": "hours",
+   "applies_to": "Cotton and Tobacco",
+   "summary": "Mature leaves will begin to yellow in 24 to 72 hours",
+   "quote": "Mature leaves will begin to yellow in 24 to 72 hours.",
+   "page": 10,
+   "id": "264-418-p10-3",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "rate_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "Cotton and Tobacco",
+   "summary": "Limit use of higher rates to cool (below 65\u00b0F at the time of treatment) slow ripening conditions",
+   "quote": "Limit use of higher rates to cool (below 65\u00b0F at the time of treatment) slow ripening conditions.",
+   "page": 10,
+   "id": "264-418-p10-8",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "Cotton and Tobacco",
+   "summary": "Prepare test spray by mixing one teaspoon of PREP\u2122 brand Ethephon for Cotton and Tobacco in 1 quart of water",
+   "quote": "Prepare your test spray by mixing one teaspoon of PREP\u2122 brand Ethephon for Cotton and Tobacco in 1 quart of water.",
+   "page": 10,
+   "id": "264-418-p10-10",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "Cotton and Tobacco",
+   "summary": "Spray each test plant with about 1 oz. of this mixture, covering all leaves with a fine mist",
+   "quote": "Spray each test plant with about 1 oz. of this mixture, covering all leaves with a fine mist.",
+   "page": 10,
+   "id": "264-418-p10-11",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST_NOT",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "Cotton and Tobacco",
+   "summary": "PREP\u2122 brand Ethephon for Cotton and Tobacco will not color immature sprayed leaves",
+   "quote": "PREP\u2122 brand Ethephon for Cotton and Tobacco wi ll not color immature sprayed leaves.",
+   "page": 10,
+   "id": "264-418-p10-12",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "counter",
+   "modality": "ADVISORY",
+   "param": "crop_stage",
+   "op": "between",
+   "value": 24,
+   "value2": 72,
+   "unit": "hours",
+   "applies_to": "Cotton and Tobacco",
+   "summary": "All mature, sprayed leaves will begin to color within 24 to 72 hours after application",
+   "quote": "All mature, sprayed leaves will begin to color within 24 to 72 hours after PREP\u2122 brand Ethephon for Cotton and Tobacco applic ation.",
+   "page": 10,
+   "id": "264-418-p10-13",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "Cotton and Tobacco",
+   "summary": "Harvest treated tobacco when leaves have reached the desired color intensity",
+   "quote": "Harvest treated tobacco when leaves have reached the desired color intensity.",
+   "page": 10,
+   "id": "264-418-p10-14",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "crop_stage",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "Cotton and Tobacco",
+   "summary": "Treated and untreated leaves should not be cured together in the same barn",
+   "quote": "Since PREP\u2122 brand Ethephon for Cotton and Tobacco treated leaves cure faster, treated and untreated leaves should not be cured together in the same barn.",
+   "page": 10,
+   "id": "264-418-p10-17",
+   "found_by": [
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+   ]
+  }
+ ],
+ "rejected": [
+  {
+   "kind": "field_obligation",
+   "modality": "MUST",
+   "param": "open_boll_pct",
+   "op": "gt",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton",
+   "summary": "accelerate opening of mature unopened cotton bolls",
+   "quote": "A foliar spray of PREP\u2122 brand Ethephon for Cotton and Tobacco for Cotton and Tobacco will accelerate opening of mature unopened cotton bolls and enhance defoliation which can result in earlier harvest with an increased recoverable yield.",
+   "page": 7,
+   "id": "264-418-p7-1",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "field_obligation",
+   "modality": "ADVISORY",
+   "param": "night_temperature_f",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": null,
+   "applies_to": "cotton and tobacco",
+   "summary": "use of a nurse tank is highly recommended for avoiding possible spills of concentrated formulation on spray equipment or any airplane parts",
+   "quote": "Use of a nurse tank is highly recommedned for avoiding possible spills of concentrated formulation on spray equipment or any airplane parts.",
+   "page": 7,
+   "id": "264-418-p7-7",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": "gal/acre",
+   "applies_to": "aerial_application_cotton",
+   "summary": "Aerial application on cotton requires minimum 5 gal/acre spray volume",
+   "quote": "Apply in a minimum of 5 gallons of water per acre by air.",
+   "page": 7,
+   "id": "264-418-p7-1",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": "gal/acre",
+   "applies_to": "aerial_application_tobacco",
+   "summary": "Aerial application on tobacco requires minimum 3 gal/acre spray volume",
+   "quote": "Apply in a minimum of 3 gallons of water per acre by air.",
+   "page": 7,
+   "id": "264-418-p7-2",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": "gal/acre",
+   "applies_to": "ground_application_cotton",
+   "summary": "Ground application on cotton requires minimum 10 gal/acre spray volume",
+   "quote": "Apply in a minimum of 10 gallons of water per acre by ground.",
+   "page": 7,
+   "id": "264-418-p7-3",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "spray_volume_gal_per_acre",
+   "op": "none",
+   "value": null,
+   "value2": null,
+   "unit": "gal/acre",
+   "applies_to": "ground_application_tobacco",
+   "summary": "Ground application on tobacco requires minimum 20 gal/acre spray volume",
+   "quote": "Apply in a minimum of 20 gallons of water per acre by ground.",
+   "page": 7,
+   "id": "264-418-p7-4",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "lte",
+   "value": 2.25,
+   "value2": null,
+   "unit": "pt/acre",
+   "applies_to": "cotton",
+   "summary": "Cotton seasonal maximum rate is 2.25 pt/acre",
+   "quote": "Do not apply more than 2.25 pints per acre per season.",
+   "page": 7,
+   "id": "264-418-p7-5",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "lte",
+   "value": 1.5,
+   "value2": null,
+   "unit": "pt/acre",
+   "applies_to": "tobacco",
+   "summary": "Tobacco seasonal maximum rate is 1.5 pt/acre",
+   "quote": "Do not apply more than 1.5 pints per acre per season.",
+   "page": 7,
+   "id": "264-418-p7-6",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "max_applications",
+   "op": "lte",
+   "value": 2,
+   "value2": null,
+   "unit": "applications",
+   "applies_to": "cotton",
+   "summary": "Cotton maximum 2 applications per season",
+   "quote": "Do not make more than 2 applications per season.",
+   "page": 7,
+   "id": "264-418-p7-7",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "max_applications",
+   "op": "lte",
+   "value": 1,
+   "value2": null,
+   "unit": "applications",
+   "applies_to": "tobacco",
+   "summary": "Tobacco maximum 1 application per season",
+   "quote": "Do not make more than 1 application per season.",
+   "page": 7,
+   "id": "264-418-p7-8",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "application_interval_days",
+   "op": "gte",
+   "value": 7,
+   "value2": null,
+   "unit": "days",
+   "applies_to": "cotton",
+   "summary": "Cotton applications must be at least 7 days apart",
+   "quote": "Allow at least 7 days between applications.",
+   "page": 7,
+   "id": "264-418-p7-9",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "lte",
+   "value": 2.25,
+   "value2": null,
+   "unit": "pt/acre",
+   "applies_to": "cotton",
+   "summary": "Cotton seasonal maximum rate is 2.25 pt/acre",
+   "quote": "Do not apply more than 2.25 pints per acre per season.",
+   "page": 7,
+   "id": "264-418-p7-10",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "lte",
+   "value": 1.5,
+   "value2": null,
+   "unit": "pt/acre",
+   "applies_to": "tobacco",
+   "summary": "Tobacco seasonal maximum rate is 1.5 pt/acre",
+   "quote": "Do not apply more than 1.5 pints per acre per season.",
+   "page": 7,
+   "id": "264-418-p7-11",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "max_applications",
+   "op": "lte",
+   "value": 2,
+   "value2": null,
+   "unit": "applications",
+   "applies_to": "cotton",
+   "summary": "Cotton maximum 2 applications per season",
+   "quote": "Do not make more than 2 applications per season.",
+   "page": 7,
+   "id": "264-418-p7-12",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "max_applications",
+   "op": "lte",
+   "value": 1,
+   "value2": null,
+   "unit": "applications",
+   "applies_to": "tobacco",
+   "summary": "Tobacco maximum 1 application per season",
+   "quote": "Do not make more than 1 application per season.",
+   "page": 7,
+   "id": "264-418-p7-13",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "application_interval_days",
+   "op": "gte",
+   "value": 7,
+   "value2": null,
+   "unit": "days",
+   "applies_to": "cotton",
+   "summary": "Cotton applications must be at least 7 days apart",
+   "quote": "Allow at least 7 days between applications.",
+   "page": 7,
+   "id": "264-418-p7-14",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "lte",
+   "value": 2.25,
+   "value2": null,
+   "unit": "pt/acre",
+   "applies_to": "cotton",
+   "summary": "Cotton seasonal maximum rate is 2.25 pt/acre",
+   "quote": "Do not apply more than 2.25 pints per acre per season.",
+   "page": 7,
+   "id": "264-418-p7-15",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "max_rate_per_season",
+   "op": "lte",
+   "value": 1.5,
+   "value2": null,
+   "unit": "pt/acre",
+   "applies_to": "tobacco",
+   "summary": "Tobacco seasonal maximum rate is 1.5 pt/acre",
+   "quote": "Do not apply more than 1.5 pints per acre per season.",
+   "page": 7,
+   "id": "264-418-p7-16",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "max_applications",
+   "op": "lte",
+   "value": 2,
+   "value2": null,
+   "unit": "applications",
+   "applies_to": "cotton",
+   "summary": "Cotton maximum 2 applications per season",
+   "quote": "Do not make more than 2 applications per season.",
+   "page": 7,
+   "id": "264-418-p7-17",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "max_applications",
+   "op": "lte",
+   "value": 1,
+   "value2": null,
+   "unit": "applications",
+   "applies_to": "tobacco",
+   "summary": "Tobacco maximum 1 application per season",
+   "quote": "Do not make more than 1 application per season.",
+   "page": 7,
+   "id": "264-418-p7-18",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+   "kind": "counter",
+   "modality": "MUST",
+   "param": "application_interval_days",
+   "op": "gte",
+   "value": 7,
+   "value2": null,
+   "unit": "days",
+   "applies_to": "cotton",
+   "summary": "Cotton applications must be at least 7 days apart",
+   "quote": "Allow at least 7 days between applications.",
+   "page": 7,
+   "id": "264-418-p7-19",
+   "reject_reason": "QUOTE_NOT_IN_PAGE"
+  }
+ ]
+}
