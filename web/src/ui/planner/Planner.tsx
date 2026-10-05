@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { evaluate, filterRules, type CompiledLabel } from "@/engine";
 import type { AgentCheckSnapshot } from "@/lib/agent/tools";
+import { runPlannerCheck, type PlannerCheckResult, type PlannerSource } from "@/lib/run-planner";
 import { forecastPermittedWindows } from "@/lib/windows";
 import { isRestrictedUseLabel } from "@/lib/label-restrictions";
 import type { SprayRecordClause, SprayRecordInput } from "@/lib/spray-record";
@@ -11,18 +11,14 @@ import {
   REPLAY_POINTS,
   errorText,
   fetchJson,
-  fetchLivePeriods,
   fetchReplay,
   formatForecastTime,
   orderedPointEntries,
   parseForecastPoints,
   parseLabelIndex,
   pointName,
-  type FilteredRules,
-  type ForecastPeriod,
   type ForecastPoints,
   type LabelIndex,
-  type PlannerHour,
   type PlannerRule,
   type ProductRegistration,
   type ReplayForecast,
@@ -40,21 +36,6 @@ type PlannerProps = {
   initialProducts?: string;
   initialHours?: string;
   initialReplay?: string;
-};
-
-type SourceKind = "LIVE" | "RECORDED";
-
-type PlannerResult = {
-  pointKey: string;
-  source: SourceKind;
-  fetchedAt: string;
-  periods: ForecastPeriod[];
-  lat: number;
-  lon: number;
-  hours: PlannerHour[];
-  ruleGroups: FilteredRules[];
-  registrations: string[];
-  liveFailure?: string;
 };
 
 type Failure = {
@@ -83,8 +64,8 @@ function hoursFromQuery(value: string | undefined): number {
   return Number.isInteger(parsed) && parsed >= 1 && parsed <= 12 ? parsed : 3;
 }
 
-function duration(start: number): string {
-  return `${Math.max(0, Math.round(performance.now() - start)).toLocaleString("en-US")} ms`;
+function duration(milliseconds: number): string {
+  return `${Math.max(0, Math.round(milliseconds)).toLocaleString("en-US")} ms`;
 }
 
 function workingSteps(current: number, measured: Array<string | undefined>): WorkingStep[] {
@@ -108,7 +89,7 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
   const [configError, setConfigError] = useState<string | null>(null);
   const [working, setWorking] = useState<{ startedAt: number; currentStep: number; steps: WorkingStep[] } | null>(null);
   const [failure, setFailure] = useState<Failure | null>(null);
-  const [result, setResult] = useState<PlannerResult | null>(null);
+  const [result, setResult] = useState<PlannerCheckResult | null>(null);
   const [selectedHour, setSelectedHour] = useState<number | null>(null);
   const [validation, setValidation] = useState<string | null>(null);
   const autoRan = useRef(false);
@@ -137,7 +118,7 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
 
   const runPlanner = useCallback(async ({ pointKey, source, suppliedReplay, fallbackToReplay = false }: {
     pointKey: string;
-    source: SourceKind;
+    source: PlannerSource;
     suppliedReplay?: ReplayForecast;
     fallbackToReplay?: boolean;
   }) => {
@@ -162,52 +143,23 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
     setWorking({ startedAt, currentStep: 0, steps: workingSteps(0, measured) });
 
     try {
-      const forecastStart = performance.now();
-      let periods: ForecastPeriod[];
-      let fetchedAt: string;
-      let resolvedSource = source;
-      let liveFailure: string | undefined;
-      if (source === "RECORDED") {
-        const replay = suppliedReplay ?? await fetchReplay(pointKey);
-        periods = replay.periods;
-        fetchedAt = replay.forecast_fetched_utc;
-        setActiveReplay(pointKey);
-      } else {
-        try {
-          const live = await fetchLivePeriods(point.forecastHourly);
-          periods = live.periods;
-          fetchedAt = live.fetchedAt;
-          setActiveReplay(undefined);
-        } catch (error) {
-          if (!fallbackToReplay || !REPLAY_POINTS.has(pointKey)) throw error;
-          const replay = await fetchReplay(pointKey);
-          periods = replay.periods;
-          fetchedAt = replay.forecast_fetched_utc;
-          resolvedSource = "RECORDED";
-          liveFailure = errorText(error);
-          setActiveReplay(pointKey);
-        }
-      }
-      measured[0] = duration(forecastStart);
-      setWorking({ startedAt, currentStep: 1, steps: workingSteps(1, measured) });
-
-      const rulesStart = performance.now();
-      const ruleGroups = await Promise.all(registrations.map(async (reg) => {
-        const compiled = await fetchJson<CompiledLabel>(`/data/compiled/${reg}.ship.json`);
-        return await filterRules(compiled, reg);
-      }));
-      const usedRules = ruleGroups.flatMap((group) => group.used);
-      measured[1] = duration(rulesStart);
-      setWorking({ startedAt, currentStep: 2, steps: workingSteps(2, measured) });
-
-      const plannerStart = performance.now();
-      const evaluated = await evaluate(usedRules, periods, point.lat, point.lon, 156) as PlannerHour[];
-      measured[2] = duration(plannerStart);
-      if (evaluated.length !== Math.min(156, periods.length)) {
-        throw new Error(`The planner returned ${evaluated.length} hours for ${periods.length} forecast periods`);
-      }
+      const checked = await runPlannerCheck({
+        pointKey,
+        registrations,
+        points,
+        source,
+        suppliedReplay,
+        fallbackToReplay,
+        onProgress: (completedStep, durationMs) => {
+          measured[completedStep - 1] = duration(durationMs);
+          if (completedStep < 3) {
+            setWorking({ startedAt, currentStep: completedStep, steps: workingSteps(completedStep, measured) });
+          }
+        },
+      });
+      setActiveReplay(checked.source === "RECORDED" ? pointKey : undefined);
       setWorking(null);
-      setResult({ pointKey, source: resolvedSource, fetchedAt, periods, lat: point.lat, lon: point.lon, hours: evaluated, ruleGroups, registrations, liveFailure });
+      setResult(checked);
     } catch (error) {
       const message = errorText(error);
       setWorking(null);
@@ -293,10 +245,13 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
   }
 
   function useAgentCheck(snapshot: AgentCheckSnapshot) {
+    const registrations = snapshot.products.filter(
+      (reg): reg is ProductRegistration => PRODUCT_REGISTRATIONS.includes(reg as ProductRegistration),
+    );
     setField(snapshot.pointKey);
     setJobHours(snapshot.jobHours);
     setActiveReplay(snapshot.source === "RECORDED" ? snapshot.pointKey : undefined);
-    setSelectedRegs(new Set(snapshot.products.filter((reg): reg is ProductRegistration => PRODUCT_REGISTRATIONS.includes(reg as ProductRegistration))));
+    setSelectedRegs(new Set(registrations));
     setFailure(null);
     setValidation(null);
     setSelectedHour(null);
@@ -309,7 +264,7 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
       lon: snapshot.lon,
       hours: snapshot.hours,
       ruleGroups: snapshot.ruleGroups,
-      registrations: snapshot.products,
+      registrations,
     });
   }
 
@@ -485,7 +440,7 @@ function shownRecordValue(value: unknown, suffix = ""): string {
 }
 
 function sprayRecordForWindow(
-  result: PlannerResult,
+  result: PlannerCheckResult,
   labels: LabelIndex,
   fieldName: string,
   window: PlannerWindow,
@@ -546,7 +501,7 @@ function sprayRecordForWindow(
 }
 
 function Results({ result, labels, pointName: selectedPointName, jobHours, windows, products, usedRules, selectedHour, onSelectHour, onSelectWindow }: {
-  result: PlannerResult;
+  result: PlannerCheckResult;
   labels: LabelIndex;
   pointName: string;
   jobHours: number;

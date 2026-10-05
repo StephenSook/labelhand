@@ -1,10 +1,5 @@
 import { Chip, Nav, SectionCard, SquashButton } from "@/ui";
-
-const labels = [
-  { name: "Folex 6 EC", reg: "5481-504" },
-  { name: "Dropp SC", reg: "264-700" },
-  { name: "Prep", reg: "264-418" },
-];
+import { LiveHeroCard } from "@/ui/LiveHeroCard";
 
 const steps = [
   {
@@ -46,21 +41,7 @@ export default function HomePage() {
             </div>
             <p className="hero-source">Sources shown in the planner: EPA Pesticide Product Label System and api.weather.gov.</p>
           </div>
-          <div aria-label="Labels currently checked by the planner" className="label-stack">
-            <p className="hand label-note">the labels in this tank</p>
-            {labels.map((label, index) => (
-              <article className="label-card" key={label.reg} style={{ "--card-index": index } as React.CSSProperties}>
-                <span aria-hidden="true" className="label-check">
-                  ✓
-                </span>
-                <div>
-                  <strong>{label.name}</strong>
-                  <small>EPA Reg. {label.reg}</small>
-                </div>
-              </article>
-            ))}
-            <span aria-hidden="true" className="boom-line" />
-          </div>
+          <LiveHeroCard />
         </SectionCard>
 
         <SectionCard className="steps-card" tone="sky">

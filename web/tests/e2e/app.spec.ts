@@ -43,6 +43,16 @@ test("a field, product, and job-length deep link reproduces its state", async ({
   }
 });
 
+test("the home hero runs a live or recorded planner check with a source time", async ({ page }) => {
+  await page.goto("/");
+  const card = page.locator("[data-live-hero]");
+  await expect(card).toHaveAttribute("data-forecast-source", /LIVE|RECORDED/, { timeout: 15_000 });
+  await expect(card.locator("time")).toHaveAttribute("datetime", /\d{4}-\d{2}-\d{2}T/);
+  await expect(card).toHaveAttribute("data-permitted-hours", /\d+/);
+  await expect(card).toHaveAttribute("data-field-check-hours", /\d+/);
+  await expect(card).toHaveAttribute("data-blocked-hours", /\d+/);
+});
+
 test("the recorded planner exposes every hour and its source quote", async ({ page }) => {
   await openReplay(page);
 

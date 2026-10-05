@@ -219,7 +219,7 @@ a {
 }
 
 .hero-copy,
-.label-stack {
+.hero-live-card {
   position: relative;
   z-index: 1;
 }
@@ -313,6 +313,38 @@ a {
 
 .squash-button:active { scale: 0.955 0.925; }
 .squash-button:disabled { cursor: not-allowed; opacity: 0.55; }
+
+.hero-live-card {
+  align-self: center;
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 2rem 2rem 2rem 0.4rem;
+  box-shadow: 8px 10px 0 var(--ink);
+  color: var(--ink);
+  min-width: 0;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  transform: rotate(1deg);
+}
+
+.hero-live-card .working-card { box-shadow: none; padding: 0; }
+.hero-live-heading { align-items: start; display: flex; gap: 1rem; justify-content: space-between; }
+.hero-live-heading h2 { font-size: clamp(2.2rem, 4.1vw, 4.3rem); margin: 0.15rem 0 0; }
+.hero-live-note { color: var(--soil); margin: 0; transform: rotate(-2deg); }
+.hero-live-badge { border: 2px solid var(--ink); border-radius: 999px; flex: none; font-size: 0.72rem; font-weight: 900; padding: 0.5rem 0.72rem; }
+.hero-live-badge-live { background: var(--field-deep); color: var(--paper); }
+.hero-live-badge-recorded { background: var(--sun); color: var(--ink); }
+.hero-live-time { color: var(--ink-soft); font-size: 0.78rem; font-weight: 750; line-height: 1.4; margin: 1rem 0 0; }
+.hero-live-fallback { background: var(--sun-soft); border: 2px solid var(--soil); border-radius: 0.9rem; font-size: 0.78rem; font-weight: 750; line-height: 1.4; margin: 0.8rem 0 0; padding: 0.65rem; }
+.hero-live-window { border-block: 2px solid var(--ink); display: grid; gap: 0.25rem; margin: 1.25rem 0 0; padding: 1rem 0; }
+.hero-live-window strong { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.hero-live-window span { font-family: var(--font-display), sans-serif; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 800; line-height: 0.95; }
+.hero-live-window small { color: var(--ink-soft); font-weight: 750; }
+.hero-live-none,
+.hero-live-error { font-weight: 750; line-height: 1.5; }
+.hero-live-counts { display: grid; gap: 0.55rem; grid-template-columns: repeat(3, 1fr); margin: 1rem 0; }
+.hero-live-counts div { background: var(--sky-soft); border: 2px solid var(--ink); border-radius: 1rem; padding: 0.7rem; }
+.hero-live-counts dt { font-size: 0.65rem; font-weight: 850; line-height: 1.15; text-transform: uppercase; }
+.hero-live-counts dd { font-size: 2rem; margin: 0.2rem 0 0; }
 
 .label-stack {
   align-self: center;
@@ -625,7 +657,7 @@ a {
   :root { --nav-clearance: 5.8rem; }
   .hero-card { grid-template-columns: 1fr; min-height: auto; }
   .hero-title { max-width: 12ch; }
-  .label-stack { min-height: auto; padding-bottom: 1rem; }
+  .hero-live-card { transform: none; }
   .home-steps { grid-template-columns: 1fr; }
   .home-step { min-height: 13rem; transform: none !important; }
 }
@@ -646,6 +678,8 @@ a {
   .squash-button { width: 100%; }
   .squash-label { flex: 1; }
   .label-card { box-shadow: 4px 5px 0 var(--ink); }
+  .hero-live-heading { align-items: flex-start; }
+  .hero-live-counts { grid-template-columns: 1fr; }
   .working-card { grid-template-columns: 1fr; }
   .working-weather { height: 5.5rem; }
   .judge-step { grid-template-columns: 2.6rem minmax(0, 1fr); padding: 1rem; }
