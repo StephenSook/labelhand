@@ -8,7 +8,12 @@ The compiler's number guard then runs again on the new values.
 Output: data/compiled/<reg><suffix>.typed.json with the same shape as the input, plus for every rule
 first_pass_param, typed_by and agreed (whether both passes chose the same parameter).
 
-Run: python compiler/retype.py 5481-504 264-700 264-418 [--model nvidia/Nemotron-3-Ultra-550b-a55b] [--suffix ""]
+With --votes K the rule is typed K times. Identical requests at temperature 0 do not always return the same
+modality (Folex's "use FOLEX 6 EC alone" below 60 F nights came back MUST in one run and ADVISORY in two), so
+disagreements are resolved toward the safety side: if any vote says MUST or MUST_NOT, the rule stays acting,
+because a missed limit can mark a forbidden hour as permitted. Every vote is kept on the rule.
+
+Run: python compiler/retype.py 5481-504 264-700 264-418 [--model nvidia/Nemotron-3-Ultra-550b-a55b] [--suffix ""] [--votes 3]
 """
 
 from __future__ import annotations
@@ -116,24 +121,55 @@ def call(model: str, rule: dict, key: str) -> dict:
     return {"ok": False, "error": err, "usage": {}}
 
 
-def retype(reg: str, model: str, suffix: str, out_tag: str = "") -> dict:
+ACTING = ("MUST", "MUST_NOT")
+
+
+def vote(first_pass_param: str, typed: list[dict]) -> tuple[dict, dict]:
+    """Combine K typings of one rule into one, and describe the agreement.
+
+    Parameter: the most common choice; a tie goes to the first pass's parameter if it is among the tied, else to
+    the earliest vote. Modality: among votes for that parameter, any MUST or MUST_NOT wins over ADVISORY (the most
+    common acting one, then the earliest). The numbers come from the earliest vote with the chosen parameter and
+    modality, so they are one model answer, never a blend.
+    """
+    params = [t["param"] for t in typed]
+    top = max(params.count(x) for x in params)
+    tied = [x for x in dict.fromkeys(params) if params.count(x) == top]
+    param = first_pass_param if first_pass_param in tied else tied[0]
+    same = [t for t in typed if t["param"] == param]
+    mods = [t["modality"] for t in same]
+    acting = [m for m in mods if m in ACTING]
+    pool = acting or mods
+    modality = max(dict.fromkeys(pool), key=pool.count)
+    chosen = next(t for t in same if t["modality"] == modality)
+    info = {"votes": [{"param": t["param"], "modality": t["modality"]} for t in typed], "unanimous": len({(t["param"], t["modality"]) for t in typed}) == 1}
+    return chosen, info
+
+
+def retype(reg: str, model: str, suffix: str, out_tag: str = "", votes: int = 1) -> dict:
     key = os.environ.get("NEBIUS_API_KEY", "").strip()
     if not key:
         raise SystemExit("NEBIUS_API_KEY missing")
     src = json.loads((COMPILED / f"{reg}{suffix}.json").read_text(encoding="utf-8"))
+    jobs = [(n, k) for n in range(len(src["accepted"])) for k in range(votes)]
     with cf.ThreadPoolExecutor(max_workers=6) as ex:
-        results = list(ex.map(lambda r: call(model, r, key), src["accepted"]))
+        flat = list(ex.map(lambda job: call(model, src["accepted"][job[0]], key), jobs))
+    results = [flat[n * votes : (n + 1) * votes] for n in range(len(src["accepted"]))]
     accepted, rejected, failed = [], list(src["rejected"]), 0
-    tin = tout = 0
-    for rule, res in zip(src["accepted"], results, strict=True):
-        tin += res["usage"].get("prompt_tokens", 0)
-        tout += res["usage"].get("completion_tokens", 0)
-        if not res["ok"]:
+    tin = tout = split = 0
+    for rule, rs in zip(src["accepted"], results, strict=True):
+        for res in rs:
+            tin += res["usage"].get("prompt_tokens", 0)
+            tout += res["usage"].get("completion_tokens", 0)
+        ok = [res["typed"] for res in rs if res["ok"]]
+        if not ok:
             failed += 1
             accepted.append({**rule, "first_pass_param": rule["param"], "typed_by": None, "agreed": None})
             continue
-        t = res["typed"]
-        new = restore_units({**rule, **t, "first_pass_param": rule["param"], "typed_by": model, "agreed": t["param"] == rule["param"]})
+        t, info = vote(rule["param"], ok)
+        extra = {"typing_votes": info["votes"], "typing_unanimous": info["unanimous"]} if votes > 1 else {}
+        split += 0 if info["unanimous"] else 1
+        new = restore_units({**rule, **t, "first_pass_param": rule["param"], "typed_by": model, "agreed": t["param"] == rule["param"], **extra})
         why = guard(new, norm(rule["quote"]))  # the quote is its own page here: only the number guard can fail
         if why:
             # The re-typed numbers are not in the quote. The first pass already passed every guard, so keep it
@@ -147,6 +183,8 @@ def retype(reg: str, model: str, suffix: str, out_tag: str = "") -> dict:
         "retyped_utc": dt.datetime.now(dt.UTC).isoformat(timespec="seconds"),
         "retype_model": model,
         "retype_failed": failed,
+        "retype_votes": votes,
+        "retype_split_votes": split,
         "retype_tokens_in": tin,
         "retype_tokens_out": tout,
         "retype_cost_usd": round(tin / 1e6 * price[0] + tout / 1e6 * price[1], 4),
@@ -165,11 +203,13 @@ def main() -> int:
     ap.add_argument("--model", default=DEFAULT_MODEL)
     ap.add_argument("--suffix", default="")
     ap.add_argument("--tag", default="", help="appended to the output name, so typing versions can be compared side by side")
+    ap.add_argument("--votes", type=int, default=1, help="type every rule this many times and resolve disagreement toward acting")
     a = ap.parse_args()
     for reg in a.regs:
-        o = retype(reg, a.model, a.suffix, a.tag)
+        o = retype(reg, a.model, a.suffix, a.tag, a.votes)
         agreed = sum(1 for r in o["accepted"] if r.get("agreed"))
-        print(f"{reg}: retyped {len(o['accepted'])} agreed {agreed} failed {o['retype_failed']} tokens {o['retype_tokens_in']}/{o['retype_tokens_out']} ${o['retype_cost_usd']}")
+        tokens = f"tokens {o['retype_tokens_in']}/{o['retype_tokens_out']} ${o['retype_cost_usd']}"
+        print(f"{reg}: retyped {len(o['accepted'])} agreed {agreed} split votes {o['retype_split_votes']} failed {o['retype_failed']} {tokens}")
     return 0
 
 
