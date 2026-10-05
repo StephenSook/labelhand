@@ -10,6 +10,7 @@ struct Fixture {
     lat: f64,
     lon: f64,
     hours: usize,
+    rules_suffix: String,
     rules: Vec<Rule>,
     periods: Vec<Period>,
     expected: Vec<Value>,
@@ -93,16 +94,6 @@ fn evaluate_matches_every_frozen_fixture_per_hour() {
 fn load_rules_matches_the_fixture_rule_order_and_fields() {
     let root = repo_root();
     let regs = ["5481-504", "264-700", "264-418"];
-    let mut actual_rules = Vec::new();
-    for reg in regs {
-        let path = root.join(format!("data/compiled/{reg}.union.typed.v3.json"));
-        let text = fs::read_to_string(&path)
-            .unwrap_or_else(|error| panic!("could not read {}: {error}", path.display()));
-        let compiled: CompiledLabel = serde_json::from_str(&text)
-            .unwrap_or_else(|error| panic!("could not parse {}: {error}", path.display()));
-        actual_rules.extend(load_rules(&compiled, reg).used);
-    }
-
     let fields = [
         "id", "page", "product", "reg", "param", "op", "value", "value2", "unit", "modality",
         "quote",
@@ -113,6 +104,15 @@ fn load_rules_matches_the_fixture_rule_order_and_fields() {
             .file_name()
             .expect("fixture has a file name")
             .to_string_lossy();
+        let mut actual_rules = Vec::new();
+        for reg in regs {
+            let path = root.join(format!("data/compiled/{reg}{}.json", fixture.rules_suffix));
+            let text = fs::read_to_string(&path)
+                .unwrap_or_else(|error| panic!("could not read {}: {error}", path.display()));
+            let compiled: CompiledLabel = serde_json::from_str(&text)
+                .unwrap_or_else(|error| panic!("could not parse {}: {error}", path.display()));
+            actual_rules.extend(load_rules(&compiled, reg).used);
+        }
         assert_eq!(
             actual_rules.len(),
             fixture.rules.len(),

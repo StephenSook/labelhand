@@ -53,9 +53,10 @@ RAIN_UNSURE_POP = 20
 ADVISORY_HOURS = 24
 
 
-# The rule set the planner uses: union of the Super and Ultra extraction passes, re-typed by typing pass v3.
-# This is the best measured configuration on gold v0 (eval/results/union_typed_ultra_v3.json).
-DEFAULT_RULES = ".union.typed.v3"
+# Shipped configuration: three p2 + typing v3 + OCR + PR 2000-5 modality-floor runs merged by clause.
+# Gold v0 (eval/results/ship.json): coverage recall 1.0, typed recall 1.0, value exact 0.944, modality 0.848,
+# planner precision 0.635, acting precision 1.0 (13/13), and acting recall 1.0 (10/10).
+DEFAULT_RULES = ".ship"
 
 
 def load_rules(reg: str, rules_suffix: str = DEFAULT_RULES) -> tuple[str, list[dict], list[dict]]:
