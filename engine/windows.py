@@ -126,6 +126,12 @@ def holds(x: float, op: str, v: float) -> bool:
 
 
 TEMPERATURE = ("night_temperature_f", "air_temperature_f")
+ALONE_TANK = re.compile(r"\buse\b[^.]*\balone\b")
+
+
+def tank_composition_clause(r: dict) -> bool:
+    """Whether an acting temperature clause requires its product to be used alone."""
+    return r["modality"] in ("MUST", "MUST_NOT") and r["param"] in TEMPERATURE and ALONE_TANK.search(r["quote"].lower()) is not None
 
 
 def temperature_condition(r: dict, i: int, periods: list[dict]) -> str | None:
@@ -203,12 +209,20 @@ def wind_limits(r: dict) -> tuple[float | None, bool, float | None, bool]:
     return None, False, None, False
 
 
-def gate(r: dict, i: int, periods: list[dict], wind: float, alt: float) -> tuple[str, str] | None:
+def gate(r: dict, i: int, periods: list[dict], wind: float, alt: float, tank_products: set[str]) -> tuple[str, str] | None:
     """("BLOCKED" or "FIELD_CHECK", why) for a MUST or MUST_NOT clause at hour i, or None when it is satisfied.
 
     A clause the kernel cannot evaluate is a FIELD_CHECK that says so: an acting clause is never silently skipped.
     """
     param = r["param"]
+    if tank_composition_clause(r):
+        why = temperature_condition(r, i, periods)
+        if not why:
+            return None
+        other_products = sorted(tank_products - {r["product"]})
+        if other_products:
+            return "BLOCKED", f"{why}: the label says use {r['product']} alone, and this tank also has {', '.join(other_products)}"
+        return None
     if param == "wind_speed_mph":
         upper, upper_out, lower, lower_out = wind_limits(r)
         if upper is None and lower is None:
@@ -249,6 +263,13 @@ def gate(r: dict, i: int, periods: list[dict], wind: float, alt: float) -> tuple
 
 
 def evaluate(rules: list[dict], periods: list[dict], lat: float, lon: float, hours: int) -> list[dict]:
+    """Evaluate forecast hours for one tank whose products are defined by all supplied rules.
+
+    The tank is the set of distinct products across the rules passed to evaluate. Rules from all three labels
+    contribute to that set regardless of modality, so an advisory rule still establishes that its product is in
+    the tank.
+    """
+    tank_products = {r["product"] for r in rules}
     out = []
     for i, p in enumerate(periods[:hours]):
         t = dt.datetime.fromisoformat(p["startTime"])
@@ -262,7 +283,7 @@ def evaluate(rules: list[dict], periods: list[dict], lat: float, lon: float, hou
                 if why:
                     advisories.append({**cite, "why": why})
                 continue
-            verdict = gate(r, i, periods, wind, alt)
+            verdict = gate(r, i, periods, wind, alt, tank_products)
             if verdict:
                 (blocked if verdict[0] == "BLOCKED" else checks).append({**cite, "why": verdict[1]})
         state = "BLOCKED" if blocked else ("FIELD_CHECK" if checks else "PERMITTED")

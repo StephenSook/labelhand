@@ -113,18 +113,39 @@ def test_acting_temperature_clause_is_a_field_check_only_when_its_condition_hold
     assert out["state"] == "FIELD_CHECK" and out["checks"][0]["why"].startswith("forecast temperature now 95 F > 90 F")
 
 
-def test_cold_night_sends_a_must_tank_mix_clause_to_field_check():
+def test_cold_night_blocks_an_alone_clause_when_the_tank_has_other_products():
     alone = r("night_temperature_f", "lt", 60, "MUST", "When minimum night temperature is below 60F use FOLEX 6 EC alone.", "t-12")
+    alone["product"] = "FOLEX 6 EC"
+    dropp = {**WIND, "product": "Dropp SC"}
+    prep = {**NIGHT_ADV, "product": "Prep"}
+    ps = [hour(NOON, 72, True), hour("2026-10-08T02:00:00-04:00", 56, False)]
+    out = windows.evaluate([alone, dropp, prep], ps, LAT, LON, 1)[0]
+    assert out["state"] == "BLOCKED"
+    assert out["blocked"][0]["why"] == ("forecast night low 56 F < 60 F over the next 2 h: the label says use FOLEX 6 EC alone, and this tank also has Dropp SC, Prep")
+
+
+def test_cold_night_satisfies_an_alone_clause_when_its_product_is_alone():
+    alone = r("night_temperature_f", "lt", 60, "MUST", "When minimum night temperature is below 60F use FOLEX 6 EC alone.", "t-12")
+    alone["product"] = "FOLEX 6 EC"
     ps = [hour(NOON, 72, True), hour("2026-10-08T02:00:00-04:00", 56, False)]
     out = windows.evaluate([alone], ps, LAT, LON, 1)[0]
-    assert out["state"] == "FIELD_CHECK" and "night low 56 F < 60 F" in out["checks"][0]["why"]
+    assert out["state"] == "PERMITTED"
+    assert out["blocked"] == [] and out["checks"] == []
+
+
+def test_warm_night_does_not_apply_an_alone_clause_to_a_mixed_tank():
+    alone = r("night_temperature_f", "lt", 60, "MUST", "When minimum night temperature is below 60F use FOLEX 6 EC alone.", "t-12")
+    alone["product"] = "FOLEX 6 EC"
+    dropp = {**WIND, "product": "Dropp SC"}
     warm = [hour(NOON, 72, True), hour("2026-10-08T02:00:00-04:00", 64, False)]
-    assert windows.evaluate([alone], warm, LAT, LON, 1)[0]["state"] == "PERMITTED"
+    out = windows.evaluate([alone, dropp], warm, LAT, LON, 1)[0]
+    assert out["state"] == "PERMITTED"
+    assert out["blocked"] == [] and out["checks"] == []
 
 
 def test_a_topic_the_kernel_has_no_logic_for_is_never_silent():
     rh = r("relative_humidity_pct", "lt", 40, "MUST_NOT", "Do not apply when relative humidity is below 40%.", "t-13")
-    verdict = windows.gate(rh, 0, [hour(NOON, 75, True)], 5.0, 50.0)
+    verdict = windows.gate(rh, 0, [hour(NOON, 75, True)], 5.0, 50.0, {rh["product"]})
     assert verdict[0] == "FIELD_CHECK" and "does not evaluate it yet" in verdict[1]
 
 

@@ -358,6 +358,19 @@ pub fn temperature_condition(rule: &Rule, i: usize, periods: &[Period]) -> Optio
     ))
 }
 
+fn tank_composition_clause(rule: &Rule) -> bool {
+    static ALONE_TANK: OnceLock<Regex> = OnceLock::new();
+    let alone_tank = ALONE_TANK.get_or_init(|| {
+        Regex::new(r"\buse\b[^.]*\balone\b").expect("valid tank-composition regex")
+    });
+    matches!(rule.modality.as_str(), "MUST" | "MUST_NOT")
+        && matches!(
+            rule.param.as_str(),
+            "night_temperature_f" | "air_temperature_f"
+        )
+        && alone_tank.is_match(&rule.quote.to_lowercase())
+}
+
 pub type WindLimits = (Option<f64>, bool, Option<f64>, bool);
 
 pub fn wind_limits(rule: &Rule) -> WindLimits {
@@ -473,7 +486,32 @@ pub fn gate(
     periods: &[Period],
     wind: f64,
     altitude: f64,
+    tank_products: &HashSet<String>,
 ) -> Option<(GateState, String)> {
+    if tank_composition_clause(rule) {
+        let why = temperature_condition(rule, i, periods)?;
+        let product = rule
+            .product
+            .as_deref()
+            .expect("tank-composition rules have a product");
+        let mut other_products = tank_products
+            .iter()
+            .filter(|other| other.as_str() != product)
+            .cloned()
+            .collect::<Vec<_>>();
+        other_products.sort();
+        if !other_products.is_empty() {
+            return Some((
+                GateState::Blocked,
+                format!(
+                    "{why}: the label says use {product} alone, and this tank also has {}",
+                    other_products.join(", ")
+                ),
+            ));
+        }
+        return None;
+    }
+
     match rule.param.as_str() {
         "wind_speed_mph" => {
             let (upper, upper_out, lower, lower_out) = wind_limits(rule);
@@ -614,6 +652,16 @@ pub fn evaluate(
     lon: f64,
     hours: usize,
 ) -> Result<Vec<Evaluation>, CoreError> {
+    // The tank is every distinct product represented by the supplied rules. Rules from all
+    // three labels contribute regardless of modality.
+    let tank_products = rules
+        .iter()
+        .map(|rule| {
+            rule.product
+                .clone()
+                .ok_or_else(|| CoreError::new(format!("rule {} has no product", rule.id)))
+        })
+        .collect::<Result<HashSet<_>, _>>()?;
     let mut output = Vec::new();
     for (i, period) in periods.iter().take(hours).enumerate() {
         let time = DateTime::parse_from_rfc3339(&period.start_time).map_err(|error| {
@@ -632,7 +680,7 @@ pub fn evaluate(
                 }
                 continue;
             }
-            if let Some((state, why)) = gate(rule, i, periods, wind, altitude) {
+            if let Some((state, why)) = gate(rule, i, periods, wind, altitude, &tank_products) {
                 let cite = citation(rule, why)?;
                 match state {
                     GateState::Blocked => blocked.push(cite),
@@ -701,7 +749,11 @@ pub fn filter_rules_json(
 
 #[cfg(test)]
 mod tests {
-    use super::{mph, py_fixed_zero, py_general};
+    use std::collections::HashSet;
+
+    use serde_json::json;
+
+    use super::{GateState, Period, Rule, gate, mph, py_fixed_zero, py_general};
 
     #[test]
     fn python_number_formats_cover_kernel_values() {
@@ -716,5 +768,49 @@ mod tests {
     fn mph_uses_the_largest_number_and_nan_for_no_number() {
         assert_eq!(mph("5 to 10 mph"), 10.0);
         assert!(mph("calm").is_nan());
+    }
+
+    #[test]
+    fn tank_composition_clause_blocks_only_when_cold_and_mixed() {
+        let rule: Rule = serde_json::from_value(json!({
+            "id": "t-12",
+            "page": 1,
+            "product": "FOLEX 6 EC",
+            "reg": "0-0",
+            "param": "night_temperature_f",
+            "op": "lt",
+            "value": 60,
+            "value2": null,
+            "unit": "F",
+            "modality": "MUST",
+            "quote": "When minimum night temperature is below 60F use FOLEX 6 EC alone."
+        }))
+        .expect("test rule parses");
+        let cold: Vec<Period> = serde_json::from_value(json!([
+            {"startTime": "2026-10-07T13:00:00-04:00", "isDaytime": true, "temperature": 72, "windSpeed": "5 mph"},
+            {"startTime": "2026-10-08T02:00:00-04:00", "isDaytime": false, "temperature": 56, "windSpeed": "5 mph"}
+        ]))
+        .expect("cold periods parse");
+        let warm: Vec<Period> = serde_json::from_value(json!([
+            {"startTime": "2026-10-07T13:00:00-04:00", "isDaytime": true, "temperature": 72, "windSpeed": "5 mph"},
+            {"startTime": "2026-10-08T02:00:00-04:00", "isDaytime": false, "temperature": 64, "windSpeed": "5 mph"}
+        ]))
+        .expect("warm periods parse");
+        let mixed = HashSet::from([
+            "FOLEX 6 EC".to_owned(),
+            "Dropp SC".to_owned(),
+            "Prep".to_owned(),
+        ]);
+        let alone = HashSet::from(["FOLEX 6 EC".to_owned()]);
+
+        assert_eq!(
+            gate(&rule, 0, &cold, 5.0, 50.0, &mixed),
+            Some((
+                GateState::Blocked,
+                "forecast night low 56 F < 60 F over the next 2 h: the label says use FOLEX 6 EC alone, and this tank also has Dropp SC, Prep".to_owned()
+            ))
+        );
+        assert_eq!(gate(&rule, 0, &cold, 5.0, 50.0, &alone), None);
+        assert_eq!(gate(&rule, 0, &warm, 5.0, 50.0, &mixed), None);
     }
 }

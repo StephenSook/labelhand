@@ -1,136 +1,6 @@
 {
-  "forecast_fetched_utc": "2026-10-05T03:07:02+00:00",
+  "forecast_fetched_utc": "2026-10-05T16:07:02+00:00",
   "periods": [
-    {
-      "startTime": "2026-10-04T23:00:00-04:00",
-      "isDaytime": false,
-      "temperature": 72,
-      "windSpeed": "0 mph",
-      "probabilityOfPrecipitation": {
-        "unitCode": "wmoUnit:percent",
-        "value": 94
-      }
-    },
-    {
-      "startTime": "2026-10-05T00:00:00-04:00",
-      "isDaytime": false,
-      "temperature": 72,
-      "windSpeed": "0 mph",
-      "probabilityOfPrecipitation": {
-        "unitCode": "wmoUnit:percent",
-        "value": 94
-      }
-    },
-    {
-      "startTime": "2026-10-05T01:00:00-04:00",
-      "isDaytime": false,
-      "temperature": 72,
-      "windSpeed": "0 mph",
-      "probabilityOfPrecipitation": {
-        "unitCode": "wmoUnit:percent",
-        "value": 84
-      }
-    },
-    {
-      "startTime": "2026-10-05T02:00:00-04:00",
-      "isDaytime": false,
-      "temperature": 72,
-      "windSpeed": "0 mph",
-      "probabilityOfPrecipitation": {
-        "unitCode": "wmoUnit:percent",
-        "value": 66
-      }
-    },
-    {
-      "startTime": "2026-10-05T03:00:00-04:00",
-      "isDaytime": false,
-      "temperature": 71,
-      "windSpeed": "0 mph",
-      "probabilityOfPrecipitation": {
-        "unitCode": "wmoUnit:percent",
-        "value": 73
-      }
-    },
-    {
-      "startTime": "2026-10-05T04:00:00-04:00",
-      "isDaytime": false,
-      "temperature": 71,
-      "windSpeed": "0 mph",
-      "probabilityOfPrecipitation": {
-        "unitCode": "wmoUnit:percent",
-        "value": 88
-      }
-    },
-    {
-      "startTime": "2026-10-05T05:00:00-04:00",
-      "isDaytime": false,
-      "temperature": 71,
-      "windSpeed": "0 mph",
-      "probabilityOfPrecipitation": {
-        "unitCode": "wmoUnit:percent",
-        "value": 88
-      }
-    },
-    {
-      "startTime": "2026-10-05T06:00:00-04:00",
-      "isDaytime": true,
-      "temperature": 71,
-      "windSpeed": "0 mph",
-      "probabilityOfPrecipitation": {
-        "unitCode": "wmoUnit:percent",
-        "value": 94
-      }
-    },
-    {
-      "startTime": "2026-10-05T07:00:00-04:00",
-      "isDaytime": true,
-      "temperature": 71,
-      "windSpeed": "0 mph",
-      "probabilityOfPrecipitation": {
-        "unitCode": "wmoUnit:percent",
-        "value": 92
-      }
-    },
-    {
-      "startTime": "2026-10-05T08:00:00-04:00",
-      "isDaytime": true,
-      "temperature": 70,
-      "windSpeed": "0 mph",
-      "probabilityOfPrecipitation": {
-        "unitCode": "wmoUnit:percent",
-        "value": 91
-      }
-    },
-    {
-      "startTime": "2026-10-05T09:00:00-04:00",
-      "isDaytime": true,
-      "temperature": 71,
-      "windSpeed": "5 mph",
-      "probabilityOfPrecipitation": {
-        "unitCode": "wmoUnit:percent",
-        "value": 89
-      }
-    },
-    {
-      "startTime": "2026-10-05T10:00:00-04:00",
-      "isDaytime": true,
-      "temperature": 73,
-      "windSpeed": "5 mph",
-      "probabilityOfPrecipitation": {
-        "unitCode": "wmoUnit:percent",
-        "value": 84
-      }
-    },
-    {
-      "startTime": "2026-10-05T11:00:00-04:00",
-      "isDaytime": true,
-      "temperature": 74,
-      "windSpeed": "5 mph",
-      "probabilityOfPrecipitation": {
-        "unitCode": "wmoUnit:percent",
-        "value": 83
-      }
-    },
     {
       "startTime": "2026-10-05T12:00:00-04:00",
       "isDaytime": true,
@@ -138,7 +8,7 @@
       "windSpeed": "5 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 81
+        "value": 63
       }
     },
     {
@@ -148,7 +18,7 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 83
+        "value": 57
       }
     },
     {
@@ -158,7 +28,7 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 76
+        "value": 52
       }
     },
     {
@@ -168,57 +38,57 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 74
+        "value": 43
       }
     },
     {
       "startTime": "2026-10-05T16:00:00-04:00",
       "isDaytime": true,
-      "temperature": 75,
+      "temperature": 74,
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 67
+        "value": 34
       }
     },
     {
       "startTime": "2026-10-05T17:00:00-04:00",
       "isDaytime": true,
-      "temperature": 75,
+      "temperature": 74,
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 56
+        "value": 27
       }
     },
     {
       "startTime": "2026-10-05T18:00:00-04:00",
       "isDaytime": false,
-      "temperature": 75,
+      "temperature": 74,
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 57
+        "value": 19
       }
     },
     {
       "startTime": "2026-10-05T19:00:00-04:00",
       "isDaytime": false,
-      "temperature": 74,
+      "temperature": 73,
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 45
+        "value": 14
       }
     },
     {
       "startTime": "2026-10-05T20:00:00-04:00",
       "isDaytime": false,
-      "temperature": 73,
-      "windSpeed": "10 mph",
+      "temperature": 72,
+      "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 39
+        "value": 26
       }
     },
     {
@@ -228,7 +98,7 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 0
+        "value": 29
       }
     },
     {
@@ -238,37 +108,37 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 19
+        "value": 29
       }
     },
     {
       "startTime": "2026-10-05T23:00:00-04:00",
       "isDaytime": false,
-      "temperature": 70,
+      "temperature": 69,
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 2
+        "value": 23
       }
     },
     {
       "startTime": "2026-10-06T00:00:00-04:00",
       "isDaytime": false,
-      "temperature": 70,
+      "temperature": 69,
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 0
+        "value": 22
       }
     },
     {
       "startTime": "2026-10-06T01:00:00-04:00",
       "isDaytime": false,
-      "temperature": 70,
+      "temperature": 69,
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 0
+        "value": 23
       }
     },
     {
@@ -278,17 +148,17 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 19
+        "value": 28
       }
     },
     {
       "startTime": "2026-10-06T03:00:00-04:00",
       "isDaytime": false,
-      "temperature": 69,
+      "temperature": 68,
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 29
+        "value": 24
       }
     },
     {
@@ -298,7 +168,7 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 16
+        "value": 21
       }
     },
     {
@@ -308,17 +178,17 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 17
+        "value": 21
       }
     },
     {
       "startTime": "2026-10-06T06:00:00-04:00",
       "isDaytime": true,
-      "temperature": 68,
+      "temperature": 67,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 28
+        "value": 23
       }
     },
     {
@@ -328,7 +198,7 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 37
+        "value": 27
       }
     },
     {
@@ -338,7 +208,7 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 46
+        "value": 21
       }
     },
     {
@@ -348,7 +218,7 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 46
+        "value": 28
       }
     },
     {
@@ -358,7 +228,7 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 46
+        "value": 17
       }
     },
     {
@@ -368,47 +238,47 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 46
+        "value": 11
       }
     },
     {
       "startTime": "2026-10-06T12:00:00-04:00",
       "isDaytime": true,
-      "temperature": 74,
+      "temperature": 73,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 46
+        "value": 9
       }
     },
     {
       "startTime": "2026-10-06T13:00:00-04:00",
       "isDaytime": true,
-      "temperature": 75,
+      "temperature": 74,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 46
+        "value": 18
       }
     },
     {
       "startTime": "2026-10-06T14:00:00-04:00",
       "isDaytime": true,
-      "temperature": 76,
+      "temperature": 75,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 32
+        "value": 1
       }
     },
     {
       "startTime": "2026-10-06T15:00:00-04:00",
       "isDaytime": true,
-      "temperature": 76,
+      "temperature": 75,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 32
+        "value": 33
       }
     },
     {
@@ -418,7 +288,7 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 32
+        "value": 38
       }
     },
     {
@@ -428,27 +298,27 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 32
+        "value": 42
       }
     },
     {
       "startTime": "2026-10-06T18:00:00-04:00",
       "isDaytime": false,
-      "temperature": 74,
+      "temperature": 75,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 32
+        "value": 21
       }
     },
     {
       "startTime": "2026-10-06T19:00:00-04:00",
       "isDaytime": false,
-      "temperature": 73,
+      "temperature": 74,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 32
+        "value": 24
       }
     },
     {
@@ -458,17 +328,17 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 6
+        "value": 13
       }
     },
     {
       "startTime": "2026-10-06T21:00:00-04:00",
       "isDaytime": false,
-      "temperature": 70,
+      "temperature": 69,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 6
+        "value": 13
       }
     },
     {
@@ -478,37 +348,37 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 6
+        "value": 13
       }
     },
     {
       "startTime": "2026-10-06T23:00:00-04:00",
       "isDaytime": false,
-      "temperature": 67,
-      "windSpeed": "15 mph",
+      "temperature": 68,
+      "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 6
+        "value": 13
       }
     },
     {
       "startTime": "2026-10-07T00:00:00-04:00",
       "isDaytime": false,
-      "temperature": 66,
+      "temperature": 67,
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 6
+        "value": 13
       }
     },
     {
       "startTime": "2026-10-07T01:00:00-04:00",
       "isDaytime": false,
-      "temperature": 66,
+      "temperature": 67,
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 6
+        "value": 13
       }
     },
     {
@@ -518,7 +388,7 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 3
+        "value": 9
       }
     },
     {
@@ -528,7 +398,7 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 3
+        "value": 9
       }
     },
     {
@@ -538,7 +408,7 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 3
+        "value": 9
       }
     },
     {
@@ -548,7 +418,7 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 3
+        "value": 9
       }
     },
     {
@@ -558,23 +428,23 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 3
+        "value": 9
       }
     },
     {
       "startTime": "2026-10-07T07:00:00-04:00",
       "isDaytime": true,
-      "temperature": 62,
+      "temperature": 63,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 3
+        "value": 9
       }
     },
     {
       "startTime": "2026-10-07T08:00:00-04:00",
       "isDaytime": true,
-      "temperature": 62,
+      "temperature": 63,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
@@ -584,7 +454,7 @@
     {
       "startTime": "2026-10-07T09:00:00-04:00",
       "isDaytime": true,
-      "temperature": 64,
+      "temperature": 65,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
@@ -624,7 +494,7 @@
     {
       "startTime": "2026-10-07T13:00:00-04:00",
       "isDaytime": true,
-      "temperature": 77,
+      "temperature": 76,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
@@ -634,31 +504,31 @@
     {
       "startTime": "2026-10-07T14:00:00-04:00",
       "isDaytime": true,
-      "temperature": 79,
+      "temperature": 77,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 3
+        "value": 2
       }
     },
     {
       "startTime": "2026-10-07T15:00:00-04:00",
       "isDaytime": true,
-      "temperature": 80,
+      "temperature": 79,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 3
+        "value": 2
       }
     },
     {
       "startTime": "2026-10-07T16:00:00-04:00",
       "isDaytime": true,
-      "temperature": 80,
+      "temperature": 79,
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 3
+        "value": 2
       }
     },
     {
@@ -668,7 +538,7 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 3
+        "value": 2
       }
     },
     {
@@ -678,7 +548,7 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 3
+        "value": 2
       }
     },
     {
@@ -688,67 +558,67 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 3
+        "value": 2
       }
     },
     {
       "startTime": "2026-10-07T20:00:00-04:00",
       "isDaytime": false,
-      "temperature": 73,
-      "windSpeed": "10 mph",
+      "temperature": 74,
+      "windSpeed": "5 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 15
+        "value": 1
       }
     },
     {
       "startTime": "2026-10-07T21:00:00-04:00",
       "isDaytime": false,
-      "temperature": 70,
+      "temperature": 71,
       "windSpeed": "5 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 15
+        "value": 1
       }
     },
     {
       "startTime": "2026-10-07T22:00:00-04:00",
       "isDaytime": false,
-      "temperature": 67,
+      "temperature": 68,
       "windSpeed": "5 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 15
+        "value": 1
       }
     },
     {
       "startTime": "2026-10-07T23:00:00-04:00",
       "isDaytime": false,
-      "temperature": 65,
+      "temperature": 66,
       "windSpeed": "5 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 15
+        "value": 1
       }
     },
     {
       "startTime": "2026-10-08T00:00:00-04:00",
       "isDaytime": false,
-      "temperature": 64,
+      "temperature": 65,
       "windSpeed": "5 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 15
+        "value": 1
       }
     },
     {
       "startTime": "2026-10-08T01:00:00-04:00",
       "isDaytime": false,
-      "temperature": 63,
+      "temperature": 64,
       "windSpeed": "5 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 15
+        "value": 1
       }
     },
     {
@@ -784,7 +654,7 @@
     {
       "startTime": "2026-10-08T05:00:00-04:00",
       "isDaytime": false,
-      "temperature": 60,
+      "temperature": 61,
       "windSpeed": "5 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
@@ -804,7 +674,7 @@
     {
       "startTime": "2026-10-08T07:00:00-04:00",
       "isDaytime": true,
-      "temperature": 59,
+      "temperature": 58,
       "windSpeed": "5 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
@@ -814,31 +684,31 @@
     {
       "startTime": "2026-10-08T08:00:00-04:00",
       "isDaytime": true,
-      "temperature": 60,
+      "temperature": 59,
       "windSpeed": "5 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 3
+        "value": 1
       }
     },
     {
       "startTime": "2026-10-08T09:00:00-04:00",
       "isDaytime": true,
-      "temperature": 64,
-      "windSpeed": "10 mph",
+      "temperature": 63,
+      "windSpeed": "5 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 3
+        "value": 1
       }
     },
     {
       "startTime": "2026-10-08T10:00:00-04:00",
       "isDaytime": true,
       "temperature": 68,
-      "windSpeed": "10 mph",
+      "windSpeed": "5 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 3
+        "value": 1
       }
     },
     {
@@ -848,7 +718,7 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 3
+        "value": 1
       }
     },
     {
@@ -858,7 +728,7 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 3
+        "value": 1
       }
     },
     {
@@ -868,7 +738,7 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 3
+        "value": 1
       }
     },
     {
@@ -878,7 +748,7 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 4
+        "value": 1
       }
     },
     {
@@ -888,7 +758,7 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 4
+        "value": 1
       }
     },
     {
@@ -898,7 +768,7 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 4
+        "value": 1
       }
     },
     {
@@ -908,27 +778,27 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 4
+        "value": 1
       }
     },
     {
       "startTime": "2026-10-08T18:00:00-04:00",
       "isDaytime": false,
       "temperature": 79,
-      "windSpeed": "10 mph",
+      "windSpeed": "5 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 4
+        "value": 1
       }
     },
     {
       "startTime": "2026-10-08T19:00:00-04:00",
       "isDaytime": false,
       "temperature": 77,
-      "windSpeed": "10 mph",
+      "windSpeed": "5 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 4
+        "value": 1
       }
     },
     {
@@ -938,7 +808,7 @@
       "windSpeed": "5 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 6
+        "value": 1
       }
     },
     {
@@ -948,7 +818,7 @@
       "windSpeed": "5 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 6
+        "value": 1
       }
     },
     {
@@ -958,44 +828,44 @@
       "windSpeed": "5 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 6
+        "value": 1
       }
     },
     {
       "startTime": "2026-10-08T23:00:00-04:00",
       "isDaytime": false,
-      "temperature": 65,
+      "temperature": 66,
       "windSpeed": "5 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 6
+        "value": 1
       }
     },
     {
       "startTime": "2026-10-09T00:00:00-04:00",
       "isDaytime": false,
-      "temperature": 64,
+      "temperature": 65,
       "windSpeed": "5 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 6
+        "value": 1
       }
     },
     {
       "startTime": "2026-10-09T01:00:00-04:00",
       "isDaytime": false,
       "temperature": 64,
-      "windSpeed": "5 mph",
+      "windSpeed": "0 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 6
+        "value": 1
       }
     },
     {
       "startTime": "2026-10-09T02:00:00-04:00",
       "isDaytime": false,
       "temperature": 64,
-      "windSpeed": "5 mph",
+      "windSpeed": "0 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
         "value": 6
@@ -1005,7 +875,7 @@
       "startTime": "2026-10-09T03:00:00-04:00",
       "isDaytime": false,
       "temperature": 63,
-      "windSpeed": "5 mph",
+      "windSpeed": "0 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
         "value": 6
@@ -1044,7 +914,7 @@
     {
       "startTime": "2026-10-09T07:00:00-04:00",
       "isDaytime": true,
-      "temperature": 59,
+      "temperature": 60,
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
@@ -1054,11 +924,11 @@
     {
       "startTime": "2026-10-09T08:00:00-04:00",
       "isDaytime": true,
-      "temperature": 60,
+      "temperature": 61,
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 15
+        "value": 18
       }
     },
     {
@@ -1068,17 +938,17 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 15
+        "value": 18
       }
     },
     {
       "startTime": "2026-10-09T10:00:00-04:00",
       "isDaytime": true,
-      "temperature": 68,
+      "temperature": 69,
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 15
+        "value": 18
       }
     },
     {
@@ -1088,17 +958,17 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 15
+        "value": 18
       }
     },
     {
       "startTime": "2026-10-09T12:00:00-04:00",
       "isDaytime": true,
-      "temperature": 76,
+      "temperature": 75,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 15
+        "value": 18
       }
     },
     {
@@ -1108,7 +978,7 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 15
+        "value": 18
       }
     },
     {
@@ -1118,7 +988,7 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 19
+        "value": 26
       }
     },
     {
@@ -1128,7 +998,7 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 19
+        "value": 26
       }
     },
     {
@@ -1138,27 +1008,27 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 19
+        "value": 26
       }
     },
     {
       "startTime": "2026-10-09T17:00:00-04:00",
       "isDaytime": true,
-      "temperature": 79,
-      "windSpeed": "15 mph",
+      "temperature": 78,
+      "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 19
+        "value": 26
       }
     },
     {
       "startTime": "2026-10-09T18:00:00-04:00",
       "isDaytime": false,
-      "temperature": 78,
+      "temperature": 77,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 19
+        "value": 26
       }
     },
     {
@@ -1168,7 +1038,7 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 19
+        "value": 26
       }
     },
     {
@@ -1184,7 +1054,7 @@
     {
       "startTime": "2026-10-09T21:00:00-04:00",
       "isDaytime": false,
-      "temperature": 71,
+      "temperature": 72,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
@@ -1195,7 +1065,7 @@
       "startTime": "2026-10-09T22:00:00-04:00",
       "isDaytime": false,
       "temperature": 69,
-      "windSpeed": "15 mph",
+      "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
         "value": 31
@@ -1205,7 +1075,7 @@
       "startTime": "2026-10-09T23:00:00-04:00",
       "isDaytime": false,
       "temperature": 67,
-      "windSpeed": "15 mph",
+      "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
         "value": 31
@@ -1214,7 +1084,7 @@
     {
       "startTime": "2026-10-10T00:00:00-04:00",
       "isDaytime": false,
-      "temperature": 67,
+      "temperature": 66,
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
@@ -1224,7 +1094,7 @@
     {
       "startTime": "2026-10-10T01:00:00-04:00",
       "isDaytime": false,
-      "temperature": 67,
+      "temperature": 66,
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
@@ -1234,11 +1104,11 @@
     {
       "startTime": "2026-10-10T02:00:00-04:00",
       "isDaytime": false,
-      "temperature": 67,
+      "temperature": 66,
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 46
+        "value": 44
       }
     },
     {
@@ -1248,17 +1118,17 @@
       "windSpeed": "10 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 46
+        "value": 44
       }
     },
     {
       "startTime": "2026-10-10T04:00:00-04:00",
       "isDaytime": false,
-      "temperature": 66,
+      "temperature": 65,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 46
+        "value": 44
       }
     },
     {
@@ -1268,17 +1138,17 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 46
+        "value": 44
       }
     },
     {
       "startTime": "2026-10-10T06:00:00-04:00",
       "isDaytime": true,
-      "temperature": 64,
+      "temperature": 65,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 46
+        "value": 44
       }
     },
     {
@@ -1288,57 +1158,57 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 46
+        "value": 44
       }
     },
     {
       "startTime": "2026-10-10T08:00:00-04:00",
       "isDaytime": true,
-      "temperature": 64,
+      "temperature": 65,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 62
+        "value": 57
       }
     },
     {
       "startTime": "2026-10-10T09:00:00-04:00",
       "isDaytime": true,
-      "temperature": 66,
+      "temperature": 67,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 62
+        "value": 57
       }
     },
     {
       "startTime": "2026-10-10T10:00:00-04:00",
       "isDaytime": true,
-      "temperature": 69,
-      "windSpeed": "15 mph",
+      "temperature": 70,
+      "windSpeed": "20 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 62
+        "value": 57
       }
     },
     {
       "startTime": "2026-10-10T11:00:00-04:00",
       "isDaytime": true,
       "temperature": 72,
-      "windSpeed": "15 mph",
+      "windSpeed": "20 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 62
+        "value": 57
       }
     },
     {
       "startTime": "2026-10-10T12:00:00-04:00",
       "isDaytime": true,
-      "temperature": 74,
-      "windSpeed": "15 mph",
+      "temperature": 73,
+      "windSpeed": "20 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 62
+        "value": 57
       }
     },
     {
@@ -1348,37 +1218,37 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 62
+        "value": 57
       }
     },
     {
       "startTime": "2026-10-10T14:00:00-04:00",
       "isDaytime": true,
-      "temperature": 75,
+      "temperature": 74,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 72
+        "value": 66
       }
     },
     {
       "startTime": "2026-10-10T15:00:00-04:00",
       "isDaytime": true,
-      "temperature": 76,
+      "temperature": 75,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 72
+        "value": 66
       }
     },
     {
       "startTime": "2026-10-10T16:00:00-04:00",
       "isDaytime": true,
       "temperature": 76,
-      "windSpeed": "15 mph",
+      "windSpeed": "20 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 72
+        "value": 66
       }
     },
     {
@@ -1388,7 +1258,7 @@
       "windSpeed": "20 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 72
+        "value": 66
       }
     },
     {
@@ -1398,7 +1268,7 @@
       "windSpeed": "20 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 72
+        "value": 66
       }
     },
     {
@@ -1408,7 +1278,7 @@
       "windSpeed": "20 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 72
+        "value": 66
       }
     },
     {
@@ -1418,7 +1288,7 @@
       "windSpeed": "20 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 64
+        "value": 67
       }
     },
     {
@@ -1428,37 +1298,37 @@
       "windSpeed": "20 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 64
+        "value": 67
       }
     },
     {
       "startTime": "2026-10-10T22:00:00-04:00",
       "isDaytime": false,
-      "temperature": 69,
-      "windSpeed": "15 mph",
+      "temperature": 68,
+      "windSpeed": "20 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 64
+        "value": 67
       }
     },
     {
       "startTime": "2026-10-10T23:00:00-04:00",
       "isDaytime": false,
-      "temperature": 68,
+      "temperature": 67,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 64
+        "value": 67
       }
     },
     {
       "startTime": "2026-10-11T00:00:00-04:00",
       "isDaytime": false,
-      "temperature": 68,
+      "temperature": 67,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 64
+        "value": 67
       }
     },
     {
@@ -1468,7 +1338,7 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 64
+        "value": 67
       }
     },
     {
@@ -1478,7 +1348,7 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 59
+        "value": 57
       }
     },
     {
@@ -1488,7 +1358,7 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 59
+        "value": 57
       }
     },
     {
@@ -1498,7 +1368,7 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 59
+        "value": 57
       }
     },
     {
@@ -1508,7 +1378,7 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 59
+        "value": 57
       }
     },
     {
@@ -1518,7 +1388,7 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 59
+        "value": 57
       }
     },
     {
@@ -1528,7 +1398,7 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 59
+        "value": 57
       }
     },
     {
@@ -1538,7 +1408,7 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 74
+        "value": 68
       }
     },
     {
@@ -1548,17 +1418,147 @@
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 74
+        "value": 68
       }
     },
     {
       "startTime": "2026-10-11T10:00:00-04:00",
       "isDaytime": true,
       "temperature": 71,
+      "windSpeed": "20 mph",
+      "probabilityOfPrecipitation": {
+        "unitCode": "wmoUnit:percent",
+        "value": 68
+      }
+    },
+    {
+      "startTime": "2026-10-11T11:00:00-04:00",
+      "isDaytime": true,
+      "temperature": 73,
+      "windSpeed": "20 mph",
+      "probabilityOfPrecipitation": {
+        "unitCode": "wmoUnit:percent",
+        "value": 68
+      }
+    },
+    {
+      "startTime": "2026-10-11T12:00:00-04:00",
+      "isDaytime": true,
+      "temperature": 74,
       "windSpeed": "15 mph",
       "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
-        "value": 74
+        "value": 68
+      }
+    },
+    {
+      "startTime": "2026-10-11T13:00:00-04:00",
+      "isDaytime": true,
+      "temperature": 75,
+      "windSpeed": "15 mph",
+      "probabilityOfPrecipitation": {
+        "unitCode": "wmoUnit:percent",
+        "value": 68
+      }
+    },
+    {
+      "startTime": "2026-10-11T14:00:00-04:00",
+      "isDaytime": true,
+      "temperature": 76,
+      "windSpeed": "15 mph",
+      "probabilityOfPrecipitation": {
+        "unitCode": "wmoUnit:percent",
+        "value": 76
+      }
+    },
+    {
+      "startTime": "2026-10-11T15:00:00-04:00",
+      "isDaytime": true,
+      "temperature": 77,
+      "windSpeed": "15 mph",
+      "probabilityOfPrecipitation": {
+        "unitCode": "wmoUnit:percent",
+        "value": 76
+      }
+    },
+    {
+      "startTime": "2026-10-11T16:00:00-04:00",
+      "isDaytime": true,
+      "temperature": 77,
+      "windSpeed": "15 mph",
+      "probabilityOfPrecipitation": {
+        "unitCode": "wmoUnit:percent",
+        "value": 76
+      }
+    },
+    {
+      "startTime": "2026-10-11T17:00:00-04:00",
+      "isDaytime": true,
+      "temperature": 77,
+      "windSpeed": "15 mph",
+      "probabilityOfPrecipitation": {
+        "unitCode": "wmoUnit:percent",
+        "value": 76
+      }
+    },
+    {
+      "startTime": "2026-10-11T18:00:00-04:00",
+      "isDaytime": false,
+      "temperature": 76,
+      "windSpeed": "20 mph",
+      "probabilityOfPrecipitation": {
+        "unitCode": "wmoUnit:percent",
+        "value": 76
+      }
+    },
+    {
+      "startTime": "2026-10-11T19:00:00-04:00",
+      "isDaytime": false,
+      "temperature": 75,
+      "windSpeed": "20 mph",
+      "probabilityOfPrecipitation": {
+        "unitCode": "wmoUnit:percent",
+        "value": 76
+      }
+    },
+    {
+      "startTime": "2026-10-11T20:00:00-04:00",
+      "isDaytime": false,
+      "temperature": 74,
+      "windSpeed": "20 mph",
+      "probabilityOfPrecipitation": {
+        "unitCode": "wmoUnit:percent",
+        "value": 45
+      }
+    },
+    {
+      "startTime": "2026-10-11T21:00:00-04:00",
+      "isDaytime": false,
+      "temperature": 72,
+      "windSpeed": "15 mph",
+      "probabilityOfPrecipitation": {
+        "unitCode": "wmoUnit:percent",
+        "value": 45
+      }
+    },
+    {
+      "startTime": "2026-10-11T22:00:00-04:00",
+      "isDaytime": false,
+      "temperature": 70,
+      "windSpeed": "15 mph",
+      "probabilityOfPrecipitation": {
+        "unitCode": "wmoUnit:percent",
+        "value": 45
+      }
+    },
+    {
+      "startTime": "2026-10-11T23:00:00-04:00",
+      "isDaytime": false,
+      "temperature": 69,
+      "windSpeed": "10 mph",
+      "probabilityOfPrecipitation": {
+        "unitCode": "wmoUnit:percent",
+        "value": 45
       }
     }
   ]
