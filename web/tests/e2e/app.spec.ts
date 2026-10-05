@@ -80,6 +80,19 @@ test("the last hour of a full day stays inside its card", async ({ page }) => {
   expect(hourBox!.x + hourBox!.width).toBeLessThanOrEqual(cardBox!.x + cardBox!.width + 1);
 });
 
+test("Ask the tank renders all example questions without calling the model", async ({ page }) => {
+  await page.goto("/app");
+  const section = page.getByRole("region", { name: "Ask the tank." });
+  await expect(section).toBeVisible();
+  for (const example of [
+    "When can I spray all three at Tift this week for a 4-hour job?",
+    "Why is the next blocked hour at Worth blocked?",
+    "Which label sets the strictest wind limit in this tank?",
+  ]) {
+    await expect(page.getByRole("button", { name: example })).toBeVisible();
+  }
+});
+
 test("every page names the product exactly once in its title", async ({ page }) => {
   for (const route of ["/", "/app", "/judge"]) {
     await page.goto(route);

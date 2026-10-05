@@ -96,10 +96,10 @@ export default function JudgePage() {
               </div>
             </li>
             <li>
-              <Chip icon="0" tone="sun">RUNTIME</Chip>
+              <Chip icon="N" tone="sun">RUNTIME</Chip>
               <div>
-                <strong>Nothing calls a model at runtime yet in Tier 1.</strong>
-                <p>The browser runs the committed rules through the deterministic WebAssembly planner.</p>
+                <strong>Ask the tank calls nvidia/Nemotron-3_5-Lightning on Nebius Token Factory at runtime.</strong>
+                <p>Every call&apos;s model, latency, tokens and cost are shown in its trace.</p>
               </div>
             </li>
           </ul>

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { evaluate, filterRules, type CompiledLabel } from "@/engine";
+import type { AgentCheckSnapshot } from "@/lib/agent/tools";
 import { forecastPermittedWindows } from "@/lib/windows";
 import {
   PRODUCT_REGISTRATIONS,
@@ -25,6 +26,7 @@ import {
   type ReplayForecast,
 } from "@/lib/planner-data";
 import { WorkingCard, type WorkingStep } from "@/ui";
+import { AskTank } from "./AskTank";
 import { HourDetail } from "./HourDetail";
 import { RulesDisclosure } from "./RulesDisclosure";
 import { Timeline } from "./Timeline";
@@ -224,6 +226,34 @@ export function Planner({ initialField, initialTank, initialReplay }: PlannerPro
     selectHour(index);
   }
 
+  function useAgentCheck(snapshot: AgentCheckSnapshot) {
+    setField(snapshot.pointKey);
+    setJobHours(snapshot.jobHours);
+    setSelectedRegs(new Set(snapshot.products.filter((reg): reg is ProductRegistration => PRODUCT_REGISTRATIONS.includes(reg as ProductRegistration))));
+    setFailure(null);
+    setValidation(null);
+    setSelectedHour(null);
+    setResult({
+      pointKey: snapshot.pointKey,
+      source: snapshot.source,
+      fetchedAt: snapshot.fetchedAt,
+      hours: snapshot.hours,
+      ruleGroups: snapshot.ruleGroups,
+    });
+  }
+
+  function openAgentClause(ruleId: string) {
+    const index = result?.hours.findIndex((hour) =>
+      [...hour.blocked, ...hour.checks, ...hour.advisories].some((citation) => citation.rule === ruleId),
+    ) ?? -1;
+    if (index >= 0) selectHour(index);
+  }
+
+  function openAgentWindow(index: number) {
+    const selectedWindow = windows[index];
+    if (selectedWindow) scrollToWindow(selectedWindow.start);
+  }
+
   return (
     <main className="px-3 pb-6 pt-24 sm:px-5 sm:pt-28">
       <section className="section-card mx-auto max-w-[92rem] overflow-hidden bg-[#9fd3f2] px-4 py-8 text-[#14213d] sm:px-8 sm:py-12 lg:px-12">
@@ -339,6 +369,8 @@ export function Planner({ initialField, initialTank, initialReplay }: PlannerPro
           </section>
         )}
       </section>
+
+      <AskTank onCheck={useAgentCheck} onClause={openAgentClause} onWindow={openAgentWindow} />
 
       {result && labels && (
         <Results
