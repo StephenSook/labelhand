@@ -48,8 +48,13 @@ RAIN_EXPECTED_POP = 50
 RAIN_UNSURE_POP = 20
 
 
-def load_rules(reg: str) -> tuple[str, list[dict], list[dict]]:
-    rep = json.loads((COMPILED / f"{reg}.json").read_text(encoding="utf-8"))
+# The rule set the planner uses: union of the Super and Ultra extraction passes, re-typed by typing pass v3.
+# This is the best measured configuration on gold v0 (eval/results/union_typed_ultra_v3.json).
+DEFAULT_RULES = ".union.typed.v3"
+
+
+def load_rules(reg: str, rules_suffix: str = DEFAULT_RULES) -> tuple[str, list[dict], list[dict]]:
+    rep = json.loads((COMPILED / f"{reg}{rules_suffix}.json").read_text(encoding="utf-8"))
     used, skipped, seen = [], [], set()
     for r in rep["accepted"]:
         words = TOPIC.get(r["param"])
@@ -154,11 +159,12 @@ def main() -> int:
     ap.add_argument("--tank", nargs="+", default=["5481-504", "264-700", "264-418"])
     ap.add_argument("--hours", type=int, default=48)
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--rules", default=DEFAULT_RULES, help="compiled rule-set suffix in data/compiled/")
     a = ap.parse_args()
     meta = json.loads(CACHE.read_text(encoding="utf-8"))[a.point]
     rules, skipped = [], []
     for reg in a.tank:
-        _, u, s = load_rules(reg)
+        _, u, s = load_rules(reg, a.rules)
         rules += u
         skipped += s
     fetched, periods = latest_forecast(a.point)
