@@ -51,7 +51,7 @@ Three real Georgia cotton defoliation labels: Folex 6 EC (EPA Reg. 5481-504, acc
 | Time per label (pages in parallel) | about 10 s |
 
 What the guards caught, in a real run:
-- The model spliced two clauses and stated the Folex restricted-entry interval as **10 days**. The label says **7 days**. Rejected.
+- The Folex label sets two restricted-entry intervals: **7 days** at rates at or below 0.75 lb ai/A and **10 days** above that rate. The model spliced the sentence with "..." into a single 10-day rule and dropped the rate condition. Rejected, because a spliced quote is not what the label says.
 - The model converted 3 feet to 36 inches and one-half mile to 2,640 feet. Rejected: conversions belong in code.
 
 Known limits we are working on, with numbers in [`SPIKE-01-label-compile.md`](SPIKE-01-label-compile.md): coverage varies between runs, some rules get the wrong parameter type, one font in the 2026 Folex PDF has no Unicode map for the "1/2" glyph, and the 2009 Dropp SC label is a scan with a poor text layer.

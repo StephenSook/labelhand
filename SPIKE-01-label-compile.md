@@ -18,7 +18,7 @@
 Three labels, 32 pages, $0.028, about 10 s per label wall-clock.
 
 ## What the guards caught (real model errors, not noise)
-- Folex re-entry interval: the model spliced two clauses with "..." and wrote 10 days; the label says 7 days. Rejected (QUOTE_SPLICED). Numbers never pass through the model unchecked.
+- Folex re-entry interval: the label sets 7 days at or below 0.75 lb ai/A and 10 days above it. The model spliced the sentence with "..." into one 10-day rule and dropped the rate condition. Rejected (QUOTE_SPLICED). (Corrected 2026-10-05: an earlier version of this note said the label only says 7 days.)
 - Unit conversions done by the model (3 feet to 36 inches; one-half mile to 2,640 ft): rejected. Conversion belongs in code.
 - Invented numbers on clauses with no number: rejected.
 
