@@ -45,7 +45,7 @@ async function copyCompiledLabels() {
   const target = path.join(publicData, "compiled");
   await mkdir(target, { recursive: true });
   for (const reg of registrations) {
-    const file = `${reg}.union.typed.v3.json`;
+    const file = `${reg}.ship.json`;
     await copyFile(
       path.join(repoRoot, "data", "compiled", file),
       path.join(target, file),

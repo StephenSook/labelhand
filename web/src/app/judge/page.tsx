@@ -28,6 +28,16 @@ const steps: JudgeStep[] = [
     action: "Go to the timeline",
   },
   {
+    title: "Run a real what-if",
+    body: (
+      <p>
+        Open &quot;Why so few windows?&quot; and press &quot;Check without FOLEX 6 EC&quot;. The same WebAssembly planner reruns on the recorded forecast and returns 17 forecast-permitted hours in two windows. It makes no new network call.
+      </p>
+    ),
+    href: `${plannerLink}&replay=tift#few-windows-heading`,
+    action: "Try the what-if",
+  },
+  {
     title: "Inspect every rule in the tank",
     body: (
       <p>
@@ -59,7 +69,7 @@ export default function JudgePage() {
             No login or API key
           </Chip>
           <h1 className="display judge-title">Judges: three minutes</h1>
-          <p className="judge-lede">Run one recorded forecast, open the clause behind a blocked hour, then inspect the rule receipt.</p>
+          <p className="judge-lede">Run one recorded forecast, inspect the clauses behind it, then rerun a real tank what-if.</p>
           <JudgeDoor steps={steps} />
         </SectionCard>
 
@@ -92,6 +102,18 @@ export default function JudgePage() {
                 <strong>Typed rules with committed quotes</strong>
                 <p>
                   The rules were compiled offline by nvidia/nemotron-3-super-120b-a12b and nvidia/Nemotron-3-Ultra-550b-a55b on Nebius Token Factory.
+                </p>
+                <p>
+                  The deployed <code>.ship</code> set merges three measured p2, typing v3, OCR and modality-floor runs under the pre-registered <code>MERGED_SHIPS</code> branch. <code>eval/results/ship.json</code> records 1.0 coverage recall, 1.0 acting precision and 1.0 acting recall.
+                </p>
+              </div>
+            </li>
+            <li>
+              <Chip icon="C" tone="field">KERNEL</Chip>
+              <div>
+                <strong>Temperature clauses that require one product alone are checked against the tank.</strong>
+                <p>
+                  A matching clause blocks only when its temperature condition holds and another product is present. On the recorded Tift forecast, the night low never falls below 60 F, so before and after totals are unchanged: all three products have 0 permitted, 79 field check and 77 blocked; Folex alone has 0 permitted, 85 field check and 71 blocked; Dropp plus Prep has 17 permitted, 62 field check and 77 blocked.
                 </p>
               </div>
             </li>

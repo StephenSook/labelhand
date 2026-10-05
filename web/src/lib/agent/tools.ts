@@ -1,5 +1,5 @@
 import type { FilterRulesResult, Rule } from "@/engine";
-import type { LabelIndex, PlannerHour } from "@/lib/planner-data";
+import type { ForecastPeriod, LabelIndex, PlannerHour } from "@/lib/planner-data";
 import type { ForecastWindow } from "@/lib/windows";
 import type { FinalAnswerArgs } from "./guard";
 
@@ -99,6 +99,9 @@ export type AgentCheckSnapshot = {
   fetchedAt: string;
   jobHours: number;
   products: string[];
+  periods: ForecastPeriod[];
+  lat: number;
+  lon: number;
   hours: PlannerHour[];
   ruleGroups: FilterRulesResult[];
   windows: ForecastWindow[];
@@ -207,7 +210,7 @@ async function checkTank(args: unknown, runtime: AgentToolRuntime): Promise<Agen
   }
 
   const ruleGroups = await Promise.all(products.map(async (reg) => {
-    const compiled = await planner.fetchJson<import("@/engine").CompiledLabel>(`/data/compiled/${reg}.union.typed.v3.json`);
+    const compiled = await planner.fetchJson<import("@/engine").CompiledLabel>(`/data/compiled/${reg}.ship.json`);
     return engine.filterRules(compiled, reg);
   }));
   runtime.rulesById.clear();
@@ -250,6 +253,9 @@ async function checkTank(args: unknown, runtime: AgentToolRuntime): Promise<Agen
     fetchedAt,
     jobHours: jobHours as number,
     products: products as string[],
+    periods,
+    lat: point.lat,
+    lon: point.lon,
     hours,
     ruleGroups,
     windows,

@@ -25,6 +25,24 @@ test("the recorded planner exposes every hour and its source quote", async ({ pa
   await expect(quoteCard).toContainText(/Page \d+/);
 });
 
+test("the constraint panel runs an in-memory what-if through the planner", async ({ page }) => {
+  await openReplay(page);
+
+  const panel = page.getByRole("region", { name: "Why so few windows?" });
+  await expect(panel).toBeVisible();
+  await expect(panel.getByRole("list", { name: "Top limiting clauses" }).getByRole("listitem")).toHaveCount(3);
+  const dataRequests: string[] = [];
+  page.on("request", (request) => {
+    if (new URL(request.url()).pathname.startsWith("/data/")) dataRequests.push(request.url());
+  });
+  await panel.getByRole("button", { name: /^Check without FOLEX/ }).click();
+
+  const outcome = panel.locator("[data-what-if-result]");
+  await expect(outcome).toContainText("17 of 156 forecast-permitted hours");
+  await expect(outcome).toContainText("2 windows at least 3 hours long");
+  expect(dataRequests).toEqual([]);
+});
+
 test("the recorded planner never overflows its viewport or day cards", async ({ page }) => {
   for (const width of [390, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 });

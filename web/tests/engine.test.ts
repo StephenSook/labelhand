@@ -37,7 +37,7 @@ describe("Rust WASM adapter", () => {
     const rules: Rule[] = [];
     for (const reg of registrations) {
       const compiled = await readJson<CompiledLabel>(
-        `public/data/compiled/${reg}.union.typed.v3.json`,
+        `public/data/compiled/${reg}.ship.json`,
       );
       const filtered = await filterRules(compiled, reg);
       expect(filtered.product).toBe(compiled.product);

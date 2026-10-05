@@ -30,6 +30,7 @@ import { AskTank } from "./AskTank";
 import { HourDetail } from "./HourDetail";
 import { RulesDisclosure } from "./RulesDisclosure";
 import { Timeline } from "./Timeline";
+import { WhyFewWindows } from "./WhyFewWindows";
 
 type PlannerProps = {
   initialField?: string;
@@ -43,6 +44,9 @@ type PlannerResult = {
   pointKey: string;
   source: SourceKind;
   fetchedAt: string;
+  periods: ForecastPeriod[];
+  lat: number;
+  lon: number;
   hours: PlannerHour[];
   ruleGroups: FilteredRules[];
 };
@@ -154,7 +158,7 @@ export function Planner({ initialField, initialTank, initialReplay }: PlannerPro
 
       const rulesStart = performance.now();
       const ruleGroups = await Promise.all(registrations.map(async (reg) => {
-        const compiled = await fetchJson<CompiledLabel>(`/data/compiled/${reg}.union.typed.v3.json`);
+        const compiled = await fetchJson<CompiledLabel>(`/data/compiled/${reg}.ship.json`);
         return await filterRules(compiled, reg);
       }));
       const usedRules = ruleGroups.flatMap((group) => group.used);
@@ -168,7 +172,7 @@ export function Planner({ initialField, initialTank, initialReplay }: PlannerPro
         throw new Error(`The planner returned ${evaluated.length} hours for ${periods.length} forecast periods`);
       }
       setWorking(null);
-      setResult({ pointKey, source, fetchedAt, hours: evaluated, ruleGroups });
+      setResult({ pointKey, source, fetchedAt, periods, lat: point.lat, lon: point.lon, hours: evaluated, ruleGroups });
     } catch (error) {
       const message = errorText(error);
       setWorking(null);
@@ -237,6 +241,9 @@ export function Planner({ initialField, initialTank, initialReplay }: PlannerPro
       pointKey: snapshot.pointKey,
       source: snapshot.source,
       fetchedAt: snapshot.fetchedAt,
+      periods: snapshot.periods,
+      lat: snapshot.lat,
+      lon: snapshot.lon,
       hours: snapshot.hours,
       ruleGroups: snapshot.ruleGroups,
     });
@@ -449,6 +456,18 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
           </ol>
         )}
       </section>
+
+      {(windows.length === 0 || counts.PERMITTED * 4 < result.hours.length) && (
+        <WhyFewWindows
+          key={`${result.pointKey}-${result.fetchedAt}-${result.ruleGroups.map((group) => group.product).join("|")}-${jobHours}`}
+          hours={result.hours}
+          ruleGroups={result.ruleGroups}
+          periods={result.periods}
+          lat={result.lat}
+          lon={result.lon}
+          jobHours={jobHours}
+        />
+      )}
 
       <Timeline hours={result.hours} products={products} selectedIndex={selectedHour} onSelect={onSelectHour} />
       {selectedHour !== null && result.hours[selectedHour] && (

@@ -64,10 +64,25 @@ Three real Georgia cotton defoliation labels: Folex 6 EC (EPA Reg. 5481-504, acc
 | + typing v2 (stricter definitions) | 0.891 | 0.848 | 0.897 | 0.872 | 1.000 | **0.800** |
 | + typing v3 (types the constraint the first reading named) | 0.891 | 0.891 | 0.935 | **0.902** | **1.000** | **1.000** |
 | + unit restore in code, extraction prompt p2 (one rule per constraint or alternative) | **0.957** | **0.957** | **0.941** | 0.841 | **1.000** | **1.000** |
+| **Shipped `.ship` merge of three p2 + typing v3 + OCR + modality-floor runs** | **1.000** | **1.000** | 0.944 | 0.848 | **1.000 (13/13)** | **1.000 (10/10)** |
 
 *Acting* rules are the ones the planner can turn into BLOCKED or FIELD CHECK. Acting recall is the safety number: a missed wind or rain limit would mark a forbidden hour as permitted. Typing v2 raised precision but dropped a wind limit hidden in a sentence that also set a boom height, so v3 replaced it.
 
-The planner still uses the typing v3 row. The p2 row finds three more gold clauses (the two Folex re-entry intervals and Dropp's one-half mile lettuce buffer), none of which the hourly planner acts on, and its acting numbers are the same, but its modality accuracy is lower (0.841 against 0.902). Token Factory cost for the p2 pipeline on three labels: $0.53 (Super pass $0.033, Ultra pass $0.18, typing $0.31).
+The planner ships the `.ship` row. The pre-registered decision branch was `MERGED_SHIPS`: merge the three measured p2 + typing v3 + OCR + PR Notice 2000-5 modality-floor runs by clause, record every source run, and prefer an acting modality when repeated runs disagree. [`eval/results/ship.json`](eval/results/ship.json) is the committed score receipt. The p2 pipeline's Token Factory cost on three labels was $0.53 per run (Super pass $0.033, Ultra pass $0.18, typing $0.31).
+
+### Tank-composition clauses
+
+The Folex clause &quot;When minimum night temperature is below 60°F use FOLEX 6 EC alone&quot; controls what may be in the tank. It is not a general temperature limit. The Python reference kernel and Rust port now recognize a MUST or MUST_NOT temperature clause matching `\buse\b[^.]*\balone\b`. When the temperature condition holds, a mixed tank is BLOCKED with the other products named; the named product by itself satisfies the clause. When the condition does not hold, the clause does not change the verdict.
+
+The committed Tift replay has 156 hours and a recorded night minimum of 61°F, so this condition never holds there. The before and after totals are therefore identical, which is the correct measured result:
+
+| Tift tank | Before | After |
+|---|---|---|
+| Folex + Dropp + Prep | 0 permitted, 79 field check, 77 blocked | 0 permitted, 79 field check, 77 blocked |
+| Folex alone | 0 permitted, 85 field check, 71 blocked | 0 permitted, 85 field check, 71 blocked |
+| Dropp + Prep | 17 permitted, 62 field check, 77 blocked | 17 permitted, 62 field check, 77 blocked |
+
+The cold-condition unit case uses a 56°F night low. It blocks Folex in a mixed tank, permits the same hour when Folex is the only product, and does nothing for a warm night. The results view also exposes real in-browser what-ifs: on the Tift replay, removing Folex produces 17 forecast-permitted hours in two windows of 6 and 11 hours.
 
 **Run-to-run variance.** One run is one draw, so the p2 pipeline was run three times with the same prompts at temperature 0:
 
