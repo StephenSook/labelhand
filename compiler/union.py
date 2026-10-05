@@ -48,10 +48,11 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("regs", nargs="+")
     ap.add_argument("--passes", nargs="+", default=DEFAULT_PASSES)
+    ap.add_argument("--tag", default="", help="appended to the output name")
     a = ap.parse_args()
     for reg in a.regs:
         u = union(reg, a.passes)
-        (COMPILED / f"{reg}.union.json").write_text(json.dumps(u, indent=1), encoding="utf-8")
+        (COMPILED / f"{reg}.union{a.tag}.json").write_text(json.dumps(u, indent=1), encoding="utf-8")
         both = sum(1 for r in u["accepted"] if len(r["found_by"]) > 1)
         print(f"{reg}: union {len(u['accepted'])} rules ({both} found by both passes) cost ${u['cost_usd']}")
     return 0

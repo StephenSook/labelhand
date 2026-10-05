@@ -90,6 +90,7 @@ RULE = {
 }
 SCHEMA = {"type": "object", "properties": {"rules": {"type": "array", "items": RULE}}, "required": ["rules"], "additionalProperties": False}
 
+PROMPT_VERSION = "p2"  # p2: one rule per constraint or alternative, each quoting the whole sentence
 SYSTEM = """You compile one page of a U.S. EPA pesticide label into machine-checkable rules for a spray-window planner.
 Extract every restriction or requirement that decides WHEN, WHERE or HOW the product may be applied:
 weather (wind, temperature, rain, inversion, humidity), timing and crop stage, rates and limits, intervals,
@@ -99,6 +100,9 @@ re-entry and grazing restrictions, and protective equipment.
 Rules:
 - "quote" must be copied character for character from the page text, one sentence or clause, no paraphrase.
   Never use "..." to join pieces; if a requirement spans two sentences, emit two rules.
+- One rule per constraint. If one sentence states several constraints (a height and a wind limit) or alternatives
+  (7 days at one rate, or 10 days at a higher rate), emit one rule for each, every one quoting the whole sentence,
+  and say in "summary" which constraint or alternative that rule is.
 - value and value2 are numbers exactly as written in the quote, in the quote's own unit. Never convert units
   (3 feet stays 3 with unit "feet"; one-half mile stays 0.5 with unit "mile" only if "1/2" or "0.5" is written).
   If the clause has no number, use null and op "none".
@@ -240,7 +244,7 @@ def call(model: str, page_no: int, text: str, key: str, thinking: bool) -> dict:
     return {"page": page_no, "ok": False, "secs": round(time.time() - t, 2), "error": err, "rules": []}
 
 
-def compile_label(reg: str, model: str, thinking: bool) -> dict:
+def compile_label(reg: str, model: str, thinking: bool, tag: str = "") -> dict:
     key = os.environ.get("NEBIUS_API_KEY", "").strip()
     if not key:
         raise SystemExit("NEBIUS_API_KEY missing")
@@ -271,6 +275,7 @@ def compile_label(reg: str, model: str, thinking: bool) -> dict:
         "label_url": meta["url"],
         "model": model,
         "thinking": thinking,
+        "prompt_version": PROMPT_VERSION,
         "compiled_utc": dt.datetime.now(dt.UTC).isoformat(timespec="seconds"),
         "pages": len(pages),
         "failed_pages": failed_pages,
@@ -282,7 +287,7 @@ def compile_label(reg: str, model: str, thinking: bool) -> dict:
         "rejected": rejected,
     }
     OUT.mkdir(parents=True, exist_ok=True)
-    suffix = ("" if model == DEFAULT_MODEL else "." + model.split("/")[-1]) + (".thinking" if thinking else "")
+    suffix = ("" if model == DEFAULT_MODEL else "." + model.split("/")[-1]) + (".thinking" if thinking else "") + tag
     (OUT / f"{reg}{suffix}.json").write_text(json.dumps(report, indent=1), encoding="utf-8")
     return report
 
@@ -292,10 +297,11 @@ def main() -> int:
     ap.add_argument("regs", nargs="+")
     ap.add_argument("--model", default=DEFAULT_MODEL)
     ap.add_argument("--thinking", action="store_true")
+    ap.add_argument("--tag", default="", help="appended to the output name, so prompt versions can be compared side by side")
     a = ap.parse_args()
     bad = 0
     for reg in a.regs:
-        r = compile_label(reg, a.model, a.thinking)
+        r = compile_label(reg, a.model, a.thinking, a.tag)
         n_acc, n_rej = len(r["accepted"]), len(r["rejected"])
         reasons: dict[str, int] = {}
         for x in r["rejected"]:
