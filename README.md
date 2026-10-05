@@ -70,6 +70,16 @@ Coverage held, but run 3 missed an acting clause. Folex's "When minimum night te
 
 **Tried and rejected: three typing votes.** Typing every rule three times and keeping it acting if any vote said MUST (`compiler/retype.py --votes 3`) cost about three times as much ($0.93 to $0.99 per run against $0.32) and changed nothing that matters: acting recall stayed 1.0, 1.0, 0.9, because in run 3 all three votes typed the Folex clause ADVISORY. Value exact fell on two of the three runs. Results are in `eval/results/p2*_union_typed_v3k3.json`. The option stays in the code with a default of one vote.
 
+**Kept: EPA's own rule, in code.** EPA's PR Notice 2000-5 says mandatory label statements "are generally written in imperative or directive terms (such as "shall," "must," "do this," "do not")", and that a heading sets a statement's intent. `compiler/modality.py` applies that after typing, with no model call: an ADVISORY rule on a weather parameter the planner acts on is raised to MUST or MUST_NOT when its sentence is a prohibition, or a directive that gates the application itself ("use FOLEX 6 EC alone", "apply only when"), has no suggestive term (should, may, recommend), and does not sit in the label's SPRAY DRIFT ADVISORIES section. It never lowers a modality and keeps the model's answer next to its own. "Applicators must use 1/2 swath displacement" is mandatory but is a technique, not a weather limit, so it is left alone. Across the three runs it raised one rule per run, the Folex night-temperature clause, and nothing else:
+
+| p2 run, with the modality floor | Coverage | Value exact | Modality | Acting precision | Acting recall |
+|---|---|---|---|---|---|
+| 1 | 0.957 | 0.941 | 0.841 | 1.000 (11/11) | 1.000 (10/10) |
+| 2 | 0.957 | 0.971 | 0.886 | 1.000 (12/12) | 1.000 (10/10) |
+| 3 | 0.957 | 0.941 | 0.886 | 1.000 (11/11) | **1.000 (10/10)** |
+
+Command: `python compiler/modality.py 5481-504 264-700 264-418 --suffix .union.p2.typed.v3 --tag .mf`, then `python eval/score.py --suffix .union.p2.typed.v3.mf`. Results: `eval/results/p2*_union_typed_v3mf.json`.
+
 What the guards caught, in a real run:
 - The Folex label sets two restricted-entry intervals: **7 days** at rates at or below 0.75 lb ai/A and **10 days** above that rate. The model spliced the sentence with "..." into a single 10-day rule and dropped the rate condition. Rejected, because a spliced quote is not what the label says.
 - The model converted 3 feet to 36 inches and one-half mile to 2,640 feet. Conversions belong in code, so `restore_units` now maps such a value back to the number and unit in the quote when it can reproduce the conversion exactly, and records what it undid. Anything it cannot reproduce is still rejected by the number guard.
