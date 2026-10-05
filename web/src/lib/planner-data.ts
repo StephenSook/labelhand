@@ -16,6 +16,7 @@ export type ForecastPoints = Record<string, ForecastPoint>;
 export type LabelRecord = {
   reg: string;
   product: string;
+  shortName: string;
   accepted: string;
   url: string;
   bytes: number;
@@ -108,6 +109,7 @@ export function parseLabelIndex(value: unknown): LabelIndex {
     if (
       typeof reg === "string" &&
       typeof candidate.product === "string" &&
+      typeof candidate.shortName === "string" &&
       typeof candidate.accepted === "string" &&
       typeof candidate.url === "string" &&
       typeof candidate.bytes === "number" &&
@@ -116,6 +118,7 @@ export function parseLabelIndex(value: unknown): LabelIndex {
       labels[reg] = {
         reg,
         product: candidate.product,
+        shortName: candidate.shortName,
         accepted: candidate.accepted,
         url: candidate.url,
         bytes: candidate.bytes,

@@ -9,7 +9,7 @@ import {
 
 type TimelineProps = {
   hours: PlannerHour[];
-  products: string[];
+  products: Array<{ fullName: string; shortName: string; reg?: string }>;
   selectedIndex: number | null;
   onSelect: (index: number) => void;
 };
@@ -167,6 +167,10 @@ export function Timeline({ hours, products, selectedIndex, onSelect }: TimelineP
   const refs = useRef<Array<HTMLButtonElement | null>>([]);
   const today = dayKey.format(new Date());
   const hasToday = groups.some((group) => group.key === today);
+  const productNames = useMemo(
+    () => new Map(products.map((product) => [product.fullName, product.shortName])),
+    [products],
+  );
 
   function moveFocus(index: number, delta: number) {
     const next = Math.max(0, Math.min(hours.length - 1, index + delta));
@@ -250,7 +254,7 @@ export function Timeline({ hours, products, selectedIndex, onSelect }: TimelineP
                 </div>
 
                 {products.map((product) => (
-                  <ProductLane key={product} product={product} entries={group.hours} />
+                  <ProductLane key={product.fullName} product={product} entries={group.hours} />
                 ))}
               </div>
 
@@ -294,7 +298,8 @@ export function Timeline({ hours, products, selectedIndex, onSelect }: TimelineP
                               <span className="block text-sm font-black leading-snug">{runLabel(run)}</span>
                               {run.bindingProducts.length > 0 && (
                                 <span className="mt-1 block break-words text-xs font-semibold leading-snug text-[#14213d]/75">
-                                  {run.bindingProducts.join(", ")}{citation?.why ? `: ${citation.why}` : ""}
+                                  {run.bindingProducts.map((product) => productNames.get(product) ?? product).join(", ")}
+                                  {citation?.why ? `: ${citation.why}` : ""}
                                 </span>
                               )}
                             </span>
@@ -314,18 +319,27 @@ export function Timeline({ hours, products, selectedIndex, onSelect }: TimelineP
 }
 
 function ProductLane({ product, entries }: {
-  product: string;
+  product: { fullName: string; shortName: string; reg?: string };
   entries: HourEntry[];
 }) {
+  const description = product.reg
+    ? `${product.fullName}, EPA Reg. ${product.reg}`
+    : product.fullName;
   return (
     <div className="timeline-grid mt-1 grid min-w-0">
-      <span className="self-center truncate pr-1 text-[0.55rem] font-bold lg:text-xs" title={product}>{product}</span>
+      <span
+        className="self-center truncate pr-1 text-[0.55rem] font-bold lg:text-xs"
+        title={description}
+        aria-label={description}
+      >
+        {product.shortName}
+      </span>
       {entries.map(({ hour }) => {
-        const state = productState(hour, product);
+        const state = productState(hour, product.fullName);
         return (
           <span
-            key={`${product}-${hour.start}`}
-            title={`${product}: ${state === "blocked" ? "BLOCKED" : state === "check" ? "FIELD CHECK" : "No controlling clause"}`}
+            key={`${product.fullName}-${hour.start}`}
+            title={`${description}: ${state === "blocked" ? "BLOCKED" : state === "check" ? "FIELD CHECK" : "No controlling clause"}`}
             style={{ gridColumn: localHour(hour.start) + 2 }}
             className={`flex min-h-6 min-w-0 items-center justify-center overflow-hidden rounded-sm border text-[0.55rem] font-black ${
               state === "blocked"

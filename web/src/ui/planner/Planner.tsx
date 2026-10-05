@@ -201,7 +201,14 @@ export function Planner({ initialField, initialTank, initialReplay }: PlannerPro
 
   const pointEntries = useMemo(() => points ? orderedPointEntries(points) : [], [points]);
   const selectedProducts = result && labels
-    ? result.ruleGroups.map((group) => group.product)
+    ? result.ruleGroups.map((group) => {
+        const label = Object.values(labels).find((candidate) => candidate.product === group.product);
+        return {
+          fullName: group.product,
+          shortName: label?.shortName ?? group.product,
+          reg: label?.reg,
+        };
+      })
     : [];
   const usedRules = result?.ruleGroups.flatMap((group) => group.used) ?? [];
   const windows = result ? forecastPermittedWindows(result.hours, jobHours) : [];
@@ -313,10 +320,20 @@ export function Planner({ initialField, initialTank, initialReplay }: PlannerPro
                   const label = labels?.[reg];
                   const checked = selectedRegs.has(reg);
                   return (
-                    <label key={reg} className={`flex min-h-20 cursor-pointer items-center gap-3 rounded-2xl border-2 border-[#14213d] px-3 py-3 font-bold outline-offset-2 has-[:focus-visible]:outline has-[:focus-visible]:outline-[3px] has-[:focus-visible]:outline-[#2f8f4e] ${checked ? "bg-[#216a38] text-white" : "bg-white"}`}>
-                      <input type="checkbox" checked={checked} onChange={() => toggleProduct(reg)} className="size-6 shrink-0 accent-[#ffc53d]" />
+                    <label
+                      key={reg}
+                      title={label ? `${label.product}, EPA Reg. ${reg}` : undefined}
+                      className={`flex min-h-20 cursor-pointer items-center gap-3 rounded-2xl border-2 border-[#14213d] px-3 py-3 font-bold outline-offset-2 has-[:focus-visible]:outline has-[:focus-visible]:outline-[3px] has-[:focus-visible]:outline-[#2f8f4e] ${checked ? "bg-[#216a38] text-white" : "bg-white"}`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => toggleProduct(reg)}
+                        aria-label={label ? `${label.shortName}, ${label.product}, EPA Reg. ${reg}` : `EPA Reg. ${reg}`}
+                        className="size-6 shrink-0 accent-[#ffc53d]"
+                      />
                       <span>
-                        <span className="block leading-tight">{label?.product ?? reg}</span>
+                        <span className="block leading-tight">{label?.shortName ?? reg}</span>
                         <span className="mt-1 block text-xs">EPA Reg. {reg}</span>
                       </span>
                     </label>
@@ -475,7 +492,7 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
   pointName: string;
   jobHours: number;
   windows: PlannerWindow[];
-  products: string[];
+  products: Array<{ fullName: string; shortName: string; reg?: string }>;
   usedRules: PlannerRule[];
   selectedHour: number | null;
   onSelectHour: (index: number) => void;

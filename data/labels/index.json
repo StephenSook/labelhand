@@ -2,6 +2,7 @@
  "5481-504": {
   "reg": "5481-504",
   "product": "FOLEX\u00ae 6 EC",
+  "shortName": "Folex 6 EC",
   "accepted": "2026-03-04",
   "url": "https://www3.epa.gov/pesticides/chem_search/ppls/005481-00504-20260304.pdf",
   "file": "data/labels/005481-00504-20260304.pdf",
@@ -13,6 +14,7 @@
  "264-700": {
   "reg": "264-700",
   "product": "DROPP SC COTTON DEFOLIANT",
+  "shortName": "Dropp SC",
   "accepted": "2009-12-14",
   "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000264-00700-20091214.pdf",
   "file": "data/labels/000264-00700-20091214.pdf",
@@ -24,6 +26,7 @@
  "264-418": {
   "reg": "264-418",
   "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
+  "shortName": "Prep",
   "accepted": "2021-02-24",
   "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000264-00418-20210224.pdf",
   "file": "data/labels/000264-00418-20210224.pdf",

@@ -20,6 +20,7 @@ import { ShowOnLabel } from "@/ui/ShowOnLabel";
 type Scenario = {
   id: string;
   label: string;
+  accessibleLabel: string;
   detail: string;
   rules: PlannerRule[];
 };
@@ -45,14 +46,19 @@ function blockedByRule(hours: PlannerHour[], rule: PlannerRule, product: string)
   ));
 }
 
-function whatIfScenarios(hours: PlannerHour[], ruleGroups: FilteredRules[]): Scenario[] {
+function productShortName(product: string, labels: LabelIndex): string {
+  return Object.values(labels).find((label) => label.product === product)?.shortName ?? product;
+}
+
+function whatIfScenarios(hours: PlannerHour[], ruleGroups: FilteredRules[], labels: LabelIndex): Scenario[] {
   const scenarios: Scenario[] = [];
   for (const group of ruleGroups) {
     for (const [index, rule] of group.used.entries()) {
       if (!isTankCompositionRule(rule) || !blockedByRule(hours, rule, group.product)) continue;
       scenarios.push({
         id: `alone-${group.product}-${rule.id}-${index}`,
-        label: `Check ${group.product} alone`,
+        label: `Check ${productShortName(group.product, labels)} alone`,
+        accessibleLabel: `Check ${group.product}, EPA Reg. ${rule.reg ?? "not supplied"}, alone`,
         detail: `Page ${String(rule.page)} says to use it alone when the clause's temperature condition holds.`,
         rules: group.used,
       });
@@ -67,8 +73,9 @@ function whatIfScenarios(hours: PlannerHour[], ruleGroups: FilteredRules[]): Sce
       if (remaining.length === 0) continue;
       scenarios.push({
         id: `without-${impact.product}`,
-        label: `Check without ${impact.product}`,
-        detail: `${impact.product} keeps ${impact.hourCount} forecast hours from the permitted state in this run.`,
+        label: `Check without ${productShortName(impact.product, labels)}`,
+        accessibleLabel: `Check without ${impact.product}, EPA Reg. ${Object.values(labels).find((label) => label.product === impact.product)?.reg ?? "not supplied"}`,
+        detail: `${productShortName(impact.product, labels)} keeps ${impact.hourCount} forecast hours from the permitted state in this run.`,
         rules: remaining.flatMap((group) => group.used),
       });
     }
@@ -89,7 +96,7 @@ function windowLabel(start: string, end: string): string {
 
 export function WhyFewWindows({ hours, ruleGroups, periods, lat, lon, jobHours, labels }: WhyFewWindowsProps) {
   const clauses = rankLimitingClauses(hours).slice(0, 3);
-  const scenarios = whatIfScenarios(hours, ruleGroups);
+  const scenarios = whatIfScenarios(hours, ruleGroups, labels);
   const [outcomes, setOutcomes] = useState<Record<string, Outcome>>({});
 
   async function runScenario(scenario: Scenario) {
@@ -134,7 +141,13 @@ export function WhyFewWindows({ hours, ruleGroups, periods, lat, lon, jobHours, 
           return (
           <li data-quote-card key={`${clause.product}-${clause.rule}-${clause.quote}`} className="rounded-2xl border-2 border-[#14213d] bg-[#fbf7ee] p-4">
             <p className="text-xs font-black uppercase tracking-[0.12em]">{clause.hourCount} {clause.hourCount === 1 ? "hour" : "hours"}</p>
-            <p className="mt-2 font-black">{clause.product} · Page {String(clause.page)}</p>
+            <p
+              className="mt-2 font-black"
+              title={label ? `${label.product}, EPA Reg. ${label.reg}` : clause.product}
+              aria-label={label ? `${label.shortName}, ${label.product}, EPA Reg. ${label.reg}, page ${String(clause.page)}` : `${clause.product}, page ${String(clause.page)}`}
+            >
+              {productShortName(clause.product, labels)} · Page {String(clause.page)}
+            </p>
             <blockquote className="mt-3 border-l-4 border-[#8a5a2b] pl-3 text-sm font-semibold leading-relaxed">
               &quot;{clause.quote}&quot;
             </blockquote>
@@ -165,6 +178,7 @@ export function WhyFewWindows({ hours, ruleGroups, periods, lat, lon, jobHours, 
                 <li key={scenario.id} className="rounded-2xl border-2 border-[#14213d] bg-white p-4">
                   <button
                     type="button"
+                    aria-label={scenario.accessibleLabel}
                     disabled={outcome?.state === "running"}
                     onClick={() => void runScenario(scenario)}
                     className="min-h-12 rounded-full border-[3px] border-[#14213d] bg-[#ffc53d] px-5 font-black shadow-[3px_4px_0_#14213d] outline-offset-2 transition-transform hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#216a38] disabled:cursor-wait disabled:opacity-60"

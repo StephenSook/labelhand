@@ -63,6 +63,7 @@ async function writeLabelIndex() {
     return {
       reg: label.reg,
       product: label.product,
+      shortName: label.shortName,
       accepted: label.accepted,
       url: label.url,
       bytes: label.bytes,
