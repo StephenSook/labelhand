@@ -1,0 +1,21 @@
+[project]
+name = "labelhand"
+version = "0.1.0"
+description = "Compiles EPA pesticide labels into clause-cited rules and finds the hours every label in a tank mix allows spraying."
+requires-python = ">=3.12"
+license = "Apache-2.0"
+dependencies = ["pypdf>=5", "pdfminer.six>=20240706"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[tool.ruff]
+line-length = 180
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["compiler", "engine", "tools"]

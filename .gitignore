@@ -1,0 +1,27 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+# Secrets: never committed; see .env.example
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+# Local data that grows hourly; published as release artifacts instead
+data/nws_recorded/
+data/*.log
+data/compile_run*.log
+data/windows_*.txt
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# EPA label PDFs are fetched from EPA PPLS at run time (tools/ppls_fetch.py), not redistributed
+data/labels/*.pdf

@@ -1,0 +1,162 @@
+{
+  "tift": {
+    "stations": [
+      "KMGR",
+      "KABY",
+      "KVAD",
+      "KTVI"
+    ],
+    "lat": 31.4,
+    "lon": -83.6,
+    "gridId": "TAE",
+    "gridX": 106,
+    "gridY": 131,
+    "forecastHourly": "https://api.weather.gov/gridpoints/TAE/106,131/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/TAE/106,131",
+    "station": "KMGR"
+  },
+  "worth": {
+    "stations": [
+      "KABY",
+      "KMGR",
+      "KTVI",
+      "KVAD"
+    ],
+    "lat": 31.5,
+    "lon": -83.9,
+    "gridId": "TAE",
+    "gridX": 95,
+    "gridY": 134,
+    "forecastHourly": "https://api.weather.gov/gridpoints/TAE/95,134/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/TAE/95,134",
+    "station": "KABY"
+  },
+  "ben_hill": {
+    "stations": [
+      "KDQH",
+      "KVAD",
+      "KABY",
+      "KMGR"
+    ],
+    "lat": 31.75,
+    "lon": -83.3,
+    "gridId": "TAE",
+    "gridX": 116,
+    "gridY": 147,
+    "forecastHourly": "https://api.weather.gov/gridpoints/TAE/116,147/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/TAE/116,147",
+    "station": "KDQH"
+  },
+  "colquitt": {
+    "stations": [
+      "KMGR",
+      "KTVI",
+      "KABY",
+      "KVAD"
+    ],
+    "lat": 31.15,
+    "lon": -83.85,
+    "gridId": "TAE",
+    "gridX": 98,
+    "gridY": 119,
+    "forecastHourly": "https://api.weather.gov/gridpoints/TAE/98,119/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/TAE/98,119",
+    "station": "KMGR"
+  },
+  "mitchell": {
+    "stations": [
+      "KABY",
+      "KMGR",
+      "KTVI",
+      "KBIJ"
+    ],
+    "lat": 31.25,
+    "lon": -84.25,
+    "gridId": "TAE",
+    "gridX": 82,
+    "gridY": 122,
+    "forecastHourly": "https://api.weather.gov/gridpoints/TAE/82,122/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/TAE/82,122",
+    "station": "KABY"
+  },
+  "dooly": {
+    "stations": [
+      "KCKF",
+      "KACJ",
+      "KPXE",
+      "KWRB"
+    ],
+    "lat": 32.1,
+    "lon": -83.85,
+    "gridId": "FFC",
+    "gridX": 76,
+    "gridY": 16,
+    "forecastHourly": "https://api.weather.gov/gridpoints/FFC/76,16/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/FFC/76,16",
+    "station": "KCKF"
+  },
+  "coffee": {
+    "stations": [
+      "KDQH",
+      "KFZG",
+      "KTMA",
+      "KAYS"
+    ],
+    "lat": 31.5,
+    "lon": -82.95,
+    "gridId": "JAX",
+    "gridX": 12,
+    "gridY": 111,
+    "forecastHourly": "https://api.weather.gov/gridpoints/JAX/12,111/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/JAX/12,111",
+    "station": "KDQH"
+  },
+  "irwin": {
+    "stations": [
+      "KDQH",
+      "KVAD",
+      "KMGR",
+      "KAYS"
+    ],
+    "lat": 31.58,
+    "lon": -83.2,
+    "gridId": "TAE",
+    "gridX": 121,
+    "gridY": 140,
+    "forecastHourly": "https://api.weather.gov/gridpoints/TAE/121,140/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/TAE/121,140",
+    "station": "KDQH"
+  },
+  "berrien": {
+    "stations": [
+      "KVAD",
+      "KDQH",
+      "KMGR",
+      "KVLD"
+    ],
+    "lat": 31.25,
+    "lon": -83.3,
+    "gridId": "TAE",
+    "gridX": 118,
+    "gridY": 125,
+    "forecastHourly": "https://api.weather.gov/gridpoints/TAE/118,125/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/TAE/118,125",
+    "station": "KVAD"
+  },
+  "cook": {
+    "stations": [
+      "KVAD",
+      "KMGR",
+      "KVLD",
+      "KTVI"
+    ],
+    "lat": 31.1,
+    "lon": -83.45,
+    "gridId": "TAE",
+    "gridX": 113,
+    "gridY": 118,
+    "forecastHourly": "https://api.weather.gov/gridpoints/TAE/113,118/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/TAE/113,118",
+    "station": "KVAD"
+  }
+}
