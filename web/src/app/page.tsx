@@ -59,7 +59,7 @@ export default function HomePage() {
             <div className="hero-actions">
               <SquashButton href="/app">Check a tank</SquashButton>
               <SquashButton href="/judge" icon="1-3" variant="secondary">
-                Three-minute judge route
+                Five-minute judge route
               </SquashButton>
             </div>
             <p className="hero-source">Sources shown in the planner: EPA Pesticide Product Label System and api.weather.gov.</p>
@@ -97,9 +97,9 @@ export default function HomePage() {
             {measured.map((metric) => (
               <div key={metric.label} data-measured-metric={metric.label}>
                 <dt>{metric.label}</dt>
-                <dd className="display">
-                  {formatPercent(metric.value)}
-                  <span>{metric.numerator}/{metric.denominator}</span>
+                <dd>
+                  <span className="display measured-value">{formatPercent(metric.value)}</span>
+                  <span className="measured-fraction">{metric.numerator}/{metric.denominator}</span>
                 </dd>
               </div>
             ))}

@@ -500,8 +500,9 @@ a {
 .measured-grid div:nth-child(1) { transform: rotate(-1deg); }
 .measured-grid div:nth-child(3) { transform: rotate(1deg); }
 .measured-grid dt { font-size: 0.78rem; font-weight: 850; letter-spacing: 0.08em; text-transform: uppercase; }
-.measured-grid dd { color: var(--field-deep); font-size: clamp(3rem, 7vw, 6rem); margin: 0.7rem 0 0; }
-.measured-grid span { color: var(--ink-soft); display: block; font-size: 1.15rem; font-weight: 850; margin-top: 0.35rem; }
+.measured-grid dd { margin: 0.7rem 0 0; }
+.measured-grid .measured-value { color: var(--field-deep); display: block; font-size: clamp(3rem, 7vw, 6rem); }
+.measured-grid .measured-fraction { color: var(--ink-soft); display: block; font-size: 1.15rem; font-weight: 850; margin-top: 0.35rem; }
 .measured-link { margin-top: 2rem; }
 
 .architecture-card { border: 3px solid var(--ink); }
