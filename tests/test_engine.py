@@ -106,10 +106,26 @@ def test_must_rain_rule_blocks_like_must_not():
     assert windows.evaluate([must], [hour(NOON, 75, True, pop=80)], LAT, LON, 1)[0]["state"] == "BLOCKED"
 
 
-def test_acting_clause_the_kernel_cannot_evaluate_is_a_field_check_not_silence():
+def test_acting_temperature_clause_is_a_field_check_only_when_its_condition_holds():
     hot = r("air_temperature_f", "gt", 90, "MUST_NOT", "Do not apply when temperatures exceed 90F.", "t-7")
-    out = windows.evaluate([hot], [hour(NOON, 75, True)], LAT, LON, 1)[0]
-    assert out["state"] == "FIELD_CHECK" and "does not evaluate it yet" in out["checks"][0]["why"]
+    assert windows.evaluate([hot], [hour(NOON, 75, True)], LAT, LON, 1)[0]["state"] == "PERMITTED"
+    out = windows.evaluate([hot], [hour(NOON, 95, True)], LAT, LON, 1)[0]
+    assert out["state"] == "FIELD_CHECK" and out["checks"][0]["why"].startswith("forecast temperature now 95 F > 90 F")
+
+
+def test_cold_night_sends_a_must_tank_mix_clause_to_field_check():
+    alone = r("night_temperature_f", "lt", 60, "MUST", "When minimum night temperature is below 60F use FOLEX 6 EC alone.", "t-12")
+    ps = [hour(NOON, 72, True), hour("2026-10-08T02:00:00-04:00", 56, False)]
+    out = windows.evaluate([alone], ps, LAT, LON, 1)[0]
+    assert out["state"] == "FIELD_CHECK" and "night low 56 F < 60 F" in out["checks"][0]["why"]
+    warm = [hour(NOON, 72, True), hour("2026-10-08T02:00:00-04:00", 64, False)]
+    assert windows.evaluate([alone], warm, LAT, LON, 1)[0]["state"] == "PERMITTED"
+
+
+def test_a_topic_the_kernel_has_no_logic_for_is_never_silent():
+    rh = r("relative_humidity_pct", "lt", 40, "MUST_NOT", "Do not apply when relative humidity is below 40%.", "t-13")
+    verdict = windows.gate(rh, 0, [hour(NOON, 75, True)], 5.0, 50.0)
+    assert verdict[0] == "FIELD_CHECK" and "does not evaluate it yet" in verdict[1]
 
 
 def test_less_than_ten_blocks_at_exactly_ten():

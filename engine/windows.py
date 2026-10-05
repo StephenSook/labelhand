@@ -124,6 +124,34 @@ def holds(x: float, op: str, v: float) -> bool:
     return {"lt": x < v, "lte": x <= v, "gt": x > v, "gte": x >= v}[op]
 
 
+TEMPERATURE = ("night_temperature_f", "air_temperature_f")
+
+
+def temperature_condition(r: dict, i: int, periods: list[dict]) -> str | None:
+    """Why the temperature condition a clause names holds in the forecast from hour i, or None.
+
+    Night clauses read the lowest night-time temperature, "mean" clauses the forecast mean, others this hour,
+    always over the next ADVISORY_HOURS hours that the forecast covers.
+    """
+    if r["value"] is None or r["op"] not in SYMBOL:
+        return None
+    v = float(r["value"])
+    ahead = periods[i : i + ADVISORY_HOURS]
+    if r["param"] == "night_temperature_f":
+        temps = [q["temperature"] for q in ahead if q.get("isDaytime") is False and q.get("temperature") is not None]
+        x, what = (min(temps), "night low") if temps else (None, "")
+    else:
+        temps = [q["temperature"] for q in ahead if q.get("temperature") is not None]
+        if "mean" in r["quote"].lower():
+            x, what = (sum(temps) / len(temps), "mean") if temps else (None, "")
+        else:
+            x, what = (float(temps[0]), "temperature now") if temps else (None, "")
+    if x is None or not holds(x, r["op"], v):
+        return None
+    span = "this hour" if what == "temperature now" else f"over the next {len(ahead)} h"
+    return f"forecast {what} {x:.0f} F {SYMBOL[r['op']]} {v:g} F {span}"
+
+
 def advisory(r: dict, i: int, periods: list[dict], wind: float = math.nan) -> str | None:
     """Why the weather condition an ADVISORY clause names holds in the forecast at hour i, or None.
 
@@ -142,21 +170,9 @@ def advisory(r: dict, i: int, periods: list[dict], wind: float = math.nan) -> st
     if r["value"] is None:
         return None
     v = float(r["value"])
-    ahead = periods[i : i + ADVISORY_HOURS]
-    if r["param"] in ("night_temperature_f", "air_temperature_f") and r["op"] in SYMBOL:
-        if r["param"] == "night_temperature_f":
-            temps = [q["temperature"] for q in ahead if q.get("isDaytime") is False and q.get("temperature") is not None]
-            x, what = (min(temps), "night low") if temps else (None, "")
-        else:
-            temps = [q["temperature"] for q in ahead if q.get("temperature") is not None]
-            if "mean" in r["quote"].lower():
-                x, what = (sum(temps) / len(temps), "mean") if temps else (None, "")
-            else:
-                x, what = (float(temps[0]), "temperature now") if temps else (None, "")
-        if x is not None and holds(x, r["op"], v):
-            span = "this hour" if what == "temperature now" else f"over the next {len(ahead)} h"
-            return f"forecast {what} {x:.0f} F {SYMBOL[r['op']]} {v:g} F {span}"
-    elif r["param"] in ("rain_free_hours", "rainfall_expected"):
+    if r["param"] in TEMPERATURE:
+        return temperature_condition(r, i, periods)
+    if r["param"] in ("rain_free_hours", "rainfall_expected"):
         n = int(v)
         pop = max_pop(periods[i : i + n + 1])
         if pop >= RAIN_UNSURE_POP:
@@ -217,6 +233,16 @@ def gate(r: dict, i: int, periods: list[dict], wind: float, alt: float) -> tuple
             return "BLOCKED", f"rain chance up to {pop}% within {n} h (rain expected = {RAIN_EXPECTED_POP}%+)"
         if pop >= RAIN_UNSURE_POP:
             return "FIELD_CHECK", f"rain chance up to {pop}% within {n} h"
+        return None
+    if param in TEMPERATURE:
+        # The typing model is not consistent about which side of a temperature threshold a clause forbids, so a
+        # MUST or MUST_NOT temperature clause whose named condition holds is a field check that quotes the clause,
+        # never a silent pass and never a guessed block.
+        why = temperature_condition(r, i, periods)
+        if why:
+            return "FIELD_CHECK", f"{why}: the label sets a requirement at this temperature"
+        if r["value"] is None or r["op"] not in SYMBOL:
+            return "FIELD_CHECK", "temperature clause the planner cannot read as a limit; check the label on site"
         return None
     return "FIELD_CHECK", f"{param} limit on the label; the planner does not evaluate it yet, check it on site"
 
