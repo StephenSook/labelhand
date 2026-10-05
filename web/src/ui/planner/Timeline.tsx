@@ -14,10 +14,17 @@ type TimelineProps = {
   onSelect: (index: number) => void;
 };
 
+type HourEntry = { hour: PlannerHour; index: number };
+
 type DayGroup = {
   key: string;
   label: string;
-  hours: Array<{ hour: PlannerHour; index: number }>;
+  hours: HourEntry[];
+};
+
+type DayRun = {
+  entries: HourEntry[];
+  bindingProducts: string[];
 };
 
 const dayKey = new Intl.DateTimeFormat("en-CA", {
@@ -40,9 +47,22 @@ const hourLabel = new Intl.DateTimeFormat("en-US", {
   hour: "numeric",
 });
 
-const shortHour = new Intl.DateTimeFormat("en-US", {
+const compactHour = new Intl.DateTimeFormat("en-US", {
   timeZone: "America/New_York",
   hour: "numeric",
+  hour12: true,
+});
+
+const runHour = new Intl.DateTimeFormat("en-US", {
+  timeZone: "America/New_York",
+  hour: "numeric",
+  hour12: true,
+});
+
+const hourColumn = new Intl.DateTimeFormat("en-US", {
+  timeZone: "America/New_York",
+  hour: "numeric",
+  hourCycle: "h23",
 });
 
 function groupByDay(hours: PlannerHour[]): DayGroup[] {
@@ -66,20 +86,47 @@ function stateClass(state: PlannerHour["state"]): string {
   return "border-[#155b2c] bg-[#216a38] text-white";
 }
 
+function summaryStateClass(state: PlannerHour["state"]): string {
+  if (state === "BLOCKED") return "bg-[#d1433f] text-white";
+  if (state === "FIELD_CHECK") return "bg-[#ffc53d] text-[#14213d]";
+  return "bg-[#216a38] text-white";
+}
+
 function abbreviation(state: PlannerHour["state"]): string {
   if (state === "BLOCKED") return "BLOCK";
   if (state === "FIELD_CHECK") return "CHECK";
   return "OK";
 }
 
+function bindingCitations(hour: PlannerHour): PlannerHour["blocked"] {
+  if (hour.state === "BLOCKED") return hour.blocked;
+  if (hour.state === "FIELD_CHECK") return hour.checks;
+  return [];
+}
+
+function bindingProducts(hour: PlannerHour): string[] {
+  return [...new Set(bindingCitations(hour).map((citation) => citation.product))].sort();
+}
+
 function accessibleHourName(hour: PlannerHour): string {
   const time = hourLabel.format(new Date(hour.start));
-  const citation = hour.blocked[0] ?? hour.checks[0];
-  if (citation) {
-    const connector = hour.state === "BLOCKED" ? "by" : "for";
-    return `${time}, ${displayState(hour.state)} ${connector} ${citation.product} page ${citation.page}`;
-  }
-  return `${time}, ${displayState(hour.state)}`;
+  const clauses = bindingCitations(hour)
+    .map((citation) => `${citation.product}: ${citation.quote}`)
+    .join("; ");
+  return clauses
+    ? `${time}, ${displayState(hour.state)}. ${clauses}`
+    : `${time}, ${displayState(hour.state)}`;
+}
+
+function compactHourLabel(value: string): string {
+  const parts = compactHour.formatToParts(new Date(value));
+  const hour = parts.find((part) => part.type === "hour")?.value ?? "";
+  const period = parts.find((part) => part.type === "dayPeriod")?.value.at(0)?.toLowerCase() ?? "";
+  return `${hour}${period}`;
+}
+
+function localHour(value: string): number {
+  return Number(hourColumn.format(new Date(value)));
 }
 
 function productState(hour: PlannerHour, product: string): "blocked" | "check" | "clear" {
@@ -88,9 +135,38 @@ function productState(hour: PlannerHour, product: string): "blocked" | "check" |
   return "clear";
 }
 
+function groupRuns(entries: HourEntry[]): DayRun[] {
+  const runs: DayRun[] = [];
+  for (const entry of entries) {
+    const products = bindingProducts(entry.hour);
+    const current = runs.at(-1);
+    if (
+      !current
+      || current.entries[0].hour.state !== entry.hour.state
+      || current.bindingProducts.length !== products.length
+      || current.bindingProducts.some((product, index) => product !== products[index])
+    ) {
+      runs.push({ entries: [entry], bindingProducts: products });
+    } else {
+      current.entries.push(entry);
+    }
+  }
+  return runs;
+}
+
+function runLabel(run: DayRun): string {
+  const first = run.entries[0].hour;
+  const last = run.entries.at(-1)?.hour ?? first;
+  const end = new Date(new Date(last.start).getTime() + 60 * 60 * 1000);
+  const length = run.entries.length;
+  return `${runHour.format(new Date(first.start))} to ${runHour.format(end)} · ${displayState(first.state)} · ${length} h`;
+}
+
 export function Timeline({ hours, products, selectedIndex, onSelect }: TimelineProps) {
   const groups = useMemo(() => groupByDay(hours), [hours]);
   const refs = useRef<Array<HTMLButtonElement | null>>([]);
+  const today = dayKey.format(new Date());
+  const hasToday = groups.some((group) => group.key === today);
 
   function moveFocus(index: number, delta: number) {
     const next = Math.max(0, Math.min(hours.length - 1, index + delta));
@@ -113,19 +189,27 @@ export function Timeline({ hours, products, selectedIndex, onSelect }: TimelineP
       </div>
 
       <p className="mt-3 max-w-3xl font-semibold text-[#14213d]/75">
-        Use the arrow keys to move between hours. Each product lane shows which label controls an hour.
+        <span className="hidden md:inline">Use the arrow keys to move between hours. Each product lane shows which label controls an hour.</span>
+        <span className="md:hidden">Open a day to review its runs. Tap a run to see the forecast and exact label clauses.</span>
       </p>
 
       <div className="mt-5 space-y-5">
-        {groups.map((group) => (
-          <section key={group.key} className="overflow-hidden rounded-[1.6rem] border-[3px] border-[#14213d] bg-[#fbf7ee] shadow-[5px_6px_0_#14213d]">
-            <h3 className="border-b-[3px] border-[#14213d] bg-[#9fd3f2] px-4 py-2 font-extrabold">
-              {group.label}
-            </h3>
-            <div className="overflow-x-auto p-3" tabIndex={0} aria-label={`${group.label} timeline`}>
-              <div className="min-w-max">
-                <div className="grid gap-1" style={{ gridTemplateColumns: `10rem repeat(${group.hours.length}, 2.75rem)` }}>
-                  <span className="self-center text-xs font-extrabold uppercase tracking-[0.12em]">Combined state</span>
+        {groups.map((group, groupIndex) => {
+          const runs = groupRuns(group.hours);
+          return (
+            <section
+              key={group.key}
+              data-day={group.key}
+              data-day-hours={group.hours.length}
+              className="min-w-0 overflow-hidden rounded-[1.6rem] border-[3px] border-[#14213d] bg-[#fbf7ee] shadow-[5px_6px_0_#14213d]"
+            >
+              <h3 className="hidden border-b-[3px] border-[#14213d] bg-[#9fd3f2] px-4 py-2 font-extrabold md:block">
+                {group.label}
+              </h3>
+
+              <div className="hidden min-w-0 p-2 md:block" aria-label={`${group.label} timeline`}>
+                <div className="timeline-grid grid min-w-0">
+                  <span className="self-center truncate pr-1 text-[0.58rem] font-extrabold uppercase tracking-[0.04em] lg:text-xs lg:tracking-[0.1em]">Combined</span>
                   {group.hours.map(({ hour, index }) => (
                     <button
                       key={hour.start}
@@ -155,22 +239,75 @@ export function Timeline({ hours, products, selectedIndex, onSelect }: TimelineP
                           moveFocus(index, hours.length - 1 - index);
                         }
                       }}
-                      className={`min-h-14 rounded-xl border-2 px-0.5 text-center outline-offset-2 transition-transform focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#14213d] ${stateClass(hour.state)} ${selectedIndex === index ? "-translate-y-1 ring-[3px] ring-[#14213d]" : "hover:-translate-y-0.5"}`}
+                      style={{ gridColumn: localHour(hour.start) + 2 }}
+                      className={`grid min-h-14 min-w-0 place-content-center overflow-hidden rounded-md border px-px text-center outline-offset-1 transition-transform focus-visible:z-10 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#14213d] ${stateClass(hour.state)} ${selectedIndex === index ? "z-10 -translate-y-1 ring-2 ring-[#14213d]" : "hover:-translate-y-0.5"}`}
                     >
-                      <span aria-hidden="true" className="block text-base font-black leading-none">{stateIcon(hour.state)}</span>
-                      <span aria-hidden="true" className="mt-1 block text-[0.58rem] font-black leading-none">{abbreviation(hour.state)}</span>
-                      <span aria-hidden="true" className="mt-1 block text-[0.62rem] font-bold leading-none">{shortHour.format(new Date(hour.start))}</span>
+                      <span aria-hidden="true" className="block text-xs font-black leading-none lg:text-sm">{stateIcon(hour.state)}</span>
+                      <span aria-hidden="true" className="timeline-state-word mt-1 text-[0.48rem] font-black leading-none">{abbreviation(hour.state)}</span>
+                      <span aria-hidden="true" className="mt-1 block text-[0.52rem] font-bold leading-none lg:text-[0.58rem]">{compactHourLabel(hour.start)}</span>
                     </button>
                   ))}
-
-                  {products.map((product) => (
-                    <ProductLane key={product} product={product} entries={group.hours} />
-                  ))}
                 </div>
+
+                {products.map((product) => (
+                  <ProductLane key={product} product={product} entries={group.hours} />
+                ))}
               </div>
-            </div>
-          </section>
-        ))}
+
+              <details className="md:hidden" open={group.key === today || (!hasToday && groupIndex === 0)}>
+                <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 bg-[#9fd3f2] px-4 py-2 font-extrabold outline-offset-[-4px] marker:hidden focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#14213d]">
+                  <span>{group.label}</span>
+                  <span className="text-xs">{runs.length} {runs.length === 1 ? "run" : "runs"}</span>
+                </summary>
+                <div className="p-3">
+                  <div aria-hidden="true" className="grid grid-cols-24 overflow-hidden rounded-lg border-2 border-[#14213d]">
+                    {Array.from({ length: 24 }, (_, column) => {
+                      const entry = group.hours.find(({ hour }) => localHour(hour.start) === column);
+                      return (
+                        <span
+                          key={column}
+                          className={`flex h-6 min-w-0 items-center justify-center text-[0.42rem] font-black leading-none ${entry ? summaryStateClass(entry.hour.state) : "bg-[#14213d]/8 text-transparent"}`}
+                        >
+                          {entry ? stateIcon(entry.hour.state) : "·"}
+                        </span>
+                      );
+                    })}
+                  </div>
+
+                  <ol className="mt-3 space-y-2">
+                    {runs.map((run) => {
+                      const first = run.entries[0];
+                      const citation = bindingCitations(first.hour)[0];
+                      return (
+                        <li key={first.hour.start}>
+                          <button
+                            type="button"
+                            data-run-row
+                            aria-pressed={selectedIndex === first.index}
+                            onClick={() => onSelect(first.index)}
+                            className={`flex min-h-[44px] w-full items-start gap-3 rounded-xl border-2 border-[#14213d] px-3 py-3 text-left outline-offset-2 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#14213d] ${selectedIndex === first.index ? "bg-[#9fd3f2]/45 ring-2 ring-[#14213d]" : "bg-white"}`}
+                          >
+                            <span aria-hidden="true" className={`flex size-8 shrink-0 items-center justify-center rounded-full border-2 text-sm font-black ${stateClass(first.hour.state)}`}>
+                              {stateIcon(first.hour.state)}
+                            </span>
+                            <span className="min-w-0">
+                              <span className="block text-sm font-black leading-snug">{runLabel(run)}</span>
+                              {run.bindingProducts.length > 0 && (
+                                <span className="mt-1 block break-words text-xs font-semibold leading-snug text-[#14213d]/75">
+                                  {run.bindingProducts.join(", ")}{citation?.why ? `: ${citation.why}` : ""}
+                                </span>
+                              )}
+                            </span>
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ol>
+                </div>
+              </details>
+            </section>
+          );
+        })}
       </div>
     </section>
   );
@@ -178,18 +315,19 @@ export function Timeline({ hours, products, selectedIndex, onSelect }: TimelineP
 
 function ProductLane({ product, entries }: {
   product: string;
-  entries: Array<{ hour: PlannerHour; index: number }>;
+  entries: HourEntry[];
 }) {
   return (
-    <>
-      <span className="self-center truncate pr-2 text-xs font-bold" title={product}>{product}</span>
+    <div className="timeline-grid mt-1 grid min-w-0">
+      <span className="self-center truncate pr-1 text-[0.55rem] font-bold lg:text-xs" title={product}>{product}</span>
       {entries.map(({ hour }) => {
         const state = productState(hour, product);
         return (
           <span
             key={`${product}-${hour.start}`}
             title={`${product}: ${state === "blocked" ? "BLOCKED" : state === "check" ? "FIELD CHECK" : "No controlling clause"}`}
-            className={`flex min-h-6 items-center justify-center rounded-md border text-[0.65rem] font-black ${
+            style={{ gridColumn: localHour(hour.start) + 2 }}
+            className={`flex min-h-6 min-w-0 items-center justify-center overflow-hidden rounded-sm border text-[0.55rem] font-black ${
               state === "blocked"
                 ? "border-[#9f2926] bg-[#d1433f] text-white"
                 : state === "check"
@@ -202,6 +340,6 @@ function ProductLane({ product, entries }: {
           </span>
         );
       })}
-    </>
+    </div>
   );
 }

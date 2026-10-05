@@ -25,6 +25,61 @@ test("the recorded planner exposes every hour and its source quote", async ({ pa
   await expect(quoteCard).toContainText(/Page \d+/);
 });
 
+test("the recorded planner never overflows its viewport or day cards", async ({ page }) => {
+  for (const width of [390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await openReplay(page);
+
+    const dimensions = await page.evaluate(() => ({
+      document: {
+        clientWidth: document.documentElement.clientWidth,
+        scrollWidth: document.documentElement.scrollWidth,
+      },
+      days: Array.from(document.querySelectorAll<HTMLElement>("[data-day]"), (day) => ({
+        day: day.dataset.day,
+        clientWidth: day.clientWidth,
+        scrollWidth: day.scrollWidth,
+      })),
+    }));
+
+    expect(dimensions.days.length, `${width}px should render day cards`).toBeGreaterThan(0);
+    expect(dimensions.document.scrollWidth, `${width}px document width`).toBeLessThanOrEqual(dimensions.document.clientWidth);
+    for (const day of dimensions.days) {
+      expect(day.scrollWidth, `${width}px ${day.day} day width`).toBeLessThanOrEqual(day.clientWidth + 1);
+    }
+  }
+});
+
+test("the phone timeline groups hours into runs that open the existing detail", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 900 });
+  await openReplay(page);
+
+  const firstDay = page.locator("[data-day]").first();
+  const disclosure = firstDay.locator("details");
+  if (!(await disclosure.evaluate((element) => (element as HTMLDetailsElement).open))) {
+    await disclosure.locator("summary").click();
+  }
+
+  const firstRun = firstDay.locator("[data-run-row]").first();
+  await expect(firstRun).toBeVisible();
+  await expect(firstRun).toHaveCSS("min-height", "44px");
+  await firstRun.click();
+  await expect(page.locator("[data-quote-card]").first()).toContainText("Exact label quote");
+});
+
+test("the last hour of a full day stays inside its card", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await openReplay(page);
+
+  const fullDay = page.locator('[data-day][data-day-hours="24"]').first();
+  const lastHour = fullDay.locator("[data-hour-cell]").nth(23);
+  const [cardBox, hourBox] = await Promise.all([fullDay.boundingBox(), lastHour.boundingBox()]);
+
+  expect(cardBox).not.toBeNull();
+  expect(hourBox).not.toBeNull();
+  expect(hourBox!.x + hourBox!.width).toBeLessThanOrEqual(cardBox!.x + cardBox!.width + 1);
+});
+
 test("every page names the product exactly once in its title", async ({ page }) => {
   for (const route of ["/", "/app", "/judge"]) {
     await page.goto(route);

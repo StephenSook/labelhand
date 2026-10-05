@@ -539,6 +539,14 @@ a {
 .source-why { color: var(--ink-soft); line-height: 1.5; }
 .source-note { font-size: 0.78rem; font-weight: 800; margin: 0.8rem 0 0; }
 
+.timeline-grid {
+  grid-template-columns: 3.75rem repeat(24, minmax(0, 1fr));
+}
+
+.timeline-state-word {
+  display: none;
+}
+
 .text-link {
   display: inline-flex;
   font-weight: 850;
@@ -643,6 +651,18 @@ a {
   .judge-step { grid-template-columns: 2.6rem minmax(0, 1fr); padding: 1rem; }
   .judge-number { font-size: 2.3rem; }
   .deployment-list li { grid-template-columns: 1fr; }
+}
+
+@media (min-width: 1024px) {
+  .timeline-grid {
+    grid-template-columns: 7rem repeat(24, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .timeline-state-word {
+    display: block;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
