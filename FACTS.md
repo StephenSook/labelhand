@@ -130,8 +130,8 @@ The required CI workflow jobs are `python`, `rust`, and `web` at `.github/workfl
 
 | Claim | Exact value | Source | Tag |
 |---|---|---|---|
-| README stale `.ship` precision | `"README.md:71 says 0.923 (12/13), but the current majority .ship receipt says 1.0 (12/12)."` | `README.md:71`; command: read `eval/results/ship.json` keys `overall.acting_precision`, `overall.acting_good`, and `overall.acting_rules`; output: `1.0`, `12`, `12` | MEASURED |
-| README false every-run statement | `"README.md:125 says acting precision and recall are 1.0 on every run, but final p2 run one acting precision is 0.909."` | `README.md:125`; command: read `eval/results/p2_union_typed_v3_ocr_mf.json` key `overall.acting_precision`; output: `0.909` | MEASURED |
+| Not drift: README `.ship` precision | `"README.md:71 gives 0.923 (12/13) for the acting-wins .ship merge, a different merge from the shipped majority .ship row, which scores 1.0 (12/12)."` | `README.md:71` and `README.md:67`; command: read `eval/results/ship.json` keys `overall.acting_precision`, `overall.acting_good`, and `overall.acting_rules`; output: `1.0`, `12`, `12` | MEASURED |
+| Fixed: README every-run statement | `"README.md:125 said acting precision and recall are 1.0 on every run, but final p2 run one acting precision is 0.909. The sentence now says acting recall is 1.0 on every run and single runs reach 0.909 to 1.0 on acting precision."` | `README.md:125`; command: read `eval/results/p2_union_typed_v3_ocr_mf.json` key `overall.acting_precision`; output: `0.909` | MEASURED |
 | README rounded cost hides run variance | `"README.md:73 says $0.53 per run. Exact committed Token Factory totals are $0.5319, $0.5597, and $0.5459."` | `README.md:73`; cost commands and outputs in the run-cost table above | MEASURED |
 
 ## Do not claim
