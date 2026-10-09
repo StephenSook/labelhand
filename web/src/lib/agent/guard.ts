@@ -118,6 +118,54 @@ function exclusivityReasons(summary: string, permittedCount: number): string[] {
   ];
 }
 
+// "for that window" / "in this window", plus the same modifiers exclusivity allows and a
+// length adjective such as "6-hour". "not for that window" is a denial, not an attribution.
+// "for the window" is a different phrase and is not matched.
+const SINGLE_WINDOW_SCOPE = new RegExp(
+  `(?<!\\bnot\\s)\\b(?:for|in)\\s+(?:this|that)(?:\\s+(?:${WINDOW_MODIFIER}|\\d+-hour)){0,4}\\s+window\\b`,
+  "i",
+);
+
+function scopeReasons(
+  summary: string,
+  successfulResults: readonly ToolResultRecord[],
+  windowRecords: readonly Record<string, unknown>[],
+): string[] {
+  const weekTotals = new Set<string>();
+  for (const entry of successfulResults) {
+    if (entry.name !== "check_tank" || !isRecord(entry.result) || !isRecord(entry.result.counts)) continue;
+    for (const value of Object.values(entry.result.counts)) {
+      if (typeof value === "number" && Number.isFinite(value)) weekTotals.add(String(value));
+    }
+  }
+  if (weekTotals.size === 0) return [];
+  // counts.* is a forecast-wide hour total. windows[].hours is only the permitted span.
+  // There is no per-window state split, so equality against that window cannot be checked.
+  // Skip a total whose digits are also a returned window's length or index: "6 hours for
+  // that window" and "Window 0" use those digits for the window itself. A total of 0 is
+  // the common case of that index collision.
+  const windowDigits = new Set<string>();
+  for (const window of windowRecords) {
+    for (const value of [window.hours, window.index]) {
+      if (typeof value === "number" && Number.isFinite(value)) windowDigits.add(String(value));
+    }
+  }
+  const misattributed: string[] = [];
+  const seen = new Set<string>();
+  for (const sentence of sentencesOf(summary)) {
+    if (!SINGLE_WINDOW_SCOPE.test(sentence)) continue;
+    for (const number of numbersIn(sentence)) {
+      if (!weekTotals.has(number) || windowDigits.has(number) || seen.has(number)) continue;
+      seen.add(number);
+      misattributed.push(number);
+    }
+  }
+  if (misattributed.length === 0) return [];
+  return [
+    `The summary attributes forecast-wide counts (${misattributed.join(", ")}) to a single window. Those counts cover the whole forecast, and check_tank does not return a per-window split, so the guard cannot check them against that window. A week total that equals a returned window's hours or index is not rejected, because those digits can name the window rather than the total.`,
+  ];
+}
+
 function scriptAndEndingReasons(answer: FinalAnswerArgs): string[] {
   const reasons: string[] = [];
   const prose = [answer.summary, ...answer.cited_rule_ids].join("\n");
@@ -143,8 +191,12 @@ function scriptAndEndingReasons(answer: FinalAnswerArgs): string[] {
 // starts at three PM; the other ...") showed that a count scoped by a predicate cannot be told apart
 // from a total by pattern matching. Those sentences stay allowed. "the only window", "a single
 // window", and "all other windows are blocked" are rejected only when the list has more than one
-// permitted window. The prompt tells the model not to state counts, and the page lists every
-// returned window under the answer.
+// permitted window. Week-total scope is the same kind of check. check_tank counts are hour
+// totals for the whole forecast, and the result has no per-window split of those totals, so a
+// number next to "for that window" cannot be proved equal to that window. A sentence that pairs
+// a counts value with "for/in this/that window" is rejected unless those digits also equal a
+// returned window's hours or index. The prompt tells the model not to state counts, and the
+// page lists every returned window under the answer.
 export function guardFinalAnswer(
   answer: FinalAnswerArgs,
   toolResults: ToolResultRecord[],
@@ -186,6 +238,7 @@ export function guardFinalAnswer(
 
   reasons.push(...scriptAndEndingReasons(answer));
   reasons.push(...exclusivityReasons(answer.summary, windowRecords.length));
+  reasons.push(...scopeReasons(answer.summary, successfulResults, windowRecords));
 
   return { passed: reasons.length === 0, reasons };
 }

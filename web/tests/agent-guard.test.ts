@@ -149,7 +149,7 @@ describe("final answer guard", () => {
     )).toEqual({ passed: true, reasons: [] });
   });
 
-  test("rejects the 2026-10-08 production answer for script, a cut-off sentence, and exclusivity", () => {
+  test("rejects the 2026-10-08 production answer for script, a cut-off sentence, exclusivity, and week-total scope", () => {
     const result = guardFinalAnswer(
       { summary: productionAnswer20261008, cited_rule_ids: [], window_indices: [0] },
       tiftFourWindows(),
@@ -158,6 +158,7 @@ describe("final answer guard", () => {
       "The final answer contains characters outside Latin script (Han).",
       "The summary does not end with sentence-final punctuation.",
       exclusivityReason(4),
+      scopeReason([38, 71]),
     ]);
   });
 
@@ -221,5 +222,92 @@ describe("final answer guard", () => {
       [...windowsForCount(1), ...windowsForCount(4)],
     );
     expect(result.reasons).toEqual([exclusivityReason(4)]);
+  });
+
+  function scopeReason(numbers: readonly number[]): string {
+    return `The summary attributes forecast-wide counts (${numbers.join(", ")}) to a single window. Those counts cover the whole forecast, and check_tank does not return a per-window split, so the guard cannot check them against that window. A week total that equals a returned window's hours or index is not rejected, because those digits can name the window rather than the total.`;
+  }
+
+  test.each([
+    ["The planner reports 38 forecast-permitted counts and 71 field-check required counts for that window.", [38, 71]],
+    ["The planner reports 38 forecast-permitted counts for this window.", [38]],
+    ["The planner reports 71 field-check hours in that window.", [71]],
+    ["The planner reports 38 forecast-permitted hours in this window.", [38]],
+    ["The planner reports 38 forecast-permitted hours for that 6-hour window.", [38]],
+  ])("rejects a week total stated for one window: %s", (summary, numbers) => {
+    const result = guardFinalAnswer(
+      { summary, cited_rule_ids: [], window_indices: [0] },
+      tiftFourWindows(),
+    );
+    expect(result.reasons).toEqual([scopeReason(numbers)]);
+  });
+
+  test("rejects a blocked-hour total stated for one window", () => {
+    const results = tiftFourWindows();
+    (results[0].result as { counts: Record<string, number> }).counts.BLOCKED = 12;
+    const result = guardFinalAnswer(
+      { summary: "The planner reports 12 blocked hours for that window.", cited_rule_ids: [], window_indices: [0] },
+      results,
+    );
+    expect(result.reasons).toEqual([scopeReason([12])]);
+  });
+
+  test("compares week totals with every successful check_tank counts object", () => {
+    const earlier = tiftFourWindows();
+    const latest = tiftFourWindows();
+    const counts = (latest[0].result as { counts: { FORECAST_PERMITTED: number; FIELD_CHECK: number } }).counts;
+    counts.FORECAST_PERMITTED = 12;
+    counts.FIELD_CHECK = 20;
+    const result = guardFinalAnswer(
+      { summary: "The planner reports 12 forecast-permitted hours for that window.", cited_rule_ids: [], window_indices: [0] },
+      [...earlier, ...latest],
+    );
+    expect(result.reasons).toEqual([scopeReason([12])]);
+  });
+
+  test("keeps week totals when another sentence is the one that names the window", () => {
+    const summary = "The planner reports 38 forecast-permitted hours and 71 field-check hours across the forecast. Thursday October 8 is 6 hours for that window.";
+    expect(guardFinalAnswer(
+      { summary, cited_rule_ids: ["264-700-p8-3"], window_indices: [0] },
+      tiftFourWindows(),
+    )).toEqual({ passed: true, reasons: [] });
+  });
+
+  test("does not treat a negated single-window phrase as an attribution", () => {
+    const summary = "The planner reports 38 forecast-permitted hours and 71 field-check hours across the forecast, not for that window.";
+    expect(guardFinalAnswer(
+      { summary, cited_rule_ids: ["264-700-p8-3"], window_indices: [0] },
+      tiftFourWindows(),
+    )).toEqual({ passed: true, reasons: [] });
+  });
+
+  test("leaves a week total alone when those digits are also the window length", () => {
+    const results = tiftFourWindows();
+    const check = results[0].result as { counts: { FORECAST_PERMITTED: number }; windows: Array<{ hours: number }> };
+    const hours = check.windows[0].hours;
+    check.counts.FORECAST_PERMITTED = hours;
+    expect(guardFinalAnswer({
+      summary: `The planner reports ${hours} forecast-permitted hours for that window.`,
+      cited_rule_ids: ["264-700-p8-3"],
+      window_indices: [0],
+    }, results)).toEqual({ passed: true, reasons: [] });
+  });
+
+  test("leaves a week total of 0 alone because it is also window index 0", () => {
+    const results = tiftFourWindows();
+    (results[0].result as { counts: Record<string, number> }).counts.BLOCKED = 0;
+    expect(guardFinalAnswer({
+      summary: "Window 0 is 6 hours for that window.",
+      cited_rule_ids: ["264-700-p8-3"],
+      window_indices: [0],
+    }, results)).toEqual({ passed: true, reasons: [] });
+  });
+
+  test("does not treat for the window as the single-window phrase", () => {
+    expect(guardFinalAnswer({
+      summary: "The planner reports 38 forecast-permitted hours for the window.",
+      cited_rule_ids: ["264-700-p8-3"],
+      window_indices: [0],
+    }, tiftFourWindows())).toEqual({ passed: true, reasons: [] });
   });
 });
