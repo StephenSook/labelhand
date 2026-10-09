@@ -68,6 +68,56 @@ function summaryEndsAsSentence(summary: string): boolean {
   return /[.!?]["'\u2019\u201D)\]\u00BB]*$/.test(summary.trim());
 }
 
+// Modifiers that can sit between an exclusivity determiner and the noun "window".
+// Arbitrary words are not allowed: "the only product in window 0" is not a one-window claim.
+const WINDOW_MODIFIER = "forecast-permitted|forecast|permitted|listed|returned|available|open|remaining|usable";
+
+function headedWindow(prefix: string, noun: "window" | "windows?"): RegExp {
+  return new RegExp(`\\b${prefix}(?:\\s+(?:${WINDOW_MODIFIER})){0,4}\\s+${noun}\\b`, "i");
+}
+
+const THE_ONLY_WINDOW = headedWindow("the only", "window");
+const SOLE_OR_SINGLE_WINDOW = headedWindow("(?:sole|single)", "window");
+const JUST_ONE_WINDOW = headedWindow("just one", "window");
+const ONLY_ONE_WINDOW = headedWindow("only one", "window");
+const NO_OTHER_WINDOW = headedWindow("no other", "windows?");
+const ALL_OTHER_WINDOWS = headedWindow("all other", "windows?");
+const BLOCK_CLAIM = /\b(?:would block|will block|blocks|(?:are|is|were|was)\s+blocked|not permitted|aren't permitted|isn't permitted)\b/i;
+const THE_REST_DENIED = /\bthe rest\b(?:\s+\S+){0,6}?\s+(?:are|were)\s+(?:blocked|not permitted)\b/i;
+const OTHER_IS_BLOCKED = /\b(?:the other|another)\b(?:\s+\S+){0,8}?\s+(?:is|are|was|were)\s+blocked\b/i;
+const OTHER_NOT_PERMITTED = /\b(?:the other|another)\b(?:\s+\S+){0,12}?\b(?:would block|not permitted|aren't permitted|isn't permitted)\b/i;
+
+function sentencesOf(summary: string): string[] {
+  return summary.split(/(?<=[.!?])\s+/).map((part) => part.trim()).filter((part) => part.length > 0);
+}
+
+// "Only one available window starts at three PM; the other starts at seven PM" names one window
+// and then another. That is not a claim that a single window was returned. The same shape with
+// "the other is blocked" stays a claim.
+function acknowledgesAnotherOpenWindow(summary: string): boolean {
+  if (!/\b(?:the other|another)\b/i.test(summary)) return false;
+  if (OTHER_IS_BLOCKED.test(summary) || OTHER_NOT_PERMITTED.test(summary)) return false;
+  return true;
+}
+
+function claimsOthersAreBlocked(summary: string): boolean {
+  if (THE_REST_DENIED.test(summary)) return true;
+  return sentencesOf(summary).some((sentence) => ALL_OTHER_WINDOWS.test(sentence) && BLOCK_CLAIM.test(sentence));
+}
+
+function exclusivityReasons(summary: string, permittedCount: number): string[] {
+  if (permittedCount <= 1) return [];
+  const anotherOpen = acknowledgesAnotherOpenWindow(summary);
+  const claimsOneWindow = THE_ONLY_WINDOW.test(summary)
+    || SOLE_OR_SINGLE_WINDOW.test(summary)
+    || NO_OTHER_WINDOW.test(summary)
+    || (!anotherOpen && (ONLY_ONE_WINDOW.test(summary) || JUST_ONE_WINDOW.test(summary)));
+  if (!claimsOneWindow && !claimsOthersAreBlocked(summary)) return [];
+  return [
+    `The summary claims a single permitted window, or that the other windows are blocked, but check_tank returned ${permittedCount} permitted windows.`,
+  ];
+}
+
 function scriptAndEndingReasons(answer: FinalAnswerArgs): string[] {
   const reasons: string[] = [];
   const prose = [answer.summary, ...answer.cited_rule_ids].join("\n");
@@ -87,12 +137,14 @@ function scriptAndEndingReasons(answer: FinalAnswerArgs): string[] {
 // The guard checks what can be checked structurally: every cited rule id, every window index and
 // every number in the summary must come from a tool result. The final answer must stay in Latin
 // script, digits and ordinary punctuation, and the summary must end with sentence-final punctuation.
-// It deliberately does NOT read window counts out of the prose. Two production false refusals
-// (2026-10-05: "only the two windows ...", then "7 PM. Wed window" read as seven) and an adversarial
-// review ("Only one available window starts at three PM; the other ...") showed that a count scoped
-// by a predicate cannot be told apart from a total by pattern matching. The prompt tells the model
-// not to state counts, and the page lists every returned window under the answer, so a wrong count
-// would sit beside the true list.
+// Exclusivity compares a fixed set of phrases with the structured window list. It does not read a
+// window count out of prose. Two production false refusals (2026-10-05: "only the two windows ...",
+// then "7 PM. Wed window" read as seven) and an adversarial review ("Only one available window
+// starts at three PM; the other ...") showed that a count scoped by a predicate cannot be told apart
+// from a total by pattern matching. Those sentences stay allowed. "the only window", "a single
+// window", and "all other windows are blocked" are rejected only when the list has more than one
+// permitted window. The prompt tells the model not to state counts, and the page lists every
+// returned window under the answer.
 export function guardFinalAnswer(
   answer: FinalAnswerArgs,
   toolResults: ToolResultRecord[],
@@ -113,9 +165,9 @@ export function guardFinalAnswer(
   const windows = isRecord(latestCheck) && Array.isArray(latestCheck.windows)
     ? latestCheck.windows
     : [];
+  const windowRecords = windows.filter(isRecord);
   const knownWindowIndices = new Set(
-    windows
-      .filter(isRecord)
+    windowRecords
       .map((window) => window.index)
       .filter((index): index is number => Number.isInteger(index)),
   );
@@ -133,6 +185,7 @@ export function guardFinalAnswer(
   }
 
   reasons.push(...scriptAndEndingReasons(answer));
+  reasons.push(...exclusivityReasons(answer.summary, windowRecords.length));
 
   return { passed: reasons.length === 0, reasons };
 }

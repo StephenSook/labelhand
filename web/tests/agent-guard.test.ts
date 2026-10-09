@@ -149,7 +149,7 @@ describe("final answer guard", () => {
     )).toEqual({ passed: true, reasons: [] });
   });
 
-  test("rejects the 2026-10-08 production answer for script and a cut-off sentence", () => {
+  test("rejects the 2026-10-08 production answer for script, a cut-off sentence, and exclusivity", () => {
     const result = guardFinalAnswer(
       { summary: productionAnswer20261008, cited_rule_ids: [], window_indices: [0] },
       tiftFourWindows(),
@@ -157,6 +157,69 @@ describe("final answer guard", () => {
     expect(result.reasons).toEqual([
       "The final answer contains characters outside Latin script (Han).",
       "The summary does not end with sentence-final punctuation.",
+      exclusivityReason(4),
     ]);
+  });
+
+  function exclusivityReason(count: number): string {
+    return `The summary claims a single permitted window, or that the other windows are blocked, but check_tank returned ${count} permitted windows.`;
+  }
+
+  function windowsForCount(count: number): ToolResultRecord[] {
+    const results = structuredClone(toolResults);
+    const windows = (results[0].result as { windows: Array<{ index: number; label: string }> }).windows;
+    for (let index = windows.length; index < count; index += 1) {
+      windows.push({ index, label: "placeholder" });
+    }
+    return results;
+  }
+
+  test("accepts the only window when check_tank returned one", () => {
+    expect(guardFinalAnswer(
+      { summary: "This is the only window.", cited_rule_ids: [], window_indices: [0] },
+      windowsForCount(1),
+    )).toEqual({ passed: true, reasons: [] });
+  });
+
+  test.each([
+    "This is the only window.",
+    "This is the sole window.",
+    "A single window fits.",
+    "Just one forecast-permitted window fits.",
+    "No other window is forecast-permitted.",
+    "All other windows are blocked.",
+    "All other listed windows would block one product.",
+    "The rest are blocked.",
+    "The rest are not permitted.",
+    "Only one window fits the job.",
+    "Only one available window fits the job.",
+    "Only one window fits; the other is blocked.",
+  ])("rejects an exclusivity claim when check_tank returned two windows: %s", (summary) => {
+    const result = guardFinalAnswer(
+      { summary, cited_rule_ids: [], window_indices: [0, 1] },
+      windowsForCount(2),
+    );
+    expect(result.reasons).toEqual([exclusivityReason(2)]);
+  });
+
+  test.each([
+    "All other windows are not blocked.",
+    "All other windows would not block the job.",
+    "Only the two windows meet the 4-hour job.",
+    "Just one available window starts at three PM; the other starts at seven PM.",
+    "The rest are not blocked.",
+  ])("does not treat a non-exclusive sentence as one window: %s", (summary) => {
+    expect(guardFinalAnswer(
+      { summary, cited_rule_ids: [], window_indices: [0, 1] },
+      windowsForCount(2),
+    )).toEqual({ passed: true, reasons: [] });
+  });
+
+  test("compares exclusivity with the latest check_tank result", () => {
+    const result = guardFinalAnswer(
+      { summary: "This is the only window.", cited_rule_ids: [], window_indices: [0] },
+      [...windowsForCount(1), ...windowsForCount(4)],
+    );
+    expect(result.reasons).toEqual([exclusivityReason(4)]);
   });
 });
