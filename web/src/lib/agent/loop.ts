@@ -226,7 +226,7 @@ export async function runAgentLoop(
   if (lastGuard) {
     return {
       answer: null,
-      fallbackText: `The answer cited something the tools did not return, so it is not shown. Here is what the tools returned.\n\n${JSON.stringify(toolResults, null, 2)}`,
+      fallbackText: `The answer failed the final-answer check (${lastGuard.reasons.join(" ")}), so it is not shown. Here is what the tools returned.\n\n${JSON.stringify(toolResults, null, 2)}`,
       guard: lastGuard,
       trace,
       latestCheck: runtime.latestCheck,
