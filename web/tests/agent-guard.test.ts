@@ -73,4 +73,90 @@ describe("final answer guard", () => {
       "Number 12 did not appear in a tool result.",
     ]);
   });
+
+  // Run 37819901943 (2026-10-08 17:54 UTC) returned 4 permitted windows. The summary is the
+  // recorded final answer. The log is not downloadable, so windows 1 to 3 are placeholders with
+  // no recorded labels. Window 0 repeats the span named in the answer. 38 and 71 are the
+  // forecast-wide counts named in that answer. The blocked-hour total was not recorded.
+  const productionAnswer20261008 =
+    "At Tift this week the only forecast-permitted window that allows all three products ... for a 4-hour job is Thursday October 8 from 1 PM to 7 PM (6-hour window). The planner reports 38 forecast-permitted counts and 71 field-check required counts for that window. All other listed windows have wind-speed or rain-inversion restrictions that would block one or更多产";
+
+  const tiftFourWindows = (): ToolResultRecord[] => [
+    {
+      name: "check_tank",
+      result: {
+        field: "Tift",
+        products: ["5481-504", "264-700", "264-418"],
+        job_hours: 4,
+        counts: { FORECAST_PERMITTED: 38, FIELD_CHECK: 71 },
+        windows: [
+          { index: 0, label: "Thu Oct 8, 1 PM to 7 PM (6 h)", hours: 6 },
+          { index: 1, label: "placeholder", hours: 4 },
+          { index: 2, label: "placeholder", hours: 4 },
+          { index: 3, label: "placeholder", hours: 4 },
+        ],
+        binding_clauses: [{ rule_id: "264-700-p8-3", page: 8 }],
+      },
+    },
+  ];
+
+  test("rejects Han characters even when the sentence is otherwise finished", () => {
+    const result = guardFinalAnswer(
+      { summary: "Window 0 provides 4 forecast-permitted hours 更.", cited_rule_ids: [], window_indices: [0] },
+      toolResults,
+    );
+    expect(result.reasons).toEqual(["The final answer contains characters outside Latin script (Han)."]);
+  });
+
+  test("rejects Cyrillic characters", () => {
+    const result = guardFinalAnswer(
+      { summary: "The forecast window is закрыто.", cited_rule_ids: [], window_indices: [] },
+      toolResults,
+    );
+    expect(result.reasons).toEqual(["The final answer contains characters outside Latin script (Cyrillic)."]);
+  });
+
+  test("rejects Greek characters", () => {
+    const result = guardFinalAnswer(
+      { summary: "The forecast window is ανοιχτό.", cited_rule_ids: [], window_indices: [] },
+      toolResults,
+    );
+    expect(result.reasons).toEqual(["The final answer contains characters outside Latin script (Greek)."]);
+  });
+
+  test("rejects a summary that does not end with sentence-final punctuation", () => {
+    const result = guardFinalAnswer(
+      { summary: "Window 0 provides 4 forecast-permitted hours", cited_rule_ids: [], window_indices: [0] },
+      toolResults,
+    );
+    expect(result.reasons).toEqual(["The summary does not end with sentence-final punctuation."]);
+  });
+
+  test.each([
+    "Does window 0 provide 4 forecast-permitted hours?",
+    "Window 0 provides 4 forecast-permitted hours!",
+    "Window 0 provides 4 forecast-permitted hours.\"",
+  ])("accepts a finished Latin sentence: %s", (summary) => {
+    expect(guardFinalAnswer({ summary, cited_rule_ids: [], window_indices: [0] }, toolResults))
+      .toEqual({ passed: true, reasons: [] });
+  });
+
+  test("accepts a finished Latin answer that reports the same hours without a script break", () => {
+    const summary = "Thursday October 8 from 1 PM to 7 PM is a 6-hour forecast-permitted window for a 4-hour job at Tift. The planner reports 38 forecast-permitted hours and 71 field-check hours across the forecast. Other returned windows are forecast-permitted too.";
+    expect(guardFinalAnswer(
+      { summary, cited_rule_ids: ["264-700-p8-3"], window_indices: [0, 1, 2, 3] },
+      tiftFourWindows(),
+    )).toEqual({ passed: true, reasons: [] });
+  });
+
+  test("rejects the 2026-10-08 production answer for script and a cut-off sentence", () => {
+    const result = guardFinalAnswer(
+      { summary: productionAnswer20261008, cited_rule_ids: [], window_indices: [0] },
+      tiftFourWindows(),
+    );
+    expect(result.reasons).toEqual([
+      "The final answer contains characters outside Latin script (Han).",
+      "The summary does not end with sentence-final punctuation.",
+    ]);
+  });
 });
