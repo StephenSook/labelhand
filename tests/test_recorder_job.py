@@ -327,3 +327,103 @@ def test_job_fails_when_one_required_object_cannot_be_written(monkeypatch):
     assert result == 1
     assert counts == {"raw_ok": 1, "raw_fail": 1, "hourly_objects": 1, "season_points": 1}
     assert errors[0].startswith("RAW_FAIL count=1")
+
+
+def test_alert_trigger_skips_when_unset_and_posts_without_logging_the_secret():
+    logs = []
+    opened = []
+
+    def opener(*args, **kwargs):
+        opened.append((args, kwargs))
+        raise AssertionError("an unset trigger must not open a request")
+
+    assert recorder_job.trigger_alerts({}, opener=opener, log_message=logs.append) is None
+    assert opened == []
+    assert logs == ["alerts_run status=skipped reason=unset"]
+
+    class Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_):
+            return False
+
+        def getcode(self):
+            return 200
+
+    secret = "test-secret-that-must-not-be-logged"
+
+    def successful(request, timeout):
+        assert request.full_url == "https://labelhand.example.com/api/alerts/run"
+        assert request.get_method() == "POST"
+        assert request.get_header("Authorization") == f"Bearer {secret}"
+        assert timeout == recorder_job.ALERT_TIMEOUT_SECONDS
+        return Response()
+
+    assert (
+        recorder_job.trigger_alerts(
+            {"ALERTS_RUN_URL": "https://labelhand.example.com/api/alerts/run", "ALERTS_RUN_SECRET": secret},
+            opener=successful,
+            log_message=logs.append,
+        )
+        is True
+    )
+    assert logs[-1] == "alerts_run status=ok http=200"
+    assert all(secret not in message for message in logs)
+
+
+def test_alert_trigger_rejects_unsafe_urls_and_disables_redirects():
+    logs = []
+
+    def must_not_open(*_args, **_kwargs):
+        raise AssertionError("unsafe URLs must not be opened")
+
+    assert (
+        recorder_job.trigger_alerts(
+            {"ALERTS_RUN_URL": "http://labelhand.example.com/api/alerts/run", "ALERTS_RUN_SECRET": "secret"},
+            opener=must_not_open,
+            log_message=logs.append,
+        )
+        is False
+    )
+    assert logs == ["alerts_run status=failed reason=unsafe_url"]
+    handler = recorder_job.NoAlertRedirects()
+    assert handler.redirect_request(None, None, 302, "Found", {}, "https://attacker.example/capture") is None
+
+
+def test_alert_trigger_swallows_failures_and_main_calls_it_only_after_success(monkeypatch):
+    logs = []
+
+    def failed(*_args, **_kwargs):
+        raise TimeoutError("synthetic timeout")
+
+    assert (
+        recorder_job.trigger_alerts(
+            {"ALERTS_RUN_URL": "https://labelhand.example.com/api/alerts/run", "ALERTS_RUN_SECRET": "secret"},
+            opener=failed,
+            log_message=logs.append,
+        )
+        is False
+    )
+    assert logs == ["alerts_run status=failed error=TimeoutError"]
+
+    for name in recorder_job.REQUIRED_ENV:
+        monkeypatch.setenv(name, "configured")
+    monkeypatch.setattr(recorder_job, "create_s3_client", lambda: object())
+    triggered = []
+    monkeypatch.setattr(recorder_job, "trigger_alerts", lambda: triggered.append(True))
+    monkeypatch.setattr(
+        recorder_job,
+        "run",
+        lambda *_: (0, {"raw_ok": 10, "raw_fail": 0, "hourly_objects": 10, "season_points": 10}, []),
+    )
+    assert recorder_job.main() == 0
+    assert triggered == [True]
+
+    monkeypatch.setattr(
+        recorder_job,
+        "run",
+        lambda *_: (1, {"raw_ok": 9, "raw_fail": 1, "hourly_objects": 9, "season_points": 10}, ["RAW_FAIL"]),
+    )
+    assert recorder_job.main() == 1
+    assert triggered == [True]

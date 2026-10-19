@@ -20,8 +20,10 @@ import {
   compiledCacheKey,
   fileIndexCacheKey,
   getCachedLiveLabel,
+  getCachedLiveLabelStrict,
   getLiveCacheIndex,
   getRegistrationCacheIndex,
+  getRegistrationCacheIndexStrict,
   registrationIndexCacheKey,
   writeLiveCache,
 } from "@/lib/live-cache";
@@ -142,5 +144,15 @@ describe("live cache", () => {
     expect(await getLiveCacheIndex(index.fileName)).toBeNull();
     expect(await getRegistrationCacheIndex(index.reg)).toEqual(index);
     expect(await getRegistrationCacheIndex(index.reg)).toBeNull();
+  });
+
+  test("strict alert reads distinguish an outage from a missing live compile", async () => {
+    getMock.mockRejectedValue(new Error("Blob unavailable"));
+    await expect(getRegistrationCacheIndexStrict("100-1256")).rejects.toThrow("Blob unavailable");
+    await expect(getCachedLiveLabelStrict(SHA, VERSION)).rejects.toThrow("Blob unavailable");
+
+    getMock.mockResolvedValue(null);
+    await expect(getRegistrationCacheIndexStrict("100-1256")).resolves.toBeNull();
+    await expect(getCachedLiveLabelStrict(SHA, VERSION)).resolves.toBeNull();
   });
 });

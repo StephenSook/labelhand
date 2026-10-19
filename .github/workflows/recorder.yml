@@ -187,6 +187,8 @@ jobs:
             --env "RECORDER_S3_ENDPOINT=$RECORDER_S3_ENDPOINT" \
             --env-secret "AWS_ACCESS_KEY_ID=$NEBIUS_RECORDER_SECRET_SELECTOR" \
             --env-secret "AWS_SECRET_ACCESS_KEY=$NEBIUS_RECORDER_SECRET_SELECTOR" \
+            --env-secret "ALERTS_RUN_URL=$NEBIUS_RECORDER_SECRET_SELECTOR" \
+            --env-secret "ALERTS_RUN_SECRET=$NEBIUS_RECORDER_SECRET_SELECTOR" \
             --timeout 1h \
             --restart-policy never \
             --platform "$NEBIUS_JOB_PLATFORM" \

@@ -21,7 +21,8 @@
     "pdf-lib": "1.17.1",
     "pdfjs-dist": "6.4.299",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "twilio": "6.2.0"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.0",

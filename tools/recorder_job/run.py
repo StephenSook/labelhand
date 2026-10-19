@@ -8,6 +8,9 @@ import json
 import os
 import re
 import sys
+import urllib.error
+import urllib.parse
+import urllib.request
 from typing import Any
 
 import nws_recorder
@@ -19,6 +22,21 @@ REQUIRED_ENV = (
     "AWS_ACCESS_KEY_ID",
     "AWS_SECRET_ACCESS_KEY",
 )
+
+ALERT_TIMEOUT_SECONDS = 30
+
+
+class NoAlertRedirects(urllib.request.HTTPRedirectHandler):
+    """Refuse redirects so the bearer secret never crosses origins."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        del req, fp, code, msg, headers, newurl
+        return None
+
+
+def open_alert_request(request, timeout):
+    """Open the configured HTTPS endpoint without following redirects."""
+    return urllib.request.build_opener(NoAlertRedirects).open(request, timeout=timeout)
 
 
 def region_from_endpoint(endpoint: str) -> str:
@@ -286,6 +304,41 @@ def run(client, bucket: str, now: dt.datetime) -> tuple[int, dict[str, int], lis
     return (0 if not errors else 1), counts, errors
 
 
+def trigger_alerts(env=None, opener=None, log_message=print) -> bool | None:
+    """Call the alert runner after a successful recording without changing recorder success."""
+    values = os.environ if env is None else env
+    url = values.get("ALERTS_RUN_URL", "").strip()
+    secret = values.get("ALERTS_RUN_SECRET", "").strip()
+    if not url or not secret:
+        log_message("alerts_run status=skipped reason=unset")
+        return None
+
+    parsed = urllib.parse.urlsplit(url)
+    if parsed.scheme != "https" or not parsed.netloc or parsed.username or parsed.password or parsed.fragment:
+        log_message("alerts_run status=failed reason=unsafe_url")
+        return False
+
+    request = urllib.request.Request(
+        url,
+        data=b"",
+        headers={"Authorization": f"Bearer {secret}"},
+        method="POST",
+    )
+    open_request = open_alert_request if opener is None else opener
+    try:
+        with open_request(request, timeout=ALERT_TIMEOUT_SECONDS) as response:
+            status = response.getcode()
+        if 200 <= status < 300:
+            log_message(f"alerts_run status=ok http={status}")
+            return True
+        log_message(f"alerts_run status=failed http={status}")
+    except urllib.error.HTTPError as exc:
+        log_message(f"alerts_run status=failed http={exc.code}")
+    except Exception as exc:
+        log_message(f"alerts_run status=failed error={type(exc).__name__}")
+    return False
+
+
 def main() -> int:
     missing = [name for name in REQUIRED_ENV if not os.environ.get(name)]
     if missing:
@@ -299,6 +352,8 @@ def main() -> int:
     except Exception as exc:
         result = 1
         messages = [f"JOB_FAIL {type(exc).__name__}: {exc}"]
+    if result == 0:
+        trigger_alerts()
     first_error = " ".join(messages[0].split())[:240] if messages else "none"
     print(
         f"recorder_job status={'ok' if result == 0 else 'failed'} raw_ok={counts['raw_ok']} raw_fail={counts['raw_fail']} "

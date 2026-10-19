@@ -1,22 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { AGENT_SYSTEM_PROMPT } from "@/lib/agent/loop";
 import { AGENT_TOOL_DEFINITIONS, AGENT_TOOL_NAMES } from "@/lib/agent/tools";
+import {
+  AGENT_MODEL,
+  requestTokenFactoryCompletion,
+  TokenFactoryRequestError,
+} from "@/lib/agent/token-factory";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
 
-const MODEL = "nvidia/Nemotron-3_5-Lightning";
-const ENDPOINT = "https://api.tokenfactory.nebius.com/v1/chat/completions";
 const MAX_MESSAGES = 14;
 const MAX_MESSAGE_CHARACTERS = 24_000;
-const MAX_TOKENS = 700;
-const UPSTREAM_TIMEOUT_MS = 25_000;
 const RATE_LIMIT_COUNT = 20;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const DAILY_TOKEN_BUDGET = 2_000_000;
-
-// Token Factory price list, read 2026-10-04.
-const TOKEN_FACTORY_PRICING = { inputPerMillionUsd: 0.06, outputPerMillionUsd: 0.24 } as const;
 
 type ValidMessage = {
   role: "user" | "assistant" | "tool";
@@ -153,71 +151,39 @@ export async function POST(request: NextRequest) {
     ? { type: "function", function: { name: allowedTools[0].function.name } }
     : "required";
 
-  const started = performance.now();
-  let upstream: Response;
+  let completion: Awaited<ReturnType<typeof requestTokenFactoryCompletion>>;
   try {
-    upstream = await fetch(ENDPOINT, {
-      method: "POST",
-      headers: {
-        authorization: `Bearer ${apiKey}`,
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        model: MODEL,
-        messages: [{ role: "system", content: AGENT_SYSTEM_PROMPT }, ...validated.messages],
-        tools: allowedTools,
-        tool_choice: toolChoice,
-        parallel_tool_calls: false,
-        max_tokens: MAX_TOKENS,
-        temperature: 0,
-        chat_template_kwargs: { enable_thinking: false },
-      }),
-      signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
+    completion = await requestTokenFactoryCompletion({
+      apiKey,
+      systemPrompt: AGENT_SYSTEM_PROMPT,
+      messages: validated.messages,
+      tools: allowedTools,
+      toolChoice,
     });
   } catch (error) {
-    const message = error instanceof Error && error.name === "TimeoutError"
-      ? "Token Factory did not respond within 25 seconds."
-      : "Token Factory could not be reached.";
-    return errorResponse(message, 504);
+    if (error instanceof TokenFactoryRequestError) return errorResponse(error.message, error.status);
+    return errorResponse("Token Factory could not be reached.", 504);
   }
-
-  if (!upstream.ok) {
-    if (upstream.status === 402) return errorResponse("Token Factory credit is exhausted", 402);
-    if (upstream.status === 429) return errorResponse("Rate limited. Try again later.", 429);
-    return errorResponse(`Token Factory request failed with HTTP ${upstream.status}.`, upstream.status >= 500 ? 502 : upstream.status);
-  }
-
-  let payload: unknown;
-  try {
-    payload = await upstream.json() as unknown;
-  } catch {
-    return errorResponse("Token Factory returned a response that was not JSON.", 502);
-  }
-  if (!isRecord(payload) || !Array.isArray(payload.choices) || !isRecord(payload.choices[0]) || !isRecord(payload.choices[0].message)) {
-    return errorResponse("Token Factory returned no assistant message.", 502);
-  }
-  const usage = isRecord(payload.usage) ? payload.usage : {};
-  const inputTokens = typeof usage.prompt_tokens === "number" ? usage.prompt_tokens : 0;
-  const outputTokens = typeof usage.completion_tokens === "number" ? usage.completion_tokens : 0;
-  const totalTokens = typeof usage.total_tokens === "number" ? usage.total_tokens : inputTokens + outputTokens;
-  tokensUsedToday += totalTokens;
-  const costUsd = inputTokens / 1_000_000 * TOKEN_FACTORY_PRICING.inputPerMillionUsd
-    + outputTokens / 1_000_000 * TOKEN_FACTORY_PRICING.outputPerMillionUsd;
-  const upstreamMessage = payload.choices[0].message;
-  const message = { ...upstreamMessage };
-  if ("tool_calls" in message) {
-    if (message.tool_calls === null) delete message.tool_calls;
-    else if (Array.isArray(message.tool_calls)) message.tool_calls = message.tool_calls.slice(0, 1);
+  tokensUsedToday += completion.totalTokens;
+  const message = { ...completion.message };
+  const returnedToolCalls = (message as { tool_calls?: unknown }).tool_calls;
+  if (returnedToolCalls !== undefined) {
+    if (returnedToolCalls === null) delete message.tool_calls;
+    else if (Array.isArray(returnedToolCalls)) message.tool_calls = returnedToolCalls.slice(0, 1);
     else return errorResponse("Token Factory returned malformed tool calls.", 502);
   }
 
   return NextResponse.json({
     message,
-    usage: { inputTokens, outputTokens, totalTokens },
-    model: MODEL,
-    latencyMs: Math.round(performance.now() - started),
-    costUsd,
-    finishReason: typeof payload.choices[0].finish_reason === "string" ? payload.choices[0].finish_reason : null,
-    requestId: upstream.headers.get("x-request-id"),
+    usage: {
+      inputTokens: completion.inputTokens,
+      outputTokens: completion.outputTokens,
+      totalTokens: completion.totalTokens,
+    },
+    model: AGENT_MODEL,
+    latencyMs: completion.latencyMs,
+    costUsd: completion.costUsd,
+    finishReason: completion.finishReason,
+    requestId: completion.requestId,
   });
 }

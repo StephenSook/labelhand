@@ -138,12 +138,18 @@ export WRITER_ACCESS_KEY_ID
 WRITER_SECRET_ACCESS_KEY="$(jq -er '.status.secret | select(type == "string" and length > 0)' "$WRITER_KEY_FILE")"
 test -n "$WRITER_SECRET_ACCESS_KEY"
 export WRITER_SECRET_ACCESS_KEY
+test -n "$ALERTS_RUN_URL"
+test -n "$ALERTS_RUN_SECRET"
 RECORDER_SECRET_PAYLOAD="$(jq -cn \
   --arg key_id "$WRITER_ACCESS_KEY_ID" \
   --arg secret "$WRITER_SECRET_ACCESS_KEY" \
+  --arg alerts_url "$ALERTS_RUN_URL" \
+  --arg alerts_secret "$ALERTS_RUN_SECRET" \
   '[
     {"key":"AWS_ACCESS_KEY_ID","string_value":$key_id},
-    {"key":"AWS_SECRET_ACCESS_KEY","string_value":$secret}
+    {"key":"AWS_SECRET_ACCESS_KEY","string_value":$secret},
+    {"key":"ALERTS_RUN_URL","string_value":$alerts_url},
+    {"key":"ALERTS_RUN_SECRET","string_value":$alerts_secret}
   ]')"
 test -n "$RECORDER_SECRET_PAYLOAD"
 RECORDER_SECRET_ID="$(nebius mysterybox secret create \
@@ -157,6 +163,8 @@ test -n "$RECORDER_SECRET_ID"
 export RECORDER_SECRET_ID
 unset RECORDER_SECRET_PAYLOAD
 ```
+
+The workflow maps all four keys from the one SecretStash secret selected by `NEBIUS_RECORDER_SECRET_SELECTOR`. For the running recorder, add a new primary version to that existing secret with `ALERTS_RUN_URL` and `ALERTS_RUN_SECRET`; keep the selector unchanged. The URL is the deployed `POST /api/alerts/run` endpoint. The secret must match the Vercel `ALERTS_RUN_SECRET` value. The recorder logs only whether the alert trigger ran, skipped, or failed, never either value.
 
 If Nebius rejects the two-role union on one bucket, stop and inspect the tenant. The documented fallback is `storage.object-editor`, but it also grants delete and restore actions and should not be applied without approval.
 

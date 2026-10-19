@@ -71,20 +71,24 @@ export function registrationIndexCacheKey(reg: string): string {
 }
 
 async function readJson(pathname: string, signal?: AbortSignal): Promise<unknown | null> {
-  const blobToken = token();
-  if (!blobToken) return null;
   try {
-    const result = await get(pathname, {
-      access: "private",
-      token: blobToken,
-      useCache: false,
-      ...(signal ? { abortSignal: signal } : {}),
-    });
-    if (!result) return null;
-    return await new Response(result.stream).json() as unknown;
+    return await readJsonStrict(pathname, signal);
   } catch {
     return null;
   }
+}
+
+async function readJsonStrict(pathname: string, signal?: AbortSignal): Promise<unknown | null> {
+  const blobToken = token();
+  if (!blobToken) return null;
+  const result = await get(pathname, {
+    access: "private",
+    token: blobToken,
+    useCache: false,
+    ...(signal ? { abortSignal: signal } : {}),
+  });
+  if (!result) return null;
+  return await new Response(result.stream).json() as unknown;
 }
 
 export async function getLiveCacheIndex(fileName: string, signal?: AbortSignal): Promise<LiveCacheIndex | null> {
@@ -97,6 +101,16 @@ export async function getRegistrationCacheIndex(reg: string, signal?: AbortSigna
   return isLiveCacheIndex(value) && value.reg === reg ? value : null;
 }
 
+export async function getRegistrationCacheIndexStrict(
+  reg: string,
+  signal?: AbortSignal,
+): Promise<LiveCacheIndex | null> {
+  const value = await readJsonStrict(registrationIndexCacheKey(reg), signal);
+  if (value === null) return null;
+  if (!isLiveCacheIndex(value) || value.reg !== reg) throw new TypeError("The live registration cache index is corrupt.");
+  return value;
+}
+
 export async function getCachedLiveLabel(
   sha256: string,
   pipelineVersion: string,
@@ -105,6 +119,23 @@ export async function getCachedLiveLabel(
   const value = await readJson(compiledCacheKey(sha256, pipelineVersion), signal);
   if (!isCompiledLiveLabel(value)) return null;
   if (value.label_sha256 !== sha256 || value.pipeline_version !== pipelineVersion) return null;
+  return value;
+}
+
+export async function getCachedLiveLabelStrict(
+  sha256: string,
+  pipelineVersion: string,
+  signal?: AbortSignal,
+): Promise<CompiledLiveLabel | null> {
+  const value = await readJsonStrict(compiledCacheKey(sha256, pipelineVersion), signal);
+  if (value === null) return null;
+  if (
+    !isCompiledLiveLabel(value)
+    || value.label_sha256 !== sha256
+    || value.pipeline_version !== pipelineVersion
+  ) {
+    throw new TypeError("The compiled live-label cache entry is corrupt.");
+  }
   return value;
 }
 
