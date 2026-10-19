@@ -164,7 +164,7 @@ export RECORDER_SECRET_ID
 unset RECORDER_SECRET_PAYLOAD
 ```
 
-The workflow maps all four keys from the one SecretStash secret selected by `NEBIUS_RECORDER_SECRET_SELECTOR`. For the running recorder, add a new primary version to that existing secret with `ALERTS_RUN_URL` and `ALERTS_RUN_SECRET`; keep the selector unchanged. The URL is the deployed `POST /api/alerts/run` endpoint. The secret must match the Vercel `ALERTS_RUN_SECRET` value. The recorder logs only whether the alert trigger ran, skipped, or failed, never either value.
+The workflow maps the two alert keys from the SecretStash secret selected by `NEBIUS_RECORDER_SECRET_SELECTOR` only when the repository variable `RECORDER_ALERTS` is `true`, because a job that maps a key its secret does not hold cannot launch. Add the keys first, then set the variable. For the running recorder, add a new primary version to that existing secret with `ALERTS_RUN_URL` and `ALERTS_RUN_SECRET`; keep the selector unchanged. The URL is the deployed `POST /api/alerts/run` endpoint. The secret must match the Vercel `ALERTS_RUN_SECRET` value. The recorder logs only whether the alert trigger ran, skipped, or failed, never either value.
 
 If Nebius rejects the two-role union on one bucket, stop and inspect the tenant. The documented fallback is `storage.object-editor`, but it also grants delete and restore actions and should not be applied without approval.
 

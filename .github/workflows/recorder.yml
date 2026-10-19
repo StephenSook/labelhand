@@ -25,6 +25,9 @@ jobs:
       NEBIUS_RECORDER_SECRET_SELECTOR: ${{ vars.NEBIUS_RECORDER_SECRET_SELECTOR }}
       RECORDER_BUCKET: ${{ vars.NEBIUS_RECORDER_BUCKET }}
       RECORDER_S3_ENDPOINT: ${{ vars.NEBIUS_RECORDER_S3_ENDPOINT }}
+      # True only after ALERTS_RUN_URL and ALERTS_RUN_SECRET are in the recorder secret: a job
+      # that maps a key its secret does not hold cannot launch, which would stop the recording.
+      RECORDER_ALERTS: ${{ vars.RECORDER_ALERTS }}
       NEBIUS_SA_CREDENTIALS: ${{ secrets.NEBIUS_SA_CREDENTIALS }}
       RECORDER_STOP_UTC: "2026-12-16T00:00:00Z"
     steps:
@@ -175,6 +178,14 @@ jobs:
           trap cleanup EXIT
           trap 'exit 130' INT TERM
 
+          alert_secrets=()
+          if [[ "${RECORDER_ALERTS:-}" == "true" ]]; then
+            alert_secrets=(
+              --env-secret "ALERTS_RUN_URL=$NEBIUS_RECORDER_SECRET_SELECTOR"
+              --env-secret "ALERTS_RUN_SECRET=$NEBIUS_RECORDER_SECRET_SELECTOR"
+            )
+          fi
+
           created_id=""
           if created_id="$(timeout --signal=TERM --kill-after=2s 60s nebius ai job create \
             --profile recorder \
@@ -187,8 +198,7 @@ jobs:
             --env "RECORDER_S3_ENDPOINT=$RECORDER_S3_ENDPOINT" \
             --env-secret "AWS_ACCESS_KEY_ID=$NEBIUS_RECORDER_SECRET_SELECTOR" \
             --env-secret "AWS_SECRET_ACCESS_KEY=$NEBIUS_RECORDER_SECRET_SELECTOR" \
-            --env-secret "ALERTS_RUN_URL=$NEBIUS_RECORDER_SECRET_SELECTOR" \
-            --env-secret "ALERTS_RUN_SECRET=$NEBIUS_RECORDER_SECRET_SELECTOR" \
+            "${alert_secrets[@]}" \
             --timeout 1h \
             --restart-policy never \
             --platform "$NEBIUS_JOB_PLATFORM" \
