@@ -1,6 +1,8 @@
 import checkback from "../../public/data/checkback.json";
 
 type Pooled = {
+  hours_considered: number;
+  evaluated_hours: number;
   held: number;
   broke: number;
   permitted_a_day_ahead: number;
@@ -60,9 +62,10 @@ export function ForecastCheckBack() {
   return (
     <div className="checkback">
       <p className="checkback-lede">
-        For every recorded hour from {spanFormatter.format(new Date(data.recorded_span.first))} to {spanFormatter.format(new Date(data.recorded_span.last))} Eastern,
-        the planner ran on the forecast issued about 24 hours earlier. Where it said forecast-permitted, the label limits an
-        airport weather station can measure were checked against what the station observed in that hour.
+        Between {spanFormatter.format(new Date(data.recorded_span.first))} and {spanFormatter.format(new Date(data.recorded_span.last))} Eastern,
+        {" "}{tank.evaluated_hours.toLocaleString("en-US")} of {tank.hours_considered.toLocaleString("en-US")} point-hours had both a station
+        observation and a forecast issued about 24 hours earlier. For those, the planner ran on the earlier forecast; where it said
+        forecast-permitted, the label limits an airport weather station can measure were checked against what the station observed.
       </p>
 
       <p className="checkback-headline">
