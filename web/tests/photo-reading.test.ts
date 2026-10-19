@@ -71,6 +71,7 @@ describe("photo reading primitives", () => {
     expect(productNamesAgree("ASSAIL 30SG", ["ASSAIL 30 SG INSECTICIDE"])).toBe(true);
     expect(productNamesAgree("Warrant", ["MON 63410", "WARRANT HERBICIDE"])).toBe(true);
     expect(productNamesAgree("Prep", ["PREP BRAND ETHEPHON FOR COTTON AND TOBACCO"])).toBe(true);
+    expect(productNamesAgree("Prep", ["PREP™brand Ethephon FOR COTTON AND TOBACCO"])).toBe(true);
     expect(productNamesAgree("AIM EC", ["AIM EC HERBICIDE"])).toBe(true);
     expect(productNamesAgree("2,4-D", ["2,4-D"])).toBe(true);
     expect(productNamesAgree("Vantacor", ["VANTACOR insect control"])).toBe(true);
@@ -190,6 +191,25 @@ describe("live vision request", () => {
     expect(result.request_ids).toEqual(["req-bad", "req-good"]);
     expect(result.usage).toMatchObject({ inputTokens: 2_000, outputTokens: 200, totalTokens: 2_200 });
     expect(result.usage.costUsd).toBeCloseTo(0.00078);
+  });
+
+  test("preserves a billed truncated response as an actionable error", async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue(completion(reading(), "req-long"));
+    fetchMock.mockResolvedValueOnce(new Response(JSON.stringify({
+      choices: [{ message: { content: JSON.stringify(reading()) }, finish_reason: "length" }],
+      usage: { prompt_tokens: 1_000, completion_tokens: 320, total_tokens: 1_320 },
+    }), { status: 200, headers: { "x-request-id": "req-long" } }));
+    await expect(readLabelPhoto(jpeg, "image/jpeg", {
+      apiKey: "test-key",
+      tokenFactoryFetch: fetchMock,
+      lookupProduct: async () => product(),
+    })).rejects.toMatchObject({
+      status: 502,
+      message: "Token Factory reached the label photo response limit.",
+      usage: { inputTokens: 1_000, outputTokens: 320, totalTokens: 1_320 },
+      requestIds: ["req-long"],
+      diagnostic: { source: "token_factory", detail: "Token Factory response reached max_tokens." },
+    });
   });
 
   test("preserves usage and request IDs when all billed responses are malformed", async () => {

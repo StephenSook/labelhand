@@ -60,6 +60,22 @@ The variance rows use the three final p2 receipts with OCR and the modality floo
 | p2 run two Token Factory cost, USD | `{"extraction":0.2238,"typing":0.3295,"ocr_rescue_typing":0.0064,"total":0.5597}` | command: same sum for `data/compiled/*.union.p2r2.typed.v3.ocr.mf.json`; output: `p2r2=0.5597` | MEASURED |
 | p2 run three Token Factory cost, USD | `{"extraction":0.2196,"typing":0.3218,"ocr_rescue_typing":0.0045,"total":0.5459}` | command: same sum for `data/compiled/*.union.p2r3.typed.v3.ocr.mf.json`; output: `p2r3=0.5459` | MEASURED |
 
+## EPA label photo reading
+
+The inputs below are rendered pages from real EPA PPLS labels. They are not photos. Each image row, including the source PDF hash, selected page, read, verdict, latency, token counts, and cost, remains in the receipt.
+
+| Claim | Exact value | Source | Tag |
+|---|---|---|---|
+| Vision model availability check | `{"http_status":200,"model":"nvidia/Nemotron-3.5-Super-VL","model_present":true,"model_count":28}` | `json:eval/results/photo-read-2026-10-19.json#model_availability` | MEASURED |
+| Photo evaluation input settings | `{"rendered_label_pages":{"images":20,"long_side_px":1600,"jpeg_quality":90},"simulated_phone_degradation":{"images":20,"rotation_degrees":4,"crop_percent":6,"long_side_px":1600,"jpeg_quality":55}}` | `json:eval/results/photo-read-2026-10-19.json#input_sets` | MEASURED |
+| Photo evaluation sample and completion | `{"labels_evaluated":20,"expected_images":40,"completed_images":40,"failed_images":0}` | `json:eval/results/photo-read-2026-10-19.json#pooled` | MEASURED |
+| Rendered label-page reads | `{"images":20,"exact_reg_reads":20,"exact_reg_read_rate":1,"product_name_agreements":20,"product_name_agreement_rate":1,"verdict_counts":{"MATCHED":20},"latency_ms":{"total":30503,"mean":1525.15},"tokens":{"input":41540,"output":1508,"total":43048},"cost_usd":0.0138192}` | `json:eval/results/photo-read-2026-10-19.json#pooled.sets.rendered_label_pages` | MEASURED |
+| Simulated phone-degradation reads | `{"images":20,"exact_reg_reads":20,"exact_reg_read_rate":1,"product_name_agreements":20,"product_name_agreement_rate":1,"verdict_counts":{"MATCHED":20},"latency_ms":{"total":27439,"mean":1371.95},"tokens":{"input":40840,"output":1485,"total":42325},"cost_usd":0.0135885}` | `json:eval/results/photo-read-2026-10-19.json#pooled.sets.simulated_phone_degradation` | MEASURED |
+| All photo-evaluation reads | `{"images":40,"exact_reg_reads":40,"exact_reg_read_rate":1,"product_name_agreements":40,"product_name_agreement_rate":1,"verdict_counts":{"MATCHED":40},"latency_ms":{"total":57942,"mean":1448.55},"tokens":{"input":82380,"output":2993,"total":85373},"cost_usd":0.0274077}` | `json:eval/results/photo-read-2026-10-19.json#pooled.overall` | MEASURED |
+| Wrong-but-valid registration reads | `{"wrong_but_valid_reg_reads":0,"wrong_but_valid_cases":[]}` | `json:eval/results/photo-read-2026-10-19.json#pooled` | MEASURED |
+| Official run cost, cumulative paid spend, and budget | `{"budget_usd":2,"current_run_cost_usd":0.0274077,"total_session_cost_usd":0.1101414}` | `json:eval/results/photo-read-2026-10-19.json#run` | MEASURED |
+| Nemotron 3.5 Super VL price used | `{"input_usd_per_million_tokens":0.3,"output_usd_per_million_tokens":0.9}` | `json:eval/results/photo-read-2026-10-19.json#pricing` | MEASURED |
+
 ## Planner results on the committed Tift replay
 
 These counts were recomputed from the committed replay periods and `.ship` rules through `engine/windows.py`. `PERMITTED` is displayed in the web app as `FORECAST-PERMITTED`.

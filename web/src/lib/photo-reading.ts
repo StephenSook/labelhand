@@ -2,6 +2,7 @@ import {
   callStrictJson,
   mergeUsage,
   TokenFactoryError,
+  TruncatedResponse,
   type TokenFactoryOptions,
   type TokenUsage,
 } from "./compiler/token-factory";
@@ -9,7 +10,7 @@ import { assertFederalReg, listLabelVersions, PplsError, type PplsProduct } from
 
 export const PHOTO_MODEL = "nvidia/Nemotron-3.5-Super-VL";
 export const MAX_PHOTO_BYTES = 4 * 1024 * 1024;
-export const PHOTO_MAX_TOKENS = 220;
+export const PHOTO_MAX_TOKENS = 320;
 
 const GENERIC_NAME_TOKENS = new Set([
   "aid",
@@ -53,6 +54,7 @@ const PHOTO_SYSTEM_PROMPT = `Read the printed pesticide container label in the i
 Return only the requested JSON. Copy the EPA registration number exactly as printed after "EPA Reg. No." and keep its hyphens.
 Copy the printed product name. Read only visible printed text. Never infer, complete, repair, or guess a digit.
 If every digit of the registration number is not legible, set epa_reg_no to null and readable to false.
+Keep what_is_visible to one short sentence.
 Do not report a confidence score.`;
 
 export type PhotoMime = "image/jpeg" | "image/png";
@@ -147,6 +149,7 @@ export function detectPhotoMime(bytes: Uint8Array): PhotoMime | null {
 
 export function productNameTokens(value: string): string[] {
   const normalized = value
+    .replace(/[™®©]/g, " ")
     .normalize("NFKD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/([a-z])([0-9])/gi, "$1 $2")
@@ -293,6 +296,12 @@ export async function readLabelPhoto(
       throw new PhotoReadError(error.message, error.status, billedUsage, requestIds, {
         source: "ppls",
         upstreamStatus: error.status,
+        detail: error.message,
+      });
+    }
+    if (error instanceof TruncatedResponse) {
+      throw new PhotoReadError("Token Factory reached the label photo response limit.", 502, billedUsage, requestIds, {
+        source: "token_factory",
         detail: error.message,
       });
     }

@@ -11,6 +11,7 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "e2e": "playwright test",
+    "photo-eval": "tsx scripts/photo-eval.ts",
     "sync-engine": "node scripts/sync-engine.mjs"
   },
   "dependencies": {
@@ -33,6 +34,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.6",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^5.0.2"

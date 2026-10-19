@@ -1,0 +1,2363 @@
+{
+  "schema_version": 1,
+  "evaluation": "EPA registration reading from rendered pesticide label pages",
+  "data_description": "These inputs are rendered label pages and rendered pages with simulated phone degradation. They are not photos.",
+  "run": {
+    "status": "complete",
+    "started_utc": "2026-10-19T22:21:34.532Z",
+    "finished_utc": "2026-10-19T22:23:20.357Z",
+    "budget_usd": 2,
+    "stop_reason": null,
+    "prior_paid_runs": [
+      {
+        "cost_usd": 0.0277878,
+        "outcome": "38 completed, 2 truncated at 220 output tokens"
+      },
+      {
+        "cost_usd": 0.0274836,
+        "outcome": "40 completed; superseded because one selected page was an EPA acceptance letter"
+      },
+      {
+        "cost_usd": 0.0274623,
+        "outcome": "40 completed; superseded because the selected Warrant master-label page did not print the product name"
+      }
+    ],
+    "current_run_cost_usd": 0.0274077,
+    "total_session_cost_usd": 0.1101414
+  },
+  "model_availability": {
+    "checked_utc": "2026-10-19T22:21:34.536Z",
+    "endpoint": "https://api.tokenfactory.nebius.com/v1/models",
+    "http_status": 200,
+    "model": "nvidia/Nemotron-3.5-Super-VL",
+    "model_present": true,
+    "model_count": 28,
+    "matched_model": {
+      "id": "nvidia/Nemotron-3.5-Super-VL",
+      "created": 1791841710,
+      "object": "model",
+      "owned_by": "system"
+    }
+  },
+  "pricing": {
+    "model": "nvidia/Nemotron-3.5-Super-VL",
+    "input_usd_per_million_tokens": 0.3,
+    "output_usd_per_million_tokens": 0.9,
+    "source": "https://nebius.com/blog/posts/three-new-open-weight-models-from-us-companies-give-builders-more-choice"
+  },
+  "input_sets": {
+    "rendered_label_pages": {
+      "images": 20,
+      "source": "newest accepted EPA PPLS PDF front-panel page",
+      "long_side_px": 1600,
+      "jpeg_quality": 90
+    },
+    "simulated_phone_degradation": {
+      "images": 20,
+      "source": "same rendered label page",
+      "rotation_degrees": 4,
+      "crop_percent": 6,
+      "crop_rule": "crop the edge opposite the registration number",
+      "long_side_px": 1600,
+      "jpeg_quality": 55
+    }
+  },
+  "manifest": [
+    {
+      "reg": "5481-504",
+      "expectedName": "Folex 6 EC",
+      "category": "defoliant",
+      "required": true,
+      "frontPage": 3,
+      "registrationSide": "right"
+    },
+    {
+      "reg": "264-700",
+      "expectedName": "Dropp SC",
+      "category": "defoliant",
+      "required": true
+    },
+    {
+      "reg": "264-418",
+      "expectedName": "Prep",
+      "category": "defoliant",
+      "required": true
+    },
+    {
+      "reg": "100-1256",
+      "expectedName": "Axial XL",
+      "category": "herbicide",
+      "required": true
+    },
+    {
+      "reg": "264-802",
+      "expectedName": "Osprey",
+      "category": "herbicide",
+      "required": true,
+      "frontPage": 3
+    },
+    {
+      "reg": "62719-643",
+      "expectedName": "PowerFlex HL",
+      "category": "herbicide",
+      "required": true
+    },
+    {
+      "reg": "279-9583",
+      "expectedName": "Harmony Extra SG",
+      "category": "herbicide",
+      "required": true
+    },
+    {
+      "reg": "100-816",
+      "expectedName": "Dual Magnum",
+      "category": "herbicide",
+      "required": false
+    },
+    {
+      "reg": "7969-448",
+      "expectedName": "Liberty 280 SL",
+      "category": "herbicide",
+      "required": false
+    },
+    {
+      "reg": "5481-684",
+      "expectedName": "Envoke",
+      "category": "herbicide",
+      "required": false
+    },
+    {
+      "reg": "352-613",
+      "expectedName": "Staple LX",
+      "category": "herbicide",
+      "required": false,
+      "frontPage": 3
+    },
+    {
+      "reg": "8033-36",
+      "expectedName": "Assail 30 SG",
+      "category": "insecticide",
+      "required": false
+    },
+    {
+      "reg": "62719-625",
+      "expectedName": "Transform WG",
+      "category": "insecticide",
+      "required": false,
+      "frontPage": 3
+    },
+    {
+      "reg": "279-9656",
+      "expectedName": "Vantacor",
+      "category": "insecticide",
+      "required": false
+    },
+    {
+      "reg": "100-1295",
+      "expectedName": "Warrior II",
+      "category": "insecticide",
+      "required": false
+    },
+    {
+      "reg": "264-862",
+      "expectedName": "Provost Silver",
+      "category": "fungicide",
+      "required": false
+    },
+    {
+      "reg": "352-834",
+      "expectedName": "Fontelis",
+      "category": "fungicide",
+      "required": false
+    },
+    {
+      "reg": "7969-186",
+      "expectedName": "Headline",
+      "category": "fungicide",
+      "required": false,
+      "frontPage": 3
+    },
+    {
+      "reg": "7969-311",
+      "expectedName": "Priaxor",
+      "category": "fungicide",
+      "required": false
+    },
+    {
+      "reg": "100-1098",
+      "expectedName": "Abound",
+      "category": "fungicide",
+      "required": false
+    }
+  ],
+  "labels": [
+    {
+      "reg": "5481-504",
+      "expected_product_name": "Folex 6 EC",
+      "category": "defoliant",
+      "ppls_product_name": "FOLEX® 6 EC",
+      "alternate_brand_names": [
+        "VESTAGE"
+      ],
+      "status": "Active",
+      "newest_accepted": "2026-03-04",
+      "newest_url": "https://www3.epa.gov/pesticides/chem_search/ppls/005481-00504-20260304.pdf",
+      "pdf_sha256": "184a62d6439c0aa76356fc8d0edad2bd23825de0e6865c7bc5663993e6f0fe2a",
+      "pdf_bytes": 399894,
+      "front_panel_page": 3,
+      "front_panel_matched_name": "Folex 6 EC",
+      "front_panel_selection": "manual_visual_image_text"
+    },
+    {
+      "reg": "264-700",
+      "expected_product_name": "Dropp SC",
+      "category": "defoliant",
+      "ppls_product_name": "DROPP SC COTTON DEFOLIANT",
+      "alternate_brand_names": [],
+      "status": "Inactive",
+      "newest_accepted": "2009-12-14",
+      "newest_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000264-00700-20091214.pdf",
+      "pdf_sha256": "a54368ee21fda49047de78578937c093c573c472848a46d2342510117f9b403e",
+      "pdf_bytes": 535435,
+      "front_panel_page": 3,
+      "front_panel_matched_name": "Dropp SC",
+      "front_panel_selection": "text_match"
+    },
+    {
+      "reg": "264-418",
+      "expected_product_name": "Prep",
+      "category": "defoliant",
+      "ppls_product_name": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
+      "alternate_brand_names": [
+        "PREP BRAND ETHEPHON COTTON BOLL OPENER",
+        "CERONE 720"
+      ],
+      "status": "Active",
+      "newest_accepted": "2021-02-24",
+      "newest_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000264-00418-20210224.pdf",
+      "pdf_sha256": "0416a94124e908f51623869612cb1f180a850488de04773fb86f3e1b63372770",
+      "pdf_bytes": 478072,
+      "front_panel_page": 3,
+      "front_panel_matched_name": "Prep",
+      "front_panel_selection": "text_match"
+    },
+    {
+      "reg": "100-1256",
+      "expected_product_name": "Axial XL",
+      "category": "herbicide",
+      "ppls_product_name": "AXIAL XL",
+      "alternate_brand_names": [],
+      "status": "Active",
+      "newest_accepted": "2022-05-03",
+      "newest_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000100-01256-20220503.pdf",
+      "pdf_sha256": "79bf4aedc997858f1267832e11fed6d4bc1437382b6bb1eb643513e5b975d68c",
+      "pdf_bytes": 355308,
+      "front_panel_page": 3,
+      "front_panel_matched_name": "Axial XL",
+      "front_panel_selection": "text_match"
+    },
+    {
+      "reg": "264-802",
+      "expected_product_name": "Osprey",
+      "category": "herbicide",
+      "ppls_product_name": "OSPREY HERBICIDE",
+      "alternate_brand_names": [],
+      "status": "Active",
+      "newest_accepted": "2024-08-28",
+      "newest_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000264-00802-20240828.pdf",
+      "pdf_sha256": "3eb0cacad54b25599a712442ec91b7461148dfa8ee344eb7b0986bbc3cc84c1f",
+      "pdf_bytes": 1148408,
+      "front_panel_page": 3,
+      "front_panel_matched_name": "Osprey",
+      "front_panel_selection": "manual_visual_image_text"
+    },
+    {
+      "reg": "62719-643",
+      "expected_product_name": "PowerFlex HL",
+      "category": "herbicide",
+      "ppls_product_name": "GF-2468",
+      "alternate_brand_names": [
+        "POWERFLEX HL"
+      ],
+      "status": "Active",
+      "newest_accepted": "2022-04-13",
+      "newest_url": "https://www3.epa.gov/pesticides/chem_search/ppls/062719-00643-20220413.pdf",
+      "pdf_sha256": "3f56ea43843e9a5ce700f2b8b0c796d11a5fd5504bfeb789aee2eaf776add007",
+      "pdf_bytes": 627617,
+      "front_panel_page": 6,
+      "front_panel_matched_name": "PowerFlex HL",
+      "front_panel_selection": "text_match"
+    },
+    {
+      "reg": "279-9583",
+      "expected_product_name": "Harmony Extra SG",
+      "category": "herbicide",
+      "ppls_product_name": "HARMONY EXTRA HERBICIDE",
+      "alternate_brand_names": [],
+      "status": "Active",
+      "newest_accepted": "2019-06-13",
+      "newest_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000279-09583-20190613.pdf",
+      "pdf_sha256": "7a050912b9942bab4109941b892197e0edb93ce5920e80b15a2b1c9acb57394f",
+      "pdf_bytes": 616048,
+      "front_panel_page": 3,
+      "front_panel_matched_name": "HARMONY EXTRA HERBICIDE",
+      "front_panel_selection": "text_match"
+    },
+    {
+      "reg": "100-816",
+      "expected_product_name": "Dual Magnum",
+      "category": "herbicide",
+      "ppls_product_name": "Dual Magnum® Herbicide",
+      "alternate_brand_names": [
+        "MEDAL EC",
+        "PREFIX CP"
+      ],
+      "status": "Active",
+      "newest_accepted": "2024-05-22",
+      "newest_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000100-00816-20240522.pdf",
+      "pdf_sha256": "b30cb671d1edb400624c6e1e8fea2ca7511cac6112d3aa073cf37c79e3faf161",
+      "pdf_bytes": 907806,
+      "front_panel_page": 3,
+      "front_panel_matched_name": "Dual Magnum",
+      "front_panel_selection": "text_match"
+    },
+    {
+      "reg": "7969-448",
+      "expected_product_name": "Liberty 280 SL",
+      "category": "herbicide",
+      "ppls_product_name": "LIBERTY 280 SL HERBICIDE",
+      "alternate_brand_names": [
+        "IGNITE 280 SL HERBICIDE",
+        "NoventaTM herbicide"
+      ],
+      "status": "Active",
+      "newest_accepted": "2026-08-26",
+      "newest_url": "https://www3.epa.gov/pesticides/chem_search/ppls/007969-00448-20260826.pdf",
+      "pdf_sha256": "d6c06bf0752bfeb6c9b3d8ca5860f165126cae2a8d2aa043ae336e48d84d9132",
+      "pdf_bytes": 1927010,
+      "front_panel_page": 3,
+      "front_panel_matched_name": "Liberty 280 SL",
+      "front_panel_selection": "text_match"
+    },
+    {
+      "reg": "5481-684",
+      "expected_product_name": "Envoke",
+      "category": "herbicide",
+      "ppls_product_name": "ENVOKE HERBICIDE",
+      "alternate_brand_names": [],
+      "status": "Active",
+      "newest_accepted": "2026-01-20",
+      "newest_url": "https://www3.epa.gov/pesticides/chem_search/ppls/005481-00684-20260120.pdf",
+      "pdf_sha256": "79eb657725518a36a8d169405cf91f5294622495033bdf054eb0ff2a099c08aa",
+      "pdf_bytes": 746153,
+      "front_panel_page": 3,
+      "front_panel_matched_name": "Envoke",
+      "front_panel_selection": "text_match"
+    },
+    {
+      "reg": "352-613",
+      "expected_product_name": "Staple LX",
+      "category": "herbicide",
+      "ppls_product_name": "STAPLE LX",
+      "alternate_brand_names": [
+        "DUPONT STAPLE LX"
+      ],
+      "status": "Active",
+      "newest_accepted": "2025-11-12",
+      "newest_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000352-00613-20251112.pdf",
+      "pdf_sha256": "8ce17409b84e8472d87aa6b7366969f06e7b4a66ad13150b867c838f536dd1e9",
+      "pdf_bytes": 1443337,
+      "front_panel_page": 3,
+      "front_panel_matched_name": "Staple LX",
+      "front_panel_selection": "manual_visual_image_text"
+    },
+    {
+      "reg": "8033-36",
+      "expected_product_name": "Assail 30 SG",
+      "category": "insecticide",
+      "ppls_product_name": "ASSAIL 30 SG INSECTICIDE",
+      "alternate_brand_names": [
+        "ACETAMIPRID 30 SG INSECTICIDE"
+      ],
+      "status": "Active",
+      "newest_accepted": "2021-06-11",
+      "newest_url": "https://www3.epa.gov/pesticides/chem_search/ppls/008033-00036-20210611.pdf",
+      "pdf_sha256": "0f55e245828d5c329e641eefb0c963ecc88e838a8ba36028cc8b09f22264af83",
+      "pdf_bytes": 489991,
+      "front_panel_page": 3,
+      "front_panel_matched_name": "Assail 30 SG",
+      "front_panel_selection": "text_match"
+    },
+    {
+      "reg": "62719-625",
+      "expected_product_name": "Transform WG",
+      "category": "insecticide",
+      "ppls_product_name": "TRANSFORM WG",
+      "alternate_brand_names": [],
+      "status": "Active",
+      "newest_accepted": "2021-01-08",
+      "newest_url": "https://www3.epa.gov/pesticides/chem_search/ppls/062719-00625-20210108.pdf",
+      "pdf_sha256": "3ba84256444a18e6cdf5f9a624ca8db1169532b23cbf89fcad52d4c992cd5cf6",
+      "pdf_bytes": 552478,
+      "front_panel_page": 3,
+      "front_panel_matched_name": "Transform WG",
+      "front_panel_selection": "manual_visual_image_text"
+    },
+    {
+      "reg": "279-9656",
+      "expected_product_name": "Vantacor",
+      "category": "insecticide",
+      "ppls_product_name": "E2Y45-848 insect control",
+      "alternate_brand_names": [
+        "VANTACOR insect control"
+      ],
+      "status": "Active",
+      "newest_accepted": "2022-07-20",
+      "newest_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000279-09656-20220720.pdf",
+      "pdf_sha256": "ac53208a68f9b57efe21ad227230488fc6d559fba4c2978fa84f5e72b06c50be",
+      "pdf_bytes": 658480,
+      "front_panel_page": 3,
+      "front_panel_matched_name": "E2Y45-848 insect control",
+      "front_panel_selection": "text_match"
+    },
+    {
+      "reg": "100-1295",
+      "expected_product_name": "Warrior II",
+      "category": "insecticide",
+      "ppls_product_name": "WARRIOR II WITH ZEON TECHNOLOGY",
+      "alternate_brand_names": [
+        "LAMCAP II"
+      ],
+      "status": "Active",
+      "newest_accepted": "2025-07-03",
+      "newest_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000100-01295-20250703.pdf",
+      "pdf_sha256": "dcb3decf4e9f62ecf9455c8bc375bcfe0bf09d9802ae987acaa3f27ce3301420",
+      "pdf_bytes": 498418,
+      "front_panel_page": 3,
+      "front_panel_matched_name": "Warrior II",
+      "front_panel_selection": "text_match"
+    },
+    {
+      "reg": "264-862",
+      "expected_product_name": "Provost Silver",
+      "category": "fungicide",
+      "ppls_product_name": "PROSARO 421 SC FUNGICIDE",
+      "alternate_brand_names": [
+        "PROVOST SILVER"
+      ],
+      "status": "Active",
+      "newest_accepted": "2025-03-24",
+      "newest_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000264-00862-20250324.pdf",
+      "pdf_sha256": "959c3f2fb57b436060620afd782d92ae989214507cb10acdb4ca56259dc6c339",
+      "pdf_bytes": 407522,
+      "front_panel_page": 3,
+      "front_panel_matched_name": "Provost Silver",
+      "front_panel_selection": "text_match"
+    },
+    {
+      "reg": "352-834",
+      "expected_product_name": "Fontelis",
+      "category": "fungicide",
+      "ppls_product_name": "DUPONT FONTELIS FUNGICIDE",
+      "alternate_brand_names": [
+        "FONTELIS",
+        "DUPONT FONTELIS"
+      ],
+      "status": "Active",
+      "newest_accepted": "2024-05-06",
+      "newest_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000352-00834-20240506.pdf",
+      "pdf_sha256": "467f679c3b3cb3c23c96a2ffc75ddddb2e54f26f28eeb8b7c7b213bc74bbdb98",
+      "pdf_bytes": 687421,
+      "front_panel_page": 3,
+      "front_panel_matched_name": "Fontelis",
+      "front_panel_selection": "text_match"
+    },
+    {
+      "reg": "7969-186",
+      "expected_product_name": "Headline",
+      "category": "fungicide",
+      "ppls_product_name": "HEADLINE FUNGICIDE",
+      "alternate_brand_names": [],
+      "status": "Active",
+      "newest_accepted": "2017-01-26",
+      "newest_url": "https://www3.epa.gov/pesticides/chem_search/ppls/007969-00186-20170126.pdf",
+      "pdf_sha256": "b174777cdf8a8e2073f2d2f17c6aa910b2bbf618249ad7aa2e4c5c7457c38eec",
+      "pdf_bytes": 215119,
+      "front_panel_page": 3,
+      "front_panel_matched_name": "Headline",
+      "front_panel_selection": "manual_visual_image_text"
+    },
+    {
+      "reg": "7969-311",
+      "expected_product_name": "Priaxor",
+      "category": "fungicide",
+      "ppls_product_name": "Priaxor® Xemium® Brand Fungicide",
+      "alternate_brand_names": [],
+      "status": "Active",
+      "newest_accepted": "2025-07-30",
+      "newest_url": "https://www3.epa.gov/pesticides/chem_search/ppls/007969-00311-20250730.pdf",
+      "pdf_sha256": "debda1f0c48c77e340bb6246d4c495bf7236c21d988c330a28b47038352eea4f",
+      "pdf_bytes": 766965,
+      "front_panel_page": 3,
+      "front_panel_matched_name": "Priaxor",
+      "front_panel_selection": "text_match"
+    },
+    {
+      "reg": "100-1098",
+      "expected_product_name": "Abound",
+      "category": "fungicide",
+      "ppls_product_name": "ABOUND FLOWABLE FUNGICIDE",
+      "alternate_brand_names": [
+        "QUADRIS FLOWABLE FUNGICIDE",
+        "DIPLOMA",
+        "DIPLOMA FUNGICIDE",
+        "AZOXY FLOWABLE FUNGICIDE",
+        "AFRAME"
+      ],
+      "status": "Active",
+      "newest_accepted": "2018-12-19",
+      "newest_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000100-01098-20181219.pdf",
+      "pdf_sha256": "46c801d887e192262169c5034c5c26bba6744e0a0a97a0cd3be0e892d69f02c8",
+      "pdf_bytes": 678535,
+      "front_panel_page": 3,
+      "front_panel_matched_name": "Abound",
+      "front_panel_selection": "text_match"
+    }
+  ],
+  "images": [
+    {
+      "reg_truth": "5481-504",
+      "expected_product_name": "Folex 6 EC",
+      "category": "defoliant",
+      "required_product": true,
+      "ppls_product_name": "FOLEX® 6 EC",
+      "alternate_brand_names": [
+        "VESTAGE"
+      ],
+      "label_accepted": "2026-03-04",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/005481-00504-20260304.pdf",
+      "label_sha256": "184a62d6439c0aa76356fc8d0edad2bd23825de0e6865c7bc5663993e6f0fe2a",
+      "front_panel_page": 3,
+      "set": "rendered_label_pages",
+      "set_label": "rendered label pages",
+      "image_sha256": "5428013c8297265f00b29c344ce61df37980cd640313839c6bd9cceec38031f6",
+      "image_bytes": 404940,
+      "transform": {
+        "source": "newest accepted EPA PPLS PDF",
+        "page": 3,
+        "long_side_px": 1600,
+        "jpeg_quality": 90
+      },
+      "status": "completed",
+      "read_epa_reg_no": "5481-504",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "FOLEX® 6 EC",
+      "epa_product_name": "FOLEX® 6 EC",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The EPA registration number 5481-504 is printed inside the accepted stamp on the right side of the label.",
+      "latency_ms": 2746,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 74,
+        "totalTokens": 2151,
+        "costUsd": 0.0006896999999999999
+      },
+      "request_ids": [
+        "0f81ee11de56ae73196b22f395a8ecc8"
+      ]
+    },
+    {
+      "reg_truth": "5481-504",
+      "expected_product_name": "Folex 6 EC",
+      "category": "defoliant",
+      "required_product": true,
+      "ppls_product_name": "FOLEX® 6 EC",
+      "alternate_brand_names": [
+        "VESTAGE"
+      ],
+      "label_accepted": "2026-03-04",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/005481-00504-20260304.pdf",
+      "label_sha256": "184a62d6439c0aa76356fc8d0edad2bd23825de0e6865c7bc5663993e6f0fe2a",
+      "front_panel_page": 3,
+      "set": "simulated_phone_degradation",
+      "set_label": "rendered pages with simulated phone degradation",
+      "image_sha256": "757ca68488770cef01a08aa56ced42e9fb8b5cec4136ce5d57ac0862a1a28f87",
+      "image_bytes": 192014,
+      "transform": {
+        "source": "rendered label page",
+        "rotation_degrees": 4,
+        "crop_percent": 6,
+        "cropped_edge": "left",
+        "epa_reg_retained_edge": "east",
+        "long_side_px": 1600,
+        "jpeg_quality": 55
+      },
+      "status": "completed",
+      "read_epa_reg_no": "5481-504",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "FOLEX® 6 EC",
+      "epa_product_name": "FOLEX® 6 EC",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The EPA registration number 5481-504 is printed in the accepted box on the right side of the label.",
+      "latency_ms": 1492,
+      "usage": {
+        "inputTokens": 1977,
+        "outputTokens": 74,
+        "totalTokens": 2051,
+        "costUsd": 0.0006596999999999999
+      },
+      "request_ids": [
+        "b60fe82848636c687af6723e4b23f530"
+      ]
+    },
+    {
+      "reg_truth": "264-700",
+      "expected_product_name": "Dropp SC",
+      "category": "defoliant",
+      "required_product": true,
+      "ppls_product_name": "DROPP SC COTTON DEFOLIANT",
+      "alternate_brand_names": [],
+      "label_accepted": "2009-12-14",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000264-00700-20091214.pdf",
+      "label_sha256": "a54368ee21fda49047de78578937c093c573c472848a46d2342510117f9b403e",
+      "front_panel_page": 3,
+      "set": "rendered_label_pages",
+      "set_label": "rendered label pages",
+      "image_sha256": "1f752f9d447c7a3cea936838ae02fc5137e8a36f38095ffa48a5e2e2d7db9a48",
+      "image_bytes": 403763,
+      "transform": {
+        "source": "newest accepted EPA PPLS PDF",
+        "page": 3,
+        "long_side_px": 1600,
+        "jpeg_quality": 90
+      },
+      "status": "completed",
+      "read_epa_reg_no": "264-700",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "Dropp SC COTTON DEFOLIANT",
+      "epa_product_name": "DROPP SC COTTON DEFOLIANT",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The EPA registration number 264-700 is printed on the label.",
+      "latency_ms": 1358,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 69,
+        "totalTokens": 2146,
+        "costUsd": 0.0006852
+      },
+      "request_ids": [
+        "89824d7adadc17bb6ecd5e9354ca9004"
+      ]
+    },
+    {
+      "reg_truth": "264-700",
+      "expected_product_name": "Dropp SC",
+      "category": "defoliant",
+      "required_product": true,
+      "ppls_product_name": "DROPP SC COTTON DEFOLIANT",
+      "alternate_brand_names": [],
+      "label_accepted": "2009-12-14",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000264-00700-20091214.pdf",
+      "label_sha256": "a54368ee21fda49047de78578937c093c573c472848a46d2342510117f9b403e",
+      "front_panel_page": 3,
+      "set": "simulated_phone_degradation",
+      "set_label": "rendered pages with simulated phone degradation",
+      "image_sha256": "d214a8536e2ec508de857f5843708bf4620e18dadc044d5dbd29f85a514f25d2",
+      "image_bytes": 184301,
+      "transform": {
+        "source": "rendered label page",
+        "rotation_degrees": 4,
+        "crop_percent": 6,
+        "cropped_edge": "right",
+        "epa_reg_retained_edge": "west",
+        "long_side_px": 1600,
+        "jpeg_quality": 55
+      },
+      "status": "completed",
+      "read_epa_reg_no": "264-700",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "Dropp SC COTTON DEFOLIANT",
+      "epa_product_name": "DROPP SC COTTON DEFOLIANT",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The EPA registration number 264-700 is printed on the label.",
+      "latency_ms": 1372,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 69,
+        "totalTokens": 2146,
+        "costUsd": 0.0006852
+      },
+      "request_ids": [
+        "b34ef22eefdada79a6d4354ec621ebdd"
+      ]
+    },
+    {
+      "reg_truth": "264-418",
+      "expected_product_name": "Prep",
+      "category": "defoliant",
+      "required_product": true,
+      "ppls_product_name": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
+      "alternate_brand_names": [
+        "PREP BRAND ETHEPHON COTTON BOLL OPENER",
+        "CERONE 720"
+      ],
+      "label_accepted": "2021-02-24",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000264-00418-20210224.pdf",
+      "label_sha256": "0416a94124e908f51623869612cb1f180a850488de04773fb86f3e1b63372770",
+      "front_panel_page": 3,
+      "set": "rendered_label_pages",
+      "set_label": "rendered label pages",
+      "image_sha256": "a5a68f2f68701ef254de2dcf77a6080c203f8f78d4fe1858269dd4a6365394e5",
+      "image_bytes": 364495,
+      "transform": {
+        "source": "newest accepted EPA PPLS PDF",
+        "page": 3,
+        "long_side_px": 1600,
+        "jpeg_quality": 90
+      },
+      "status": "completed",
+      "read_epa_reg_no": "264-418",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "PREP brand Ethephon FOR COTTON AND TOBACCO",
+      "epa_product_name": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The label shows the product name, active ingredient, EPA Reg. No. 264-418, and first aid instructions.",
+      "latency_ms": 1348,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 84,
+        "totalTokens": 2161,
+        "costUsd": 0.0006986999999999999
+      },
+      "request_ids": [
+        "139e07c7cb090370db3f5800c02431bc"
+      ]
+    },
+    {
+      "reg_truth": "264-418",
+      "expected_product_name": "Prep",
+      "category": "defoliant",
+      "required_product": true,
+      "ppls_product_name": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
+      "alternate_brand_names": [
+        "PREP BRAND ETHEPHON COTTON BOLL OPENER",
+        "CERONE 720"
+      ],
+      "label_accepted": "2021-02-24",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000264-00418-20210224.pdf",
+      "label_sha256": "0416a94124e908f51623869612cb1f180a850488de04773fb86f3e1b63372770",
+      "front_panel_page": 3,
+      "set": "simulated_phone_degradation",
+      "set_label": "rendered pages with simulated phone degradation",
+      "image_sha256": "a7994649c3a07d8d7803eeb84df9a13ea5abcfc86714bf08c3cfa81b19431fd7",
+      "image_bytes": 179340,
+      "transform": {
+        "source": "rendered label page",
+        "rotation_degrees": 4,
+        "crop_percent": 6,
+        "cropped_edge": "right",
+        "epa_reg_retained_edge": "west",
+        "long_side_px": 1600,
+        "jpeg_quality": 55
+      },
+      "status": "completed",
+      "read_epa_reg_no": "264-418",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "PREP brand Ethephon",
+      "epa_product_name": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The EPA registration number 264-418 is clearly printed on the label.",
+      "latency_ms": 1362,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 65,
+        "totalTokens": 2142,
+        "costUsd": 0.0006815999999999999
+      },
+      "request_ids": [
+        "395e08659bca82eb5ffe248304a150da"
+      ]
+    },
+    {
+      "reg_truth": "100-1256",
+      "expected_product_name": "Axial XL",
+      "category": "herbicide",
+      "required_product": true,
+      "ppls_product_name": "AXIAL XL",
+      "alternate_brand_names": [],
+      "label_accepted": "2022-05-03",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000100-01256-20220503.pdf",
+      "label_sha256": "79bf4aedc997858f1267832e11fed6d4bc1437382b6bb1eb643513e5b975d68c",
+      "front_panel_page": 3,
+      "set": "rendered_label_pages",
+      "set_label": "rendered label pages",
+      "image_sha256": "5ace230a15fc7fadf3827f64ff144e4f09aaf304618f98ed7d3b8cd90b658a67",
+      "image_bytes": 171959,
+      "transform": {
+        "source": "newest accepted EPA PPLS PDF",
+        "page": 3,
+        "long_side_px": 1600,
+        "jpeg_quality": 90
+      },
+      "status": "completed",
+      "read_epa_reg_no": "100-1256",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "Axial® XL Herbicide",
+      "epa_product_name": "AXIAL XL",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The image shows a pesticide master label for Axial XL Herbicide with EPA Reg. No. 100-1256.",
+      "latency_ms": 1183,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 76,
+        "totalTokens": 2153,
+        "costUsd": 0.0006915
+      },
+      "request_ids": [
+        "be9ff575297749f4760232247e31b1e5"
+      ]
+    },
+    {
+      "reg_truth": "100-1256",
+      "expected_product_name": "Axial XL",
+      "category": "herbicide",
+      "required_product": true,
+      "ppls_product_name": "AXIAL XL",
+      "alternate_brand_names": [],
+      "label_accepted": "2022-05-03",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000100-01256-20220503.pdf",
+      "label_sha256": "79bf4aedc997858f1267832e11fed6d4bc1437382b6bb1eb643513e5b975d68c",
+      "front_panel_page": 3,
+      "set": "simulated_phone_degradation",
+      "set_label": "rendered pages with simulated phone degradation",
+      "image_sha256": "56dbf8b362afb46afe3d311d2ba9daab57e40dd8075951e41ef9b0f7bd5fff11",
+      "image_bytes": 85699,
+      "transform": {
+        "source": "rendered label page",
+        "rotation_degrees": 4,
+        "crop_percent": 6,
+        "cropped_edge": "right",
+        "epa_reg_retained_edge": "west",
+        "long_side_px": 1600,
+        "jpeg_quality": 55
+      },
+      "status": "completed",
+      "read_epa_reg_no": "100-1256",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "Axial® XL Herbicide",
+      "epa_product_name": "AXIAL XL",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The image shows a pesticide master label for Axial XL Herbicide with EPA Reg. No. 100-1256.",
+      "latency_ms": 1277,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 76,
+        "totalTokens": 2153,
+        "costUsd": 0.0006915
+      },
+      "request_ids": [
+        "226f9f1ca34e6741184f83b4aadddede"
+      ]
+    },
+    {
+      "reg_truth": "264-802",
+      "expected_product_name": "Osprey",
+      "category": "herbicide",
+      "required_product": true,
+      "ppls_product_name": "OSPREY HERBICIDE",
+      "alternate_brand_names": [],
+      "label_accepted": "2024-08-28",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000264-00802-20240828.pdf",
+      "label_sha256": "3eb0cacad54b25599a712442ec91b7461148dfa8ee344eb7b0986bbc3cc84c1f",
+      "front_panel_page": 3,
+      "set": "rendered_label_pages",
+      "set_label": "rendered label pages",
+      "image_sha256": "0269770f65d1e0b47eb35f7fd1b209e63468fb7ac664fc45250a31c1cd0fb8ae",
+      "image_bytes": 427514,
+      "transform": {
+        "source": "newest accepted EPA PPLS PDF",
+        "page": 3,
+        "long_side_px": 1600,
+        "jpeg_quality": 90
+      },
+      "status": "completed",
+      "read_epa_reg_no": "264-802",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "OSPREY® Herbicide",
+      "epa_product_name": "OSPREY HERBICIDE",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The label shows OSPREY Herbicide with EPA Reg. No. 264-802.",
+      "latency_ms": 1350,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 70,
+        "totalTokens": 2147,
+        "costUsd": 0.0006860999999999999
+      },
+      "request_ids": [
+        "a4dc02b3deb563cacf51476b0daf5cd1"
+      ]
+    },
+    {
+      "reg_truth": "264-802",
+      "expected_product_name": "Osprey",
+      "category": "herbicide",
+      "required_product": true,
+      "ppls_product_name": "OSPREY HERBICIDE",
+      "alternate_brand_names": [],
+      "label_accepted": "2024-08-28",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000264-00802-20240828.pdf",
+      "label_sha256": "3eb0cacad54b25599a712442ec91b7461148dfa8ee344eb7b0986bbc3cc84c1f",
+      "front_panel_page": 3,
+      "set": "simulated_phone_degradation",
+      "set_label": "rendered pages with simulated phone degradation",
+      "image_sha256": "4a1586a6efbc0778268b979b61469c13e53b641b8678edc82a02e34c9c63e22c",
+      "image_bytes": 188650,
+      "transform": {
+        "source": "rendered label page",
+        "rotation_degrees": 4,
+        "crop_percent": 6,
+        "cropped_edge": "left",
+        "epa_reg_retained_edge": "east",
+        "long_side_px": 1600,
+        "jpeg_quality": 55
+      },
+      "status": "completed",
+      "read_epa_reg_no": "264-802",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "OSPREY® Herbicide",
+      "epa_product_name": "OSPREY HERBICIDE",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The label shows OSPREY Herbicide with EPA Reg. No. 264-802.",
+      "latency_ms": 1385,
+      "usage": {
+        "inputTokens": 1977,
+        "outputTokens": 70,
+        "totalTokens": 2047,
+        "costUsd": 0.0006561
+      },
+      "request_ids": [
+        "b11c66f7d31a4c485506955f4ea7f1f4"
+      ]
+    },
+    {
+      "reg_truth": "62719-643",
+      "expected_product_name": "PowerFlex HL",
+      "category": "herbicide",
+      "required_product": true,
+      "ppls_product_name": "GF-2468",
+      "alternate_brand_names": [
+        "POWERFLEX HL"
+      ],
+      "label_accepted": "2022-04-13",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/062719-00643-20220413.pdf",
+      "label_sha256": "3f56ea43843e9a5ce700f2b8b0c796d11a5fd5504bfeb789aee2eaf776add007",
+      "front_panel_page": 6,
+      "set": "rendered_label_pages",
+      "set_label": "rendered label pages",
+      "image_sha256": "62758e7fac53d54da828c32d13bcccbd5a236897d92e675b91415a63bb4c10ba",
+      "image_bytes": 268129,
+      "transform": {
+        "source": "newest accepted EPA PPLS PDF",
+        "page": 6,
+        "long_side_px": 1600,
+        "jpeg_quality": 90
+      },
+      "status": "completed",
+      "read_epa_reg_no": "62719-643",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "GF-2468",
+      "epa_product_name": "GF-2468",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The image shows a pesticide label for GF-2468 herbicide with EPA Reg. No. 62719-643.",
+      "latency_ms": 1244,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 80,
+        "totalTokens": 2157,
+        "costUsd": 0.0006950999999999999
+      },
+      "request_ids": [
+        "e72f2af00cbd606ba3e25927c3c3986b"
+      ]
+    },
+    {
+      "reg_truth": "62719-643",
+      "expected_product_name": "PowerFlex HL",
+      "category": "herbicide",
+      "required_product": true,
+      "ppls_product_name": "GF-2468",
+      "alternate_brand_names": [
+        "POWERFLEX HL"
+      ],
+      "label_accepted": "2022-04-13",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/062719-00643-20220413.pdf",
+      "label_sha256": "3f56ea43843e9a5ce700f2b8b0c796d11a5fd5504bfeb789aee2eaf776add007",
+      "front_panel_page": 6,
+      "set": "simulated_phone_degradation",
+      "set_label": "rendered pages with simulated phone degradation",
+      "image_sha256": "16ace575375297877176948076b3560adf5ec8b5e9ff9d85fdceb2caeedc9f9e",
+      "image_bytes": 123343,
+      "transform": {
+        "source": "rendered label page",
+        "rotation_degrees": 4,
+        "crop_percent": 6,
+        "cropped_edge": "right",
+        "epa_reg_retained_edge": "west",
+        "long_side_px": 1600,
+        "jpeg_quality": 55
+      },
+      "status": "completed",
+      "read_epa_reg_no": "62719-643",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "GF-2468",
+      "epa_product_name": "GF-2468",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The image shows a pesticide label for GF-2468 herbicide with EPA Reg. No. 62719-643.",
+      "latency_ms": 1392,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 80,
+        "totalTokens": 2157,
+        "costUsd": 0.0006950999999999999
+      },
+      "request_ids": [
+        "cf6ad389c351fe281ec20a13b112b4d4"
+      ]
+    },
+    {
+      "reg_truth": "279-9583",
+      "expected_product_name": "Harmony Extra SG",
+      "category": "herbicide",
+      "required_product": true,
+      "ppls_product_name": "HARMONY EXTRA HERBICIDE",
+      "alternate_brand_names": [],
+      "label_accepted": "2019-06-13",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000279-09583-20190613.pdf",
+      "label_sha256": "7a050912b9942bab4109941b892197e0edb93ce5920e80b15a2b1c9acb57394f",
+      "front_panel_page": 3,
+      "set": "rendered_label_pages",
+      "set_label": "rendered label pages",
+      "image_sha256": "01826c3e3fbddef1209201819a94c8acb4d930026d6bec6082bdce6e530a67eb",
+      "image_bytes": 351043,
+      "transform": {
+        "source": "newest accepted EPA PPLS PDF",
+        "page": 3,
+        "long_side_px": 1600,
+        "jpeg_quality": 90
+      },
+      "status": "completed",
+      "read_epa_reg_no": "279-9583",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "HARMONY EXTRA HERBICIDE",
+      "epa_product_name": "HARMONY EXTRA HERBICIDE",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The EPA registration number 279-9583 is printed on the label.",
+      "latency_ms": 1526,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 70,
+        "totalTokens": 2147,
+        "costUsd": 0.0006860999999999999
+      },
+      "request_ids": [
+        "de102e9066ec7376da1cb32b3a6be034"
+      ]
+    },
+    {
+      "reg_truth": "279-9583",
+      "expected_product_name": "Harmony Extra SG",
+      "category": "herbicide",
+      "required_product": true,
+      "ppls_product_name": "HARMONY EXTRA HERBICIDE",
+      "alternate_brand_names": [],
+      "label_accepted": "2019-06-13",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000279-09583-20190613.pdf",
+      "label_sha256": "7a050912b9942bab4109941b892197e0edb93ce5920e80b15a2b1c9acb57394f",
+      "front_panel_page": 3,
+      "set": "simulated_phone_degradation",
+      "set_label": "rendered pages with simulated phone degradation",
+      "image_sha256": "80d96a7562a365efd0466af00679a2720832d726037feea1c0f8fd08526de48a",
+      "image_bytes": 173072,
+      "transform": {
+        "source": "rendered label page",
+        "rotation_degrees": 4,
+        "crop_percent": 6,
+        "cropped_edge": "right",
+        "epa_reg_retained_edge": "west",
+        "long_side_px": 1600,
+        "jpeg_quality": 55
+      },
+      "status": "completed",
+      "read_epa_reg_no": "279-9583",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "HARMONY EXTRA HERBICIDE",
+      "epa_product_name": "HARMONY EXTRA HERBICIDE",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The EPA registration number 279-9583 is printed on the label.",
+      "latency_ms": 1379,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 70,
+        "totalTokens": 2147,
+        "costUsd": 0.0006860999999999999
+      },
+      "request_ids": [
+        "d6cd3078a9354d7886c6760374c1e04c"
+      ]
+    },
+    {
+      "reg_truth": "100-816",
+      "expected_product_name": "Dual Magnum",
+      "category": "herbicide",
+      "required_product": false,
+      "ppls_product_name": "Dual Magnum® Herbicide",
+      "alternate_brand_names": [
+        "MEDAL EC",
+        "PREFIX CP"
+      ],
+      "label_accepted": "2024-05-22",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000100-00816-20240522.pdf",
+      "label_sha256": "b30cb671d1edb400624c6e1e8fea2ca7511cac6112d3aa073cf37c79e3faf161",
+      "front_panel_page": 3,
+      "set": "rendered_label_pages",
+      "set_label": "rendered label pages",
+      "image_sha256": "53e934f37905a7be2246dd15843d8f1eb3d7e6d6b52b6f1dea9bf5409af6011f",
+      "image_bytes": 212334,
+      "transform": {
+        "source": "newest accepted EPA PPLS PDF",
+        "page": 3,
+        "long_side_px": 1600,
+        "jpeg_quality": 90
+      },
+      "status": "completed",
+      "read_epa_reg_no": "100-816",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "Dual Magnum® Herbicide",
+      "epa_product_name": "Dual Magnum® Herbicide",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The label shows the product name, active ingredient percentage, and EPA registration number 100-816.",
+      "latency_ms": 1495,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 71,
+        "totalTokens": 2148,
+        "costUsd": 0.0006869999999999999
+      },
+      "request_ids": [
+        "a5f4868aacd4347978a33a14c0edcd39"
+      ]
+    },
+    {
+      "reg_truth": "100-816",
+      "expected_product_name": "Dual Magnum",
+      "category": "herbicide",
+      "required_product": false,
+      "ppls_product_name": "Dual Magnum® Herbicide",
+      "alternate_brand_names": [
+        "MEDAL EC",
+        "PREFIX CP"
+      ],
+      "label_accepted": "2024-05-22",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000100-00816-20240522.pdf",
+      "label_sha256": "b30cb671d1edb400624c6e1e8fea2ca7511cac6112d3aa073cf37c79e3faf161",
+      "front_panel_page": 3,
+      "set": "simulated_phone_degradation",
+      "set_label": "rendered pages with simulated phone degradation",
+      "image_sha256": "0a78d37b5a0accec4bd263384f2566ce7a3c4db8970ef9d5cc95170a66ace2e5",
+      "image_bytes": 104318,
+      "transform": {
+        "source": "rendered label page",
+        "rotation_degrees": 4,
+        "crop_percent": 6,
+        "cropped_edge": "right",
+        "epa_reg_retained_edge": "west",
+        "long_side_px": 1600,
+        "jpeg_quality": 55
+      },
+      "status": "completed",
+      "read_epa_reg_no": "100-816",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "Dual Magnum® Herbicide",
+      "epa_product_name": "Dual Magnum® Herbicide",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The label shows the product name, active ingredient, EPA registration number 100-816, and an accepted revision date of 05/22/2024.",
+      "latency_ms": 1169,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 87,
+        "totalTokens": 2164,
+        "costUsd": 0.0007013999999999999
+      },
+      "request_ids": [
+        "035dc8215344ae522b4493090dfb1356"
+      ]
+    },
+    {
+      "reg_truth": "7969-448",
+      "expected_product_name": "Liberty 280 SL",
+      "category": "herbicide",
+      "required_product": false,
+      "ppls_product_name": "LIBERTY 280 SL HERBICIDE",
+      "alternate_brand_names": [
+        "IGNITE 280 SL HERBICIDE",
+        "NoventaTM herbicide"
+      ],
+      "label_accepted": "2026-08-26",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/007969-00448-20260826.pdf",
+      "label_sha256": "d6c06bf0752bfeb6c9b3d8ca5860f165126cae2a8d2aa043ae336e48d84d9132",
+      "front_panel_page": 3,
+      "set": "rendered_label_pages",
+      "set_label": "rendered label pages",
+      "image_sha256": "a48a629b147a21349f5d0dfd62445c8cab50826561e67031c00ae6047d7ab76c",
+      "image_bytes": 350100,
+      "transform": {
+        "source": "newest accepted EPA PPLS PDF",
+        "page": 3,
+        "long_side_px": 1600,
+        "jpeg_quality": 90
+      },
+      "status": "completed",
+      "read_epa_reg_no": "7969-448",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "Liberty 280 SL",
+      "epa_product_name": "LIBERTY 280 SL HERBICIDE",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The EPA registration number 7969-448 is printed on the label.",
+      "latency_ms": 1628,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 67,
+        "totalTokens": 2144,
+        "costUsd": 0.0006833999999999999
+      },
+      "request_ids": [
+        "e4985143dc1b87c0089bb4812b4493f5"
+      ]
+    },
+    {
+      "reg_truth": "7969-448",
+      "expected_product_name": "Liberty 280 SL",
+      "category": "herbicide",
+      "required_product": false,
+      "ppls_product_name": "LIBERTY 280 SL HERBICIDE",
+      "alternate_brand_names": [
+        "IGNITE 280 SL HERBICIDE",
+        "NoventaTM herbicide"
+      ],
+      "label_accepted": "2026-08-26",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/007969-00448-20260826.pdf",
+      "label_sha256": "d6c06bf0752bfeb6c9b3d8ca5860f165126cae2a8d2aa043ae336e48d84d9132",
+      "front_panel_page": 3,
+      "set": "simulated_phone_degradation",
+      "set_label": "rendered pages with simulated phone degradation",
+      "image_sha256": "57710a20ac1c66affedd2f0155adbf0a517bb49f056c56fc33044e908af78cc9",
+      "image_bytes": 171047,
+      "transform": {
+        "source": "rendered label page",
+        "rotation_degrees": 4,
+        "crop_percent": 6,
+        "cropped_edge": "right",
+        "epa_reg_retained_edge": "west",
+        "long_side_px": 1600,
+        "jpeg_quality": 55
+      },
+      "status": "completed",
+      "read_epa_reg_no": "7969-448",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "Liberty 280 SL",
+      "epa_product_name": "LIBERTY 280 SL HERBICIDE",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The EPA registration number 7969-448 is printed on the label.",
+      "latency_ms": 1625,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 67,
+        "totalTokens": 2144,
+        "costUsd": 0.0006833999999999999
+      },
+      "request_ids": [
+        "dc64fdfbeffebcf69ac060f15a55a27a"
+      ]
+    },
+    {
+      "reg_truth": "5481-684",
+      "expected_product_name": "Envoke",
+      "category": "herbicide",
+      "required_product": false,
+      "ppls_product_name": "ENVOKE HERBICIDE",
+      "alternate_brand_names": [],
+      "label_accepted": "2026-01-20",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/005481-00684-20260120.pdf",
+      "label_sha256": "79eb657725518a36a8d169405cf91f5294622495033bdf054eb0ff2a099c08aa",
+      "front_panel_page": 3,
+      "set": "rendered_label_pages",
+      "set_label": "rendered label pages",
+      "image_sha256": "4d4e13bee7931643919a1a914ca9593a32dac92e943cd30355da3eea9dd0928a",
+      "image_bytes": 259637,
+      "transform": {
+        "source": "newest accepted EPA PPLS PDF",
+        "page": 3,
+        "long_side_px": 1600,
+        "jpeg_quality": 90
+      },
+      "status": "completed",
+      "read_epa_reg_no": "5481-684",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "ENVOKE® HERBICIDE",
+      "epa_product_name": "ENVOKE HERBICIDE",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The EPA registration number 5481-684 and product name ENVOKE® HERBICIDE are clearly printed on the label.",
+      "latency_ms": 1442,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 80,
+        "totalTokens": 2157,
+        "costUsd": 0.0006950999999999999
+      },
+      "request_ids": [
+        "189a96891d333fb289e5e87722eacc58"
+      ]
+    },
+    {
+      "reg_truth": "5481-684",
+      "expected_product_name": "Envoke",
+      "category": "herbicide",
+      "required_product": false,
+      "ppls_product_name": "ENVOKE HERBICIDE",
+      "alternate_brand_names": [],
+      "label_accepted": "2026-01-20",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/005481-00684-20260120.pdf",
+      "label_sha256": "79eb657725518a36a8d169405cf91f5294622495033bdf054eb0ff2a099c08aa",
+      "front_panel_page": 3,
+      "set": "simulated_phone_degradation",
+      "set_label": "rendered pages with simulated phone degradation",
+      "image_sha256": "16c9cf5c6eb06ca30b7e7a5e677965f54c71a4da6b6f55cf96fe5ca0a8fb0c40",
+      "image_bytes": 128493,
+      "transform": {
+        "source": "rendered label page",
+        "rotation_degrees": 4,
+        "crop_percent": 6,
+        "cropped_edge": "right",
+        "epa_reg_retained_edge": "west",
+        "long_side_px": 1600,
+        "jpeg_quality": 55
+      },
+      "status": "completed",
+      "read_epa_reg_no": "5481-684",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "ENVOKE® HERBICIDE",
+      "epa_product_name": "ENVOKE HERBICIDE",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The label shows the product name ENVOKE® HERBICIDE and EPA Reg. No. 5481-684.",
+      "latency_ms": 1345,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 79,
+        "totalTokens": 2156,
+        "costUsd": 0.0006941999999999999
+      },
+      "request_ids": [
+        "73a51f3914c89602d9de5a6aa6dbfb09"
+      ]
+    },
+    {
+      "reg_truth": "352-613",
+      "expected_product_name": "Staple LX",
+      "category": "herbicide",
+      "required_product": false,
+      "ppls_product_name": "STAPLE LX",
+      "alternate_brand_names": [
+        "DUPONT STAPLE LX"
+      ],
+      "label_accepted": "2025-11-12",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000352-00613-20251112.pdf",
+      "label_sha256": "8ce17409b84e8472d87aa6b7366969f06e7b4a66ad13150b867c838f536dd1e9",
+      "front_panel_page": 3,
+      "set": "rendered_label_pages",
+      "set_label": "rendered label pages",
+      "image_sha256": "aa1a92bb3a0550bb8ffd0353ec60af60eb41902151b609c466879e2c5a627554",
+      "image_bytes": 318536,
+      "transform": {
+        "source": "newest accepted EPA PPLS PDF",
+        "page": 3,
+        "long_side_px": 1600,
+        "jpeg_quality": 90
+      },
+      "status": "completed",
+      "read_epa_reg_no": "352-613",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "Staple® LX",
+      "epa_product_name": "STAPLE LX",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The image shows a pesticide label for Staple LX herbicide with an EPA registration number of 352-613 in an accepted box.",
+      "latency_ms": 1554,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 78,
+        "totalTokens": 2155,
+        "costUsd": 0.0006932999999999999
+      },
+      "request_ids": [
+        "1edfa0a217b5414f7398efcbf05d35ac"
+      ]
+    },
+    {
+      "reg_truth": "352-613",
+      "expected_product_name": "Staple LX",
+      "category": "herbicide",
+      "required_product": false,
+      "ppls_product_name": "STAPLE LX",
+      "alternate_brand_names": [
+        "DUPONT STAPLE LX"
+      ],
+      "label_accepted": "2025-11-12",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000352-00613-20251112.pdf",
+      "label_sha256": "8ce17409b84e8472d87aa6b7366969f06e7b4a66ad13150b867c838f536dd1e9",
+      "front_panel_page": 3,
+      "set": "simulated_phone_degradation",
+      "set_label": "rendered pages with simulated phone degradation",
+      "image_sha256": "0b159f8b94d5a8275a5cd475c85ea9d2d9c6c9a2a0ce2f71a2a5b8b34b249404",
+      "image_bytes": 140862,
+      "transform": {
+        "source": "rendered label page",
+        "rotation_degrees": 4,
+        "crop_percent": 6,
+        "cropped_edge": "left",
+        "epa_reg_retained_edge": "east",
+        "long_side_px": 1600,
+        "jpeg_quality": 55
+      },
+      "status": "completed",
+      "read_epa_reg_no": "352-613",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "Staple® LX",
+      "epa_product_name": "STAPLE LX",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The image shows a pesticide label for Staple LX herbicide with an EPA registration number of 352-613 in an accepted box.",
+      "latency_ms": 1403,
+      "usage": {
+        "inputTokens": 1977,
+        "outputTokens": 78,
+        "totalTokens": 2055,
+        "costUsd": 0.0006632999999999999
+      },
+      "request_ids": [
+        "ffca7da862f71eb40eac5f44ae2fc63e"
+      ]
+    },
+    {
+      "reg_truth": "8033-36",
+      "expected_product_name": "Assail 30 SG",
+      "category": "insecticide",
+      "required_product": false,
+      "ppls_product_name": "ASSAIL 30 SG INSECTICIDE",
+      "alternate_brand_names": [
+        "ACETAMIPRID 30 SG INSECTICIDE"
+      ],
+      "label_accepted": "2021-06-11",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/008033-00036-20210611.pdf",
+      "label_sha256": "0f55e245828d5c329e641eefb0c963ecc88e838a8ba36028cc8b09f22264af83",
+      "front_panel_page": 3,
+      "set": "rendered_label_pages",
+      "set_label": "rendered label pages",
+      "image_sha256": "3f30c2a252185673b5fb7e417dde4f3a1a4736db84ccf179eb126230002683d4",
+      "image_bytes": 318058,
+      "transform": {
+        "source": "newest accepted EPA PPLS PDF",
+        "page": 3,
+        "long_side_px": 1600,
+        "jpeg_quality": 90
+      },
+      "status": "completed",
+      "read_epa_reg_no": "8033-36",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "ASSAIL® 30 SG Insecticide",
+      "epa_product_name": "ASSAIL 30 SG INSECTICIDE",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The label shows the product name and EPA registration number 8033-36.",
+      "latency_ms": 1561,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 71,
+        "totalTokens": 2148,
+        "costUsd": 0.0006869999999999999
+      },
+      "request_ids": [
+        "900e5f036f4f9d2d5ff93321bc7de648"
+      ]
+    },
+    {
+      "reg_truth": "8033-36",
+      "expected_product_name": "Assail 30 SG",
+      "category": "insecticide",
+      "required_product": false,
+      "ppls_product_name": "ASSAIL 30 SG INSECTICIDE",
+      "alternate_brand_names": [
+        "ACETAMIPRID 30 SG INSECTICIDE"
+      ],
+      "label_accepted": "2021-06-11",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/008033-00036-20210611.pdf",
+      "label_sha256": "0f55e245828d5c329e641eefb0c963ecc88e838a8ba36028cc8b09f22264af83",
+      "front_panel_page": 3,
+      "set": "simulated_phone_degradation",
+      "set_label": "rendered pages with simulated phone degradation",
+      "image_sha256": "4c5cf9efe31470791dad671c9a06d250b458419c2732ca95f9eb0c8cc2348cbb",
+      "image_bytes": 162540,
+      "transform": {
+        "source": "rendered label page",
+        "rotation_degrees": 4,
+        "crop_percent": 6,
+        "cropped_edge": "right",
+        "epa_reg_retained_edge": "west",
+        "long_side_px": 1600,
+        "jpeg_quality": 55
+      },
+      "status": "completed",
+      "read_epa_reg_no": "8033-36",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "ASSAIL® 30 SG Insecticide",
+      "epa_product_name": "ASSAIL 30 SG INSECTICIDE",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The EPA registration number 8033-36 is clearly printed on the label.",
+      "latency_ms": 1389,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 71,
+        "totalTokens": 2148,
+        "costUsd": 0.0006869999999999999
+      },
+      "request_ids": [
+        "3341762556028b88174f7f54174a99db"
+      ]
+    },
+    {
+      "reg_truth": "62719-625",
+      "expected_product_name": "Transform WG",
+      "category": "insecticide",
+      "required_product": false,
+      "ppls_product_name": "TRANSFORM WG",
+      "alternate_brand_names": [],
+      "label_accepted": "2021-01-08",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/062719-00625-20210108.pdf",
+      "label_sha256": "3ba84256444a18e6cdf5f9a624ca8db1169532b23cbf89fcad52d4c992cd5cf6",
+      "front_panel_page": 3,
+      "set": "rendered_label_pages",
+      "set_label": "rendered label pages",
+      "image_sha256": "fe1a74ef0650b5bdb65a8fc0e49ba401d5456139abfac5bd79213b7cdb669e3f",
+      "image_bytes": 487438,
+      "transform": {
+        "source": "newest accepted EPA PPLS PDF",
+        "page": 3,
+        "long_side_px": 1600,
+        "jpeg_quality": 90
+      },
+      "status": "completed",
+      "read_epa_reg_no": "62719-625",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "Transform® WG",
+      "epa_product_name": "TRANSFORM WG",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The EPA registration number 62719-625 is printed in the ACCEPTED box on the right side of the label.",
+      "latency_ms": 1487,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 77,
+        "totalTokens": 2154,
+        "costUsd": 0.0006923999999999999
+      },
+      "request_ids": [
+        "db72ffd7d34308c2bfe0cb3988a042c3"
+      ]
+    },
+    {
+      "reg_truth": "62719-625",
+      "expected_product_name": "Transform WG",
+      "category": "insecticide",
+      "required_product": false,
+      "ppls_product_name": "TRANSFORM WG",
+      "alternate_brand_names": [],
+      "label_accepted": "2021-01-08",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/062719-00625-20210108.pdf",
+      "label_sha256": "3ba84256444a18e6cdf5f9a624ca8db1169532b23cbf89fcad52d4c992cd5cf6",
+      "front_panel_page": 3,
+      "set": "simulated_phone_degradation",
+      "set_label": "rendered pages with simulated phone degradation",
+      "image_sha256": "60c0b501cf9e5b6299bccc9479b9cfbb49a4e53d4ffd56bb81200ab15fa7664d",
+      "image_bytes": 225849,
+      "transform": {
+        "source": "rendered label page",
+        "rotation_degrees": 4,
+        "crop_percent": 6,
+        "cropped_edge": "left",
+        "epa_reg_retained_edge": "east",
+        "long_side_px": 1600,
+        "jpeg_quality": 55
+      },
+      "status": "completed",
+      "read_epa_reg_no": "62719-625",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "Transform® WG",
+      "epa_product_name": "TRANSFORM WG",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The EPA registration number 62719-625 is printed inside the ACCEPTED box on the label.",
+      "latency_ms": 1488,
+      "usage": {
+        "inputTokens": 1977,
+        "outputTokens": 73,
+        "totalTokens": 2050,
+        "costUsd": 0.0006588
+      },
+      "request_ids": [
+        "0f9f950eb96078914980f165f40e6b1c"
+      ]
+    },
+    {
+      "reg_truth": "279-9656",
+      "expected_product_name": "Vantacor",
+      "category": "insecticide",
+      "required_product": false,
+      "ppls_product_name": "E2Y45-848 insect control",
+      "alternate_brand_names": [
+        "VANTACOR insect control"
+      ],
+      "label_accepted": "2022-07-20",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000279-09656-20220720.pdf",
+      "label_sha256": "ac53208a68f9b57efe21ad227230488fc6d559fba4c2978fa84f5e72b06c50be",
+      "front_panel_page": 3,
+      "set": "rendered_label_pages",
+      "set_label": "rendered label pages",
+      "image_sha256": "da813cb0098151b4ca0b243047b7679dd38e438a0bef1c5ed99f805e18680f9f",
+      "image_bytes": 332125,
+      "transform": {
+        "source": "newest accepted EPA PPLS PDF",
+        "page": 3,
+        "long_side_px": 1600,
+        "jpeg_quality": 90
+      },
+      "status": "completed",
+      "read_epa_reg_no": "279-9656",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "E2Y45-848 insect control",
+      "epa_product_name": "E2Y45-848 insect control",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The label shows the product name and EPA registration number 279-9656.",
+      "latency_ms": 1629,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 72,
+        "totalTokens": 2149,
+        "costUsd": 0.0006879
+      },
+      "request_ids": [
+        "2476362e1f419accf8482b92bfea8710"
+      ]
+    },
+    {
+      "reg_truth": "279-9656",
+      "expected_product_name": "Vantacor",
+      "category": "insecticide",
+      "required_product": false,
+      "ppls_product_name": "E2Y45-848 insect control",
+      "alternate_brand_names": [
+        "VANTACOR insect control"
+      ],
+      "label_accepted": "2022-07-20",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000279-09656-20220720.pdf",
+      "label_sha256": "ac53208a68f9b57efe21ad227230488fc6d559fba4c2978fa84f5e72b06c50be",
+      "front_panel_page": 3,
+      "set": "simulated_phone_degradation",
+      "set_label": "rendered pages with simulated phone degradation",
+      "image_sha256": "f5f339e6f5257bc83423b7610e43cd943c2be0ec14df1cc6517de5f0f344b60c",
+      "image_bytes": 162714,
+      "transform": {
+        "source": "rendered label page",
+        "rotation_degrees": 4,
+        "crop_percent": 6,
+        "cropped_edge": "left",
+        "epa_reg_retained_edge": "east",
+        "long_side_px": 1600,
+        "jpeg_quality": 55
+      },
+      "status": "completed",
+      "read_epa_reg_no": "279-9656",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "E2Y45-848 insect control",
+      "epa_product_name": "E2Y45-848 insect control",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The EPA registration number 279-9656 is clearly printed on the label.",
+      "latency_ms": 1426,
+      "usage": {
+        "inputTokens": 1977,
+        "outputTokens": 72,
+        "totalTokens": 2049,
+        "costUsd": 0.0006578999999999999
+      },
+      "request_ids": [
+        "1b6688020bae144d377973a85441571c"
+      ]
+    },
+    {
+      "reg_truth": "100-1295",
+      "expected_product_name": "Warrior II",
+      "category": "insecticide",
+      "required_product": false,
+      "ppls_product_name": "WARRIOR II WITH ZEON TECHNOLOGY",
+      "alternate_brand_names": [
+        "LAMCAP II"
+      ],
+      "label_accepted": "2025-07-03",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000100-01295-20250703.pdf",
+      "label_sha256": "dcb3decf4e9f62ecf9455c8bc375bcfe0bf09d9802ae987acaa3f27ce3301420",
+      "front_panel_page": 3,
+      "set": "rendered_label_pages",
+      "set_label": "rendered label pages",
+      "image_sha256": "12cfcc113885cc5138bfbdb051be34f28f15f33232b8ef9833828548e61a5f39",
+      "image_bytes": 223625,
+      "transform": {
+        "source": "newest accepted EPA PPLS PDF",
+        "page": 3,
+        "long_side_px": 1600,
+        "jpeg_quality": 90
+      },
+      "status": "completed",
+      "read_epa_reg_no": "100-1295",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "Warrior II with Zeon Technology®",
+      "epa_product_name": "WARRIOR II WITH ZEON TECHNOLOGY",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The image shows a pesticide label for Warrior II with Zeon Technology, including the EPA registration number 100-1295.",
+      "latency_ms": 1267,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 78,
+        "totalTokens": 2155,
+        "costUsd": 0.0006932999999999999
+      },
+      "request_ids": [
+        "c93298343a0a458531418342c46f972d"
+      ]
+    },
+    {
+      "reg_truth": "100-1295",
+      "expected_product_name": "Warrior II",
+      "category": "insecticide",
+      "required_product": false,
+      "ppls_product_name": "WARRIOR II WITH ZEON TECHNOLOGY",
+      "alternate_brand_names": [
+        "LAMCAP II"
+      ],
+      "label_accepted": "2025-07-03",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000100-01295-20250703.pdf",
+      "label_sha256": "dcb3decf4e9f62ecf9455c8bc375bcfe0bf09d9802ae987acaa3f27ce3301420",
+      "front_panel_page": 3,
+      "set": "simulated_phone_degradation",
+      "set_label": "rendered pages with simulated phone degradation",
+      "image_sha256": "eb65cf56c4d89e95e4a01aeb721442f27dfeed10099569e6a8f4252687b6e6f0",
+      "image_bytes": 113459,
+      "transform": {
+        "source": "rendered label page",
+        "rotation_degrees": 4,
+        "crop_percent": 6,
+        "cropped_edge": "right",
+        "epa_reg_retained_edge": "west",
+        "long_side_px": 1600,
+        "jpeg_quality": 55
+      },
+      "status": "completed",
+      "read_epa_reg_no": "100-1295",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "Warrior II with Zeon Technology®",
+      "epa_product_name": "WARRIOR II WITH ZEON TECHNOLOGY",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The image shows a pesticide label with the product name, active ingredient, and EPA registration number 100-1295.",
+      "latency_ms": 1317,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 77,
+        "totalTokens": 2154,
+        "costUsd": 0.0006923999999999999
+      },
+      "request_ids": [
+        "ef1733d8f51bf630162574b96f7128d5"
+      ]
+    },
+    {
+      "reg_truth": "264-862",
+      "expected_product_name": "Provost Silver",
+      "category": "fungicide",
+      "required_product": false,
+      "ppls_product_name": "PROSARO 421 SC FUNGICIDE",
+      "alternate_brand_names": [
+        "PROVOST SILVER"
+      ],
+      "label_accepted": "2025-03-24",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000264-00862-20250324.pdf",
+      "label_sha256": "959c3f2fb57b436060620afd782d92ae989214507cb10acdb4ca56259dc6c339",
+      "front_panel_page": 3,
+      "set": "rendered_label_pages",
+      "set_label": "rendered label pages",
+      "image_sha256": "68ea239ef2d6a8b85ae9f653f4c5d6a0f7ab32b2ac6b4e6222352a82df93ffcd",
+      "image_bytes": 281770,
+      "transform": {
+        "source": "newest accepted EPA PPLS PDF",
+        "page": 3,
+        "long_side_px": 1600,
+        "jpeg_quality": 90
+      },
+      "status": "completed",
+      "read_epa_reg_no": "264-862",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "PROSARO® 421 SC Fungicide",
+      "epa_product_name": "PROSARO 421 SC FUNGICIDE",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The label shows the product name, active ingredients, and EPA Reg. No. 264-862.",
+      "latency_ms": 1528,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 78,
+        "totalTokens": 2155,
+        "costUsd": 0.0006932999999999999
+      },
+      "request_ids": [
+        "98b5b471b11d5628557880f851a8fbe8"
+      ]
+    },
+    {
+      "reg_truth": "264-862",
+      "expected_product_name": "Provost Silver",
+      "category": "fungicide",
+      "required_product": false,
+      "ppls_product_name": "PROSARO 421 SC FUNGICIDE",
+      "alternate_brand_names": [
+        "PROVOST SILVER"
+      ],
+      "label_accepted": "2025-03-24",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000264-00862-20250324.pdf",
+      "label_sha256": "959c3f2fb57b436060620afd782d92ae989214507cb10acdb4ca56259dc6c339",
+      "front_panel_page": 3,
+      "set": "simulated_phone_degradation",
+      "set_label": "rendered pages with simulated phone degradation",
+      "image_sha256": "5444884a39ccd07b571b3deded63e7e6b8d26fc07894d75b7b3e609826fbf2d6",
+      "image_bytes": 137386,
+      "transform": {
+        "source": "rendered label page",
+        "rotation_degrees": 4,
+        "crop_percent": 6,
+        "cropped_edge": "right",
+        "epa_reg_retained_edge": "west",
+        "long_side_px": 1600,
+        "jpeg_quality": 55
+      },
+      "status": "completed",
+      "read_epa_reg_no": "264-862",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "PROSARO® 421 SC Fungicide",
+      "epa_product_name": "PROSARO 421 SC FUNGICIDE",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The label shows the product name, active ingredients, and EPA registration number 264-862.",
+      "latency_ms": 1351,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 76,
+        "totalTokens": 2153,
+        "costUsd": 0.0006915
+      },
+      "request_ids": [
+        "7d9b9aaac7b45509cdf560611b7e89b1"
+      ]
+    },
+    {
+      "reg_truth": "352-834",
+      "expected_product_name": "Fontelis",
+      "category": "fungicide",
+      "required_product": false,
+      "ppls_product_name": "DUPONT FONTELIS FUNGICIDE",
+      "alternate_brand_names": [
+        "FONTELIS",
+        "DUPONT FONTELIS"
+      ],
+      "label_accepted": "2024-05-06",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000352-00834-20240506.pdf",
+      "label_sha256": "467f679c3b3cb3c23c96a2ffc75ddddb2e54f26f28eeb8b7c7b213bc74bbdb98",
+      "front_panel_page": 3,
+      "set": "rendered_label_pages",
+      "set_label": "rendered label pages",
+      "image_sha256": "a207059702bc2b13ef5bd36e137c92b09f9c7cec8d6bcab95977b860d8e5b1ae",
+      "image_bytes": 280115,
+      "transform": {
+        "source": "newest accepted EPA PPLS PDF",
+        "page": 3,
+        "long_side_px": 1600,
+        "jpeg_quality": 90
+      },
+      "status": "completed",
+      "read_epa_reg_no": "352-834",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "Fontelis®",
+      "epa_product_name": "DUPONT FONTELIS FUNGICIDE",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The label shows Fontelis fungicide with EPA Reg. No. 352-834 and active ingredient penthiopyrad at 20.4%.",
+      "latency_ms": 1487,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 79,
+        "totalTokens": 2156,
+        "costUsd": 0.0006941999999999999
+      },
+      "request_ids": [
+        "4b1ea6d47c86cbe02cc4eb2620fcd19e"
+      ]
+    },
+    {
+      "reg_truth": "352-834",
+      "expected_product_name": "Fontelis",
+      "category": "fungicide",
+      "required_product": false,
+      "ppls_product_name": "DUPONT FONTELIS FUNGICIDE",
+      "alternate_brand_names": [
+        "FONTELIS",
+        "DUPONT FONTELIS"
+      ],
+      "label_accepted": "2024-05-06",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000352-00834-20240506.pdf",
+      "label_sha256": "467f679c3b3cb3c23c96a2ffc75ddddb2e54f26f28eeb8b7c7b213bc74bbdb98",
+      "front_panel_page": 3,
+      "set": "simulated_phone_degradation",
+      "set_label": "rendered pages with simulated phone degradation",
+      "image_sha256": "b11309ffe0a7ddfbe4690f8217cb39b639abce60c970d272eab381d00a786be6",
+      "image_bytes": 134944,
+      "transform": {
+        "source": "rendered label page",
+        "rotation_degrees": 4,
+        "crop_percent": 6,
+        "cropped_edge": "left",
+        "epa_reg_retained_edge": "east",
+        "long_side_px": 1600,
+        "jpeg_quality": 55
+      },
+      "status": "completed",
+      "read_epa_reg_no": "352-834",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "Fontelis",
+      "epa_product_name": "DUPONT FONTELIS FUNGICIDE",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The EPA registration number 352-834 is printed in the accepted box and near the bottom of the label.",
+      "latency_ms": 1405,
+      "usage": {
+        "inputTokens": 1977,
+        "outputTokens": 68,
+        "totalTokens": 2045,
+        "costUsd": 0.0006542999999999999
+      },
+      "request_ids": [
+        "6927cb6ec9b637854dd8172bbba19683"
+      ]
+    },
+    {
+      "reg_truth": "7969-186",
+      "expected_product_name": "Headline",
+      "category": "fungicide",
+      "required_product": false,
+      "ppls_product_name": "HEADLINE FUNGICIDE",
+      "alternate_brand_names": [],
+      "label_accepted": "2017-01-26",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/007969-00186-20170126.pdf",
+      "label_sha256": "b174777cdf8a8e2073f2d2f17c6aa910b2bbf618249ad7aa2e4c5c7457c38eec",
+      "front_panel_page": 3,
+      "set": "rendered_label_pages",
+      "set_label": "rendered label pages",
+      "image_sha256": "484e232d45a4aa309971986fa1730b4b65b7b2c980a3976087e4de436305ad96",
+      "image_bytes": 280765,
+      "transform": {
+        "source": "newest accepted EPA PPLS PDF",
+        "page": 3,
+        "long_side_px": 1600,
+        "jpeg_quality": 90
+      },
+      "status": "completed",
+      "read_epa_reg_no": "7969-186",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "Headline Fungicide",
+      "epa_product_name": "HEADLINE FUNGICIDE",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The label shows the product name Headline Fungicide and EPA Reg. No. 7969-186 in the accepted stamp and below the ingredient list.",
+      "latency_ms": 1574,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 82,
+        "totalTokens": 2159,
+        "costUsd": 0.0006968999999999999
+      },
+      "request_ids": [
+        "5251e9e7299655b7487aa4109c395f7f"
+      ]
+    },
+    {
+      "reg_truth": "7969-186",
+      "expected_product_name": "Headline",
+      "category": "fungicide",
+      "required_product": false,
+      "ppls_product_name": "HEADLINE FUNGICIDE",
+      "alternate_brand_names": [],
+      "label_accepted": "2017-01-26",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/007969-00186-20170126.pdf",
+      "label_sha256": "b174777cdf8a8e2073f2d2f17c6aa910b2bbf618249ad7aa2e4c5c7457c38eec",
+      "front_panel_page": 3,
+      "set": "simulated_phone_degradation",
+      "set_label": "rendered pages with simulated phone degradation",
+      "image_sha256": "7b677c00f503a8d65dbe9f5d0189c2c9747dd7b07f04e5925140e9a0e5699780",
+      "image_bytes": 139065,
+      "transform": {
+        "source": "rendered label page",
+        "rotation_degrees": 4,
+        "crop_percent": 6,
+        "cropped_edge": "right",
+        "epa_reg_retained_edge": "west",
+        "long_side_px": 1600,
+        "jpeg_quality": 55
+      },
+      "status": "completed",
+      "read_epa_reg_no": "7969-186",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "Headline Fungicide",
+      "epa_product_name": "HEADLINE FUNGICIDE",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The image shows a BASF Headline Fungicide pesticide label with an EPA registration number of 7969-186.",
+      "latency_ms": 1278,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 75,
+        "totalTokens": 2152,
+        "costUsd": 0.0006905999999999999
+      },
+      "request_ids": [
+        "cefcd7249055278239c348cdbda8c7b5"
+      ]
+    },
+    {
+      "reg_truth": "7969-311",
+      "expected_product_name": "Priaxor",
+      "category": "fungicide",
+      "required_product": false,
+      "ppls_product_name": "Priaxor® Xemium® Brand Fungicide",
+      "alternate_brand_names": [],
+      "label_accepted": "2025-07-30",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/007969-00311-20250730.pdf",
+      "label_sha256": "debda1f0c48c77e340bb6246d4c495bf7236c21d988c330a28b47038352eea4f",
+      "front_panel_page": 3,
+      "set": "rendered_label_pages",
+      "set_label": "rendered label pages",
+      "image_sha256": "5147cf199b877405b034d87aed8f8c07f17959cbab4b9688aa8dd337b0ff416a",
+      "image_bytes": 428220,
+      "transform": {
+        "source": "newest accepted EPA PPLS PDF",
+        "page": 3,
+        "long_side_px": 1600,
+        "jpeg_quality": 90
+      },
+      "status": "completed",
+      "read_epa_reg_no": "7969-311",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "Priaxor Xemium® Brand Fungicide",
+      "epa_product_name": "Priaxor® Xemium® Brand Fungicide",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The label shows the product name Priaxor Xemium® Brand Fungicide and EPA Reg. No. 7969-311.",
+      "latency_ms": 1609,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 85,
+        "totalTokens": 2162,
+        "costUsd": 0.0006995999999999999
+      },
+      "request_ids": [
+        "08e54e249063a720cc34c7dff961585a"
+      ]
+    },
+    {
+      "reg_truth": "7969-311",
+      "expected_product_name": "Priaxor",
+      "category": "fungicide",
+      "required_product": false,
+      "ppls_product_name": "Priaxor® Xemium® Brand Fungicide",
+      "alternate_brand_names": [],
+      "label_accepted": "2025-07-30",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/007969-00311-20250730.pdf",
+      "label_sha256": "debda1f0c48c77e340bb6246d4c495bf7236c21d988c330a28b47038352eea4f",
+      "front_panel_page": 3,
+      "set": "simulated_phone_degradation",
+      "set_label": "rendered pages with simulated phone degradation",
+      "image_sha256": "a86fe88d0903c3fc7c8fe87d57df8b93ddddb8711e0dd998db4939d4ed3dca57",
+      "image_bytes": 195658,
+      "transform": {
+        "source": "rendered label page",
+        "rotation_degrees": 4,
+        "crop_percent": 6,
+        "cropped_edge": "left",
+        "epa_reg_retained_edge": "east",
+        "long_side_px": 1600,
+        "jpeg_quality": 55
+      },
+      "status": "completed",
+      "read_epa_reg_no": "7969-311",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "Priaxor Xemium® Brand Fungicide",
+      "epa_product_name": "Priaxor® Xemium® Brand Fungicide",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The EPA registration number 7969-311 is clearly visible in the accepted stamp and near the active ingredients section.",
+      "latency_ms": 1437,
+      "usage": {
+        "inputTokens": 1977,
+        "outputTokens": 79,
+        "totalTokens": 2056,
+        "costUsd": 0.0006642
+      },
+      "request_ids": [
+        "3831ad41c696e419c2f3a08b6ca51796"
+      ]
+    },
+    {
+      "reg_truth": "100-1098",
+      "expected_product_name": "Abound",
+      "category": "fungicide",
+      "required_product": false,
+      "ppls_product_name": "ABOUND FLOWABLE FUNGICIDE",
+      "alternate_brand_names": [
+        "QUADRIS FLOWABLE FUNGICIDE",
+        "DIPLOMA",
+        "DIPLOMA FUNGICIDE",
+        "AZOXY FLOWABLE FUNGICIDE",
+        "AFRAME"
+      ],
+      "label_accepted": "2018-12-19",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000100-01098-20181219.pdf",
+      "label_sha256": "46c801d887e192262169c5034c5c26bba6744e0a0a97a0cd3be0e892d69f02c8",
+      "front_panel_page": 3,
+      "set": "rendered_label_pages",
+      "set_label": "rendered label pages",
+      "image_sha256": "6db0754bcd3fd74bf14aa028d77be5ca66d7908f03998e7669fa577c1b0eb7fc",
+      "image_bytes": 160706,
+      "transform": {
+        "source": "newest accepted EPA PPLS PDF",
+        "page": 3,
+        "long_side_px": 1600,
+        "jpeg_quality": 90
+      },
+      "status": "completed",
+      "read_epa_reg_no": "100-1098",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "Abound® Flowable Fungicide",
+      "epa_product_name": "ABOUND FLOWABLE FUNGICIDE",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The label shows the product name, active ingredient, EPA registration number, and caution statement.",
+      "latency_ms": 1487,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 67,
+        "totalTokens": 2144,
+        "costUsd": 0.0006833999999999999
+      },
+      "request_ids": [
+        "050172ed92383c96473bdc8f6c5255f3"
+      ]
+    },
+    {
+      "reg_truth": "100-1098",
+      "expected_product_name": "Abound",
+      "category": "fungicide",
+      "required_product": false,
+      "ppls_product_name": "ABOUND FLOWABLE FUNGICIDE",
+      "alternate_brand_names": [
+        "QUADRIS FLOWABLE FUNGICIDE",
+        "DIPLOMA",
+        "DIPLOMA FUNGICIDE",
+        "AZOXY FLOWABLE FUNGICIDE",
+        "AFRAME"
+      ],
+      "label_accepted": "2018-12-19",
+      "label_url": "https://www3.epa.gov/pesticides/chem_search/ppls/000100-01098-20181219.pdf",
+      "label_sha256": "46c801d887e192262169c5034c5c26bba6744e0a0a97a0cd3be0e892d69f02c8",
+      "front_panel_page": 3,
+      "set": "simulated_phone_degradation",
+      "set_label": "rendered pages with simulated phone degradation",
+      "image_sha256": "948f51abed88baae95efa8be9f14e781d6b0874844e47e50fb01b266803aff22",
+      "image_bytes": 78353,
+      "transform": {
+        "source": "rendered label page",
+        "rotation_degrees": 4,
+        "crop_percent": 6,
+        "cropped_edge": "right",
+        "epa_reg_retained_edge": "west",
+        "long_side_px": 1600,
+        "jpeg_quality": 55
+      },
+      "status": "completed",
+      "read_epa_reg_no": "100-1098",
+      "exact_reg_match": true,
+      "verdict": "MATCHED",
+      "model_product_name": "Abound® Flowable Fungicide",
+      "epa_product_name": "ABOUND FLOWABLE FUNGICIDE",
+      "product_name_agrees": true,
+      "readable": true,
+      "what_is_visible": "The image shows a pesticide label for Abound Flowable Fungicide with EPA Reg. No. 100-1098.",
+      "latency_ms": 1147,
+      "usage": {
+        "inputTokens": 2077,
+        "outputTokens": 79,
+        "totalTokens": 2156,
+        "costUsd": 0.0006941999999999999
+      },
+      "request_ids": [
+        "dd4939bc124821cfcd117d12b15ee809"
+      ]
+    }
+  ],
+  "pooled": {
+    "labels_evaluated": 20,
+    "expected_images": 40,
+    "completed_images": 40,
+    "failed_images": 0,
+    "sets": {
+      "rendered_label_pages": {
+        "images": 20,
+        "exact_reg_reads": 20,
+        "exact_reg_read_rate": 1,
+        "product_name_agreements": 20,
+        "product_name_agreement_rate": 1,
+        "verdict_counts": {
+          "MATCHED": 20
+        },
+        "latency_ms": {
+          "total": 30503,
+          "mean": 1525.15
+        },
+        "tokens": {
+          "input": 41540,
+          "output": 1508,
+          "total": 43048
+        },
+        "cost_usd": 0.0138192
+      },
+      "simulated_phone_degradation": {
+        "images": 20,
+        "exact_reg_reads": 20,
+        "exact_reg_read_rate": 1,
+        "product_name_agreements": 20,
+        "product_name_agreement_rate": 1,
+        "verdict_counts": {
+          "MATCHED": 20
+        },
+        "latency_ms": {
+          "total": 27439,
+          "mean": 1371.95
+        },
+        "tokens": {
+          "input": 40840,
+          "output": 1485,
+          "total": 42325
+        },
+        "cost_usd": 0.0135885
+      }
+    },
+    "overall": {
+      "images": 40,
+      "exact_reg_reads": 40,
+      "exact_reg_read_rate": 1,
+      "product_name_agreements": 40,
+      "product_name_agreement_rate": 1,
+      "verdict_counts": {
+        "MATCHED": 40
+      },
+      "latency_ms": {
+        "total": 57942,
+        "mean": 1448.55
+      },
+      "tokens": {
+        "input": 82380,
+        "output": 2993,
+        "total": 85373
+      },
+      "cost_usd": 0.0274077
+    },
+    "wrong_but_valid_reg_reads": 0,
+    "wrong_but_valid_cases": []
+  }
+}

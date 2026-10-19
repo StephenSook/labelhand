@@ -79,6 +79,16 @@ Recompute: `python tools/checkback.py --recorded data/nws_recorded`. The recorde
 
 Three real Georgia cotton defoliation labels: Folex 6 EC (EPA Reg. 5481-504, accepted 2026-03-04), Dropp SC (264-700) and Prep (264-418), 32 pages in total.
 
+### Photo reading
+
+`POST /api/labels/photo` reads an EPA registration number and product name with `nvidia/Nemotron-3.5-Super-VL`, then verifies both against EPA PPLS before returning a verdict. It never compiles automatically. The route accepts JPEG or PNG bytes, rejects inputs over 4 MB, checks image signatures instead of trusting headers, keeps the image in memory only, and can be disabled with `LIVE_PHOTO=off`.
+
+The real-data evaluation used the newest accepted PPLS PDF for 20 federal registrations. It rendered each label's front-panel page at a 1600 px long side, then made a second input with 4 degrees of rotation, a 6% edge crop that retained the registration, and JPEG quality 55. These 40 inputs are rendered label pages, not photos. Nemotron read the exact registration on 20 of 20 rendered pages and 20 of 20 degraded pages. All 40 product-name checks returned `MATCHED`; no call failed and no wrong-but-valid registration was read. The official run cost $0.02740770. Total spend including three superseded audit runs was $0.11014140.
+
+The 13 added Georgia row-crop products were Dual Magnum, Liberty 280 SL, Envoke, and Staple LX (herbicides); Assail 30 SG, Transform WG, Vantacor, and Warrior II (insecticides); and Provost Silver, Fontelis, Headline, Priaxor, and Abound (fungicides). The committed receipt includes each PDF URL and hash, selected page, image transform, read, verdict, latency, token counts, and cost: [`eval/results/photo-read-2026-10-19.json`](eval/results/photo-read-2026-10-19.json).
+
+Recompute after setting `NEBIUS_API_KEY`: `cd web && pnpm photo-eval`. The script checks `GET /v1/models` before preparing images and stops if the exact vision model is unavailable. Poppler and ImageMagick are required locally.
+
 **Accuracy against a gold set.** [`eval/gold_v0.json`](eval/gold_v0.json) holds 46 clauses the planner relies on (wind, inversion, rain, temperature, open-boll stage, buffers, release height, droplets, re-entry), annotated from the label text and checked against it by `eval/verify_gold.py`. It is our own annotation until an outside reviewer checks it. `eval/score.py` scores every configuration; each row below changed one thing and was kept or reverted on the numbers.
 
 | Configuration | Coverage | Typed recall | Value exact | Modality | Acting precision | Acting recall |
