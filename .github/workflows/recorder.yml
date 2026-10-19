@@ -1,0 +1,138 @@
+name: recorder
+
+on:
+  schedule:
+    - cron: "23 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: labelhand-hourly-recorder
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  record:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      NEBIUS_PROJECT_ID: ${{ vars.NEBIUS_PROJECT_ID }}
+      NEBIUS_RECORDER_IMAGE: ${{ vars.NEBIUS_RECORDER_IMAGE }}
+      NEBIUS_JOB_PLATFORM: ${{ vars.NEBIUS_JOB_PLATFORM || 'cpu-e2' }}
+      NEBIUS_JOB_PRESET: ${{ vars.NEBIUS_JOB_PRESET || '2vcpu-8gb' }}
+      NEBIUS_JOB_SUBNET_ID: ${{ vars.NEBIUS_JOB_SUBNET_ID }}
+      RECORDER_BUCKET: ${{ vars.NEBIUS_RECORDER_BUCKET }}
+      RECORDER_S3_ENDPOINT: ${{ vars.NEBIUS_RECORDER_S3_ENDPOINT }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.RECORDER_AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.RECORDER_AWS_SECRET_ACCESS_KEY }}
+      NEBIUS_SA_CREDENTIALS: ${{ secrets.NEBIUS_SA_CREDENTIALS }}
+      RECORDER_STOP_UTC: "2026-12-16T00:00:00Z"
+    steps:
+      - name: Enforce stop date and required configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          if (( $(date -u +%s) >= $(date -u -d "$RECORDER_STOP_UTC" +%s) )); then
+            echo "::error::The recorder hard stop is $RECORDER_STOP_UTC. No job was launched."
+            exit 1
+          fi
+          required=(
+            NEBIUS_PROJECT_ID
+            NEBIUS_RECORDER_IMAGE
+            NEBIUS_JOB_PLATFORM
+            NEBIUS_JOB_PRESET
+            NEBIUS_JOB_SUBNET_ID
+            RECORDER_BUCKET
+            RECORDER_S3_ENDPOINT
+            AWS_ACCESS_KEY_ID
+            AWS_SECRET_ACCESS_KEY
+            NEBIUS_SA_CREDENTIALS
+          )
+          for name in "${required[@]}"; do
+            if [[ -z "${!name:-}" ]]; then
+              echo "::error::Missing required recorder setting: $name"
+              exit 1
+            fi
+          done
+
+      - name: Install Nebius CLI 0.12.283
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Installer: https://docs.nebius.com/cli/install
+          curl --fail --silent --show-error --location \
+            https://artifacts.nebius.cloud/cli/install.sh \
+            --output "$RUNNER_TEMP/install-nebius.sh"
+          NEBIUS_CLI_VERSION=0.12.283 bash "$RUNNER_TEMP/install-nebius.sh"
+          echo "$HOME/.nebius/bin" >> "$GITHUB_PATH"
+
+      - name: Authenticate the launcher service account
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Authorized-key profile flow: https://docs.nebius.com/iam/service-accounts/authorized-keys
+          credentials="$RUNNER_TEMP/nebius-launcher-credentials.json"
+          printf '%s' "$NEBIUS_SA_CREDENTIALS" > "$credentials"
+          chmod 600 "$credentials"
+          nebius profile create \
+            --endpoint api.nebius.cloud \
+            --service-account-file "$credentials" \
+            --parent-id "$NEBIUS_PROJECT_ID" \
+            --profile recorder
+
+      - name: Launch one job and wait for its verdict
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Job flags and states: https://docs.nebius.com/serverless/jobs/manage
+          # Smallest documented eu-north1 CPU pair: https://docs.nebius.com/compute/virtual-machines/types
+          job_name="labelhand-recorder-$(date -u +%Y%m%d-%H%M%S)"
+          job_env="RECORDER_BUCKET=$RECORDER_BUCKET,RECORDER_S3_ENDPOINT=$RECORDER_S3_ENDPOINT,AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
+          job_id="$(nebius ai job create \
+            --profile recorder \
+            --name "$job_name" \
+            --image "$NEBIUS_RECORDER_IMAGE" \
+            --env "$job_env" \
+            --timeout 1h \
+            --restart-policy never \
+            --platform "$NEBIUS_JOB_PLATFORM" \
+            --preset "$NEBIUS_JOB_PRESET" \
+            --disk-size 20Gi \
+            --subnet-id "$NEBIUS_JOB_SUBNET_ID" \
+            --async \
+            --format 'jsonpath={.resource_id}')"
+          if [[ -z "$job_id" ]]; then
+            echo "::error::Nebius returned no job ID."
+            exit 1
+          fi
+          echo "Created Nebius job $job_id"
+
+          for attempt in $(seq 1 36); do
+            if ! state="$(nebius ai job get "$job_id" --profile recorder --format 'jsonpath={.status.state}')"; then
+              echo "::error::Could not read state for $job_id."
+              if ! nebius ai job cancel "$job_id" --profile recorder; then
+                echo "::warning::The follow-up cancel command also failed."
+              fi
+              exit 1
+            fi
+            echo "Job $job_id state=$state poll=$attempt/36"
+            case "$state" in
+              COMPLETED)
+                exit 0
+                ;;
+              FAILED|ERROR|CANCELLED)
+                echo "::error::Nebius job $job_id finished with state $state."
+                exit 1
+                ;;
+            esac
+            if [[ "$attempt" -lt 36 ]]; then
+              sleep 15
+            fi
+          done
+
+          echo "::error::Nebius job $job_id did not finish inside the bounded poll window."
+          if ! nebius ai job cancel "$job_id" --profile recorder; then
+            echo "::warning::The timeout cancel command failed."
+          fi
+          exit 1

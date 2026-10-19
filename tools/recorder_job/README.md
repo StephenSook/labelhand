@@ -1,0 +1,256 @@
+# Nebius recorder setup
+
+Status: **NOT RUN**. Every command below is a one-time setup command for Claude to run after this branch is reviewed. This build did not create, start, modify, or delete any cloud resource, secret, GitHub setting, or Vercel setting.
+
+The workflow launches one short Serverless AI job at minute 23 of each hour. The job records the ten NWS points, rebuilds the current UTC day, updates `season/index.json` last, and exits. The workflow refuses to launch a job at or after `2026-12-16T00:00:00Z`.
+
+## Sources checked
+
+- CLI installation: https://docs.nebius.com/cli/install
+- Service-account authorized keys and CLI profiles: https://docs.nebius.com/iam/service-accounts/authorized-keys
+- Serverless AI job flags, timeout, restart policy, lifecycle, and same-project registry access: https://docs.nebius.com/serverless/jobs/manage
+- CPU platforms and presets: https://docs.nebius.com/compute/virtual-machines/types
+- Container Registry helper and image path: https://docs.nebius.com/container-registry/quickstart
+- Object Storage S3 endpoint: https://docs.nebius.com/object-storage/s3-api
+- Object Storage role actions: https://docs.nebius.com/object-storage/supported-actions
+
+The documented smallest CPU pair in `eu-north1` is `cpu-e2` with `2vcpu-8gb`. Serverless AI requires a minimum 20 GiB disk for CPU jobs. Project availability still must be checked before enabling the schedule.
+
+## Prerequisites
+
+Run these commands from Git Bash at the repository root. Use an already authenticated Nebius admin profile that can create IAM and project resources. Install `jq`, the AWS CLI, Docker, GitHub CLI, and Vercel CLI. Replace every angle-bracket value before running.
+
+Create a temporary directory so credential files never enter the repository:
+
+```bash
+export PROJECT_ID='<project-id>'
+export REGION_ID='eu-north1'
+export BUCKET_NAME='<globally-unique-labelhand-recorder-bucket>'
+export SUBNET_ID='<existing-subnet-with-outbound-internet>'
+export EXPECTED_VERCEL_PROJECT='<dedicated-labelhand-vercel-project-name>'
+export SETUP_DIR="$(mktemp -d)"
+export LAUNCHER_CREDENTIALS="$SETUP_DIR/launcher-credentials.json"
+export WRITER_KEY_FILE="$SETUP_DIR/writer-access-key.json"
+export READER_KEY_FILE="$SETUP_DIR/reader-access-key.json"
+```
+
+The selected subnet must reach `api.weather.gov`, `storage.eu-north1.nebius.cloud`, and the Nebius Container Registry. Confirm it before creating the first job.
+
+## 1. Bucket
+
+```bash
+export BUCKET_ID="$(nebius storage bucket create \
+  --parent-id "$PROJECT_ID" \
+  --name "$BUCKET_NAME" \
+  --format jsonpath='{.metadata.id}')"
+test -n "$BUCKET_ID"
+```
+
+## 2. GitHub Actions launcher identity
+
+Serverless AI job creation currently requires the project-scoped `editor` role. Keep this identity separate from the bucket writer.
+
+```bash
+export LAUNCHER_SA_ID="$(nebius iam service-account create \
+  --parent-id "$PROJECT_ID" \
+  --name labelhand-recorder-launcher \
+  --format jsonpath='{.metadata.id}')"
+export LAUNCHER_GROUP_ID="$(nebius iam group create \
+  --parent-id "$PROJECT_ID" \
+  --name labelhand-recorder-launchers \
+  --format jsonpath='{.metadata.id}')"
+nebius iam access-permit create \
+  --parent-id "$LAUNCHER_GROUP_ID" \
+  --resource-id "$PROJECT_ID" \
+  --role editor
+nebius iam group-membership create \
+  --parent-id "$LAUNCHER_GROUP_ID" \
+  --member-id "$LAUNCHER_SA_ID"
+nebius iam auth-public-key generate \
+  --service-account-id "$LAUNCHER_SA_ID" \
+  --expires-at 2026-12-17T00:00:00Z \
+  --output "$LAUNCHER_CREDENTIALS"
+test -s "$LAUNCHER_CREDENTIALS"
+```
+
+## 3. Bucket writer identity
+
+The recorder needs list and read access to rebuild a day, plus put access for raw and compact objects. It does not need delete access.
+
+```bash
+export WRITER_SA_ID="$(nebius iam service-account create \
+  --parent-id "$PROJECT_ID" \
+  --name labelhand-recorder-writer \
+  --format jsonpath='{.metadata.id}')"
+export WRITER_GROUP_ID="$(nebius iam group create \
+  --parent-id "$PROJECT_ID" \
+  --name labelhand-recorder-writers \
+  --format jsonpath='{.metadata.id}')"
+nebius iam access-permit create \
+  --parent-id "$WRITER_GROUP_ID" \
+  --resource-id "$BUCKET_ID" \
+  --role storage.viewer
+nebius iam access-permit create \
+  --parent-id "$WRITER_GROUP_ID" \
+  --resource-id "$BUCKET_ID" \
+  --role storage.uploader
+nebius iam group-membership create \
+  --parent-id "$WRITER_GROUP_ID" \
+  --member-id "$WRITER_SA_ID"
+nebius iam v2 access-key create \
+  --parent-id "$PROJECT_ID" \
+  --account-service-account-id "$WRITER_SA_ID" \
+  --expires-at 2026-12-17T00:00:00Z \
+  --description 'Labelhand recorder Object Storage writer' \
+  --secret-delivery-mode inline \
+  --format json > "$WRITER_KEY_FILE"
+export WRITER_ACCESS_KEY_ID="$(jq -r '.status.aws_access_key_id' "$WRITER_KEY_FILE")"
+export WRITER_SECRET_ACCESS_KEY="$(jq -r '.status.secret' "$WRITER_KEY_FILE")"
+test -n "$WRITER_ACCESS_KEY_ID"
+test -n "$WRITER_SECRET_ACCESS_KEY"
+```
+
+If Nebius rejects the two-role union on one bucket, stop and inspect the tenant. The documented fallback is `storage.object-editor`, but it also grants delete and restore actions and should not be applied without approval.
+
+## 4. Vercel bucket reader identity
+
+```bash
+export READER_SA_ID="$(nebius iam service-account create \
+  --parent-id "$PROJECT_ID" \
+  --name labelhand-season-reader \
+  --format jsonpath='{.metadata.id}')"
+export READER_GROUP_ID="$(nebius iam group create \
+  --parent-id "$PROJECT_ID" \
+  --name labelhand-season-readers \
+  --format jsonpath='{.metadata.id}')"
+nebius iam access-permit create \
+  --parent-id "$READER_GROUP_ID" \
+  --resource-id "$BUCKET_ID" \
+  --role storage.object-viewer
+nebius iam group-membership create \
+  --parent-id "$READER_GROUP_ID" \
+  --member-id "$READER_SA_ID"
+nebius iam v2 access-key create \
+  --parent-id "$PROJECT_ID" \
+  --account-service-account-id "$READER_SA_ID" \
+  --expires-at 2026-12-17T00:00:00Z \
+  --description 'Labelhand season Object Storage reader' \
+  --secret-delivery-mode inline \
+  --format json > "$READER_KEY_FILE"
+export READER_ACCESS_KEY_ID="$(jq -r '.status.aws_access_key_id' "$READER_KEY_FILE")"
+export READER_SECRET_ACCESS_KEY="$(jq -r '.status.secret' "$READER_KEY_FILE")"
+test -n "$READER_ACCESS_KEY_ID"
+test -n "$READER_SECRET_ACCESS_KEY"
+```
+
+## 5. Seed the compact static season
+
+The live index extends the committed static index. Seed the compact files before the first job so issuance counts and history remain continuous.
+
+```bash
+AWS_ACCESS_KEY_ID="$WRITER_ACCESS_KEY_ID" \
+AWS_SECRET_ACCESS_KEY="$WRITER_SECRET_ACCESS_KEY" \
+aws --region "$REGION_ID" \
+  --endpoint-url "https://storage.$REGION_ID.nebius.cloud" \
+  s3 cp web/public/data/season "s3://$BUCKET_NAME/season" \
+  --recursive
+AWS_ACCESS_KEY_ID="$WRITER_ACCESS_KEY_ID" \
+AWS_SECRET_ACCESS_KEY="$WRITER_SECRET_ACCESS_KEY" \
+aws --region "$REGION_ID" \
+  --endpoint-url "https://storage.$REGION_ID.nebius.cloud" \
+  s3api head-object \
+  --bucket "$BUCKET_NAME" \
+  --key season/index.json > /dev/null
+```
+
+## 6. Registry and image
+
+Build from the repository root because the Dockerfile copies shared recorder code and the tracked point cache.
+
+```bash
+export REGISTRY_ID="$(nebius registry create \
+  --parent-id "$PROJECT_ID" \
+  --name labelhand-recorder \
+  --format jsonpath='{.metadata.id}')"
+export REGISTRY_PATH="${REGISTRY_ID#registry-}"
+export RECORDER_TAG="$(git rev-parse --short=12 HEAD)"
+export RECORDER_IMAGE="cr.$REGION_ID.nebius.cloud/$REGISTRY_PATH/labelhand-recorder:$RECORDER_TAG"
+nebius registry configure-helper
+docker build \
+  --file tools/recorder_job/Dockerfile \
+  --tag "$RECORDER_IMAGE" \
+  .
+docker push "$RECORDER_IMAGE"
+```
+
+Jobs in the same Nebius project can pull this image without separate registry credentials.
+
+## 7. GitHub Actions secrets and variables
+
+These commands target the current repository selected by `gh`. Confirm with `gh repo view` before writing anything.
+
+```bash
+gh repo view
+gh secret set NEBIUS_SA_CREDENTIALS < "$LAUNCHER_CREDENTIALS"
+printf '%s' "$WRITER_ACCESS_KEY_ID" | gh secret set RECORDER_AWS_ACCESS_KEY_ID
+printf '%s' "$WRITER_SECRET_ACCESS_KEY" | gh secret set RECORDER_AWS_SECRET_ACCESS_KEY
+gh variable set NEBIUS_PROJECT_ID --body "$PROJECT_ID"
+gh variable set NEBIUS_RECORDER_IMAGE --body "$RECORDER_IMAGE"
+gh variable set NEBIUS_RECORDER_BUCKET --body "$BUCKET_NAME"
+gh variable set NEBIUS_RECORDER_S3_ENDPOINT --body "https://storage.$REGION_ID.nebius.cloud"
+gh variable set NEBIUS_JOB_PLATFORM --body 'cpu-e2'
+gh variable set NEBIUS_JOB_PRESET --body '2vcpu-8gb'
+gh variable set NEBIUS_JOB_SUBNET_ID --body "$SUBNET_ID"
+```
+
+Do not manually dispatch the workflow until every verification in the final section passes.
+
+## 8. Vercel production environment
+
+Verify the local Vercel link before changing production environment values. Do not continue if the project name is not the dedicated Labelhand project.
+
+```bash
+test "$(jq -r '.projectName' web/.vercel/project.json)" = "$EXPECTED_VERCEL_PROJECT"
+printf '%s' "$BUCKET_NAME" | vercel env add SEASON_BUCKET production --cwd web
+printf '%s' "https://storage.$REGION_ID.nebius.cloud" | vercel env add SEASON_S3_ENDPOINT production --cwd web
+printf '%s' "$READER_ACCESS_KEY_ID" | vercel env add SEASON_READ_KEY_ID production --cwd web
+printf '%s' "$READER_SECRET_ACCESS_KEY" | vercel env add SEASON_READ_SECRET production --cwd web
+vercel env ls --cwd web
+```
+
+Trigger the existing production deployment path only after the four names appear. Do not let `vercel` create or relink a project interactively.
+
+## 9. Verification before enabling the schedule
+
+Run every check. Do not infer success from a create command.
+
+```bash
+nebius compute platform list --parent-id "$PROJECT_ID"
+nebius vpc subnet get "$SUBNET_ID"
+gh secret list
+gh variable list
+curl --fail --silent --show-error \
+  "https://<labelhand-production-host>/api/season/index.json" \
+  --output "$SETUP_DIR/live-season-index.json"
+jq -e '.points.tift.days | length > 0' "$SETUP_DIR/live-season-index.json" > /dev/null
+```
+
+Then use `workflow_dispatch` once. Record the job ID, elapsed time, terminal `COMPLETED` state, Object Storage timestamps, workflow URL, and billed cost. Confirm the job stays under the three-minute billing target before leaving the cron enabled.
+
+## Not verified
+
+- No authenticated Nebius command in this document has been run.
+- `cpu-e2` and `2vcpu-8gb` are documented for `eu-north1`, but capacity and Serverless AI availability in this project are not verified.
+- The `storage.viewer` plus `storage.uploader` role pair is documented by its action union, but has not been exercised together in this tenant.
+- The selected subnet's outbound path is not verified.
+- The pinned CLI binary accepts the documented flags in local `--help`; an authenticated job creation with version `0.12.283` is not verified.
+- GitHub Actions scheduled execution, Vercel environment wiring, S3 signature compatibility, live NWS access, duration, and billed cost are not verified.
+
+After setup and verification, remove the temporary credential files without printing them:
+
+```bash
+rm -rf "$SETUP_DIR"
+unset LAUNCHER_CREDENTIALS WRITER_KEY_FILE READER_KEY_FILE
+unset WRITER_ACCESS_KEY_ID WRITER_SECRET_ACCESS_KEY
+unset READER_ACCESS_KEY_ID READER_SECRET_ACCESS_KEY
+```
