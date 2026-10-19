@@ -23,10 +23,19 @@ import {
   type ProductRegistration,
   type ReplayForecast,
 } from "@/lib/planner-data";
+import { fetchSeasonDay } from "@/lib/season";
+import {
+  earlierIssuances,
+  fetchSeasonIndex,
+  toReplay,
+  windowStability,
+  type Stability,
+} from "@/lib/season-replay";
 import { WorkingCard, type WorkingStep } from "@/ui";
 import { AskTank } from "./AskTank";
 import { HourDetail } from "./HourDetail";
 import { RulesDisclosure } from "./RulesDisclosure";
+import { SeasonReplay, useSeasonScores, type SeasonScores } from "./SeasonReplay";
 import { SprayRecordButton } from "./SprayRecordButton";
 import { Timeline } from "./Timeline";
 import { WhyFewWindows } from "./WhyFewWindows";
@@ -36,9 +45,14 @@ type PlannerProps = {
   initialProducts?: string;
   initialHours?: string;
   initialReplay?: string;
+  initialIssued?: string;
   initialHour?: string;
   initialQuestion?: string;
 };
+
+function issuedFromQuery(value: string | undefined): string | undefined {
+  return value && !Number.isNaN(Date.parse(value)) && /^\d{4}-\d{2}-\d{2}T/.test(value) ? value : undefined;
+}
 
 type Failure = {
   message: string;
@@ -79,8 +93,11 @@ function workingSteps(current: number, measured: Array<string | undefined>): Wor
   }));
 }
 
-export function Planner({ initialField, initialProducts, initialHours, initialReplay, initialHour, initialQuestion }: PlannerProps) {
+export function Planner({ initialField, initialProducts, initialHours, initialReplay, initialIssued, initialHour, initialQuestion }: PlannerProps) {
   const replayPoint = initialReplay && REPLAY_POINTS.has(initialReplay) ? initialReplay : undefined;
+  const startIssued = issuedFromQuery(initialIssued);
+  const [replayIssued, setReplayIssued] = useState<string | undefined>(startIssued);
+  const [stability, setStability] = useState<{ key: string; value: Stability | null }>({ key: "", value: null });
   const [field, setField] = useState(replayPoint ?? initialField ?? DEFAULT_FIELD);
   const [selectedRegs, setSelectedRegs] = useState<Set<ProductRegistration>>(() => selectedFromQuery(initialProducts));
   const [jobHours, setJobHours] = useState(() => hoursFromQuery(initialHours));
@@ -120,11 +137,13 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
     return () => { current = false; };
   }, [initialField, replayPoint]);
 
-  const runPlanner = useCallback(async ({ pointKey, source, suppliedReplay, fallbackToReplay = false }: {
+  const runPlanner = useCallback(async ({ pointKey, source, suppliedReplay, fallbackToReplay = false, seasonIssued }: {
     pointKey: string;
     source: PlannerSource;
     suppliedReplay?: ReplayForecast;
     fallbackToReplay?: boolean;
+    // Set when the forecast is one of the recorded season issuances (the issued= link).
+    seasonIssued?: string;
   }) => {
     if (!points || !labels) return;
     const point = points[pointKey];
@@ -161,7 +180,9 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
           }
         },
       });
-      setActiveReplay(checked.source === "RECORDED" ? pointKey : undefined);
+      // A season issuance is linked by issued=, not by the three-point replay= fallback.
+      setActiveReplay(checked.source === "RECORDED" && !seasonIssued ? pointKey : undefined);
+      setReplayIssued(seasonIssued);
       setWorking(null);
       if (!initialHourApplied.current && initialHour === "first-blocked") {
         const blockedIndex = checked.hours.findIndex((hour) => hour.state === "BLOCKED");
@@ -188,12 +209,25 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
   useEffect(() => {
     if (!points || !labels || !configReady || autoRan.current) return;
     autoRan.current = true;
-    void runPlanner({
+    const runDefault = () => runPlanner({
       pointKey: field,
       source: replayPoint ? "RECORDED" : "LIVE",
       fallbackToReplay: !replayPoint,
     });
-  }, [configReady, field, labels, points, replayPoint, runPlanner]);
+    if (!startIssued) {
+      void runDefault();
+      return;
+    }
+    // Day files are UTC days, so the issued timestamp's UTC date names the file.
+    const day = new Date(startIssued).toISOString().slice(0, 10);
+    fetchSeasonDay(field, day)
+      .then((recorded) => {
+        const issuance = recorded.issuances.find((candidate) => Date.parse(candidate.fetched_utc) === Date.parse(startIssued));
+        if (!issuance) throw new Error(`No forecast issued at ${startIssued} was recorded for ${field}.`);
+        return runPlanner({ pointKey: field, source: "RECORDED", suppliedReplay: toReplay(issuance), seasonIssued: issuance.fetched_utc });
+      })
+      .catch(() => runDefault());
+  }, [configReady, field, labels, points, replayPoint, runPlanner, startIssued]);
 
   useEffect(() => {
     if (!configReady) return;
@@ -207,8 +241,10 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
     params.delete("tank");
     if (activeReplay) params.set("replay", activeReplay);
     else params.delete("replay");
+    if (replayIssued) params.set("issued", replayIssued);
+    else params.delete("issued");
     window.history.replaceState(null, "", `${window.location.pathname}?${params.toString()}${window.location.hash}`);
-  }, [activeReplay, configReady, field, jobHours, selectedRegs]);
+  }, [activeReplay, configReady, field, jobHours, replayIssued, selectedRegs]);
 
   useEffect(() => {
     if (!result || deepLinkScrolled.current || !window.location.hash) return;
@@ -238,6 +274,47 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
     : [];
   const usedRules = result?.ruleGroups.flatMap((group) => group.used) ?? [];
   const windows = result ? forecastPermittedWindows(result.hours, jobHours) : [];
+  const seasonPoint = result ? points?.[result.pointKey] : undefined;
+  const seasonScores = useSeasonScores(
+    result?.pointKey,
+    result ? usedRules : undefined,
+    seasonPoint?.lat,
+    seasonPoint?.lon,
+    jobHours,
+  );
+  const firstWindowStart = windows[0]?.start;
+  const firstWindowEnd = windows[0]?.end;
+
+  // How many of the 12 forecasts recorded before a replayed one already permitted its first window.
+  // The measurement is stored with the replay and window it belongs to, so a stale one is never shown.
+  const stabilityKey = result && replayIssued && firstWindowStart && firstWindowEnd && seasonPoint
+    ? `${result.pointKey}|${replayIssued}|${firstWindowStart}|${firstWindowEnd}|${result.ruleGroups.map((group) => group.product).join("|")}`
+    : "";
+  useEffect(() => {
+    if (!stabilityKey || !result || !replayIssued || !firstWindowStart || !firstWindowEnd || !seasonPoint) return;
+    let current = true;
+    const rules = result.ruleGroups.flatMap((group) => group.used);
+    fetchSeasonIndex()
+      .then((index) => earlierIssuances(result.pointKey, index, replayIssued))
+      .then((earlier) => windowStability(
+        { start: firstWindowStart, end: firstWindowEnd, length: 0 },
+        earlier,
+        rules,
+        seasonPoint.lat,
+        seasonPoint.lon,
+      ))
+      .then((measured) => { if (current) setStability({ key: stabilityKey, value: measured }); })
+      .catch(() => { if (current) setStability({ key: stabilityKey, value: null }); });
+    return () => { current = false; };
+    // stabilityKey names every input that changes the measurement.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stabilityKey]);
+  const shownStability = stability.key === stabilityKey && stabilityKey ? stability.value : null;
+
+  function replaySeason(replay: ReplayForecast) {
+    if (!result) return;
+    void runPlanner({ pointKey: result.pointKey, source: "RECORDED", suppliedReplay: replay, seasonIssued: replay.forecast_fetched_utc });
+  }
 
   function toggleProduct(reg: ProductRegistration) {
     setSelectedRegs((current) => {
@@ -449,6 +526,11 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
           selectedHour={selectedHour}
           onSelectHour={selectHour}
           onSelectWindow={scrollToWindow}
+          seasonScores={seasonScores}
+          seasonIssued={replayIssued}
+          stability={shownStability}
+          busy={Boolean(working)}
+          onReplaySeason={replaySeason}
         />
       )}
 
@@ -524,7 +606,12 @@ function sprayRecordForWindow(
   };
 }
 
-function Results({ result, labels, pointName: selectedPointName, jobHours, windows, products, usedRules, selectedHour, onSelectHour, onSelectWindow }: {
+function Results({ result, labels, pointName: selectedPointName, jobHours, windows, products, usedRules, selectedHour, onSelectHour, onSelectWindow, seasonScores, seasonIssued, stability, busy, onReplaySeason }: {
+  seasonScores: SeasonScores;
+  seasonIssued?: string;
+  stability: Stability | null;
+  busy: boolean;
+  onReplaySeason: (replay: ReplayForecast) => void;
   result: PlannerCheckResult;
   labels: LabelIndex;
   pointName: string;
@@ -580,7 +667,9 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
         </div>
 
         <p className={`mt-4 text-sm font-semibold ${nextWindow ? "text-white/85" : "text-[#14213d]/75"}`}>
-          {result.source === "LIVE" ? "NWS response received" : "NWS forecast recorded"} at {formatForecastTime(result.fetchedAt)}
+          {result.source === "LIVE"
+            ? "NWS response received"
+            : seasonIssued ? "Season replay: NWS forecast issued and recorded" : "NWS forecast recorded"} at {formatForecastTime(result.fetchedAt)}
         </p>
         <p className="mt-3 font-bold" title={tankDescription} aria-label={`Tank products: ${tankDescription}`}>
           Tank: {tankLabel}
@@ -596,6 +685,11 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
               <p className="mt-2 text-lg font-bold">
                 {nextWindow.length} consecutive {nextWindow.length === 1 ? "hour" : "hours"}, Eastern time
               </p>
+              {seasonIssued && stability && stability.compared > 0 ? (
+                <p data-window-stability className="mt-2 max-w-xl font-semibold text-white/90">
+                  {stability.held} of the {stability.compared} forecasts recorded just before this one already permitted every hour of this window.
+                </p>
+              ) : null}
               <button
                 type="button"
                 onClick={() => onSelectWindow(nextWindow.start)}
@@ -610,10 +704,28 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
             />
           </div>
         ) : (
-          <p className="mt-5 text-lg font-black">
-            No forecast-permitted window fits this {jobHours}-hour job in the forecast.{" "}
-            <a href="#why-few-windows" className="underline decoration-4 underline-offset-4">Why so few windows?</a>
-          </p>
+          <div className="mt-5">
+            <p className="text-lg font-black">
+              No forecast-permitted window fits this {jobHours}-hour job in the forecast.{" "}
+              <a href="#why-few-windows" className="underline decoration-4 underline-offset-4">Why so few windows?</a>
+            </p>
+            {result.source === "LIVE" && seasonScores.best && seasonScores.best.windows.length > 0 ? (
+              <button
+                type="button"
+                data-replay-best
+                disabled={busy}
+                onClick={() => {
+                  const issuance = seasonScores.days
+                    .flatMap((day) => day.issuances)
+                    .find((candidate) => candidate.fetched_utc === seasonScores.best!.fetchedUtc);
+                  if (issuance) onReplaySeason(toReplay(issuance));
+                }}
+                className="mt-4 min-h-12 rounded-full border-[3px] border-[#14213d] bg-[#fbf7ee] px-5 text-left font-black shadow-[3px_4px_0_#14213d] outline-offset-2 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#14213d] disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Replay the best recorded morning this season ({formatWindowDay(seasonScores.best.fetchedUtc)})
+              </button>
+            ) : null}
+          </div>
         )}
 
         <p className={`mt-5 border-t-2 pt-4 text-sm font-bold ${nextWindow ? "border-white/45" : "border-[#14213d]/35"}`}>
@@ -625,6 +737,15 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
           </p>
         ) : null}
       </section>
+
+      <SeasonReplay
+        pointName={selectedPointName}
+        jobHours={jobHours}
+        scores={seasonScores}
+        activeFetchedUtc={seasonIssued}
+        busy={busy}
+        onReplay={onReplaySeason}
+      />
 
       <Timeline hours={result.hours} products={products} selectedIndex={selectedHour} onSelect={onSelectHour} />
       {selectedHour !== null && result.hours[selectedHour] && (

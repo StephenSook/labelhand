@@ -286,3 +286,26 @@ test("all Tier 1 pages have zero axe violations and render the requested stills"
     }
   }
 });
+
+// Season replay runs on the committed NWS recording, so these checks hold in any month.
+test("the season strip replays the best recorded morning with its window and stability", async ({ page }) => {
+  await page.goto("/app?field=tift&products=5481-504,264-700,264-418&hours=4");
+  await waitForAutoRun(page);
+  const strip = page.locator("#season-replay ol li");
+  await expect(strip.first()).toBeVisible({ timeout: 30_000 });
+  expect(await strip.count()).toBeGreaterThanOrEqual(15);
+
+  await page.locator("#season-replay button", { hasText: "Replay the best morning" }).click();
+  await expect(page.locator("#next-window")).toContainText("Season replay", { timeout: 30_000 });
+  await expect(page.locator("[data-forecast-source]")).toHaveAttribute("data-forecast-source", "RECORDED");
+  await expect(page).toHaveURL(/issued=2026-/);
+  await expect(page.locator("#next-window")).toContainText("consecutive");
+  await expect(page.locator("[data-window-stability]")).toContainText(/\d+ of the \d+ forecasts recorded just before this one/, { timeout: 30_000 });
+});
+
+test("an issued deep link reopens that recorded forecast", async ({ page }) => {
+  await page.goto("/app?field=tift&products=5481-504,264-700,264-418&hours=4&issued=2026-10-10T11:07:02%2B00:00");
+  await expect(page.locator("#next-window")).toContainText("Season replay", { timeout: 30_000 });
+  await expect(page.locator("#next-window")).toContainText("Oct 10, 2026");
+  await expect(page.locator("[data-hour-cell]")).toHaveCount(156);
+});

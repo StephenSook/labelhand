@@ -23,6 +23,7 @@ export default async function AppPage({ searchParams }: { searchParams: SearchPa
         initialProducts={first(query.products) ?? first(query.tank)}
         initialHours={first(query.hours)}
         initialReplay={first(query.replay)}
+        initialIssued={first(query.issued)}
         initialHour={first(query.hour)}
         initialQuestion={first(query.question)}
       />
