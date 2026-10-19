@@ -97,6 +97,25 @@ Three real Georgia cotton defoliation labels: Folex 6 EC (EPA Reg. 5481-504, acc
 
 The planner ships the majority `.ship` row. Each duplicate clause gets one modality vote per run; two matching votes win, a clause found in only one run keeps that modality, and a three-way split keeps the first acting modality. The fixed decision rule selected this merge because coverage recall, strict acting precision, and acting recall are all 1.0. Every source modality and vote count stays in the compiled rule. [`eval/results/ship.json`](eval/results/ship.json) is the committed score receipt. The p2 pipeline's Token Factory cost on three labels was $0.53 per run (Super pass $0.033, Ultra pass $0.18, typing $0.31).
 
+### Why compile the labels? Nemotron alone on the same forecasts
+
+The obvious alternative is to hand a big model the labels and the forecast and ask for the spray hours. `tools/model_alone.py` measures that on real recorded data. For each of the ten points, it takes the first NWS forecast recorded after 7 AM Eastern on Oct 6, Oct 10 and Oct 14 (30 cases, 1,440 forecast hours). It gives `nvidia/nemotron-3-super-120b-a12b` the full page text of all three labels, the 48-hour forecast and the app's three state definitions, and asks for every hour's state with the label sentence it relied on (temperature 0, strict JSON schema, no compiled rules in the prompt). The compiled planner runs on the same forecasts. The design was written into the receipt before the first call.
+
+| | Nemotron alone | Compiled rules |
+|---|---|---|
+| Hours marked forecast-permitted | 111 of 1,440 | 360 of 1,440 |
+| Said go on an hour the compiled rules block | 3 | not applicable |
+| Said go where an inversion is possible and the forecast cannot decide | 73 | 0 by construction |
+| Go hours checked against the station: held / broke | 51 / 17 | 197 / 89 |
+| Cost and time per field check | $0.018 and about 46 s (Token Factory) | no model call; WebAssembly in the browser |
+
+- **The 3 unsafe hours** are Worth on Oct 11, 1 to 3 PM. The forecast said 15 mph; the labels' limit is 10 mph; the model wrote "wind ≤10 mph" and said go.
+- **The 73 hours** are all hours where the planner's sun-angle rule flags a possible temperature inversion, which every label in the tank forbids. The model reasoned "no temperature inversion reported", treating a forecast that cannot see inversions as one that rules them out.
+- **It also cites well and finds few windows.** All 1,440 cited sentences are verbatim on the cited page. It marked 314 of the planner's forecast-permitted hours as field check.
+- **Neither side is the ground truth.** Station wind broke 89 of the planner's checked go hours because the forecast itself was wrong, which is why the planner says to re-run close to spray time. This is one model, one prompt and one run.
+
+The first schema left the hours array open, and all 10 of its calls came back with a single hour. That receipt is kept as [`eval/results/model-alone-2026-10-19.schema-v1.json`](eval/results/model-alone-2026-10-19.schema-v1.json). Revision 2 requires exactly 48 hours; sample, prompt, metrics and budget did not change. Command: `python tools/model_alone.py --recorded data/nws_recorded --text-dir data/text --out eval/results/model-alone-2026-10-19.json --summary-out web/public/data/model-alone.json` (Token Factory spend $0.54). Full per-hour detail: [`eval/results/model-alone-2026-10-19.json`](eval/results/model-alone-2026-10-19.json).
+
 ### Tank-composition clauses
 
 The Folex clause &quot;When minimum night temperature is below 60°F use FOLEX 6 EC alone&quot; controls what may be in the tank. It is not a general temperature limit. The Python reference kernel and Rust port now recognize a MUST or MUST_NOT temperature clause matching `\buse\b[^.]*\balone\b`. When the temperature condition holds, a mixed tank is BLOCKED with the other products named; the named product by itself satisfies the clause. When the condition does not hold, the clause does not change the verdict.

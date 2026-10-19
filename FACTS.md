@@ -73,6 +73,22 @@ These counts were recomputed from the committed replay periods and `.ship` rules
 | Dropp SC and Prep | `{"PERMITTED":17,"FIELD_CHECK":63,"BLOCKED":76}` | command: filter fixture rules to registrations `264-700,264-418`, run `windows.evaluate`, count `state`; output: `PERMITTED=17,FIELD_CHECK=63,BLOCKED=76` | MEASURED |
 | Folex 6 EC, Dropp SC, and Prep | `{"PERMITTED":17,"FIELD_CHECK":63,"BLOCKED":76}` | command: run `windows.evaluate` with all fixture rules, count `state`; output: `PERMITTED=17,FIELD_CHECK=63,BLOCKED=76` | MEASURED |
 
+## Nemotron alone against the compiled rules
+
+`tools/model_alone.py` gives `nvidia/nemotron-3-super-120b-a12b` the full text of the three labels and a recorded 48-hour NWS forecast, with no compiled rules, and compares its hour states with the planner's on the same forecast. Response schema revision 2; revision 1 is kept in `eval/results/model-alone-2026-10-19.schema-v1.json`.
+
+| Claim | Exact value | Source | Tag |
+|---|---|---|---|
+| Cases and hours compared | `{"planned_cases":30,"successful_cases":30,"failed_cases":0,"hours_compared":1440}` | `json:web/public/data/model-alone.json#pooled` | MEASURED |
+| Agreement matrix, model state by planner state | `{"PERMITTED":{"PERMITTED":35,"BLOCKED":3,"FIELD_CHECK":73},"BLOCKED":{"PERMITTED":11,"BLOCKED":43,"FIELD_CHECK":20},"FIELD_CHECK":{"PERMITTED":314,"BLOCKED":217,"FIELD_CHECK":724}}` | `json:web/public/data/model-alone.json#pooled.agreement_matrix_model_x_planner` | MEASURED |
+| Model go hours the planner blocks | `3` | `json:web/public/data/model-alone.json#pooled.unsafe_go_count` | MEASURED |
+| Cited sentences verbatim on the cited page | `{"matched":1440,"total":1440}` | `json:web/public/data/model-alone.json#pooled.quote_check` | MEASURED |
+| Go hours against the station | `{"model_permitted":{"held":51,"broke":17},"planner_permitted":{"held":197,"broke":89}}` | `json:web/public/data/model-alone.json#pooled.against_observations` | MEASURED |
+| Model calls, tokens, latency and cost | `{"attempts":30,"prompt_tokens":1235834,"completion_tokens":190862,"latency_ms":1371365,"cost_usd":0.542526}` | `json:web/public/data/model-alone.json#pooled.model_calls` | MEASURED |
+| The 73 model-go, planner-field-check hours are all possible-inversion hours | `73` | command: count planner `checks` whose `why` contains "inversion" over hours with model `PERMITTED` and planner `FIELD_CHECK` in `eval/results/model-alone-2026-10-19.json`; output: `73 [('inversion', 73)]` | MEASURED |
+| The 3 unsafe hours | `"Worth, 2026-10-11 13:00 to 15:00 EDT; forecast 15 mph; model reason: wind ≤10 mph"` | `eval/results/model-alone-2026-10-19.json`, case `worth-2026-10-10`, hour indexes 30 to 32 | MEASURED |
+| Revision 1 schema outcome | `"10 of 10 calls returned one hour"` | `eval/results/model-alone-2026-10-19.schema-v1.json`, every `model_calls[].error`: `response has 1 hours, expected 48` | MEASURED |
+
 ## Recorded season and forecast check-back
 
 The season files are exported by `tools/season_export.py`. The check-back runs the planner on the forecast issued closest to 24 hours before each recorded hour and checks every forecast-permitted hour against the station observation recorded for that hour. Only label limits a station can measure are checked; clauses it cannot decide are listed, never counted as held.
