@@ -1,13 +1,14 @@
-import { guardFinalAnswer, type FinalAnswerArgs, type ToolResultRecord } from "./guard";
+import { guardFinalAnswer, prepareFinalAnswer, type FinalAnswerArgs, type ToolResultRecord } from "./guard";
 import {
   AGENT_TOOL_NAMES,
   createAgentToolRuntime,
   executeAgentTool,
   type AgentCheckSnapshot,
+  type AgentCheckTankResult,
   type AgentToolName,
 } from "./tools";
 
-export const AGENT_SYSTEM_PROMPT = `You help a Georgia cotton applicator understand the Labelhand planner. You must use check_tank before answering any question about forecast windows. You may state only facts that appear in tool results from this conversation. Never say spraying is legal. Say forecast-permitted and remind the user that field checks required by the label remain their responsibility. For a when or window question, call check_tank and then call final_answer directly with every returned window index. Do not state how many windows there are; the page lists every window index you return. Use get_clause only when the user asks why or asks about a label limit. Never invent or abbreviate a rule ID. Copy a rule_id exactly from check_tank binding_clauses. End by calling final_answer with a summary, cited rule IDs, and window indices. Do not answer in ordinary text.`;
+export const AGENT_SYSTEM_PROMPT = `You help a Georgia cotton applicator understand the Labelhand planner. You must use check_tank before answering any question about forecast windows. You may state only facts that appear in tool results from this conversation. Never say spraying is legal. Say forecast-permitted and remind the user that field checks required by the label remain their responsibility. For a when or window question, call check_tank and then call final_answer directly with every returned window index. Do not state how many windows there are; the page lists every window index you return. Keep the summary under 300 characters, at most three short sentences. If no window is returned, say so in one sentence and name the clause that blocks the most hours. Counts in check_tank are hours, never windows. Use get_clause only when the user asks why or asks about a label limit. Never invent or abbreviate a rule ID. Copy a rule_id exactly from check_tank binding_clauses. End by calling final_answer with a summary, cited rule IDs, and window indices. Do not answer in ordinary text.`;
 
 type ToolCall = {
   id: string;
@@ -45,12 +46,16 @@ export type AgentGuardTrace = {
   type: "guard";
   passed: boolean;
   reasons: string[];
+  // Mechanical edits made before the guard ran (an unfinished sentence removed, typographic spaces).
+  notes?: string[];
 };
 
 export type AgentTraceEntry = AgentModelTrace | AgentToolTrace | AgentGuardTrace;
 
 export type AgentRunResult = {
   answer: FinalAnswerArgs | null;
+  // Set only when every model answer failed the guard and check_tank had returned a result.
+  plannerSummary?: string | null;
   fallbackText: string | null;
   guard: AgentGuardTrace;
   trace: AgentTraceEntry[];
@@ -186,9 +191,12 @@ export async function runAgentLoop(
       });
 
       if (name === "final_answer") {
-        const answer = executed.result as FinalAnswerArgs;
+        const prepared = prepareFinalAnswer(executed.result as FinalAnswerArgs);
+        const answer = prepared.answer;
         const checked = guardFinalAnswer(answer, toolResults);
-        const guard: AgentGuardTrace = { type: "guard", ...checked };
+        const guard: AgentGuardTrace = prepared.notes.length > 0
+          ? { type: "guard", ...checked, notes: prepared.notes }
+          : { type: "guard", ...checked };
         lastGuard = guard;
         trace.push(guard);
         if (checked.passed) {
@@ -224,8 +232,10 @@ export async function runAgentLoop(
   }
 
   if (lastGuard) {
+    const latest = [...toolResults].reverse().find((entry) => entry.name === "check_tank")?.result;
     return {
       answer: null,
+      plannerSummary: latest ? plannerSummary(latest as AgentCheckTankResult) : null,
       fallbackText: `The answer failed the final-answer check (${lastGuard.reasons.join(" ")}), so it is not shown. Here is what the tools returned.\n\n${JSON.stringify(toolResults, null, 2)}`,
       guard: lastGuard,
       trace,
@@ -234,4 +244,15 @@ export async function runAgentLoop(
     };
   }
   throw new Error(`Nemotron did not call final_answer within ${MAX_MODEL_CALLS} model calls.`);
+}
+
+// Written from the planner result alone, with no model text, for the case where every Nemotron
+// answer failed the guard. It states what check_tank returned and nothing else.
+export function plannerSummary(result: AgentCheckTankResult): string {
+  const where = `${result.field}, ${result.job_hours}-hour job, ${result.source.kind.toLowerCase()} forecast fetched ${result.source.time}`;
+  if (result.windows.length > 0) {
+    return `Forecast-permitted windows (${where}): ${result.windows.map((window) => `window ${window.index}, ${window.label}`).join("; ")}. Field checks required by the label remain your responsibility.`;
+  }
+  const clauses = result.binding_clauses.slice(0, 3).map((clause) => `${clause.rule_id} (${clause.product}): "${clause.quote}"`);
+  return `No forecast-permitted window (${where}).${clauses.length > 0 ? ` First clauses that blocked or flagged hours: ${clauses.join("; ")}` : ""}`;
 }

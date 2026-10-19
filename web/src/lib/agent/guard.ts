@@ -68,6 +68,67 @@ function summaryEndsAsSentence(summary: string): boolean {
   return /[.!?]["'\u2019\u201D)\]\u00BB]*$/.test(summary.trim());
 }
 
+// final_answer.summary has a JSON-schema maxLength, and Token Factory's constrained decoding stops
+// the string at that length even mid-word. Production 2026-10-19 (run 39294396284): a zero-window
+// week produced a 400-character list of restrictions cut at "wind speeds >10", and every retry
+// repeated it because the only reason given was the missing full stop. The summary is never
+// trimmed here: a review showed "permitted at 3 p.m. only if ..." would trim to an unconditional
+// claim. The guard instead names the cut so the retry is asked for a shorter answer.
+export const SUMMARY_MAX_CHARACTERS = 400;
+
+// Typographic spaces Nemotron puts inside "10 mph" or "48 F". U+202F failed the script check in
+// that same run although it is only a space. Replacing a space with a space changes no claim.
+const TYPOGRAPHIC_SPACES = /[\u2000-\u200A\u202F\u205F]/g;
+
+export type PreparedAnswer = {
+  answer: FinalAnswerArgs;
+  notes: string[];
+};
+
+export function prepareFinalAnswer(answer: FinalAnswerArgs): PreparedAnswer {
+  const summary = answer.summary.replace(TYPOGRAPHIC_SPACES, " ");
+  if (summary === answer.summary) return { answer, notes: [] };
+  return {
+    answer: { ...answer, summary },
+    notes: ["Typographic spaces in the summary were replaced with ordinary spaces."],
+  };
+}
+
+const COUNT_WORDS = ["zero", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"];
+const COUNT_WORD_VALUES = new Map(COUNT_WORDS.map((word, index) => [word, index === 0 ? 0 : index + 1]));
+// "156 blocked windows", "two forecast-permitted windows", "3 4-hour windows". A length adjective
+// such as "4-hour" may sit between the count and the noun; a bare "hours" may not, so "156 hours of
+// blocked windows" is not read as a window count.
+const WINDOW_COUNT_CLAIM = new RegExp(
+  `\\b(\\d+|${COUNT_WORDS.join("|")})((?:\\s+(?!hours?\\b)(?:[A-Za-z][A-Za-z\\u2010\\u2011-]*|\\d+[\\u2010\\u2011-]hours?)){0,3})\\s+windows\\b`,
+  "gi",
+);
+// "field-check" is not here: a returned window is forecast-permitted and can still need label field
+// checks ("two forecast-permitted field-check-required windows" is true).
+// "non-blocked" and "not blocked" are negations, so the word must not follow a hyphen or "not".
+const NON_PERMITTED_MODIFIER = /(?<![\w-])(?<!\bnot\s)(?:blocked|blocking|closed|denied|unpermitted)\b/i;
+
+// A count scoped by a predicate ("two windows start before noon") can never exceed the number of
+// windows returned, so only a count above that number is rejected. Windows are permitted spans by
+// definition, so a count of "blocked windows" is always a mislabelled hour total. An undercount
+// ("zero windows were returned" with four listed) passes because a scoped count cannot be told
+// apart from a total; it errs toward not spraying, and the page lists every returned window.
+function windowCountReasons(summary: string, permittedCount: number): string[] {
+  const reasons: string[] = [];
+  for (const match of summary.matchAll(WINDOW_COUNT_CLAIM)) {
+    const token = match[1].toLowerCase();
+    const value = /^\d+$/.test(token) ? Number(token) : COUNT_WORD_VALUES.get(token);
+    if (value === undefined) continue;
+    const modifiers = match[2] ?? "";
+    if (NON_PERMITTED_MODIFIER.test(modifiers)) {
+      reasons.push(`The summary says "${match[0].trim()}", but windows are forecast-permitted spans; check_tank counts are hours, not windows.`);
+    } else if (value > permittedCount) {
+      reasons.push(`The summary says "${match[0].trim()}", but check_tank returned ${permittedCount} permitted windows.`);
+    }
+  }
+  return reasons;
+}
+
 // Modifiers that can sit between an exclusivity determiner and the noun "window".
 // Arbitrary words are not allowed: "the only product in window 0" is not a one-window claim.
 const WINDOW_MODIFIER = "forecast-permitted|forecast|permitted|listed|returned|available|open|remaining|usable";
@@ -178,6 +239,9 @@ function scriptAndEndingReasons(answer: FinalAnswerArgs): string[] {
   }
   if (!summaryEndsAsSentence(answer.summary)) {
     reasons.push("The summary does not end with sentence-final punctuation.");
+    if (answer.summary.length >= SUMMARY_MAX_CHARACTERS - 5) {
+      reasons.push(`The summary reached the ${SUMMARY_MAX_CHARACTERS}-character limit and was cut off. Write a shorter summary, under 300 characters.`);
+    }
   }
   return reasons;
 }
@@ -195,8 +259,9 @@ function scriptAndEndingReasons(answer: FinalAnswerArgs): string[] {
 // totals for the whole forecast, and the result has no per-window split of those totals, so a
 // number next to "for that window" cannot be proved equal to that window. A sentence that pairs
 // a counts value with "for/in this/that window" is rejected unless those digits also equal a
-// returned window's hours or index. The prompt tells the model not to state counts, and the
-// page lists every returned window under the answer.
+// returned window's hours or index. A plural window count ("156 blocked windows") is rejected when
+// it names blocked windows or exceeds the returned window list. The prompt tells the model not to
+// state counts, and the page lists every returned window under the answer.
 export function guardFinalAnswer(
   answer: FinalAnswerArgs,
   toolResults: ToolResultRecord[],
@@ -238,6 +303,7 @@ export function guardFinalAnswer(
 
   reasons.push(...scriptAndEndingReasons(answer));
   reasons.push(...exclusivityReasons(answer.summary, windowRecords.length));
+  reasons.push(...windowCountReasons(answer.summary, windowRecords.length));
   reasons.push(...scopeReasons(answer.summary, successfulResults, windowRecords));
 
   return { passed: reasons.length === 0, reasons };

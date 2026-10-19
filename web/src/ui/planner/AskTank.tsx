@@ -62,6 +62,7 @@ function TraceRow({ entry }: { entry: AgentTraceEntry }) {
   return (
     <li data-agent-guard={entry.passed ? "passed" : "failed"} className="rounded-2xl border-2 border-[#14213d] bg-white p-3">
       <strong>Guard: {entry.passed ? "passed" : "failed"}</strong>
+      {entry.notes?.map((note) => <p key={note} data-guard-note className="text-sm italic">{note}</p>)}
       {entry.reasons.map((reason) => <p key={reason}>{reason}</p>)}
     </li>
   );
@@ -163,7 +164,21 @@ export function AskTank({ initialQuestion, onCheck, onClause, onWindow }: AskTan
               Guard {result.guard.passed ? "passed" : "failed"}
             </span>
           </div>
-          {result.answer ? <p className="mt-4 text-lg font-bold leading-relaxed">{result.answer.summary}</p> : <pre className="mt-4 max-h-96 overflow-auto whitespace-pre-wrap text-sm">{result.fallbackText}</pre>}
+          {result.answer ? <p className="mt-4 text-lg font-bold leading-relaxed">{result.answer.summary}</p> : (
+            <>
+              {result.plannerSummary ? (
+                <div data-planner-summary className="mt-4">
+                  <p className="text-xs font-extrabold uppercase tracking-[0.12em]">From the planner, not the model</p>
+                  <p className="mt-1 text-lg font-bold leading-relaxed">{result.plannerSummary}</p>
+                  <p className="mt-2 text-sm">Every Nemotron answer failed the guard, so this text is written from the planner result alone.</p>
+                </div>
+              ) : null}
+              <details className="mt-4">
+                <summary className="cursor-pointer font-extrabold">Guard reasons and raw tool results</summary>
+                <pre className="mt-2 max-h-96 overflow-auto whitespace-pre-wrap text-sm">{result.fallbackText}</pre>
+              </details>
+            </>
+          )}
 
           {result.answer?.cited_rule_ids.length ? (
             <div className="mt-5">

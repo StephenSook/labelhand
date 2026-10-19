@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { guardFinalAnswer, type ToolResultRecord } from "@/lib/agent/guard";
+import { guardFinalAnswer, prepareFinalAnswer, SUMMARY_MAX_CHARACTERS, type ToolResultRecord } from "@/lib/agent/guard";
 
 const toolResults: ToolResultRecord[] = [
   {
@@ -309,5 +309,118 @@ describe("final answer guard", () => {
       cited_rule_ids: ["264-700-p8-3"],
       window_indices: [0],
     }, tiftFourWindows())).toEqual({ passed: true, reasons: [] });
+  });
+});
+
+// Production run 39294396284 (2026-10-19 17:28 UTC): check_tank returned 0 permitted windows and
+// 156 blocked hours (night lows of 48 F fail the Folex 60 F clause). This is the first recorded
+// final answer, byte for byte: 400 characters, cut by the schema maxLength, with U+202F inside
+// "5 mph". The guard refused it and all four retries, so the page showed the fallback dump.
+const productionAnswer20261019 = {
+  summary: "No forecast-permitted window for spraying all three products at Tift this week. The current data shows 156 blocked windows and zero forecast-permitted windows. The primary restrictions are: FOLEX 6 EC requires minimum night temperature ≥60°F (current night low 48°F); all three products restrict application during temperature inversions (sun -1°, wind 5 mph); and all three restrict wind speeds >10 ",
+  cited_rule_ids: ["5481-504-p10-10", "5481-504-p8-7", "264-700-p5-3", "264-418-p5-14", "5481-504-p7-8", "5481-504-p8-4", "5481-504-p8-10", "264-700-p5-1", "264-418-p5-13"],
+  window_indices: [],
+};
+
+const tiftNoWindows = (): ToolResultRecord[] => [
+  {
+    name: "check_tank",
+    result: {
+      field: "Tift",
+      products: ["5481-504", "264-700", "264-418"],
+      job_hours: 4,
+      counts: { FORECAST_PERMITTED: 0, FIELD_CHECK: 0, BLOCKED: 156 },
+      windows: [],
+      binding_clauses: productionAnswer20261019.cited_rule_ids.map((rule_id) => ({ rule_id, why: "night low 48 F" })),
+    },
+  },
+];
+
+function windowsOf(count: number): ToolResultRecord[] {
+  return [{
+    name: "check_tank",
+    result: {
+      windows: Array.from({ length: count }, (_, index) => ({ index, label: "placeholder", hours: 4 })),
+      binding_clauses: [{ rule_id: "264-700-p8-3", page: 8 }],
+    },
+  }];
+}
+
+describe("preparing a final answer before the guard", () => {
+  test("replaces typographic spaces and nothing else", () => {
+    const prepared = prepareFinalAnswer(productionAnswer20261019);
+    expect(prepared.answer.summary).toBe(productionAnswer20261019.summary.replaceAll(" ", " "));
+    expect(prepared.answer.cited_rule_ids).toEqual(productionAnswer20261019.cited_rule_ids);
+    expect(prepared.notes).toEqual(["Typographic spaces in the summary were replaced with ordinary spaces."]);
+  });
+
+  test("leaves a summary without typographic spaces alone", () => {
+    const answer = { summary: "Window 0 provides 4 forecast-permitted hours.", cited_rule_ids: [], window_indices: [0] };
+    expect(prepareFinalAnswer(answer)).toEqual({ answer, notes: [] });
+  });
+
+  // Review 2026-10-19: trimming at the last full stop would turn "permitted at 3 p.m. only if every
+  // field check passes; ..." into "permitted at 3 p.m.", so the summary is never shortened.
+  test("never shortens a cut summary, even one whose last full stop is an abbreviation", () => {
+    const summary = ("Spraying is permitted at 3 p.m. only if every field check required by the label passes; " + "all on-site conditions are acceptable ".repeat(20)).slice(0, SUMMARY_MAX_CHARACTERS);
+    const prepared = prepareFinalAnswer({ summary, cited_rule_ids: [], window_indices: [0] });
+    expect(prepared.answer.summary).toBe(summary);
+    expect(guardFinalAnswer(prepared.answer, toolResults).passed).toBe(false);
+  });
+
+  test("names the length cut so the retry asks for a shorter answer, and still refuses blocked windows", () => {
+    const prepared = prepareFinalAnswer(productionAnswer20261019);
+    // The fixture's tool result does not carry every number the model quoted (60, 6, -1), so those
+    // number reasons also fire; this test pins the three reasons this change is about.
+    expect(guardFinalAnswer(prepared.answer, tiftNoWindows()).reasons).toEqual(expect.arrayContaining([
+      "The summary does not end with sentence-final punctuation.",
+      `The summary reached the ${SUMMARY_MAX_CHARACTERS}-character limit and was cut off. Write a shorter summary, under 300 characters.`,
+      "The summary says \"156 blocked windows\", but windows are forecast-permitted spans; check_tank counts are hours, not windows.",
+    ]));
+  });
+
+  test("a short unfinished summary gets the punctuation reason only", () => {
+    expect(guardFinalAnswer(
+      { summary: "Window 0 provides 4 forecast-permitted hours", cited_rule_ids: [], window_indices: [0] },
+      toolResults,
+    ).reasons).toEqual(["The summary does not end with sentence-final punctuation."]);
+  });
+
+  test("a true zero-window answer passes", () => {
+    const summary = "No forecast-permitted window for all three products at Tift this week. The Folex minimum night temperature clause blocks the most hours.";
+    expect(guardFinalAnswer(
+      { summary, cited_rule_ids: ["5481-504-p10-10"], window_indices: [] },
+      tiftNoWindows(),
+    )).toEqual({ passed: true, reasons: [] });
+  });
+});
+
+describe("plural window counts", () => {
+  test("rejects a count above the returned windows", () => {
+    expect(guardFinalAnswer(
+      { summary: "Two windows are forecast-permitted.", cited_rule_ids: [], window_indices: [0] },
+      windowsOf(1),
+    ).reasons).toEqual(["The summary says \"Two windows\", but check_tank returned 1 permitted windows."]);
+  });
+
+  test.each([
+    ["Two windows are forecast-permitted.", 2],
+    ["Two windows start before noon.", 4],
+    ["Three 4-hour windows are forecast-permitted.", 3],
+    ["Zero forecast-permitted windows this week.", 0],
+    ["Two forecast-permitted field-check-required windows are returned.", 2],
+    ["Two non-blocked windows are returned.", 2],
+  ] as const)("accepts %s with %i windows", (summary, count) => {
+    expect(guardFinalAnswer(
+      { summary, cited_rule_ids: [], window_indices: Array.from({ length: count }, (_, index) => index) },
+      windowsOf(count),
+    )).toEqual({ passed: true, reasons: [] });
+  });
+
+  test("does not read an hour total followed by windows as a window count", () => {
+    expect(guardFinalAnswer(
+      { summary: "The forecast has 156 hours of blocked windows.", cited_rule_ids: [], window_indices: [] },
+      tiftNoWindows(),
+    )).toEqual({ passed: true, reasons: [] });
   });
 });

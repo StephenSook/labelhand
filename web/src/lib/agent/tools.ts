@@ -1,7 +1,7 @@
 import type { FilterRulesResult, Rule } from "@/engine";
 import type { ForecastPeriod, LabelIndex, PlannerHour } from "@/lib/planner-data";
 import type { ForecastWindow } from "@/lib/windows";
-import type { FinalAnswerArgs } from "./guard";
+import { SUMMARY_MAX_CHARACTERS, type FinalAnswerArgs } from "./guard";
 
 // The ten NWS forecast points the recorder and the planner know (data/nws_points_cache.json). Listing them in the
 // schema lets the first step force check_tank by name: with two tools and tool_choice "required", Nemotron 3.5
@@ -63,7 +63,7 @@ export const AGENT_TOOL_DEFINITIONS = [
         additionalProperties: false,
         required: ["summary", "cited_rule_ids", "window_indices"],
         properties: {
-          summary: { type: "string", maxLength: 400 },
+          summary: { type: "string", maxLength: SUMMARY_MAX_CHARACTERS },
           cited_rule_ids: { type: "array", uniqueItems: true, items: { type: "string" } },
           window_indices: { type: "array", uniqueItems: true, items: { type: "integer", minimum: 0 } },
         },
@@ -301,8 +301,8 @@ function getClause(args: unknown, runtime: AgentToolRuntime) {
 
 function parseFinalAnswer(args: unknown): FinalAnswerArgs {
   const input = requireRecord(args, "final_answer");
-  if (typeof input.summary !== "string" || input.summary.length > 400) {
-    throw new TypeError("final_answer summary must be a string no longer than 400 characters.");
+  if (typeof input.summary !== "string" || input.summary.length > SUMMARY_MAX_CHARACTERS) {
+    throw new TypeError(`final_answer summary must be a string no longer than ${SUMMARY_MAX_CHARACTERS} characters.`);
   }
   if (!Array.isArray(input.cited_rule_ids) || input.cited_rule_ids.some((value) => typeof value !== "string")) {
     throw new TypeError("final_answer cited_rule_ids must be an array of strings.");
