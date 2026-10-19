@@ -1,0 +1,84 @@
+[
+  {
+    "name": "valid_axial_wind",
+    "source": "Axial XL 100-1256",
+    "input": {
+      "rule": {
+        "quote": "Do not apply when wind speeds exceed 15 mph at the application site.",
+        "value": 15,
+        "value2": null,
+        "unit": "mph"
+      },
+      "page_text": "Do not apply when wind speeds exceed 15 mph at the application site."
+    },
+    "expected": null
+  },
+  {
+    "name": "quote_too_short",
+    "source": "Axial XL 100-1256",
+    "input": {
+      "rule": {
+        "quote": "Do not",
+        "value": null,
+        "value2": null
+      },
+      "page_text": "Do not apply when wind speeds exceed 15 mph at the application site."
+    },
+    "expected": "QUOTE_TOO_SHORT"
+  },
+  {
+    "name": "quote_spliced",
+    "source": "Osprey 264-802",
+    "input": {
+      "rule": {
+        "quote": "AVOID APPLICATIONS DURING GUSTY WIND CONDITIONS. ... Do not apply.",
+        "value": null,
+        "value2": null
+      },
+      "page_text": "AVOID APPLICATIONS DURING GUSTY WIND CONDITIONS."
+    },
+    "expected": "QUOTE_SPLICED"
+  },
+  {
+    "name": "quote_not_in_page",
+    "source": "Dropp SC 264-700",
+    "input": {
+      "rule": {
+        "quote": "Do not apply Dropp\u00ae SC by ground or air when wind speeds exceed ten (10) miles per hour at the time of application.",
+        "value": 10,
+        "value2": null,
+        "unit": "mph"
+      },
+      "page_text": "AVOID APPLICATIONS DURING GUSTY WIND CONDITIONS."
+    },
+    "expected": "QUOTE_NOT_IN_PAGE"
+  },
+  {
+    "name": "number_not_in_quote",
+    "source": "Axial XL 100-1256",
+    "input": {
+      "rule": {
+        "quote": "Do not apply when wind speeds exceed 15 mph at the application site.",
+        "value": 12,
+        "value2": null,
+        "unit": "mph"
+      },
+      "page_text": "Do not apply when wind speeds exceed 15 mph at the application site."
+    },
+    "expected": "NUMBER_NOT_IN_QUOTE:value=12"
+  },
+  {
+    "name": "unreadable_glyph",
+    "source": "Folex 6 EC 5481-504",
+    "input": {
+      "rule": {
+        "quote": "\u2022 Do not exceed 2 \ufffd pints/A/Year of FOLEX 6 EC for California and Arizona, and 1 \ufffd pints/A/Year for all other states.",
+        "value": 2.5,
+        "value2": null,
+        "unit": "pints"
+      },
+      "page_text": "\u2022 Do not exceed 2 \ufffd pints/A/Year of FOLEX 6 EC for California and Arizona, and 1 \ufffd pints/A/Year for all other states."
+    },
+    "expected": "UNREADABLE_GLYPH:value=2.5"
+  }
+]

@@ -1,0 +1,242 @@
+[
+  {
+    "name": "acting_wins",
+    "source": "Folex 6 EC 5481-504",
+    "input": {
+      "first_pass_param": "night_temperature_f",
+      "typed": [
+        {
+          "param": "night_temperature_f",
+          "op": "lt",
+          "value": 60,
+          "value2": null,
+          "unit": "F",
+          "modality": "ADVISORY"
+        },
+        {
+          "param": "night_temperature_f",
+          "op": "lt",
+          "value": 60,
+          "value2": null,
+          "unit": "F",
+          "modality": "MUST"
+        },
+        {
+          "param": "night_temperature_f",
+          "op": "lt",
+          "value": 60,
+          "value2": null,
+          "unit": "F",
+          "modality": "ADVISORY"
+        }
+      ]
+    },
+    "expected": {
+      "chosen": {
+        "param": "night_temperature_f",
+        "op": "lt",
+        "value": 60,
+        "value2": null,
+        "unit": "F",
+        "modality": "MUST"
+      },
+      "info": {
+        "votes": [
+          {
+            "param": "night_temperature_f",
+            "modality": "ADVISORY"
+          },
+          {
+            "param": "night_temperature_f",
+            "modality": "MUST"
+          },
+          {
+            "param": "night_temperature_f",
+            "modality": "ADVISORY"
+          }
+        ],
+        "unanimous": false
+      }
+    }
+  },
+  {
+    "name": "majority_parameter",
+    "source": "Dropp SC 264-700",
+    "input": {
+      "first_pass_param": "wind_speed_mph",
+      "typed": [
+        {
+          "param": "wind_speed_mph",
+          "op": "lte",
+          "value": 10,
+          "value2": null,
+          "unit": "mph",
+          "modality": "MUST"
+        },
+        {
+          "param": "wind_speed_mph",
+          "op": "lte",
+          "value": 10,
+          "value2": null,
+          "unit": "mph",
+          "modality": "MUST"
+        },
+        {
+          "param": "other",
+          "op": "lte",
+          "value": 10,
+          "value2": null,
+          "unit": "mph",
+          "modality": "MUST"
+        }
+      ]
+    },
+    "expected": {
+      "chosen": {
+        "param": "wind_speed_mph",
+        "op": "lte",
+        "value": 10,
+        "value2": null,
+        "unit": "mph",
+        "modality": "MUST"
+      },
+      "info": {
+        "votes": [
+          {
+            "param": "wind_speed_mph",
+            "modality": "MUST"
+          },
+          {
+            "param": "wind_speed_mph",
+            "modality": "MUST"
+          },
+          {
+            "param": "other",
+            "modality": "MUST"
+          }
+        ],
+        "unanimous": false
+      }
+    }
+  },
+  {
+    "name": "tie_keeps_first_pass",
+    "source": "Prep 264-418",
+    "input": {
+      "first_pass_param": "rain_free_hours",
+      "typed": [
+        {
+          "param": "rainfall_expected",
+          "op": "none",
+          "value": null,
+          "value2": null,
+          "unit": "mph",
+          "modality": "ADVISORY"
+        },
+        {
+          "param": "rain_free_hours",
+          "op": "none",
+          "value": null,
+          "value2": null,
+          "unit": "mph",
+          "modality": "ADVISORY"
+        }
+      ]
+    },
+    "expected": {
+      "chosen": {
+        "param": "rain_free_hours",
+        "op": "none",
+        "value": null,
+        "value2": null,
+        "unit": "mph",
+        "modality": "ADVISORY"
+      },
+      "info": {
+        "votes": [
+          {
+            "param": "rainfall_expected",
+            "modality": "ADVISORY"
+          },
+          {
+            "param": "rain_free_hours",
+            "modality": "ADVISORY"
+          }
+        ],
+        "unanimous": false
+      }
+    }
+  },
+  {
+    "name": "single_osprey",
+    "source": "Osprey 264-802",
+    "input": {
+      "first_pass_param": "rainfall_expected",
+      "typed": [
+        {
+          "param": "rainfall_expected",
+          "op": "none",
+          "value": null,
+          "value2": null,
+          "unit": null,
+          "modality": "ADVISORY"
+        }
+      ]
+    },
+    "expected": {
+      "chosen": {
+        "param": "rainfall_expected",
+        "op": "none",
+        "value": null,
+        "value2": null,
+        "unit": null,
+        "modality": "ADVISORY"
+      },
+      "info": {
+        "votes": [
+          {
+            "param": "rainfall_expected",
+            "modality": "ADVISORY"
+          }
+        ],
+        "unanimous": true
+      }
+    }
+  },
+  {
+    "name": "single_axial",
+    "source": "Axial XL 100-1256",
+    "input": {
+      "first_pass_param": "wind_speed_mph",
+      "typed": [
+        {
+          "param": "wind_speed_mph",
+          "op": "lte",
+          "value": 10,
+          "value2": null,
+          "unit": "miles per hour",
+          "modality": "MUST"
+        }
+      ]
+    },
+    "expected": {
+      "chosen": {
+        "param": "wind_speed_mph",
+        "op": "lte",
+        "value": 10,
+        "value2": null,
+        "unit": "miles per hour",
+        "modality": "MUST"
+      },
+      "info": {
+        "votes": [
+          {
+            "param": "wind_speed_mph",
+            "modality": "MUST"
+          }
+        ],
+        "unanimous": true
+      }
+    }
+  }
+]

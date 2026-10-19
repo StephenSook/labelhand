@@ -1,0 +1,47 @@
+[
+  {
+    "name": "folex_directive",
+    "source": "Folex 6 EC 5481-504",
+    "input": {
+      "quote": "When minimum night temperature is below 60\u00b0F use FOLEX 6 EC alone.",
+      "brand": "folex"
+    },
+    "expected": "MUST"
+  },
+  {
+    "name": "dropp_prohibition",
+    "source": "Dropp SC 264-700",
+    "input": {
+      "quote": "Do not apply Dropp\u00ae SC by ground or air when wind speeds exceed ten (10) miles per hour at the time of application.",
+      "brand": "dropp"
+    },
+    "expected": "MUST_NOT"
+  },
+  {
+    "name": "prep_avoid",
+    "source": "Prep 264-418",
+    "input": {
+      "quote": "AVOID APPLICATIONS DURING GUSTY WIND CONDITIONS.",
+      "brand": "prep"
+    },
+    "expected": null
+  },
+  {
+    "name": "osprey_prohibition",
+    "source": "Osprey 264-802",
+    "input": {
+      "quote": "Do not apply when wind causes drift to off-site vegetation as injury may occur.",
+      "brand": "osprey"
+    },
+    "expected": null
+  },
+  {
+    "name": "axial_technique",
+    "source": "Axial XL 100-1256",
+    "input": {
+      "quote": "If the windspeed is 10 miles per hour or less, applicators must use \u00bd swath displacement upwind at the downwind edge of the field.",
+      "brand": "axial"
+    },
+    "expected": null
+  }
+]

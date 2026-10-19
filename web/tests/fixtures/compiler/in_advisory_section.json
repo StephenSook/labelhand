@@ -1,0 +1,62 @@
+[
+  {
+    "name": "folex_outside_advisory",
+    "source": "Folex 6 EC 5481-504",
+    "input": {
+      "pages": [
+        "SPRAY DRIFT ADVISORIES\nWIND\nAVOID APPLICATIONS DURING GUSTY WIND CONDITIONS.\nDEFOLIATION AND BOLL OPENING\nWhen minimum night temperature is below 60\u00b0F use FOLEX 6 EC alone."
+      ],
+      "page_no": 1,
+      "quote": "When minimum night temperature is below 60\u00b0F use FOLEX 6 EC alone."
+    },
+    "expected": false
+  },
+  {
+    "name": "dropp_mandatory_section",
+    "source": "Dropp SC 264-700",
+    "input": {
+      "pages": [
+        "MANDATORY SPRAY DRIFT MANAGEMENT\nWIND SPEED\nDo not apply Dropp\u00ae SC by ground or air when wind speeds exceed ten (10) miles per hour at the time of application."
+      ],
+      "page_no": 1,
+      "quote": "Do not apply Dropp\u00ae SC by ground or air when wind speeds exceed ten (10) miles per hour at the time of application."
+    },
+    "expected": false
+  },
+  {
+    "name": "prep_advisory",
+    "source": "Prep 264-418",
+    "input": {
+      "pages": [
+        "SPRAY DRIFT ADVISORIES\nWIND\nAVOID APPLICATIONS DURING GUSTY WIND CONDITIONS."
+      ],
+      "page_no": 1,
+      "quote": "AVOID APPLICATIONS DURING GUSTY WIND CONDITIONS."
+    },
+    "expected": true
+  },
+  {
+    "name": "osprey_advisory",
+    "source": "Osprey 264-802",
+    "input": {
+      "pages": [
+        "SPRAY DRIFT ADVISORIES\nWIND\nAVOID APPLICATIONS DURING GUSTY WIND CONDITIONS."
+      ],
+      "page_no": 1,
+      "quote": "AVOID APPLICATIONS DURING GUSTY WIND CONDITIONS."
+    },
+    "expected": true
+  },
+  {
+    "name": "axial_advisory",
+    "source": "Axial XL 100-1256",
+    "input": {
+      "pages": [
+        "SPRAY DRIFT ADVISORIES\nWIND\nWIND \nDrift potential generally increases with wind speed. AVOID APPLICATIONS DURING  GUSTY WIND CONDITIONS."
+      ],
+      "page_no": 1,
+      "quote": "WIND \nDrift potential generally increases with wind speed. AVOID APPLICATIONS DURING  GUSTY WIND CONDITIONS."
+    },
+    "expected": true
+  }
+]

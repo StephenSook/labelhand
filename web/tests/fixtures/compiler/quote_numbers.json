@@ -1,0 +1,53 @@
+[
+  {
+    "name": "folex",
+    "source": "Folex 6 EC 5481-504",
+    "input": "\u2022 Do not exceed 2 \u00bd pints/A/Year of FOLEX 6 EC for California and Arizona, and 1 \u00bd pints/A/Year for all other states.",
+    "expected": [
+      2.0,
+      6.0,
+      1.0,
+      2.5,
+      1.5
+    ]
+  },
+  {
+    "name": "dropp",
+    "source": "Dropp SC 264-700",
+    "input": "Additionally, do not apply Dropp\u00ae SC by air within one-half (1/2) mile of lettuce.",
+    "expected": [
+      1.0,
+      2.0,
+      0.5
+    ]
+  },
+  {
+    "name": "prep",
+    "source": "Prep 264-418",
+    "input": "Add 1/2 to 3/4 of the required amount of water to the spray tank. Start agitation. Add the required amount of PREP\u2122 brand Ethephon for Cotton and Tobacco, and the remaining amount of water.",
+    "expected": [
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      0.5,
+      0.75
+    ]
+  },
+  {
+    "name": "osprey",
+    "source": "Osprey 264-802",
+    "input": "Do not apply when wind speeds exceed 10 miles per hour at the application site.",
+    "expected": [
+      10.0
+    ]
+  },
+  {
+    "name": "axial",
+    "source": "Axial XL 100-1256",
+    "input": "Do not apply when wind speeds exceed 15 mph at the application site.",
+    "expected": [
+      15.0
+    ]
+  }
+]

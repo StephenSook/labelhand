@@ -1,0 +1,53 @@
+[
+  {
+    "name": "folex",
+    "source": "Folex 6 EC 5481-504",
+    "input": {
+      "quote": "For ground rig applications, apply product no more than 4 feet above the ground or the crop canopy and only when wind speed is 10 mph or less at the application site as measured by an anemometer.",
+      "value": 48,
+      "value2": null,
+      "unit": "in"
+    },
+    "expected": {
+      "quote": "For ground rig applications, apply product no more than 4 feet above the ground or the crop canopy and only when wind speed is 10 mph or less at the application site as measured by an anemometer.",
+      "value": 4.0,
+      "value2": null,
+      "unit": "feet",
+      "unit_restored": "48 in -> 4 feet (model conversion undone in code)"
+    }
+  },
+  {
+    "name": "dropp",
+    "source": "Dropp SC 264-700",
+    "input": {
+      "quote": "Additionally, do not apply Dropp\u00ae SC by air within one-half (1/2) mile of lettuce.",
+      "value": 2640,
+      "value2": null,
+      "unit": "ft"
+    },
+    "expected": {
+      "quote": "Additionally, do not apply Dropp\u00ae SC by air within one-half (1/2) mile of lettuce.",
+      "value": 0.5,
+      "value2": null,
+      "unit": "mile",
+      "unit_restored": "2640 ft -> 0.5 mile (model conversion undone in code)"
+    }
+  },
+  {
+    "name": "prep",
+    "source": "Prep 264-418",
+    "input": {
+      "quote": "Apply with the nozzle height recommended by the manufacturer, but no more than 3 feet above the ground or crop canopy.",
+      "value": 36,
+      "value2": null,
+      "unit": "in"
+    },
+    "expected": {
+      "quote": "Apply with the nozzle height recommended by the manufacturer, but no more than 3 feet above the ground or crop canopy.",
+      "value": 3.0,
+      "value2": null,
+      "unit": "feet",
+      "unit_restored": "36 in -> 3 feet (model conversion undone in code)"
+    }
+  }
+]
