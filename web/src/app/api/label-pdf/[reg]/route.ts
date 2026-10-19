@@ -2,6 +2,9 @@ import { createHash } from "node:crypto";
 import { NextResponse } from "next/server";
 import labelIndex from "../../../../../public/data/labels/index.json";
 
+import { getCachedLiveLabel, getRegistrationCacheIndex } from "@/lib/live-cache";
+import { assertFederalReg, pplsPdfUrl } from "@/lib/ppls";
+
 export const runtime = "nodejs";
 export const maxDuration = 25;
 
@@ -9,6 +12,12 @@ const USER_AGENT = "labelhand (github.com/StephenSook/labelhand)";
 const TIMEOUT_MS = 20_000;
 
 type LabelRecord = (typeof labelIndex)[number];
+
+interface LabelSource {
+  url: string;
+  sha256: string;
+  digestSource: "committed label index" | "live cache record";
+}
 
 function plain(message: string, status: number) {
   return new NextResponse(message, {
@@ -21,12 +30,46 @@ function findLabel(reg: string): LabelRecord | undefined {
   return labelIndex.find((label) => label.reg === reg);
 }
 
+async function findLiveLabel(reg: string, signal: AbortSignal): Promise<LabelSource | null> {
+  try {
+    assertFederalReg(reg);
+    const index = await getRegistrationCacheIndex(reg, signal);
+    if (!index) return null;
+    const expectedUrl = pplsPdfUrl(index.fileName);
+    if (index.labelUrl !== expectedUrl) return null;
+    const compiled = await getCachedLiveLabel(index.sha256, index.pipelineVersion, signal);
+    if (!compiled
+      || compiled.reg !== reg
+      || compiled.product !== index.product
+      || compiled.label_file !== index.fileName
+      || compiled.label_accepted !== index.accepted
+      || compiled.label_url !== expectedUrl
+      || compiled.label_sha256 !== index.sha256) {
+      return null;
+    }
+    return {
+      url: expectedUrl,
+      sha256: index.sha256,
+      digestSource: "live cache record",
+    };
+  } catch {
+    return null;
+  }
+}
+
 export async function GET(
-  _request: Request,
+  request: Request,
   context: { params: Promise<{ reg: string }> },
 ) {
   const { reg } = await context.params;
-  const label = findLabel(reg);
+  const committed = findLabel(reg);
+  const label: LabelSource | null = committed
+    ? {
+        url: committed.url,
+        sha256: committed.sha256,
+        digestSource: "committed label index",
+      }
+    : await findLiveLabel(reg, request.signal);
   if (!label) return plain(`No accepted EPA label is indexed for registration ${reg}.`, 404);
 
   let upstream: Response;
@@ -58,7 +101,7 @@ export async function GET(
 
   const digest = createHash("sha256").update(bytes).digest("hex");
   if (digest !== label.sha256) {
-    return plain(`The EPA PDF SHA-256 for ${reg} did not match the committed label index.`, 502);
+    return plain(`The EPA PDF SHA-256 for ${reg} did not match the ${label.digestSource}.`, 502);
   }
 
   return new NextResponse(bytes, {
