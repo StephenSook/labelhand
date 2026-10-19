@@ -507,6 +507,24 @@ a {
 
 .architecture-card { border: 3px solid var(--ink); }
 .architecture-card .section-heading .hand { color: var(--soil); }
+
+/* Forecast check-back: one two-segment bar per tank, held (planner green) and broke (amber). */
+.checkback-card { border: 3px solid var(--ink); padding: clamp(2.2rem, 5vw, 5rem); }
+.checkback { margin-top: 2rem; max-width: 64rem; }
+.checkback-lede { font-size: 1.12rem; font-weight: 650; line-height: 1.6; margin: 0; max-width: 46rem; }
+.checkback-headline { align-items: baseline; display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; font-size: 1.2rem; font-weight: 800; margin: 1.8rem 0 0; }
+.checkback-number { color: var(--field-deep); font-size: clamp(3rem, 7vw, 5.6rem); line-height: 0.95; }
+.checkback-legend { display: flex; flex-wrap: wrap; gap: 0.5rem 1.4rem; font-size: 0.92rem; font-weight: 750; margin-top: 1.4rem; }
+.checkback-legend i { border: 2px solid var(--ink); border-radius: 4px; display: inline-block; height: 0.95rem; margin-right: 0.35rem; vertical-align: -0.12rem; width: 1.4rem; }
+.checkback-rows { display: grid; gap: 0.85rem; list-style: none; margin: 1.2rem 0 0; padding: 0; }
+.checkback-row { align-items: center; display: grid; gap: 0.4rem 1rem; grid-template-columns: minmax(9rem, 13rem) minmax(0, 1fr) auto; }
+.checkback-row-label { font-weight: 800; }
+.checkback-row-value { font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.checkback-bar { background: var(--paper); border: 2px solid var(--ink); border-radius: 0.6rem; display: flex; gap: 2px; height: 1.6rem; overflow: hidden; padding: 2px; }
+.checkback-seg { border-radius: 4px; display: block; min-width: 2px; }
+.checkback-why { background: var(--sun-soft); border: 2px solid var(--ink); border-radius: var(--radius-card); font-weight: 700; line-height: 1.55; margin: 1.6rem 0 0; padding: 1rem 1.2rem; }
+.checkback-source { color: var(--ink-soft); font-size: 0.9rem; font-weight: 600; line-height: 1.55; margin: 1.2rem 0 0; }
+.checkback-source code { overflow-wrap: anywhere; }
 .architecture-diagram {
   display: grid;
   gap: 1.25rem;
@@ -724,6 +742,7 @@ a {
   .architecture-node:not(:last-child)::after { bottom: -1.1rem; color: var(--soil); content: "↓"; font-size: 1.3rem; font-weight: 900; left: 50%; position: absolute; }
   .architecture-paths { display: none; }
   .home-step { min-height: 13rem; transform: none !important; }
+  .checkback-row { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 520px) {
@@ -736,6 +755,7 @@ a {
   .hero-card,
   .steps-card,
   .measured-card,
+  .checkback-card,
   .architecture-card,
   .judge-hero,
   .deployment-card { padding: 1.5rem; }

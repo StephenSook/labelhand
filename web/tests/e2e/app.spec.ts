@@ -309,3 +309,14 @@ test("an issued deep link reopens that recorded forecast", async ({ page }) => {
   await expect(page.locator("#next-window")).toContainText("Oct 10, 2026");
   await expect(page.locator("[data-hour-cell]")).toHaveCount(156);
 });
+
+test("the home page shows the forecast check-back from the committed summary", async ({ page }) => {
+  const summary = JSON.parse(await readFile(path.join(process.cwd(), "public/data/checkback.json"), "utf8")) as {
+    tank_mix: { pooled: { held: number; broke: number } };
+  };
+  const { held, broke } = summary.tank_mix.pooled;
+  await page.goto("/");
+  const card = page.locator(".checkback-card");
+  await expect(card).toContainText(`${held} of ${held + broke}`);
+  await expect(card.locator("[data-checkback-row]")).toHaveCount(4);
+});

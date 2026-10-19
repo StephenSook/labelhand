@@ -1,5 +1,6 @@
 import { Chip, Nav, SectionCard, SquashButton } from "@/ui";
 import { ArchitectureDiagram } from "@/ui/ArchitectureDiagram";
+import { ForecastCheckBack } from "@/ui/ForecastCheckBack";
 import { LiveHeroCard } from "@/ui/LiveHeroCard";
 import shipEval from "../../public/data/eval/ship.json";
 
@@ -107,6 +108,14 @@ export default function HomePage() {
           <a className="text-link measured-link" href="https://github.com/StephenSook/labelhand#measured-so-far">
             Read the full measured table <span aria-hidden="true">→</span>
           </a>
+        </SectionCard>
+
+        <SectionCard className="checkback-card" tone="paper">
+          <div className="section-heading" id="forecast-check-back">
+            <p className="hand">checked against the airport station</p>
+            <h2 className="display">Did the day-ahead forecast hold?</h2>
+          </div>
+          <ForecastCheckBack />
         </SectionCard>
 
         <SectionCard className="architecture-card" tone="paper">
