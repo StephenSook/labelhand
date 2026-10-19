@@ -22,6 +22,16 @@ const steps: JudgeStep[] = [
     action: "Open the live check",
   },
   {
+    title: "Replay a recorded morning of the season",
+    body: (
+      <p>
+        From late October the live forecast blocks this tank on most days: Folex 6 EC wants nights above 60 F. The season strip replays any NWS forecast recorded every hour since Oct 5. Press Replay the best morning, then read how many earlier forecasts agreed.
+      </p>
+    ),
+    href: `${plannerLink}#season-replay`,
+    action: "Open the season strip",
+  },
+  {
     title: "Read a blocked hour and its clause",
     body: (
       <p>
@@ -83,7 +93,7 @@ export default function JudgePage() {
             No login or API key
           </Chip>
           <h1 className="display judge-title">Judges: five minutes</h1>
-          <p className="judge-lede">Run the live check, inspect one clause on its label, ask the tank, then change the tank and keep the record.</p>
+          <p className="judge-lede">Run the live check, replay a recorded morning, inspect one clause on its label, ask the tank, then change the tank and keep the record.</p>
           <JudgeDoor steps={steps} />
         </SectionCard>
 
@@ -96,6 +106,16 @@ export default function JudgePage() {
               <div>
                 <strong>National Weather Service hourly forecast</strong>
                 <p>The planner fetches it from api.weather.gov in your browser on arrival and again when you press Check.</p>
+              </div>
+            </li>
+            <li>
+              <Chip icon="R" tone="sky">RECORDED</Chip>
+              <div>
+                <strong>Every hourly NWS forecast since Oct 5, for ten Georgia cotton points</strong>
+                <p>
+                  The season strip replays them through the same planner. The home page checks day-ahead forecast-permitted hours against the
+                  nearest airport station: <Link className="text-link" href="/#forecast-check-back">did the forecast hold?</Link>
+                </p>
               </div>
             </li>
             <li>

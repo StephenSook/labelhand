@@ -76,7 +76,7 @@ test("every judge step resolves to its app target", async ({ page }) => {
   const links = await page.locator(".judge-step a[href^='/app']").evaluateAll((anchors) => (
     anchors.map((anchor) => (anchor as HTMLAnchorElement).getAttribute("href")).filter((href): href is string => Boolean(href))
   ));
-  expect(links).toHaveLength(7);
+  expect(links).toHaveLength(8);
 
   for (const href of links) {
     const response = await page.goto(href);
