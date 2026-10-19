@@ -1,0 +1,21 @@
+{
+  "items": [
+    {
+      "eparegno": "100-1256",
+      "productname": "AXIAL XL",
+      "product_status": "Active",
+      "altbrandnames": [],
+      "pdffiles": [
+        {"epa_reg_num": "100-1256", "pdffile": "000100-01256-20220503.pdf", "pdffile_accepted_date": "May 3, 2022"},
+        {"epa_reg_num": "100-1256", "pdffile": "000100-01256-20130826.pdf", "pdffile_accepted_date": "August 26, 2013"},
+        {"epa_reg_num": "100-1256", "pdffile": "000100-01256-20120110.pdf", "pdffile_accepted_date": "January 10, 2012"},
+        {"epa_reg_num": "100-1256", "pdffile": "000100-01256-20111018.pdf", "pdffile_accepted_date": "October 18, 2011"},
+        {"epa_reg_num": "100-1256", "pdffile": "000100-01256-20090824.pdf", "pdffile_accepted_date": "August 24, 2009"},
+        {"epa_reg_num": "100-1256", "pdffile": "000100-01256-20090514.pdf", "pdffile_accepted_date": "May 14, 2009"},
+        {"epa_reg_num": "100-1256", "pdffile": "000100-01256-20080326.pdf", "pdffile_accepted_date": "March 26, 2008"},
+        {"epa_reg_num": "100-1256", "pdffile": "000100-01256-20080122.pdf", "pdffile_accepted_date": "January 22, 2008"},
+        {"epa_reg_num": "100-1256", "pdffile": "000100-01256-20070201.pdf", "pdffile_accepted_date": "February 1, 2007"}
+      ]
+    }
+  ]
+}

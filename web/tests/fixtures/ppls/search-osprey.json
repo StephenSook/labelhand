@@ -1,0 +1,9 @@
+{
+  "items": [
+    {"eparegno": "264-802", "productname": "OSPREY HERBICIDE", "product_status": "Active", "altrntbrndnames": null},
+    {"eparegno": "WA060010", "productname": "OSPREY HERBICIDE", "product_status": "Inactive", "altrntbrndnames": null},
+    {"eparegno": "OR110003", "productname": "OSPREY HERBICIDE", "product_status": "Inactive", "altrntbrndnames": null},
+    {"eparegno": "264-1195", "productname": "Osprey Xtra Herbicide", "product_status": "Active", "altrntbrndnames": null},
+    {"eparegno": "NY130002", "productname": "OSPREY HERBICIDE", "product_status": "Active", "altrntbrndnames": null}
+  ]
+}
