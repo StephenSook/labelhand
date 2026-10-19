@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { pointName } from "@/lib/planner-data";
 import { Chip, Nav, SectionCard } from "@/ui";
+import modelAlone from "../../../public/data/model-alone.json";
 import proof from "../../../public/data/proof.json";
 
 export const metadata: Metadata = { title: "Proof: every graded case, misses included" };
@@ -39,6 +40,27 @@ type Proof = {
 };
 
 const data = proof as unknown as Proof;
+
+type MatrixRow = { PERMITTED: number; BLOCKED: number; FIELD_CHECK: number };
+type ModelAlone = {
+  model: string;
+  pooled: {
+    successful_cases: number;
+    hours_compared: number;
+    agreement_matrix_model_x_planner: { PERMITTED: MatrixRow; BLOCKED: MatrixRow; FIELD_CHECK: MatrixRow };
+    quote_check: { matched: number; total: number };
+    against_observations: { model_permitted: { held: number; broke: number }; planner_permitted: { held: number; broke: number } };
+    model_calls: { attempts: number; latency_ms: number; cost_usd: number };
+  };
+  unsafe_go_hours: Array<{
+    point: string;
+    time: string;
+    model_reason: string;
+    model_citation: { registration: string; page: number; sentence: string };
+    planner_rules: Array<{ rule_id: string; product: string; page: number; why: string }>;
+  }>;
+};
+const alone = modelAlone as unknown as ModelAlone;
 const ACTING = new Set(["MUST", "MUST_NOT"]);
 const TANK = "5481-504,264-700,264-418";
 
@@ -124,6 +146,10 @@ export default function ProofPage() {
   const brokenRules = Object.entries(rules);
   const windOnly = brokenRules.length > 0 && brokenRules.every(([, rule]) => rule.param === "wind_speed_mph");
   const regs = ["5481-504", "264-700", "264-418"].filter((reg) => reg in data.products);
+  const matrix = alone.pooled.agreement_matrix_model_x_planner;
+  const modelGo = matrix.PERMITTED.PERMITTED + matrix.PERMITTED.BLOCKED + matrix.PERMITTED.FIELD_CHECK;
+  const plannerGo = matrix.PERMITTED.PERMITTED + matrix.BLOCKED.PERMITTED + matrix.FIELD_CHECK.PERMITTED;
+  const calls = alone.pooled.model_calls;
 
   return (
     <>
@@ -133,7 +159,7 @@ export default function ProofPage() {
           <p className="hand">misses first</p>
           <h1 className="display proof-title">Every graded case</h1>
           <p className="proof-lede">
-            Two checks, run on committed data. Every case is listed here, including the ones Labelhand got wrong, so you can check the counts
+            Three checks, run on committed data. Every case is listed here, including the ones Labelhand got wrong, so you can check the counts
             yourself instead of trusting a percentage.
           </p>
           <div className="proof-tally">
@@ -142,6 +168,12 @@ export default function ProofPage() {
               <span>
                 gold-set label clauses found by the shipped rules. {modalityDiffers} carry a different modality and {valueDiffers} a different number;
                 {" "}{enforced} of {mustEnforce.length} clauses the planner must enforce are enforced.
+              </span>
+            </a>
+            <a className="proof-tally-item" href="#model-alone">
+              <span className="display proof-tally-number">{matrix.PERMITTED.BLOCKED}</span>
+              <span>
+                hours where Nemotron, handed the same three labels and forecast with no compiled rules, said go and the labels block the hour.
               </span>
             </a>
             <a className="proof-tally-item" href="#forecast-misses">
@@ -227,6 +259,69 @@ export default function ProofPage() {
               </table>
             </div>
           </details>
+        </SectionCard>
+
+        <SectionCard className="proof-card" id="model-alone">
+          <h2 className="display proof-heading">Nemotron alone on the same forecasts</h2>
+          <p className="proof-text">
+            Why compile the labels at all? <code>{alone.model}</code> got the full text of all three labels and a recorded 48-hour NWS forecast,
+            with no compiled rules, and was asked for every hour&apos;s state and the label sentence behind it. {alone.pooled.successful_cases} recorded
+            forecasts from ten Georgia points, {alone.pooled.hours_compared.toLocaleString("en-US")} hours, compared with the planner on the same
+            forecasts. The design was written into the receipt before the first call.
+          </p>
+          <dl className="proof-compare proof-alone">
+            <div>
+              <dt>Hours marked forecast-permitted</dt>
+              <dd>Nemotron alone {modelGo}, compiled rules {plannerGo}</dd>
+            </div>
+            <div>
+              <dt>Said go on an hour the labels block</dt>
+              <dd>{matrix.PERMITTED.BLOCKED}</dd>
+            </div>
+            <div>
+              <dt>Said go where the forecast cannot decide</dt>
+              <dd>{matrix.PERMITTED.FIELD_CHECK} (in this run, all were possible temperature inversion hours)</dd>
+            </div>
+            <div>
+              <dt>Cited sentences found on the cited page</dt>
+              <dd>{alone.pooled.quote_check.matched.toLocaleString("en-US")} of {alone.pooled.quote_check.total.toLocaleString("en-US")}</dd>
+            </div>
+            <div>
+              <dt>Go hours checked against the station, held and broke</dt>
+              <dd>Nemotron alone {alone.pooled.against_observations.model_permitted.held} and {alone.pooled.against_observations.model_permitted.broke}; compiled rules {alone.pooled.against_observations.planner_permitted.held} and {alone.pooled.against_observations.planner_permitted.broke}</dd>
+            </div>
+            <div>
+              <dt>Cost and time per field check</dt>
+              <dd>${(calls.cost_usd / calls.attempts).toFixed(3)} and {Math.round(calls.latency_ms / calls.attempts / 1000)} s on Token Factory, against no model call for the planner</dd>
+            </div>
+          </dl>
+
+          <h3 className="proof-subheading">The hours Nemotron alone said go and the labels block</h3>
+          <ul className="proof-diffs">
+            {alone.unsafe_go_hours.map((hour) => (
+              <li className="proof-diff" key={`${hour.point}-${hour.time}`} data-unsafe-hour>
+                <div className="proof-diff-head">
+                  <Chip tone="red">{pointName(hour.point, {})}</Chip>
+                  <span>{dayFormatter.format(new Date(hour.time))}, {hourFormatter.format(new Date(hour.time))} Eastern</span>
+                </div>
+                <dl className="proof-compare">
+                  <div>
+                    <dt>Nemotron alone</dt>
+                    <dd>{hour.model_reason}</dd>
+                  </div>
+                  <div>
+                    <dt>Planner</dt>
+                    <dd>BLOCKED: {hour.planner_rules[0]?.why} ({hour.planner_rules[0]?.product}, page {hour.planner_rules[0]?.page})</dd>
+                  </div>
+                </dl>
+              </li>
+            ))}
+          </ul>
+          <p className="proof-text proof-caveat">
+            One model, one prompt, one run at temperature 0. Neither side is the ground truth: station wind also broke many of the planner&apos;s go hours,
+            because the forecast itself was wrong. Full detail per hour:{" "}
+            <a className="text-link" href="https://github.com/StephenSook/labelhand/blob/main/eval/results/model-alone-2026-10-19.json">eval/results/model-alone-2026-10-19.json</a>.
+          </p>
         </SectionCard>
 
         <SectionCard className="proof-card" id="forecast-misses">
