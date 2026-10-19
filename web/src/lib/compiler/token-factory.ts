@@ -19,6 +19,7 @@ export interface TokenFactoryOptions {
   fetchImpl?: typeof fetch;
   signal?: AbortSignal;
   sleep?: (milliseconds: number) => Promise<void>;
+  onUsage?: (usage: TokenUsage, requestId: string | null) => void;
 }
 
 export interface StrictJsonRequest {
@@ -112,6 +113,12 @@ function requestSignal(parent?: AbortSignal): AbortSignal {
 
 const defaultSleep = (milliseconds: number) => new Promise<void>((resolve) => setTimeout(resolve, milliseconds));
 
+export function throwIfTokenFactoryAborted(signal?: AbortSignal): void {
+  if (!signal?.aborted) return;
+  if (signal.reason instanceof Error) throw signal.reason;
+  throw new TokenFactoryError("Token Factory request was cancelled.");
+}
+
 export async function callStrictJson<T>(
   request: StrictJsonRequest,
   options: TokenFactoryOptions,
@@ -121,6 +128,7 @@ export async function callStrictJson<T>(
   let lastError: TokenFactoryError = new TokenFactoryError("Token Factory request failed.");
 
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt += 1) {
+    throwIfTokenFactoryAborted(options.signal);
     try {
       const response = await fetchImpl(TOKEN_FACTORY_ENDPOINT, {
         method: "POST",
@@ -154,12 +162,14 @@ export async function callStrictJson<T>(
         lastError = error;
       } else {
         const payload = await response.json() as unknown;
+        const usage = usageFor(request.model, isRecord(payload) ? payload.usage : null);
+        const requestId = response.headers.get("x-request-id");
+        options.onUsage?.(usage, requestId);
+        throwIfTokenFactoryAborted(options.signal);
         if (!isRecord(payload) || !Array.isArray(payload.choices) || !isRecord(payload.choices[0])) {
           throw new TokenFactoryError("Token Factory returned no completion choice.");
         }
         const choice = payload.choices[0];
-        const usage = usageFor(request.model, payload.usage);
-        const requestId = response.headers.get("x-request-id");
         if (choice.finish_reason === "length") throw new TruncatedResponse(usage, requestId);
         if (!isRecord(choice.message) || typeof choice.message.content !== "string") {
           throw new TokenFactoryError("Token Factory returned no JSON message content.");
@@ -172,6 +182,7 @@ export async function callStrictJson<T>(
         };
       }
     } catch (error) {
+      throwIfTokenFactoryAborted(options.signal);
       if (error instanceof TruncatedResponse) throw error;
       if (error instanceof TokenFactoryError && error.status !== undefined && NO_RETRY_STATUSES.has(error.status)) {
         throw error;
@@ -199,6 +210,7 @@ export async function compilePage(
   options: TokenFactoryOptions,
   depth = 0,
 ): Promise<PageCompileResult> {
+  throwIfTokenFactoryAborted(options.signal);
   const started = performance.now();
   try {
     const result = await callStrictJson<{ rules?: unknown }>(
@@ -225,6 +237,7 @@ export async function compilePage(
       latencyMs: Math.round(performance.now() - started),
     };
   } catch (error) {
+    throwIfTokenFactoryAborted(options.signal);
     if (error instanceof TruncatedResponse && depth < 2) {
       const halves = await Promise.all(splitText(text).map((part) => compilePage(page, part, options, depth + 1)));
       const requestIds = [

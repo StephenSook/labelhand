@@ -2,6 +2,7 @@ import { guard, norm, restoreUnits, type GuardRule } from "./guards";
 import spec from "./spec.generated.json";
 import {
   callStrictJson,
+  throwIfTokenFactoryAborted,
   type StrictJsonResult,
   type TokenFactoryOptions,
   type TokenUsage,
@@ -102,6 +103,7 @@ export async function typeRule(rule: CompilerRule, options: TokenFactoryOptions)
     );
     return { ok: true, typed: result.value, usage: result.usage, requestId: result.requestId };
   } catch (error) {
+    throwIfTokenFactoryAborted(options.signal);
     return {
       ok: false,
       error: error instanceof Error ? error.message : "Token Factory typing failed.",

@@ -116,6 +116,48 @@ describe("Token Factory compiler client", () => {
     expect(fetchMock).toHaveBeenCalledTimes(MAX_ATTEMPTS);
   });
 
+  test("counts usage from a billed malformed attempt before retrying", async () => {
+    const malformed = new Response(JSON.stringify({
+      choices: [{ message: { content: "{" }, finish_reason: "stop" }],
+      usage: { prompt_tokens: 1_000, completion_tokens: 100, total_tokens: 1_100 },
+    }), { status: 200, headers: { "x-request-id": "req-malformed" } });
+    const fetchMock = vi.fn<typeof fetch>()
+      .mockResolvedValueOnce(malformed)
+      .mockResolvedValueOnce(completion({ ok: true }, { requestId: "req-good" }));
+    const observed: Array<{ total: number; requestId: string | null }> = [];
+    const result = await callStrictJson<{ ok: boolean }>({
+      model: FIRST_PASS_MODEL,
+      system: "system",
+      user: "user",
+      schemaName: "test",
+      schema: {},
+      maxTokens: 10,
+    }, {
+      ...options(fetchMock),
+      onUsage: (usage, requestId) => observed.push({ total: usage.totalTokens, requestId }),
+    });
+    expect(result.value.ok).toBe(true);
+    expect(observed).toEqual([
+      { total: 1_100, requestId: "req-malformed" },
+      { total: 1_100, requestId: "req-good" },
+    ]);
+  });
+
+  test("does not start or retry a request after parent cancellation", async () => {
+    const controller = new AbortController();
+    controller.abort(new Error("compile deadline"));
+    const fetchMock = vi.fn<typeof fetch>();
+    await expect(callStrictJson({
+      model: FIRST_PASS_MODEL,
+      system: "system",
+      user: "user",
+      schemaName: "test",
+      schema: {},
+      maxTokens: 10,
+    }, { ...options(fetchMock), signal: controller.signal })).rejects.toThrow("compile deadline");
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
   test("uses Ultra only for topic-word typing", async () => {
     const fetchMock = vi.fn<typeof fetch>().mockResolvedValue(completion({
       param: "wind_speed_mph",

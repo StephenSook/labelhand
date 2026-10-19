@@ -9,6 +9,7 @@ import {
   FIRST_PASS_MODEL,
   mergeUsage,
   type TokenFactoryOptions,
+  type TokenUsage,
 } from "./token-factory";
 import {
   applyTyping,
@@ -18,6 +19,7 @@ import {
   type CompilerRule,
   typeRule,
 } from "./typing";
+import { COMPILE_TOKEN_CEILING } from "../live-limits";
 import {
   MAX_PDF_BYTES,
   MIN_PDF_BYTES,
@@ -79,7 +81,7 @@ export interface CompiledLiveLabel extends CompiledLabel {
   scored: false;
   complete: boolean;
   pages: number;
-  failed_pages: Array<{ page: number; error: string }>;
+  failed_pages: Array<{ page: number; error: string; status?: number }>;
   typing_failures: Array<{ id: string; error: string; status?: number }>;
   tokens_in: number;
   tokens_out: number;
@@ -105,9 +107,19 @@ export type PipelineEvent =
 export type PipelineEmitter = (event: PipelineEvent) => void | Promise<void>;
 
 export class PipelineError extends Error {
-  constructor(message: string, readonly status = 422) {
+  usage?: TokenUsage;
+  requestIds: string[];
+
+  constructor(
+    message: string,
+    readonly status = 422,
+    usage?: TokenUsage,
+    requestIds: string[] = [],
+  ) {
     super(message);
     this.name = "PipelineError";
+    this.usage = usage;
+    this.requestIds = requestIds;
   }
 }
 
@@ -168,12 +180,24 @@ async function mapConcurrent<T, R>(
       if (completed) await completed(result, index, done);
     }
   });
-  await Promise.all(workers);
+  const settled = await Promise.allSettled(workers);
+  const failed = settled.find((result): result is PromiseRejectedResult => result.status === "rejected");
+  if (failed) throw failed.reason;
   return results;
 }
 
 function throwIfAborted(signal?: AbortSignal): void {
-  if (signal?.aborted) throw new PipelineError("The live compile deadline was reached.", 504);
+  if (!signal?.aborted) return;
+  if (signal.reason instanceof PipelineError) throw signal.reason;
+  throw new PipelineError("The live compile deadline was reached.", 504);
+}
+
+function fatalTokenFactoryError(status?: number): PipelineError | null {
+  if (status === 402) return new PipelineError("Token Factory credit is exhausted.", 503);
+  if (status === 429) return new PipelineError("Token Factory is busy. Try again shortly.", 429);
+  if (status === 400) return new PipelineError("Token Factory rejected the compiler request.", 502);
+  if (status === 401 || status === 403) return new PipelineError("Token Factory credentials are unavailable.", 503);
+  return null;
 }
 
 function verifyPdf(input: LiveCompileInput): void {
@@ -234,22 +258,62 @@ export async function compileLiveLabel(
   await emit({ type: "extracted", pages: extracted.pageCount });
   throwIfAborted(input.signal);
 
+  const compileAbort = new AbortController();
+  let usage = mergeUsage();
+  const billedRequestIds: string[] = [];
+  let terminalError: PipelineError | undefined;
+  const updateErrorUsage = (error: PipelineError) => {
+    error.usage = usage;
+    error.requestIds = [...billedRequestIds];
+  };
+  const abortCompile = (error: PipelineError): PipelineError => {
+    terminalError = error;
+    updateErrorUsage(error);
+    if (!compileAbort.signal.aborted) compileAbort.abort(error);
+    return error;
+  };
+  const abortFromParent = () => {
+    const reason = input.signal?.reason;
+    abortCompile(reason instanceof PipelineError
+      ? reason
+      : new PipelineError("The live compile deadline was reached.", 504));
+  };
+  if (input.signal?.aborted) abortFromParent();
+  else input.signal?.addEventListener("abort", abortFromParent, { once: true });
+  const compileSignal = compileAbort.signal;
   const tokenOptions: TokenFactoryOptions = {
     apiKey: input.apiKey,
     ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {}),
-    ...(input.signal ? { signal: input.signal } : {}),
+    signal: compileSignal,
+    onUsage: (item, requestId) => {
+      usage = mergeUsage(usage, item);
+      if (requestId) billedRequestIds.push(requestId);
+      if (terminalError) updateErrorUsage(terminalError);
+      if (usage.totalTokens > COMPILE_TOKEN_CEILING) {
+        abortCompile(new PipelineError(
+          `The live compile exceeded the ${COMPILE_TOKEN_CEILING} token ceiling.`,
+          422,
+        ));
+      }
+    },
   };
   const pageInputs = extracted.pages.map((text, index) => ({ page: index + 1, text }));
   const accepted: CompilerRule[] = [];
   const rejected: RejectedCompilerRule[] = [];
-  const failedPages: Array<{ page: number; error: string }> = [];
-  const pageResults = await mapConcurrent(
+  const failedPages: Array<{ page: number; error: string; status?: number }> = [];
+  await mapConcurrent(
     pageInputs,
     8,
     ({ page, text }) => compilePage(page, text, tokenOptions),
     async (result) => {
       if (!result.ok) {
-        failedPages.push({ page: result.page, error: result.error });
+        const fatal = fatalTokenFactoryError(result.status);
+        if (fatal) throw abortCompile(fatal);
+        failedPages.push({
+          page: result.page,
+          error: result.error,
+          ...(result.status === undefined ? {} : { status: result.status }),
+        });
         await emit({ type: "page", n: result.page, of: extracted.pageCount, accepted: 0, rejected: 0 });
         return;
       }
@@ -292,16 +356,21 @@ export async function compileLiveLabel(
   accepted.sort((left, right) => left.page - right.page || left.id.localeCompare(right.id));
   rejected.sort((left, right) => left.page - right.page || left.id.localeCompare(right.id));
   failedPages.sort((left, right) => left.page - right.page);
-  throwIfAborted(input.signal);
+  throwIfAborted(compileSignal);
 
   const topical = accepted.filter(hasTopicWord);
   const typingFailures: Array<{ id: string; error: string; status?: number }> = [];
-  let typingUsage = mergeUsage();
-  const typingRequestIds: string[] = [];
   const typed = await mapConcurrent(
     topical,
     6,
-    async (rule) => ({ rule, result: await typeRule(rule, tokenOptions) }),
+    async (rule) => {
+      const result = await typeRule(rule, tokenOptions);
+      if (!result.ok) {
+        const fatal = fatalTokenFactoryError(result.status);
+        if (fatal) throw abortCompile(fatal);
+      }
+      return { rule, result };
+    },
     async (_result, _index, done) => emit({ type: "typing", done, of: topical.length }),
   );
   if (topical.length === 0) await emit({ type: "typing", done: 0, of: 0 });
@@ -312,8 +381,6 @@ export async function compileLiveLabel(
       typedById.set(rule.id, { ...keepFirstPass(rule), typing_error: result.error });
       continue;
     }
-    typingUsage = mergeUsage(typingUsage, result.usage);
-    if (result.requestId) typingRequestIds.push(result.requestId);
     typedById.set(rule.id, applyTyping(rule, result.typed));
   }
   const typedRules = accepted.map((rule) => typedById.get(rule.id) ?? keepFirstPass(rule));
@@ -323,7 +390,6 @@ export async function compileLiveLabel(
   const raised = floored.filter((rule) => "modality_floor" in rule).length;
   await emit({ type: "floor", raised });
 
-  const usage = mergeUsage(...pageResults.map((result) => result.usage), typingUsage);
   const compiled: CompiledLiveLabel = {
     reg: input.reg,
     product: input.product,
@@ -345,11 +411,12 @@ export async function compileLiveLabel(
     tokens_out: usage.outputTokens,
     total_tokens: usage.totalTokens,
     cost_usd: usage.costUsd,
-    request_ids: [...pageResults.flatMap((result) => result.requestIds), ...typingRequestIds],
+    request_ids: billedRequestIds,
     accepted: floored,
     rejected,
   };
   assertCompiledShape(compiled, extracted.pages);
+  input.signal?.removeEventListener("abort", abortFromParent);
   await emit({ type: "done", compiled });
   return compiled;
 }

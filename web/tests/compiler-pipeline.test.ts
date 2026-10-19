@@ -12,23 +12,29 @@ import {
 } from "@/lib/compiler/pipeline";
 import { sha256 } from "@/lib/ppls";
 
-function completion(content: unknown, requestId: string): Response {
+function completion(
+  content: unknown,
+  requestId: string,
+  usage = { prompt_tokens: 1_000, completion_tokens: 100, total_tokens: 1_100 },
+): Response {
   return new Response(JSON.stringify({
     choices: [{ message: { content: JSON.stringify(content) }, finish_reason: "stop" }],
-    usage: { prompt_tokens: 1_000, completion_tokens: 100, total_tokens: 1_100 },
+    usage,
   }), {
     status: 200,
     headers: { "content-type": "application/json", "x-request-id": requestId },
   });
 }
 
-async function labelPdf(): Promise<Uint8Array> {
+async function labelPdf(pageCount = 1): Promise<Uint8Array> {
   const document = await PDFDocument.create();
   const font = await document.embedFont(StandardFonts.Helvetica);
-  document.addPage().drawText(
-    "Do not apply when wind speeds exceed 15 mph. This additional label text keeps the page readable for a live compile.",
-    { x: 30, y: 700, size: 10, font },
-  );
+  for (let index = 0; index < pageCount; index += 1) {
+    document.addPage().drawText(
+      "Do not apply when wind speeds exceed 15 mph. This additional label text keeps the page readable for a live compile.",
+      { x: 30, y: 700, size: 10, font },
+    );
+  }
   const pdf = await document.save({ useObjectStreams: false });
   const padded = new Uint8Array(20_000);
   padded.set(pdf);
@@ -175,5 +181,88 @@ describe("live compiler pipeline", () => {
     });
     compiled.accepted[0].quote = "A quote that is absent from the EPA page.";
     expect(() => assertCompiledShape(compiled, [firstPassRule().quote])).toThrow(/shape check/);
+  });
+
+  test("aborts before typing when billed use crosses the compile token ceiling", async () => {
+    const bytes = await labelPdf();
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue(completion(
+      { rules: [] },
+      "req-over-ceiling",
+      { prompt_tokens: 120_001, completion_tokens: 0, total_tokens: 120_001 },
+    ));
+    const failure = compileLiveLabel({
+      reg: "100-1256",
+      product: "AXIAL XL",
+      alternateBrandNames: [],
+      fileName: "000100-01256-20220503.pdf",
+      accepted: "2022-05-03",
+      labelUrl: "https://www3.epa.gov/pesticides/chem_search/ppls/000100-01256-20220503.pdf",
+      labelSha256: sha256(bytes),
+      pdfBytes: bytes,
+      apiKey: "test-key-that-is-never-sent",
+      fetchImpl: fetchMock,
+    });
+    await expect(failure).rejects.toMatchObject({
+      status: 422,
+      message: expect.stringContaining("token ceiling"),
+      usage: expect.objectContaining({ totalTokens: 120_001 }),
+      requestIds: ["req-over-ceiling"],
+    });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  test("maps Token Factory credit exhaustion to a fatal pipeline error", async () => {
+    const bytes = await labelPdf();
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue(new Response("credit exhausted", { status: 402 }));
+    await expect(compileLiveLabel({
+      reg: "100-1256",
+      product: "AXIAL XL",
+      alternateBrandNames: [],
+      fileName: "000100-01256-20220503.pdf",
+      accepted: "2022-05-03",
+      labelUrl: "https://www3.epa.gov/pesticides/chem_search/ppls/000100-01256-20220503.pdf",
+      labelSha256: sha256(bytes),
+      pdfBytes: bytes,
+      apiKey: "test-key-that-is-never-sent",
+      fetchImpl: fetchMock,
+    })).rejects.toMatchObject({ status: 503, message: "Token Factory credit is exhausted." });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  test("includes peer usage that arrives while a token-ceiling abort settles", async () => {
+    const bytes = await labelPdf(2);
+    let releasePeer: ((response: Response) => void) | undefined;
+    const peer = new Promise<Response>((resolve) => {
+      releasePeer = resolve;
+    });
+    const fetchMock = vi.fn<typeof fetch>()
+      .mockResolvedValueOnce(completion(
+        { rules: [] },
+        "req-over-ceiling",
+        { prompt_tokens: 120_001, completion_tokens: 0, total_tokens: 120_001 },
+      ))
+      .mockReturnValueOnce(peer);
+    const failure = compileLiveLabel({
+      reg: "100-1256",
+      product: "AXIAL XL",
+      alternateBrandNames: [],
+      fileName: "000100-01256-20220503.pdf",
+      accepted: "2022-05-03",
+      labelUrl: "https://www3.epa.gov/pesticides/chem_search/ppls/000100-01256-20220503.pdf",
+      labelSha256: sha256(bytes),
+      pdfBytes: bytes,
+      apiKey: "test-key-that-is-never-sent",
+      fetchImpl: fetchMock,
+    });
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
+    releasePeer?.(completion(
+      { rules: [] },
+      "req-peer",
+      { prompt_tokens: 1_000, completion_tokens: 100, total_tokens: 1_100 },
+    ));
+    await expect(failure).rejects.toMatchObject({
+      usage: expect.objectContaining({ totalTokens: 121_101 }),
+      requestIds: ["req-over-ceiling", "req-peer"],
+    });
   });
 });
