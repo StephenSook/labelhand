@@ -1,0 +1,706 @@
+{
+ "schema_version": 1,
+ "preregistration": {
+  "locked_before_first_model_call_utc": "2026-10-19T20:24:28+00:00",
+  "tank": {
+   "products": [
+    "Folex 6 EC",
+    "Dropp SC",
+    "Prep"
+   ],
+   "registrations": [
+    "5481-504",
+    "264-700",
+    "264-418"
+   ]
+  },
+  "sample": {
+   "points": "all 10 points present in the recorded forecast set",
+   "dates_local": [
+    "2026-10-06",
+    "2026-10-10",
+    "2026-10-14"
+   ],
+   "selection": "for each point and date, the first recorded issuance at or after 07:00 and before 12:00 America/New_York; record missing without substituting another day",
+   "planned_cases": 30
+  },
+  "horizon_hours": 48,
+  "model_alone": {
+   "model": "nvidia/nemotron-3-super-120b-a12b",
+   "temperature": 0,
+   "response": "strict JSON schema",
+   "thinking": false,
+   "label_input": "full saved text-layer pages for all three labels; the saved 264-700 OCR second reading is also shown page by page, matching the compiler pipeline's available readings",
+   "forecast_columns": [
+    "start time in local time",
+    "temperature F",
+    "wind speed mph",
+    "wind direction",
+    "probability of precipitation",
+    "short forecast"
+   ],
+   "task": "For each hour, say whether this tank may be sprayed according to every label: PERMITTED, BLOCKED or FIELD_CHECK (the forecast cannot decide), with the label sentence and page you relied on.",
+   "compiled_rules_in_prompt": false
+  },
+  "planner": {
+   "function": "engine/windows.py windows.evaluate",
+   "rules": "data/compiled/*.ship.json loaded by windows.load_rules"
+  },
+  "metrics": [
+   "agreement matrix model state x planner state, per case and pooled",
+   "unsafe go: model PERMITTED and planner BLOCKED, with blocking rule id, parameter, and quote",
+   "lost window: model BLOCKED and planner PERMITTED",
+   "quote check using compiler.compile_label.guard's whitespace-insensitive page match",
+   "station check for each system's PERMITTED hours using tools.checkback.check_permitted_rules",
+   "response tokens, latency, and list-price cost per call"
+  ],
+  "budget": {
+   "maximum_usd": 3.0,
+   "policy": "stop with a partial receipt before the next call whose conservative maximum would exceed the budget",
+   "retries": "at most two retries after the first failed attempt, with backoff; every attempt is recorded"
+  },
+  "invalid_output_policy": "invalid JSON or an omitted, duplicate, reordered, or wrong-time hour is a failed attempt; never repair by guessing",
+  "data_policy": "recorded label text, NWS forecasts, and station observations only; no synthetic evaluation inputs"
+ },
+ "preregistration_sha256": "d05b54a4f139bde288cb611f28efe9916162792d6ba0ff66cbdc42f592dbcce5",
+ "run": {
+  "status": "preregistered",
+  "started_utc": "2026-10-19T20:24:28+00:00",
+  "finished_utc": null,
+  "command": "python tools/model_alone.py --recorded ..\\labelhand\\data\\nws_recorded --text-dir ..\\labelhand\\data\\text --out eval\\results\\model-alone-2026-10-19.json --summary-out web\\public\\data\\model-alone.json",
+  "selected_cases": 30,
+  "input_counts": {
+   "hourly_files": 3409,
+   "valid_hourly_files": 3409,
+   "bad_hourly_files": 0,
+   "bad_hourly_examples": [],
+   "observation_files": 3409,
+   "valid_observation_files": 3409,
+   "bad_observation_files": 0,
+   "bad_observation_examples": [],
+   "unique_observations": 2924,
+   "duplicate_observations": 485
+  },
+  "stop_reason": null,
+  "compiled_rule_sources": [
+   {
+    "registration": "5481-504",
+    "source_file": "data/compiled/5481-504.ship.json",
+    "source_sha256": "30185f28bb2f6630a4c03827ef028403b04dd3654efb4274f58e35402367e929"
+   },
+   {
+    "registration": "264-700",
+    "source_file": "data/compiled/264-700.ship.json",
+    "source_sha256": "19fe4b9835e40e89bb3e436361e45addf02273dc43e6d5766be762145d55bd82"
+   },
+   {
+    "registration": "264-418",
+    "source_file": "data/compiled/264-418.ship.json",
+    "source_sha256": "6d9a6fc3b9837d58b54087c6f137bc72824e5ce2fef75f776df7402aec78c3c9"
+   }
+  ]
+ },
+ "cases": [
+  {
+   "id": "ben_hill-2026-10-06",
+   "point": "ben_hill",
+   "date_local": "2026-10-06",
+   "status": "failed",
+   "model_calls": [
+    {
+     "attempt": 1,
+     "status": "invalid_response",
+     "http_status": 200,
+     "latency_ms": 3073,
+     "request_id": "440cc0b796f854cecb5239f445269eb7",
+     "usage": {
+      "completion_tokens": 112,
+      "prompt_tokens": 41216,
+      "total_tokens": 41328,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": null,
+       "audio_tokens": null,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": null
+      },
+      "prompt_tokens_details": {
+       "audio_tokens": null,
+       "cached_tokens": 0,
+       "created_cache_tokens": 0,
+       "multimodal_tokens": null
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 41216
+     },
+     "cost_usd": 0.0124656,
+     "finish_reason": "stop",
+     "budget_accounted_cost_usd": 0.0124656,
+     "error": "ValueError: response has 1 hours, expected 48"
+    },
+    {
+     "attempt": 2,
+     "status": "invalid_response",
+     "http_status": 200,
+     "latency_ms": 2725,
+     "request_id": "3d345130b69569d8520683cf0fd857cd",
+     "usage": {
+      "completion_tokens": 122,
+      "prompt_tokens": 41216,
+      "total_tokens": 41338,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": null,
+       "audio_tokens": null,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": null
+      },
+      "prompt_tokens_details": {
+       "audio_tokens": null,
+       "cached_tokens": 0,
+       "created_cache_tokens": 0,
+       "multimodal_tokens": null
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 41216
+     },
+     "cost_usd": 0.0124746,
+     "finish_reason": "stop",
+     "budget_accounted_cost_usd": 0.0124746,
+     "error": "ValueError: response has 1 hours, expected 48"
+    },
+    {
+     "attempt": 3,
+     "status": "invalid_response",
+     "http_status": 200,
+     "latency_ms": 2932,
+     "request_id": "281e988612c79836e611258535a5fa43",
+     "usage": {
+      "completion_tokens": 120,
+      "prompt_tokens": 41216,
+      "total_tokens": 41336,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": null,
+       "audio_tokens": null,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": null
+      },
+      "prompt_tokens_details": {
+       "audio_tokens": null,
+       "cached_tokens": 0,
+       "created_cache_tokens": 0,
+       "multimodal_tokens": null
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 41216
+     },
+     "cost_usd": 0.0124728,
+     "finish_reason": "stop",
+     "budget_accounted_cost_usd": 0.0124728,
+     "error": "ValueError: response has 1 hours, expected 48"
+    }
+   ],
+   "issuance_fetched_utc": "2026-10-06T11:07:01+00:00",
+   "issuance_fetched_local": "2026-10-06T07:07:01-04:00",
+   "source_file": "2026-10-06/1107Z_ben_hill_hourly.json.gz",
+   "source_sha256": "0adde6bfe622145cc64783f96d6aa2596fa0e2245a091462fcc4ba65241188da",
+   "prompt_sha256": "e59c29133d4b5dcf9b43b04f5a2319746cd144aaf26d9aadf5197e2461468fbe",
+   "prompt_estimate": {
+    "request_bytes": 144426,
+    "estimated_input_tokens": 36107,
+    "input_token_upper_bound": 144426,
+    "maximum_completion_tokens": 16000,
+    "conservative_maximum_cost_usd": 0.057728
+   },
+   "planner_topic_skipped_rules": [
+    {
+     "registration": "264-418",
+     "id": "264-418-p10-7",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    },
+    {
+     "registration": "264-418",
+     "id": "264-418-p8-1",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    },
+    {
+     "registration": "264-418",
+     "id": "264-418-p8-2",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    },
+    {
+     "registration": "264-418",
+     "id": "264-418-p8-3",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    },
+    {
+     "registration": "264-418",
+     "id": "264-418-p8-8",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    },
+    {
+     "registration": "264-418",
+     "id": "264-418-p8-9",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    }
+   ],
+   "error": "model failed all recorded attempts"
+  },
+  {
+   "id": "ben_hill-2026-10-10",
+   "point": "ben_hill",
+   "date_local": "2026-10-10",
+   "status": "failed",
+   "model_calls": [
+    {
+     "attempt": 1,
+     "status": "invalid_response",
+     "http_status": 200,
+     "latency_ms": 3091,
+     "request_id": "3dd1f048ace5ae19d8309161bccbdbc2",
+     "usage": {
+      "completion_tokens": 159,
+      "prompt_tokens": 41205,
+      "total_tokens": 41364,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": null,
+       "audio_tokens": null,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": null
+      },
+      "prompt_tokens_details": {
+       "audio_tokens": null,
+       "cached_tokens": 0,
+       "created_cache_tokens": 0,
+       "multimodal_tokens": null
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 41205
+     },
+     "cost_usd": 0.0125046,
+     "finish_reason": "stop",
+     "budget_accounted_cost_usd": 0.0125046,
+     "error": "ValueError: response has 1 hours, expected 48"
+    },
+    {
+     "attempt": 2,
+     "status": "invalid_response",
+     "http_status": 200,
+     "latency_ms": 2701,
+     "request_id": "61b9de323a25f464fd4cac017ee7bdd0",
+     "usage": {
+      "completion_tokens": 159,
+      "prompt_tokens": 41205,
+      "total_tokens": 41364,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": null,
+       "audio_tokens": null,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": null
+      },
+      "prompt_tokens_details": {
+       "audio_tokens": null,
+       "cached_tokens": 0,
+       "created_cache_tokens": 0,
+       "multimodal_tokens": null
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 41205
+     },
+     "cost_usd": 0.0125046,
+     "finish_reason": "stop",
+     "budget_accounted_cost_usd": 0.0125046,
+     "error": "ValueError: response has 1 hours, expected 48"
+    },
+    {
+     "attempt": 3,
+     "status": "invalid_response",
+     "http_status": 200,
+     "latency_ms": 2836,
+     "request_id": "8b08c54287257e04b272939f21a9a850",
+     "usage": {
+      "completion_tokens": 158,
+      "prompt_tokens": 41205,
+      "total_tokens": 41363,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": null,
+       "audio_tokens": null,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": null
+      },
+      "prompt_tokens_details": {
+       "audio_tokens": null,
+       "cached_tokens": 0,
+       "created_cache_tokens": 0,
+       "multimodal_tokens": null
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 41205
+     },
+     "cost_usd": 0.0125037,
+     "finish_reason": "stop",
+     "budget_accounted_cost_usd": 0.0125037,
+     "error": "ValueError: response has 1 hours, expected 48"
+    }
+   ],
+   "issuance_fetched_utc": "2026-10-10T11:07:02+00:00",
+   "issuance_fetched_local": "2026-10-10T07:07:02-04:00",
+   "source_file": "2026-10-10/1107Z_ben_hill_hourly.json.gz",
+   "source_sha256": "61f124af17eab7ce6dd34b4f2b56f7f3b9fd42819f12867babce8aab10311656",
+   "prompt_sha256": "0f4fa176220fb44982112012e7cf6660a67a2d83893afe2001611049bdb4032e",
+   "prompt_estimate": {
+    "request_bytes": 144487,
+    "estimated_input_tokens": 36122,
+    "input_token_upper_bound": 144487,
+    "maximum_completion_tokens": 16000,
+    "conservative_maximum_cost_usd": 0.057746
+   },
+   "planner_topic_skipped_rules": [
+    {
+     "registration": "264-418",
+     "id": "264-418-p10-7",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    },
+    {
+     "registration": "264-418",
+     "id": "264-418-p8-1",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    },
+    {
+     "registration": "264-418",
+     "id": "264-418-p8-2",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    },
+    {
+     "registration": "264-418",
+     "id": "264-418-p8-3",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    },
+    {
+     "registration": "264-418",
+     "id": "264-418-p8-8",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    },
+    {
+     "registration": "264-418",
+     "id": "264-418-p8-9",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    }
+   ],
+   "error": "model failed all recorded attempts"
+  },
+  {
+   "id": "ben_hill-2026-10-14",
+   "point": "ben_hill",
+   "date_local": "2026-10-14",
+   "status": "failed",
+   "model_calls": [
+    {
+     "attempt": 1,
+     "status": "invalid_response",
+     "http_status": 200,
+     "latency_ms": 2633,
+     "request_id": "83921b5fdf0f5e940cd4f1159db13743",
+     "usage": {
+      "completion_tokens": 142,
+      "prompt_tokens": 41169,
+      "total_tokens": 41311,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": null,
+       "audio_tokens": null,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": null
+      },
+      "prompt_tokens_details": {
+       "audio_tokens": null,
+       "cached_tokens": 0,
+       "created_cache_tokens": 0,
+       "multimodal_tokens": null
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 41169
+     },
+     "cost_usd": 0.0124785,
+     "finish_reason": "stop",
+     "budget_accounted_cost_usd": 0.0124785,
+     "error": "ValueError: response has 1 hours, expected 48"
+    },
+    {
+     "attempt": 2,
+     "status": "invalid_response",
+     "http_status": 200,
+     "latency_ms": 2491,
+     "request_id": "d7601dc56118bab29cad5a7f70308c0f",
+     "usage": {
+      "completion_tokens": 142,
+      "prompt_tokens": 41169,
+      "total_tokens": 41311,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": null,
+       "audio_tokens": null,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": null
+      },
+      "prompt_tokens_details": {
+       "audio_tokens": null,
+       "cached_tokens": 0,
+       "created_cache_tokens": 0,
+       "multimodal_tokens": null
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 41169
+     },
+     "cost_usd": 0.0124785,
+     "finish_reason": "stop",
+     "budget_accounted_cost_usd": 0.0124785,
+     "error": "ValueError: response has 1 hours, expected 48"
+    },
+    {
+     "attempt": 3,
+     "status": "invalid_response",
+     "http_status": 200,
+     "latency_ms": 2836,
+     "request_id": "eb3924e5a7bb5af825597d5fcbcafa70",
+     "usage": {
+      "completion_tokens": 143,
+      "prompt_tokens": 41169,
+      "total_tokens": 41312,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": null,
+       "audio_tokens": null,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": null
+      },
+      "prompt_tokens_details": {
+       "audio_tokens": null,
+       "cached_tokens": 0,
+       "created_cache_tokens": 0,
+       "multimodal_tokens": null
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 41169
+     },
+     "cost_usd": 0.0124794,
+     "finish_reason": "stop",
+     "budget_accounted_cost_usd": 0.0124794,
+     "error": "ValueError: response has 1 hours, expected 48"
+    }
+   ],
+   "issuance_fetched_utc": "2026-10-14T11:07:01+00:00",
+   "issuance_fetched_local": "2026-10-14T07:07:01-04:00",
+   "source_file": "2026-10-14/1107Z_ben_hill_hourly.json.gz",
+   "source_sha256": "5eb6687fa53d65221039fedb8911c13539c49661b46baf0136453994290c78af",
+   "prompt_sha256": "ae1ca96f90d5d865b41c819c03e9009d1418eae1db57fb3a21bad6286111f7dd",
+   "prompt_estimate": {
+    "request_bytes": 144416,
+    "estimated_input_tokens": 36104,
+    "input_token_upper_bound": 144416,
+    "maximum_completion_tokens": 16000,
+    "conservative_maximum_cost_usd": 0.057725
+   },
+   "planner_topic_skipped_rules": [
+    {
+     "registration": "264-418",
+     "id": "264-418-p10-7",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    },
+    {
+     "registration": "264-418",
+     "id": "264-418-p8-1",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    },
+    {
+     "registration": "264-418",
+     "id": "264-418-p8-2",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    },
+    {
+     "registration": "264-418",
+     "id": "264-418-p8-3",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    },
+    {
+     "registration": "264-418",
+     "id": "264-418-p8-8",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    },
+    {
+     "registration": "264-418",
+     "id": "264-418-p8-9",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    }
+   ],
+   "error": "model failed all recorded attempts"
+  },
+  {
+   "id": "berrien-2026-10-06",
+   "point": "berrien",
+   "date_local": "2026-10-06",
+   "status": "calling_model",
+   "model_calls": [
+    {
+     "attempt": 1,
+     "status": "invalid_response",
+     "http_status": 200,
+     "latency_ms": 2566,
+     "request_id": "0b85e24da9f7405ee4e26ff49de5d08b",
+     "usage": {
+      "completion_tokens": 156,
+      "prompt_tokens": 41214,
+      "total_tokens": 41370,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": null,
+       "audio_tokens": null,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": null
+      },
+      "prompt_tokens_details": {
+       "audio_tokens": null,
+       "cached_tokens": 0,
+       "created_cache_tokens": 0,
+       "multimodal_tokens": null
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 41214
+     },
+     "cost_usd": 0.0125046,
+     "finish_reason": "stop",
+     "budget_accounted_cost_usd": 0.0125046,
+     "error": "ValueError: response has 1 hours, expected 48"
+    }
+   ],
+   "issuance_fetched_utc": "2026-10-06T11:07:01+00:00",
+   "issuance_fetched_local": "2026-10-06T07:07:01-04:00",
+   "source_file": "2026-10-06/1107Z_berrien_hourly.json.gz",
+   "source_sha256": "6f820aea1d5b7881a196f9931b1d10c45dea40a1b25afb43f79c3f3d8c6006e2",
+   "prompt_sha256": "9dfe0cb6796ef330965efa052a67ce8f209a508312ffb5737583d3d6c4b2c457",
+   "prompt_estimate": {
+    "request_bytes": 144439,
+    "estimated_input_tokens": 36110,
+    "input_token_upper_bound": 144439,
+    "maximum_completion_tokens": 16000,
+    "conservative_maximum_cost_usd": 0.057732
+   },
+   "planner_topic_skipped_rules": [
+    {
+     "registration": "264-418",
+     "id": "264-418-p10-7",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    },
+    {
+     "registration": "264-418",
+     "id": "264-418-p8-1",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    },
+    {
+     "registration": "264-418",
+     "id": "264-418-p8-2",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    },
+    {
+     "registration": "264-418",
+     "id": "264-418-p8-3",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    },
+    {
+     "registration": "264-418",
+     "id": "264-418-p8-8",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    },
+    {
+     "registration": "264-418",
+     "id": "264-418-p8-9",
+     "param": "air_temperature_f",
+     "why": "quote lacks ('temperature',)"
+    }
+   ]
+  }
+ ],
+ "summary": {
+  "planned_cases": 30,
+  "selected_cases": 30,
+  "successful_cases": 0,
+  "failed_cases": 4,
+  "missing_issuance_cases": 0,
+  "not_attempted_cases": 0,
+  "hours_compared": 0,
+  "agreement_matrix_model_x_planner": {
+   "PERMITTED": {
+    "PERMITTED": 0,
+    "BLOCKED": 0,
+    "FIELD_CHECK": 0
+   },
+   "BLOCKED": {
+    "PERMITTED": 0,
+    "BLOCKED": 0,
+    "FIELD_CHECK": 0
+   },
+   "FIELD_CHECK": {
+    "PERMITTED": 0,
+    "BLOCKED": 0,
+    "FIELD_CHECK": 0
+   }
+  },
+  "unsafe_go_count": 0,
+  "unsafe_go": [],
+  "lost_window_count": 0,
+  "lost_window": [],
+  "quote_check": {
+   "matched": 0,
+   "total": 0,
+   "fraction": null
+  },
+  "against_observations": {
+   "model_permitted": {
+    "permitted_hours": 0,
+    "with_observation": 0,
+    "no_observation": 0,
+    "held": 0,
+    "broke": 0,
+    "skipped_missing_measurement": 0,
+    "not_checkable": 0
+   },
+   "planner_permitted": {
+    "permitted_hours": 0,
+    "with_observation": 0,
+    "no_observation": 0,
+    "held": 0,
+    "broke": 0,
+    "skipped_missing_measurement": 0,
+    "not_checkable": 0
+   }
+  },
+  "model_calls": {
+   "attempts": 10,
+   "prompt_tokens": 411984,
+   "completion_tokens": 1413,
+   "total_tokens": 413397,
+   "latency_ms": 27884,
+   "cost_usd": 0.1248669,
+   "reported_cost_usd": 0.1248669,
+   "unknown_cost_attempts": 0,
+   "budget_accounted_cost_usd": 0.1248669
+  }
+ }
+}

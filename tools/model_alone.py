@@ -60,9 +60,13 @@ HOUR_SCHEMA = {
 RESPONSE_SCHEMA = {
     "type": "object",
     "properties": {
+        # Revision 2 fixes the length. Revision 1 left it open, and every one of its 10 calls came
+        # back with a single hour (receipt: eval/results/model-alone-2026-10-19.schema-v1.json).
         "hours": {
             "type": "array",
             "items": HOUR_SCHEMA,
+            "minItems": HORIZON_HOURS,
+            "maxItems": HORIZON_HOURS,
         }
     },
     "required": ["hours"],
@@ -98,6 +102,11 @@ def preregistration(locked_utc: str) -> dict[str, Any]:
             "model": MODEL,
             "temperature": 0,
             "response": "strict JSON schema",
+            "response_schema_revision": 2,
+            "response_schema_revision_note": (
+                "revision 1 did not fix the hours array length and all 10 of its calls returned one hour; "
+                "revision 2 requires exactly 48 hours. Sample, prompt, metrics and budget are unchanged."
+            ),
             "thinking": False,
             "label_input": (
                 "full saved text-layer pages for all three labels; the saved 264-700 OCR second reading is also "
