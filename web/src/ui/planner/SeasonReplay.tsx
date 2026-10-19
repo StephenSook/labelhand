@@ -114,6 +114,14 @@ export function SeasonReplay({ pointName, jobHours, scores, activeFetchedUtc, bu
     ? selectedIssued
     : dayScore?.fetchedUtc;
   const maxHours = Math.max(1, ...scores.scored.map((score) => score.permittedHours));
+  // Review 2026-10-19: Tift has no forecasts from 08:07Z Oct 16 to 01:07Z Oct 17, so "every hour" was false.
+  // Expected counts the whole hours between the first and last recording, inclusive.
+  const coverage = scores.status === "ready" && scores.span
+    ? {
+        recorded: scores.days.reduce((sum, day) => sum + day.issuances.length, 0),
+        expected: Math.floor((Date.parse(scores.span.last) - Date.parse(scores.span.first)) / 3_600_000) + 1,
+      }
+    : undefined;
   const stripRef = useRef<HTMLOListElement>(null);
 
   // On a phone the strip scrolls sideways; keep the shown day in view without moving the page.
@@ -138,12 +146,18 @@ export function SeasonReplay({ pointName, jobHours, scores, activeFetchedUtc, bu
     >
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="max-w-3xl">
-          <p className="hand -rotate-1 text-3xl text-[#2f6f9f]">recorded every hour since Oct 5</p>
+          <p className="hand -rotate-1 text-3xl text-[#2f6f9f]">recorded hourly since Oct 5</p>
           <h2 id="season-replay-heading" className="display mt-1 text-4xl sm:text-5xl">Replay the season</h2>
           <p className="mt-3 text-lg font-semibold leading-relaxed">
-            The National Weather Service only serves today&apos;s forecast. Labelhand saved it every hour for ten Georgia cotton
-            points, so the planner can run on the forecast an applicator read on any morning of the 2026 defoliation season.
+            The National Weather Service only serves today&apos;s forecast. Labelhand saved it hourly for ten Georgia cotton
+            points, so the planner can run on the forecast an applicator read on most mornings of the 2026 defoliation season.
           </p>
+          {coverage ? (
+            <p data-season-coverage className="mt-2 text-sm font-semibold text-[#14213d]/75">
+              {coverage.recorded.toLocaleString("en-US")} of {coverage.expected.toLocaleString("en-US")} hourly forecasts were recorded for {pointName};
+              the recorder missed hours when its computer was off.
+            </p>
+          ) : null}
         </div>
         {scores.best ? (
           <button

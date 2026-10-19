@@ -25,7 +25,7 @@ const steps: JudgeStep[] = [
     title: "Replay a recorded morning of the season",
     body: (
       <p>
-        From late October the live forecast blocks this tank on most days: Folex 6 EC wants nights above 60 F. The season strip replays any NWS forecast recorded every hour since Oct 5. Press Replay the best morning, then read how many earlier forecasts agreed.
+        From late October the live forecast blocks this tank on most days: Folex 6 EC wants nights above 60 F. The season strip replays any NWS forecast recorded hourly since Oct 5. Press Replay the best morning, then read how many earlier forecasts agreed.
       </p>
     ),
     href: `${plannerLink}#season-replay`,
@@ -111,7 +111,7 @@ export default function JudgePage() {
             <li>
               <Chip icon="R" tone="sky">RECORDED</Chip>
               <div>
-                <strong>Every hourly NWS forecast since Oct 5, for ten Georgia cotton points</strong>
+                <strong>NWS hourly forecasts recorded since Oct 5 for ten Georgia cotton points</strong>
                 <p>
                   The season strip replays them through the same planner. The home page checks day-ahead forecast-permitted hours against the
                   nearest airport station: <Link className="text-link" href="/#forecast-check-back">did the forecast hold?</Link>
