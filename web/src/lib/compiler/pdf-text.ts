@@ -1,4 +1,11 @@
-import { getDocument, version as pdfjsVersion } from "pdfjs-dist/legacy/build/pdf.mjs";
+import { join } from "node:path";
+import { pathToFileURL } from "node:url";
+
+import {
+  getDocument,
+  GlobalWorkerOptions,
+  version as pdfjsVersion,
+} from "pdfjs-dist/legacy/build/pdf.mjs";
 
 import { norm, squash } from "./guards";
 
@@ -6,6 +13,10 @@ export const MAX_LABEL_PAGES = 40;
 export const NEAR_EMPTY_CHARACTERS = 50;
 export const MAX_REPLACEMENT_SHARE = 0.01;
 export const PDFJS_VERSION = pdfjsVersion;
+
+GlobalWorkerOptions.workerSrc = pathToFileURL(
+  join(process.cwd(), "node_modules", "pdfjs-dist", "legacy", "build", "pdf.worker.mjs"),
+).href;
 
 export interface ExtractedPdfText {
   pages: string[];
