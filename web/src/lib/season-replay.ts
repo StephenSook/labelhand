@@ -24,6 +24,9 @@ export type Evaluate = (rules: Rule[], periods: ReplayForecast["periods"], lat: 
 export type ScoredIssuance = {
   day: string;
   fetchedUtc: string;
+  // False when the recorder saved no forecast after 7 AM Eastern that day (PC off or offline),
+  // so the bar uses the latest forecast it did save and must say so.
+  morning: boolean;
   permittedHours: number;
   windows: ForecastWindow[];
 };
@@ -50,14 +53,16 @@ export function easternHourOf(utc: string): number {
   return Number(easternHour.format(new Date(utc)));
 }
 
+export function isMorningOf(day: string, fetchedUtc: string): boolean {
+  return easternDate.format(new Date(fetchedUtc)) === day && easternHourOf(fetchedUtc) >= MORNING_HOUR_EASTERN;
+}
+
 // Day files are UTC days, so each one also holds the previous evening's Eastern forecasts
-// (00:00 to 04:00 UTC). A morning must match the file's date in Eastern time as well.
+// (00:00 to 04:00 UTC). A morning must match the file's date in Eastern time as well. When the
+// recorder missed the morning, the latest saved forecast is used and isMorningOf says so.
 export function morningIssuance(day: SeasonDay): SeasonIssuance {
   const ordered = [...day.issuances].sort((a, b) => Date.parse(a.fetched_utc) - Date.parse(b.fetched_utc));
-  return ordered.find((issuance) =>
-    easternDate.format(new Date(issuance.fetched_utc)) === day.day
-    && easternHourOf(issuance.fetched_utc) >= MORNING_HOUR_EASTERN,
-  ) ?? ordered.at(-1)!;
+  return ordered.find((issuance) => isMorningOf(day.day, issuance.fetched_utc)) ?? ordered.at(-1)!;
 }
 
 export function toReplay(issuance: SeasonIssuance): ReplayForecast {
@@ -88,6 +93,7 @@ export async function scoreIssuance(
   return {
     day,
     fetchedUtc: issuance.fetched_utc,
+    morning: isMorningOf(day, issuance.fetched_utc),
     permittedHours: hours.filter((hour) => hour.state === "PERMITTED").length,
     windows: forecastPermittedWindows(hours, jobHours),
   };

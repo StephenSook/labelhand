@@ -8,6 +8,7 @@ import {
   bestScored,
   earlierIssuances,
   easternHourOf,
+  isMorningOf,
   morningIssuance,
   scoreIssuance,
   toReplay,
@@ -74,14 +75,18 @@ describe("season replay helpers", () => {
       ],
     };
     expect(morningIssuance(day).fetched_utc).toBe("2026-10-05T02:07:00+00:00");
+    // Review 2026-10-19: Tift's Oct 16 file ends at 4:07 AM Eastern; the fallback must be flagged.
+    expect(isMorningOf(day.day, morningIssuance(day).fetched_utc)).toBe(false);
+    expect(isMorningOf("2026-10-16", "2026-10-16T08:07:01Z")).toBe(false);
+    expect(isMorningOf("2026-10-16", "2026-10-16T11:07:01Z")).toBe(true);
   });
 
   test("ranks fitting windows first, then permitted hours, then the earlier morning", () => {
     const window = { start: "a", end: "b", length: 4 };
     const best = bestScored([
-      { day: "2026-10-06", fetchedUtc: "2026-10-06T11:07:00Z", permittedHours: 40, windows: [] },
-      { day: "2026-10-08", fetchedUtc: "2026-10-08T11:07:00Z", permittedHours: 12, windows: [window] },
-      { day: "2026-10-07", fetchedUtc: "2026-10-07T11:07:00Z", permittedHours: 12, windows: [window] },
+      { day: "2026-10-06", fetchedUtc: "2026-10-06T11:07:00Z", morning: true, permittedHours: 40, windows: [] },
+      { day: "2026-10-08", fetchedUtc: "2026-10-08T11:07:00Z", morning: true, permittedHours: 12, windows: [window] },
+      { day: "2026-10-07", fetchedUtc: "2026-10-07T11:07:00Z", morning: true, permittedHours: 12, windows: [window] },
     ]);
     expect(best?.day).toBe("2026-10-07");
     expect(bestScored([])).toBeUndefined();

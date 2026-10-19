@@ -86,6 +86,9 @@ export function issuanceFor(scores: SeasonScores, fetchedUtc: string): SeasonIss
 const dayFormatter = new Intl.DateTimeFormat("en-US", { timeZone: "UTC", weekday: "short", month: "short", day: "numeric" });
 const longDayFormatter = new Intl.DateTimeFormat("en-US", { timeZone: "UTC", weekday: "long", month: "long", day: "numeric" });
 const clockFormatter = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "2-digit" });
+// Issuance times are Eastern and a UTC day file starts at 8 PM Eastern the evening before, so each
+// option carries its own Eastern date (review 2026-10-19: "Oct 6 at 8:07 PM" was really Oct 5).
+const issuedFormatter = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
 
 function dayLabel(day: string, formatter = dayFormatter): string {
   return formatter.format(new Date(`${day}T12:00:00Z`));
@@ -168,7 +171,10 @@ export function SeasonReplay({ pointName, jobHours, scores, activeFetchedUtc, bu
               const selected = score.day === shownDay;
               const fits = score.windows.length;
               const tone = fits > 0 ? "bg-[#216a38]" : score.permittedHours > 0 ? "bg-[#ffc53d]" : "bg-[#14213d]/15";
-              const summary = `${dayLabel(score.day, longDayFormatter)}: ${score.permittedHours} forecast-permitted hours, ${fits === 0 ? "no window fits" : `${fits} ${fits === 1 ? "window fits" : "windows fit"}`} a ${jobHours}-hour job`;
+              const issuedNote = score.morning
+                ? ""
+                : `. The recorder saved no forecast after 7 AM that day; this bar uses the one issued ${issuedFormatter.format(new Date(score.fetchedUtc))} Eastern`;
+              const summary = `${dayLabel(score.day, longDayFormatter)}: ${score.permittedHours} forecast-permitted hours, ${fits === 0 ? "no window fits" : `${fits} ${fits === 1 ? "window fits" : "windows fit"}`} a ${jobHours}-hour job${issuedNote}`;
               return (
                 <li key={score.day} className="shrink-0">
                   <button
@@ -189,6 +195,11 @@ export function SeasonReplay({ pointName, jobHours, scores, activeFetchedUtc, bu
                     </span>
                     <span className="mt-1 text-sm font-black">{score.permittedHours} h</span>
                     <span className="text-[0.7rem] font-bold leading-tight">{fits === 0 ? "no window" : `${fits} ${fits === 1 ? "window" : "windows"}`}</span>
+                    {score.morning ? null : (
+                      <span data-not-morning className="mt-1 rounded-md border border-[#14213d] px-1 text-[0.65rem] font-black leading-tight">
+                        {clockFormatter.format(new Date(score.fetchedUtc))} only
+                      </span>
+                    )}
                   </button>
                 </li>
               );
@@ -198,7 +209,7 @@ export function SeasonReplay({ pointName, jobHours, scores, activeFetchedUtc, bu
           {dayRecord && (
             <div className="mt-4 flex flex-wrap items-end gap-3">
               <label className="font-bold">
-                <span className="block text-sm">Forecast issued on {dayLabel(dayRecord.day, longDayFormatter)} at</span>
+                <span className="block text-sm">Forecasts recorded on {dayLabel(dayRecord.day, longDayFormatter)} (UTC day), issued at</span>
                 <select
                   value={issued}
                   onChange={(event) => setSelectedIssued(event.target.value)}
@@ -208,7 +219,7 @@ export function SeasonReplay({ pointName, jobHours, scores, activeFetchedUtc, bu
                     .sort((a, b) => Date.parse(a.fetched_utc) - Date.parse(b.fetched_utc))
                     .map((issuance) => (
                       <option key={issuance.fetched_utc} value={issuance.fetched_utc}>
-                        {clockFormatter.format(new Date(issuance.fetched_utc))} Eastern
+                        {issuedFormatter.format(new Date(issuance.fetched_utc))} Eastern
                       </option>
                     ))}
                 </select>
@@ -226,6 +237,7 @@ export function SeasonReplay({ pointName, jobHours, scores, activeFetchedUtc, bu
 
           <p className="mt-4 text-sm font-semibold text-[#14213d]/75">
             Bars count forecast-permitted hours in the first forecast issued after 7 AM Eastern each day, for this tank and a {jobHours}-hour job.
+            {" "}On a day the recorder missed the morning, the bar uses the latest forecast it saved and shows that time.
             {" "}{scores.totalIssuances.toLocaleString("en-US")} hourly NWS forecasts recorded for {pointName}
             {scores.span ? ` from ${dayLabel(scores.span.first.slice(0, 10))} to ${dayLabel(scores.span.last.slice(0, 10))}` : ""} by the
             project&apos;s recorder (<code>tools/nws_recorder.py</code>).
