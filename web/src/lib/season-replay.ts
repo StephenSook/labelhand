@@ -1,10 +1,9 @@
 import { evaluate as engineEvaluate, type Rule } from "@/engine";
 import type { PlannerHour, ReplayForecast } from "@/lib/planner-data";
-import { fetchJson } from "@/lib/planner-data";
 import {
+  fetchMergedSeasonIndex,
   fetchSeasonDay,
   issuanceToPeriods,
-  parseSeasonIndex,
   type SeasonDay,
   type SeasonIndex,
   type SeasonIssuance,
@@ -137,7 +136,7 @@ export async function windowStability(
 }
 
 export async function fetchSeasonIndex(): Promise<SeasonIndex> {
-  return parseSeasonIndex(await fetchJson<unknown>("/data/season/index.json"));
+  return await fetchMergedSeasonIndex();
 }
 
 // The issuances recorded before `fetchedUtc` for one point, newest first, at most `limit`.

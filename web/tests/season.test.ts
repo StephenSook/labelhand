@@ -11,10 +11,13 @@ import {
   type Rule,
 } from "@/engine";
 import {
+  fetchMergedSeasonIndex,
   fetchSeasonDay,
   issuanceToPeriods,
+  mergeSeasonIndexes,
   parseSeasonDay,
   parseSeasonIndex,
+  SeasonNotRecordedError,
   type SeasonDay,
 } from "@/lib/season";
 
@@ -96,6 +99,80 @@ describe("season data parser", () => {
       "/data/season/tift/2026-10-05.json",
       { cache: "no-store" },
     );
+  });
+
+  test("merges only remote days after each committed point boundary", () => {
+    const committed = parseSeasonIndex({
+      generated_utc: "2026-10-19T18:07:01Z",
+      recorded_span: { first: "2026-10-05T01:19:36Z", last: "2026-10-19T18:07:01Z" },
+      points: { tift: { days: ["2026-10-18", "2026-10-19"], issuances: 40 } },
+    });
+    const remote = parseSeasonIndex({
+      generated_utc: "2026-10-21T12:23:00Z",
+      recorded_span: { first: "2026-10-05T01:19:36Z", last: "2026-10-21T12:23:00Z" },
+      points: { tift: { days: ["2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21"], issuances: 82 } },
+    });
+
+    expect(mergeSeasonIndexes(committed, remote)).toEqual({
+      generated_utc: "2026-10-21T12:23:00Z",
+      recorded_span: { first: "2026-10-05T01:19:36Z", last: "2026-10-21T12:23:00Z" },
+      points: { tift: { days: ["2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21"], issuances: 82 } },
+    });
+  });
+
+  test("loads the static season index and day when the API route is unavailable", async () => {
+    const committed = {
+      generated_utc: "2026-10-19T18:07:01Z",
+      recorded_span: { first: "2026-10-05T01:19:36Z", last: "2026-10-19T18:07:01Z" },
+      points: { tift: { days: ["2026-10-05"], issuances: 24 } },
+    };
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify(committed)))
+      .mockResolvedValueOnce(new Response("not configured", { status: 503, statusText: "Unavailable" }))
+      .mockResolvedValueOnce(new Response(JSON.stringify(sampleDay())));
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(fetchMergedSeasonIndex()).resolves.toEqual(committed);
+    await expect(fetchSeasonDay("tift", "2026-10-05")).resolves.toEqual(sampleDay());
+    expect(fetchMock.mock.calls.map((call) => call[0])).toEqual([
+      "/data/season/index.json",
+      "/api/season/index.json",
+      "/data/season/tift/2026-10-05.json",
+    ]);
+  });
+
+  test("prefers the API for a newer day", async () => {
+    const live = sampleDay();
+    live.day = "2099-01-01";
+    const fetchMock = vi.fn(async () => new Response(JSON.stringify(live)));
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(fetchSeasonDay("tift", "2099-01-01")).resolves.toEqual(live);
+    expect(fetchMock).toHaveBeenCalledOnce();
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/season/tift/2099-01-01.json",
+      { cache: "no-store" },
+    );
+  });
+
+  test("falls back to a committed file when the newer-day API is unavailable", async () => {
+    const fallback = sampleDay();
+    fallback.day = "2099-01-01";
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(new Response("missing", { status: 503, statusText: "Unavailable" }))
+      .mockResolvedValueOnce(new Response(JSON.stringify(fallback)));
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(fetchSeasonDay("tift", "2099-01-01")).resolves.toEqual(fallback);
+    expect(fetchMock.mock.calls.map((call) => call[0])).toEqual([
+      "/api/season/tift/2099-01-01.json",
+      "/data/season/tift/2099-01-01.json",
+    ]);
+  });
+
+  test("turns a missing live and static day into not recorded", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => new Response("missing", { status: 404, statusText: "Not Found" })));
+    await expect(fetchSeasonDay("tift", "2099-01-01")).rejects.toBeInstanceOf(SeasonNotRecordedError);
   });
 });
 

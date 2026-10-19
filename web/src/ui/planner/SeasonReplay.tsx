@@ -3,7 +3,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Rule } from "@/engine";
 import { errorText, type ReplayForecast } from "@/lib/planner-data";
-import { fetchSeasonDay, type SeasonDay, type SeasonIssuance } from "@/lib/season";
+import {
+  fetchSeasonDay,
+  isSeasonNotRecorded,
+  type SeasonDay,
+  type SeasonIssuance,
+} from "@/lib/season";
 import {
   bestScored,
   fetchSeasonIndex,
@@ -46,7 +51,15 @@ export function useSeasonScores(
       const index = await fetchSeasonIndex();
       const point = index.points[pointKey];
       if (!point) throw new Error(`No recorded season for ${pointKey}.`);
-      const days = await Promise.all(point.days.map((day) => fetchSeasonDay(pointKey, day)));
+      const loaded = await Promise.all(point.days.map(async (day) => {
+        try {
+          return await fetchSeasonDay(pointKey, day);
+        } catch (error) {
+          if (isSeasonNotRecorded(error)) return undefined;
+          throw error;
+        }
+      }));
+      const days = loaded.filter((day): day is SeasonDay => day !== undefined);
       const scored: ScoredIssuance[] = [];
       for (const day of days) {
         scored.push(await scoreIssuance(day.day, morningIssuance(day), rules, lat, lon, jobHours));
@@ -59,7 +72,7 @@ export function useSeasonScores(
           days,
           scored,
           best: bestScored(scored),
-          totalIssuances: point.issuances,
+          totalIssuances: days.reduce((sum, day) => sum + day.issuances.length, 0),
           span: index.recorded_span,
         },
       });

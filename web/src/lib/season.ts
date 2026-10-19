@@ -1,5 +1,5 @@
 import type { ForecastPeriod } from "@/engine";
-import { fetchJson } from "@/lib/planner-data";
+import committedSeasonIndex from "../../public/data/season/index.json";
 
 export type SeasonPointIndex = {
   days: string[];
@@ -30,6 +30,27 @@ export type SeasonDay = {
   source: string;
   issuances: SeasonIssuance[];
 };
+
+class SeasonHttpError extends Error {
+  constructor(
+    readonly url: string,
+    readonly status: number,
+    readonly statusText: string,
+  ) {
+    super(`${url} returned HTTP ${status} ${statusText}`.trim());
+  }
+}
+
+export class SeasonNotRecordedError extends Error {
+  constructor(point: string, day: string) {
+    super(`No season forecast was recorded for ${point} on ${day}.`);
+    this.name = "SeasonNotRecordedError";
+  }
+}
+
+export function isSeasonNotRecorded(error: unknown): error is SeasonNotRecordedError {
+  return error instanceof SeasonNotRecordedError;
+}
 
 function record(value: unknown, path: string): Record<string, unknown> {
   if (typeof value !== "object" || value === null || Array.isArray(value)) {
@@ -186,6 +207,75 @@ export function parseSeasonDay(value: unknown): SeasonDay {
   };
 }
 
+const COMMITTED_SEASON_INDEX = parseSeasonIndex(committedSeasonIndex);
+
+async function fetchSeasonJson(url: string): Promise<unknown> {
+  const response = await fetch(url, { cache: "no-store" });
+  if (!response.ok) throw new SeasonHttpError(url, response.status, response.statusText);
+  return await response.json() as unknown;
+}
+
+function timestampMinimum(left: string, right: string): string {
+  return Date.parse(left) <= Date.parse(right) ? left : right;
+}
+
+function timestampMaximum(left: string, right: string): string {
+  return Date.parse(left) >= Date.parse(right) ? left : right;
+}
+
+// The committed index is the boundary. Only whole UTC days after each point's
+// committed last day are added from Object Storage.
+export function mergeSeasonIndexes(committed: SeasonIndex, remote: SeasonIndex): SeasonIndex {
+  const points: Record<string, SeasonPointIndex> = {};
+  let hasNewerDay = false;
+  for (const point of new Set([...Object.keys(committed.points), ...Object.keys(remote.points)])) {
+    const base = committed.points[point];
+    const live = remote.points[point];
+    const baseDays = base?.days ?? [];
+    const boundary = [...baseDays].sort().at(-1);
+    const newerDays = live?.days.filter((candidate) => boundary === undefined || candidate > boundary) ?? [];
+    hasNewerDay = hasNewerDay || newerDays.length > 0;
+    const days = [...new Set([...baseDays, ...newerDays])].sort();
+    if (days.length === 0) continue;
+    points[point] = {
+      days,
+      issuances: Math.max(base?.issuances ?? 0, live?.issuances ?? 0),
+    };
+  }
+  if (!hasNewerDay) return committed;
+  return {
+    generated_utc: timestampMaximum(committed.generated_utc, remote.generated_utc),
+    recorded_span: {
+      first: timestampMinimum(committed.recorded_span.first, remote.recorded_span.first),
+      last: timestampMaximum(committed.recorded_span.last, remote.recorded_span.last),
+    },
+    points,
+  };
+}
+
+export async function fetchMergedSeasonIndex(): Promise<SeasonIndex> {
+  const committed = parseSeasonIndex(await fetchSeasonJson("/data/season/index.json"));
+  try {
+    const remote = parseSeasonIndex(await fetchSeasonJson("/api/season/index.json"));
+    return mergeSeasonIndexes(committed, remote);
+  } catch {
+    return committed;
+  }
+}
+
+function newerThanCommitted(point: string, requestedDay: string): boolean {
+  const lastCommitted = [...(COMMITTED_SEASON_INDEX.points[point]?.days ?? [])].sort().at(-1);
+  return lastCommitted !== undefined && requestedDay > lastCommitted;
+}
+
+function checkedSeasonDay(value: unknown, point: string, requestedDay: string): SeasonDay {
+  const parsed = parseSeasonDay(value);
+  if (parsed.point !== point || parsed.day !== requestedDay) {
+    throw new TypeError(`season day identity did not match ${point}/${requestedDay}`);
+  }
+  return parsed;
+}
+
 function addHoursPreservingOffset(value: string, hours: number): string {
   const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(\.\d+)?(Z|[+-]\d{2}:\d{2})$/.exec(value);
   if (!match) throw new TypeError(`first_start cannot be expanded: ${value}`);
@@ -217,8 +307,36 @@ export function issuanceToPeriods(issuance: SeasonIssuance): ForecastPeriod[] {
 }
 
 export async function fetchSeasonDay(point: string, day: string): Promise<SeasonDay> {
-  const value = await fetchJson<unknown>(
-    `/data/season/${encodeURIComponent(point)}/${encodeURIComponent(day)}.json`,
-  );
-  return parseSeasonDay(value);
+  const suffix = `${encodeURIComponent(point)}/${encodeURIComponent(day)}.json`;
+  const staticUrl = `/data/season/${suffix}`;
+  if (!newerThanCommitted(point, day)) {
+    try {
+      return checkedSeasonDay(await fetchSeasonJson(staticUrl), point, day);
+    } catch (error) {
+      if (error instanceof SeasonHttpError && error.status === 404) {
+        throw new SeasonNotRecordedError(point, day);
+      }
+      throw error;
+    }
+  }
+
+  let remoteError: unknown;
+  try {
+    return checkedSeasonDay(await fetchSeasonJson(`/api/season/${suffix}`), point, day);
+  } catch (error) {
+    remoteError = error;
+  }
+  try {
+    return checkedSeasonDay(await fetchSeasonJson(staticUrl), point, day);
+  } catch (staticError) {
+    if (
+      remoteError instanceof SeasonHttpError
+      && remoteError.status === 404
+      && staticError instanceof SeasonHttpError
+      && staticError.status === 404
+    ) {
+      throw new SeasonNotRecordedError(point, day);
+    }
+    throw remoteError;
+  }
 }
