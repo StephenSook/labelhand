@@ -272,7 +272,7 @@ export async function runAlerts(
         result.noWindow += 1;
         continue;
       }
-      const id = callWindowId(subscription.id, planner.calledWindow.start);
+      const id = callWindowId(subscription.id, planner.calledWindow.end);
       const day = easternDay(planningNow);
       const log: AlertCallLog = {
         schemaVersion: 1,

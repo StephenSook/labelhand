@@ -29,8 +29,11 @@ export function subscriptionIdentityId(
   return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
 }
 
-export function callWindowId(subscriptionId: string, windowStart: string): string {
-  return createHash("sha256").update(subscriptionId).update("\0").update(windowStart).digest("hex");
+// A permitted run is named by the hour it ends, not the hour it starts. Each hourly forecast
+// starts at the current hour, so a run already under way loses an hour off its front every run
+// and its start moves; its end does not, so one opening is claimed (and called) once.
+export function callWindowId(subscriptionId: string, windowEnd: string): string {
+  return createHash("sha256").update(subscriptionId).update("\0").update(windowEnd).digest("hex");
 }
 
 export function validBearer(header: string | null, expected: string): boolean {

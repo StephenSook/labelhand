@@ -358,11 +358,39 @@ describe("alert run", () => {
       "+15555550123",
       expect.stringMatching(/This is Labelhand[\s\S]*At Tift[\s\S]*Folex 6 EC[\s\S]*Press 9 to stop these calls/),
     );
-    const log = await store.readCall(SUBSCRIPTION_ID, callWindowId(SUBSCRIPTION_ID, "2026-10-07T13:00:00-04:00"));
-    expect(log?.planner.calledWindow).toMatchObject({ start: "2026-10-07T13:00:00-04:00", hours: 6 });
+    const log = await store.readCall(SUBSCRIPTION_ID, callWindowId(SUBSCRIPTION_ID, "2026-10-07T23:00:00.000Z"));
+    expect(log?.planner.calledWindow).toMatchObject({ start: "2026-10-07T13:00:00-04:00", end: "2026-10-07T23:00:00.000Z", hours: 6 });
 
     const second = await runAlerts(config, deps);
     expect(second).toMatchObject({ called: 0, duplicate: 1 });
+    expect(twilio.placeCall).toHaveBeenCalledTimes(1);
+  });
+
+  test("calls a permitted run once while later hourly runs see it shrink from the front", async () => {
+    const blob = fakeBlob();
+    const store = new AlertBlobStore(config, blob.api);
+    const twilio = fakeTwilio();
+    await store.createSubscription(subscription());
+    const replay = JSON.parse(await readFile(path.join(process.cwd(), "public/data/replay/tift.json"), "utf8")) as { periods: unknown[] };
+    const nwsFetch = vi.fn<typeof fetch>().mockImplementation(async () => new Response(
+      JSON.stringify({ properties: { periods: replay.periods } }),
+      { status: 200, headers: { "content-type": "application/json" } },
+    ));
+    let clock = new Date("2026-10-06T10:23:00.000Z");
+    const deps = dependencies(store, twilio, {
+      now: () => clock,
+      plan: (record, input) => planAlert(record, { ...input, fetchImpl: nwsFetch }),
+    });
+
+    // The recorder fires at minute 23. The run opens 13:00 EDT and lasts through 18:00 EDT.
+    const runs = [];
+    for (const at of ["2026-10-06T10:23:00.000Z", "2026-10-07T17:23:00.000Z", "2026-10-07T18:23:00.000Z", "2026-10-07T19:23:00.000Z"]) {
+      clock = new Date(at);
+      runs.push(await runAlerts(config, deps));
+    }
+
+    expect(runs.map((run) => run.called)).toEqual([1, 0, 0, 0]);
+    expect(runs.slice(1).map((run) => run.duplicate)).toEqual([1, 1, 1]);
     expect(twilio.placeCall).toHaveBeenCalledTimes(1);
   });
 
@@ -509,7 +537,7 @@ describe("voice actions", () => {
     const record = subscription();
     await store.createSubscription(record);
     const planner = evidence();
-    const id = callWindowId(record.id, planner.calledWindow.start);
+    const id = callWindowId(record.id, planner.calledWindow.end);
     const log: AlertCallLog = {
       schemaVersion: 1,
       id,
