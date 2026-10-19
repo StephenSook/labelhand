@@ -17,7 +17,7 @@ Labelhand reads the full EPA label of every product in the tank and turns each r
 
 It never says a spray is legal. The applicator stays in charge.
 
-> Built for the **Nebius x NVIDIA Global AI Hackathon** (Best Apps & Agents). Work in progress: the label compiler, planner kernel, web app, source-label viewer, browser-generated application record, season replay and forecast check-back run today. Compiling any EPA label from its registration number is being built.
+> Built for the **Nebius x NVIDIA Global AI Hackathon** (Best Apps & Agents). Running today: the label compiler, planner kernel, web app, source-label viewer, browser-generated application record, season replay, forecast check-back, any EPA label read live (found by search or by a photo of the jug), and a map of all ten fields. A phone call when a window opens is built and waits on the carrier account.
 
 ## How it works
 
@@ -55,6 +55,8 @@ wasm-pack build core --target web --release -- --features wasm
 Folex 6 EC wants nights above 60°F, so from late October the live forecast blocks the defoliation tank on most Georgia days. A judge opening the app in December would see an empty week. The recorder fixes that with real data instead of a sample.
 
 **Season replay.** `tools/season_export.py` turns the recorder's files into [`web/public/data/season/`](web/public/data/season): 3,389 NWS hourly forecast issuances for the ten points between 2026-10-05 01:19 UTC and 2026-10-19 18:07 UTC (339 per point, 338 for Cook). The planner page shows the season as a strip of days, scores each recorded morning through the same WebAssembly planner, and replays any issuance with its NWS fetch time on screen and in the URL (`issued=`). When the live forecast has no window, a button replays the best recorded morning. Each window also says how many of the 12 forecasts recorded just before it already permitted every hour of it, so a judge can see whether a window was stable or appeared at the last minute.
+
+**Where can I spray?** The `/map` page runs the same WebAssembly planner for one tank at all ten points, on the live NWS forecast or on any recorded morning, and colors each county by what the labels allow: a job can start now, a window opens later (with its hours), or no window in the forecast (with the clause that blocks the most hours). A slider moves the map through the next 72 hours, and each county opens the planner on the same forecast. When the live forecast has no window anywhere, one button finds the latest recorded morning that had one. County outlines come from [us-atlas](https://github.com/topojson/us-atlas) (US Census cartographic boundaries), built once by `web/scripts/build-county-map.mjs`.
 
 **Did the day-ahead forecast hold?** `tools/checkback.py` takes each recorded hour, runs the planner on the forecast issued closest to 24 hours earlier, and, for every hour that forecast permitted, checks the label limits an airport weather station can measure against what the station reported.
 
