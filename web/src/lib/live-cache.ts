@@ -1,6 +1,7 @@
 import { BlobPreconditionFailedError, get, put } from "@vercel/blob";
 
 import type { CompiledLiveLabel } from "./compiler/pipeline";
+import { LIVE_COMPILE_READINGS } from "./live-limits";
 
 const JSON_CONTENT_TYPE = "application/json";
 
@@ -50,6 +51,11 @@ function isCompiledLiveLabel(value: unknown): value is CompiledLiveLabel {
     && value.scored === false
     && typeof value.restricted_use === "boolean"
     && value.complete === true
+    && value.readings === LIVE_COMPILE_READINGS
+    && Array.isArray(value.reading_records)
+    && value.reading_records.length === LIVE_COMPILE_READINGS
+    && Array.isArray(value.merged_from)
+    && value.merged_from.length === LIVE_COMPILE_READINGS
     && Array.isArray(value.accepted)
     && Array.isArray(value.rejected);
 }

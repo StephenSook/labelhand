@@ -302,7 +302,7 @@ export async function POST(request: NextRequest) {
                 }, emit);
                 recordCompileSpend(compiled.cost_usd);
                 spendRecorded = true;
-                assertCompileTokenCeiling(compiled.total_tokens);
+                assertCompileTokenCeiling(compiled.total_tokens, compiled.readings);
                 throwIfAborted(compileSignal);
                 if (compiled.complete) await commitLiveCache(compiled, compileSignal);
                 return compiled;

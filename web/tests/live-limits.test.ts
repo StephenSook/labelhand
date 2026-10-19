@@ -12,6 +12,7 @@ import {
   COLD_COMPILES_PER_WINDOW,
   COMPILE_TOKEN_CEILING,
   DAILY_BUDGET_USD,
+  LIVE_COMPILE_READINGS,
   LiveLimitError,
   MAX_COMPILE_COST_USD,
   PHOTO_READS_PER_WINDOW,
@@ -76,17 +77,29 @@ describe("live compile limits", () => {
     expect(await second).toEqual({ value: "shared", deduplicated: true });
   });
 
-  test("caps distinct in-flight cold compiles at two", async () => {
-    const never = () => new Promise<string>(() => undefined);
-    void runColdCompile({ sha256: "one", ip: "one", work: never });
-    void runColdCompile({ sha256: "two", ip: "two", work: never });
-    await expect(runColdCompile({ sha256: "three", ip: "three", work: async () => "three" }))
-      .rejects.toMatchObject({ status: 429 });
+  test("refuses a second worst-case three-reading compile while one is in flight", async () => {
+    let release: ((value: string) => void) | undefined;
+    const first = runColdCompile({
+      sha256: "one",
+      ip: "one",
+      work: () => new Promise<string>((resolve) => {
+        release = resolve;
+      }),
+    });
+    await Promise.resolve();
+    await expect(runColdCompile({ sha256: "two", ip: "two", work: async () => "two" }))
+      .rejects.toMatchObject({ status: 503 });
+    release?.("done");
+    await expect(first).resolves.toMatchObject({ value: "done" });
   });
 
   test("reserves worst-case cost so concurrent compiles cannot overshoot the budget", async () => {
     expect(MAX_COMPILE_COST_USD).toBeCloseTo(0.36);
-    recordCompileSpend(1.3, Date.UTC(2026, 9, 19));
+    expect(LIVE_COMPILE_READINGS).toBe(3);
+    const requestReservation = LIVE_COMPILE_READINGS * MAX_COMPILE_COST_USD;
+    expect(requestReservation).toBeCloseTo(1.08);
+    recordCompileSpend(DAILY_BUDGET_USD - requestReservation, Date.UTC(2026, 9, 19));
+    expect(() => assertDailyBudgetAvailable(Date.UTC(2026, 9, 19))).not.toThrow();
     let release: ((value: string) => void) | undefined;
     const first = runColdCompile({
       sha256: "budget-one",
@@ -97,6 +110,7 @@ describe("live compile limits", () => {
       }),
     });
     await Promise.resolve();
+    expect(() => assertDailyBudgetAvailable(Date.UTC(2026, 9, 19))).toThrowError(/budget/);
     await expect(runColdCompile({
       sha256: "budget-two",
       ip: "two",
@@ -164,5 +178,7 @@ describe("live compile limits", () => {
     expect(recordCompileSpend(DAILY_BUDGET_USD, Date.UTC(2026, 9, 19))).toBe(DAILY_BUDGET_USD);
     expect(() => assertDailyBudgetAvailable(Date.UTC(2026, 9, 19))).toThrowError(/budget/);
     expect(() => assertCompileTokenCeiling(COMPILE_TOKEN_CEILING + 1)).toThrowError(/token ceiling/);
+    expect(() => assertCompileTokenCeiling(COMPILE_TOKEN_CEILING * 3, 3)).not.toThrow();
+    expect(() => assertCompileTokenCeiling(COMPILE_TOKEN_CEILING * 3 + 1, 3)).toThrowError(/token ceiling/);
   });
 });

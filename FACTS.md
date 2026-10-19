@@ -60,6 +60,16 @@ The variance rows use the three final p2 receipts with OCR and the modality floo
 | p2 run two Token Factory cost, USD | `{"extraction":0.2238,"typing":0.3295,"ocr_rescue_typing":0.0064,"total":0.5597}` | command: same sum for `data/compiled/*.union.p2r2.typed.v3.ocr.mf.json`; output: `p2r2=0.5597` | MEASURED |
 | p2 run three Token Factory cost, USD | `{"extraction":0.2196,"typing":0.3218,"ocr_rescue_typing":0.0045,"total":0.5459}` | command: same sum for `data/compiled/*.union.p2r3.typed.v3.ocr.mf.json`; output: `p2r3=0.5459` | MEASURED |
 
+### Live compiler three-reading cost caps
+
+The live compiler keeps the prior worst-case spend envelope while taking three readings. One reading is capped at 120,000 tokens. At the maximum configured token price of $3 per million tokens, that is $0.36 per reading and $1.08 reserved per three-reading request against the unchanged $2 daily budget. The shared ledger permits 13 requests per day and 133 over its lifetime, which allow at most 39 and 399 readings compared with the prior caps of 40 and 400 single readings.
+
+| Claim | Exact value | Source | Tag |
+|---|---|---|---|
+| Three-reading request reservation, USD | `{"per_reading_tokens":120000,"maximum_usd_per_million_tokens":3,"per_reading_usd":0.36,"readings":3,"request_reservation_usd":1.08,"daily_budget_usd":2}` | `web/src/lib/live-limits.ts`; arithmetic: `120000 * 3 / 1000000 = 0.36`, then `3 * 0.36 = 1.08` | MEASURED |
+| Shared daily reading ceiling | `{"requests":13,"readings_per_request":3,"maximum_readings":39,"prior_single_reading_cap":40}` | `web/src/lib/live-ledger.ts`; arithmetic: `13 * 3 = 39 <= 40` | MEASURED |
+| Shared lifetime reading ceiling | `{"requests":133,"readings_per_request":3,"maximum_readings":399,"prior_single_reading_cap":400}` | `web/src/lib/live-ledger.ts`; arithmetic: `133 * 3 = 399 <= 400` | MEASURED |
+
 ## EPA label photo reading
 
 The inputs below are rendered pages from real EPA PPLS labels. They are not photos. Each image row, including the source PDF hash, selected page, read, verdict, latency, token counts, and cost, remains in the receipt.

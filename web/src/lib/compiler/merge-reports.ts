@@ -18,7 +18,7 @@ export type MergedRule<Rule extends MergeRule> = Rule & {
   modality_vote: Record<string, number>;
 };
 
-export type MergedReport<Rule extends MergeRule, Report extends MergeReport<Rule>> = Omit<Report, "accepted"> & {
+export type MergedReport<Rule extends MergeRule, Report extends MergeReport<Rule>> = Report & {
   accepted: Array<MergedRule<Rule>>;
   merged_from: string[];
 };

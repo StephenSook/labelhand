@@ -6,10 +6,13 @@ export const CACHE_HITS_PER_WINDOW = 60;
 export const PHOTO_READS_PER_WINDOW = 10;
 export const DAILY_BUDGET_USD = 2;
 export const COMPILE_TOKEN_CEILING = 120_000;
+export const LIVE_COMPILE_READINGS = 3;
 export const MAX_IN_FLIGHT_COLD_COMPILES = 2;
 
 const MAX_TOKEN_PRICE_PER_MILLION = Math.max(...Object.values(compilerSpec.PRICES).flat());
 export const MAX_COMPILE_COST_USD = COMPILE_TOKEN_CEILING * MAX_TOKEN_PRICE_PER_MILLION / 1_000_000;
+// Three readings at $0.36 each reserve $1.08 per live compile against the existing $2 daily budget.
+const MAX_LIVE_COMPILE_COST_USD = LIVE_COMPILE_READINGS * MAX_COMPILE_COST_USD;
 
 type LimitKind = "cache" | "cold" | "photo";
 
@@ -77,11 +80,11 @@ function reservationError(): LiveLimitError {
 
 function reserveCompileBudget(now: number): BudgetReservation {
   refreshBudgetDay(now);
-  if (budgetSpentUsd + budgetReservedUsd + MAX_COMPILE_COST_USD > DAILY_BUDGET_USD) {
+  if (budgetSpentUsd + budgetReservedUsd + MAX_LIVE_COMPILE_COST_USD > DAILY_BUDGET_USD) {
     throw reservationError();
   }
-  budgetReservedUsd += MAX_COMPILE_COST_USD;
-  return { day: budgetDay, amount: MAX_COMPILE_COST_USD };
+  budgetReservedUsd += MAX_LIVE_COMPILE_COST_USD;
+  return { day: budgetDay, amount: MAX_LIVE_COMPILE_COST_USD };
 }
 
 function releaseCompileBudget(reservation: BudgetReservation): void {
@@ -193,7 +196,7 @@ export function assertLivePhotoEnabled(value = process.env.LIVE_PHOTO): void {
 
 export function assertDailyBudgetAvailable(now = Date.now()): void {
   refreshBudgetDay(now);
-  if (budgetSpentUsd + budgetReservedUsd + MAX_COMPILE_COST_USD > DAILY_BUDGET_USD) {
+  if (budgetSpentUsd + budgetReservedUsd + MAX_LIVE_COMPILE_COST_USD > DAILY_BUDGET_USD) {
     throw reservationError();
   }
 }
@@ -205,10 +208,14 @@ export function recordCompileSpend(costUsd: number, now = Date.now()): number {
   return budgetSpentUsd;
 }
 
-export function assertCompileTokenCeiling(totalTokens: number): void {
+export function assertCompileTokenCeiling(totalTokens: number, readings = 1): void {
   if (!Number.isFinite(totalTokens) || totalTokens < 0) throw new TypeError("Compile token use must be a non-negative number.");
-  if (totalTokens > COMPILE_TOKEN_CEILING) {
-    throw new LiveLimitError(`The live compile exceeded the ${COMPILE_TOKEN_CEILING} token ceiling.`, 422);
+  if (!Number.isInteger(readings) || readings < 1 || readings > LIVE_COMPILE_READINGS) {
+    throw new TypeError(`Compile readings must be an integer from 1 through ${LIVE_COMPILE_READINGS}.`);
+  }
+  const ceiling = COMPILE_TOKEN_CEILING * readings;
+  if (totalTokens > ceiling) {
+    throw new LiveLimitError(`The live compile exceeded the ${ceiling} token ceiling.`, 422);
   }
 }
 

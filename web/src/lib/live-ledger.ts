@@ -12,8 +12,10 @@ import {
 // ledger in the Blob store all instances share, and is refused when the shared counts are full.
 // Two instances that read the ledger at the same moment can each pass one compile past a cap;
 // the overshoot is bounded by how many compiles start in the same instant.
-export const SHARED_DAILY_COLD_COMPILES = 40;
-export const SHARED_LIFETIME_COLD_COMPILES = 400;
+// Each cold compile now starts three readings: 13 * 3 = 39 <= 40 daily readings,
+// and 133 * 3 = 399 <= 400 lifetime readings, preserving the prior spend ceilings.
+export const SHARED_DAILY_COLD_COMPILES = 13;
+export const SHARED_LIFETIME_COLD_COMPILES = 133;
 export const LEDGER_PREFIX = "ledger/cold/";
 export const SHARED_DAILY_PHOTO_READS = 150;
 export const PHOTO_LEDGER_PREFIX = "ledger/photo/";

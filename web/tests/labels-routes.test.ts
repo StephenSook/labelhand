@@ -84,6 +84,21 @@ function compiled(sha256 = "a".repeat(64)): CompiledLiveLabel {
     total_tokens: 1_100,
     cost_usd: 0.001,
     request_ids: ["req-live"],
+    readings: 3,
+    reading_records: [1, 2, 3].map((reading) => ({
+      reading,
+      attempts: 1,
+      accepted_rules: 0,
+      rejected_rules: 0,
+      latency_ms: 10,
+      tokens_in: 1_000,
+      tokens_out: 100,
+      total_tokens: 1_100,
+      cost_usd: 0.001,
+      request_ids: [`req-${reading}`],
+    })),
+    latency_ms: 12,
+    merged_from: ["reading-1", "reading-2", "reading-3"],
     accepted: [],
     rejected: [],
   };
@@ -324,6 +339,19 @@ describe("label compile route", () => {
     writeCacheMock.mockResolvedValue(false);
     await expect(readCompileStream(await POST(request()))).rejects.toThrow("cache record could not be committed");
     expect(compileMock).toHaveBeenCalledTimes(1);
+  });
+
+  test("does not write cache when a named reading still fails after retry", async () => {
+    const fetchMock = vi.fn<typeof fetch>();
+    for (const response of pplsResponses()) fetchMock.mockResolvedValueOnce(response);
+    vi.stubGlobal("fetch", fetchMock);
+    compileMock.mockRejectedValueOnce(new PipelineError(
+      "Live label reading 2 failed after one retry: Token Factory credit is exhausted.",
+      503,
+    ));
+
+    await expect(readCompileStream(await POST(request()))).rejects.toThrow("reading 2 failed after one retry");
+    expect(writeCacheMock).not.toHaveBeenCalled();
   });
 
   test("still returns a cold result when Blob is not configured", async () => {

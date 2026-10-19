@@ -13,7 +13,7 @@ import {
   reserveSharedPhotoRead,
   visitorKey,
 } from "@/lib/live-ledger";
-import { LiveLimitError } from "@/lib/live-limits";
+import { LIVE_COMPILE_READINGS, LiveLimitError } from "@/lib/live-limits";
 
 const TOKEN = "vercel_blob_rw_test_token";
 const NOW = Date.parse("2026-10-20T15:00:00Z");
@@ -65,6 +65,15 @@ async function refusal(promise: Promise<void>): Promise<LiveLimitError> {
 }
 
 describe("shared cold-compile ledger", () => {
+  test("keeps three-reading request caps within the former reading allowances", () => {
+    expect(SHARED_DAILY_COLD_COMPILES).toBe(13);
+    expect(SHARED_DAILY_COLD_COMPILES * LIVE_COMPILE_READINGS).toBe(39);
+    expect((SHARED_DAILY_COLD_COMPILES + 1) * LIVE_COMPILE_READINGS).toBeGreaterThan(40);
+    expect(SHARED_LIFETIME_COLD_COMPILES).toBe(133);
+    expect(SHARED_LIFETIME_COLD_COMPILES * LIVE_COMPILE_READINGS).toBe(399);
+    expect((SHARED_LIFETIME_COLD_COMPILES + 1) * LIVE_COMPILE_READINGS).toBeGreaterThan(400);
+  });
+
   test("a production deployment without the shared store refuses instead of compiling without a limit", async () => {
     const error = await refusal(reserveSharedColdCompile({ ip: "203.0.113.5", now: NOW, env: { VERCEL_ENV: "production" } }));
     expect(error.status).toBe(503);
@@ -93,8 +102,7 @@ describe("shared cold-compile ledger", () => {
   });
 
   test("refuses once the lifetime allowance is used, across days", async () => {
-    const days = Array.from({ length: 10 }, (_, day) => entries(SHARED_LIFETIME_COLD_COMPILES / 10, NOW - (day + 1) * 86_400_000)).flat();
-    const store = fakeStore(days);
+    const store = fakeStore(entries(SHARED_LIFETIME_COLD_COMPILES, NOW - 86_400_000));
     const error = await refusal(reserveSharedColdCompile({ ip: "198.51.100.7", now: NOW, env, api: store.api }));
     expect(error.status).toBe(503);
   });
