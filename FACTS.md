@@ -112,7 +112,7 @@ The season files are exported by `tools/season_export.py`. The check-back runs t
 | Browser agent model | `"nvidia/Nemotron-3_5-Lightning"` | `web/src/app/api/agent/route.ts:8,159-176`; static audit command output: `const MODEL = "nvidia/Nemotron-3_5-Lightning"` | MEASURED |
 | Token Factory base URL | `"https://api.tokenfactory.nebius.com/v1"` | `compiler/compile_label.py:34,235`; the web agent uses `https://api.tokenfactory.nebius.com/v1/chat/completions` at `web/src/app/api/agent/route.ts:9,159` | MEASURED |
 | OCR Serverless Job target | `"gpu-l40s-a"` | `tools/ocr_job/submit.sh:9-21`, specifically line 13; job command runs Parse at `tools/ocr_job/run.sh:31-32` | MEASURED |
-| Historical OCR job actually ran on an L40S | `"NOT VERIFIED"` | Check needed: read the Nebius job record or retained job log and match its job ID to the committed OCR result. The repo records the requested platform but not the job ID or returned hardware name. | NOT VERIFIED |
+| Historical OCR job ran on an L40S | `"NVIDIA L40S"` | retained job output `data/text/264-700.ocr.json` (gitignored because it is label text), key `device`, written inside the job by `torch.cuda.get_device_name(0)` at `tools/ocr_parse.py:86`; same file: `ocr_utc` `2026-10-05T04:15:25+00:00`, model `nvidia/NVIDIA-Nemotron-Parse-2.0`, 9 pages. The Nebius job record itself is no longer listed (`nebius ai job list` in all three projects on 2026-10-19: no jobs). | MEASURED |
 
 ## Web app and agent
 
