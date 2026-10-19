@@ -1,0 +1,24 @@
+{
+ "verdict": "MATCHED",
+ "epa_reg_no": "5481-504",
+ "read_epa_reg_no": "5481-504",
+ "model_product_name": "FOLEX® 6 EC",
+ "epa_product_name": "FOLEX® 6 EC",
+ "alternate_brand_names": [
+  "VESTAGE"
+ ],
+ "readable": true,
+ "what_is_visible": "The EPA registration number 5481-504 is printed inside the accepted stamp on the right side of the label.",
+ "name_agrees": true,
+ "model": "nvidia/Nemotron-3.5-Super-VL",
+ "latency_ms": 2746,
+ "usage": {
+  "inputTokens": 2077,
+  "outputTokens": 74,
+  "totalTokens": 2151,
+  "costUsd": 0.0006896999999999999
+ },
+ "request_ids": [
+  "0f81ee11de56ae73196b22f395a8ecc8"
+ ]
+}

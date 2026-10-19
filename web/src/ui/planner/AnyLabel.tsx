@@ -1,8 +1,10 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LiveCompileClientError, requestLiveCompile } from "@/lib/compiler/client";
 import type { CompiledLiveLabel, PipelineEvent } from "@/lib/compiler/pipeline";
+import { PhotoClientError, readLabelPhotoFromBrowser } from "@/lib/photo-client";
+import type { PhotoReadResult } from "@/lib/photo-reading";
 
 export const MAX_LIVE_LABELS = 3;
 const FEDERAL_REG = /^\d{1,6}-\d{1,5}$/;
@@ -47,7 +49,7 @@ function advance(progress: Progress, event: PipelineEvent): Progress {
 
 function errorMessage(error: unknown): string {
   if (error instanceof DOMException && error.name === "AbortError") return "Stopped. Nothing was added to the tank.";
-  if (error instanceof LiveCompileClientError) return error.message;
+  if (error instanceof LiveCompileClientError || error instanceof PhotoClientError) return error.message;
   return error instanceof Error ? error.message : String(error);
 }
 
@@ -62,9 +64,33 @@ export function AnyLabel({ disabled, liveLabels, onAdd, onRemove }: {
   const [searching, setSearching] = useState(false);
   const [compiling, setCompiling] = useState<{ reg: string; progress: Progress } | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [reading, setReading] = useState(false);
+  const [photo, setPhoto] = useState<{ preview: string; result: PhotoReadResult } | null>(null);
   const abort = useRef<AbortController | null>(null);
+  const fileInput = useRef<HTMLInputElement | null>(null);
   const full = liveLabels.length >= MAX_LIVE_LABELS;
-  const busy = disabled || searching || Boolean(compiling);
+  const busy = disabled || searching || reading || Boolean(compiling);
+
+  // The preview is a local object URL of the visitor's own photo; release it when replaced.
+  useEffect(() => () => { if (photo) URL.revokeObjectURL(photo.preview); }, [photo]);
+
+  async function readPhoto(file: File) {
+    setMessage(null);
+    setResults(null);
+    setPhoto(null);
+    setReading(true);
+    const preview = URL.createObjectURL(file);
+    try {
+      const result = await readLabelPhotoFromBrowser(file);
+      setPhoto({ preview, result });
+    } catch (error) {
+      URL.revokeObjectURL(preview);
+      setMessage(errorMessage(error));
+    } finally {
+      setReading(false);
+      if (fileInput.current) fileInput.current.value = "";
+    }
+  }
 
   async function search() {
     const value = query.trim();
@@ -152,7 +178,40 @@ export function AnyLabel({ disabled, liveLabels, onAdd, onRemove }: {
         >
           {searching ? "Searching EPA" : "Search EPA"}
         </button>
+        <button
+          type="button"
+          onClick={() => fileInput.current?.click()}
+          disabled={busy || full}
+          data-photo-button
+          className="min-h-12 rounded-full border-2 border-[#14213d] bg-[#ffc53d] px-5 font-black outline-offset-2 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#2f8f4e] disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {reading ? "Reading the photo" : "Photograph the jug"}
+        </button>
+        <input
+          ref={fileInput}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          className="sr-only"
+          tabIndex={-1}
+          aria-label="Photo of the product label"
+          data-photo-input
+          onChange={(event) => {
+            const file = event.target.files?.[0];
+            if (file) void readPhoto(file);
+          }}
+        />
       </div>
+      <p className="mt-2 text-xs font-semibold text-[#14213d]/70">
+        A photo is read by Nemotron 3.5 Super VL and checked against EPA&apos;s own records before anything is compiled. It is not stored.
+      </p>
+      {photo && !compiling ? (
+        <PhotoResult
+          photo={photo}
+          disabled={busy || full}
+          onRead={(reg) => { setPhoto(null); void compile(reg); }}
+        />
+      ) : null}
       {full ? <p className="mt-2 text-sm font-bold">The tank holds up to {MAX_LIVE_LABELS} live labels. Remove one to add another.</p> : null}
 
       {results && results.length > 0 && !compiling ? (
@@ -251,6 +310,50 @@ function CompileProgress({ reg, progress, onStop }: { reg: string; progress: Pro
       >
         Stop
       </button>
+    </div>
+  );
+}
+
+function PhotoResult({ photo, disabled, onRead }: {
+  photo: { preview: string; result: PhotoReadResult };
+  disabled: boolean;
+  onRead: (reg: string) => void;
+}) {
+  const { result } = photo;
+  const reg = result.epa_reg_no ?? result.read_epa_reg_no;
+  let body: React.ReactNode;
+  let action: string | null = null;
+  if (result.verdict === "MATCHED" && reg) {
+    body = <>Read EPA Reg. No. <strong>{reg}</strong>, {result.epa_product_name}. EPA&apos;s records agree with the name on the jug.</>;
+    action = `Read ${result.epa_product_name ?? "this label"}`;
+  } else if (result.verdict === "NAME_DIFFERS" && reg) {
+    body = <>Read EPA Reg. No. <strong>{reg}</strong>, but EPA lists that number as <strong>{result.epa_product_name}</strong>, while the photo shows {result.model_product_name ?? "a different name"}. Check the jug before you continue.</>;
+    action = `It is ${result.epa_product_name ?? reg}, read it`;
+  } else if (result.verdict === "NOT_FOUND") {
+    body = <>Read EPA Reg. No. <strong>{result.read_epa_reg_no}</strong>, but EPA has no active product with that number. Retake the photo with the &quot;EPA Reg. No.&quot; line sharp and in frame.</>;
+  } else {
+    body = <>No registration number was legible. What the model saw: {result.what_is_visible || "nothing readable"}. Retake the photo closer to the &quot;EPA Reg. No.&quot; line.</>;
+  }
+  return (
+    <div className="mt-3 grid gap-3 rounded-2xl border-2 border-[#14213d] bg-[#fbf7ee] p-3 sm:grid-cols-[6rem_1fr]" data-photo-result={result.verdict}>
+      {/* eslint-disable-next-line @next/next/no-img-element -- a local object URL of the visitor's own photo */}
+      <img src={photo.preview} alt="The label photo you chose" className="h-24 w-24 rounded-xl border-2 border-[#14213d] object-cover" />
+      <div className="min-w-0">
+        <p className="text-sm font-bold leading-relaxed">{body}</p>
+        <p className="mt-1 text-xs font-semibold text-[#14213d]/65">
+          {result.model}, {(result.latency_ms / 1000).toFixed(1)} s
+        </p>
+        {action && reg ? (
+          <button
+            type="button"
+            onClick={() => onRead(reg)}
+            disabled={disabled}
+            className="mt-2 min-h-11 rounded-full border-2 border-[#14213d] bg-[#216a38] px-4 text-sm font-black text-white outline-offset-2 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#ffc53d] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {action}
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 }
