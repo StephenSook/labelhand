@@ -8,7 +8,7 @@ import { expect, test } from "@playwright/test";
 // no Token Factory credit.
 const fixtures = path.join(process.cwd(), "tests/fixtures/live");
 
-test("a jug photo is read and checked against EPA before anything is compiled", async ({ page }) => {
+test("a jug photo of a scored product is read, checked against EPA, and selects its scored chip", async ({ page }) => {
   const photo = await readFile(path.join(fixtures, "photo-folex-6-ec.json"), "utf8");
   const stream = await readFile(path.join(fixtures, "axial-xl-100-1256.ndjson"), "utf8");
   let photoRequests = 0;
@@ -30,5 +30,8 @@ test("a jug photo is read and checked against EPA before anything is compiled", 
   await expect(result).toContainText("EPA's records agree");
   expect(photoRequests).toBe(1);
 
+  await result.getByRole("button").click();
+  await expect(page.getByRole("checkbox", { name: /Folex 6 EC/ })).toBeChecked();
+  await expect(page.locator("[data-live-label]")).toHaveCount(0);
   expect(compileRequests).toBe(0);
 });

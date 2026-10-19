@@ -53,11 +53,14 @@ function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
 
-export function AnyLabel({ disabled, liveLabels, onAdd, onRemove }: {
+export function AnyLabel({ disabled, liveLabels, onAdd, onRemove, shippedRegs = [], onSelectShipped }: {
   disabled: boolean;
   liveLabels: CompiledLiveLabel[];
   onAdd: (compiled: CompiledLiveLabel) => void;
   onRemove: (reg: string) => void;
+  // The scored labels already in the app. Picking one selects its chip instead of an unscored live copy.
+  shippedRegs?: readonly string[];
+  onSelectShipped?: (reg: string) => void;
 }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[] | null>(null);
@@ -120,6 +123,13 @@ export function AnyLabel({ disabled, liveLabels, onAdd, onRemove }: {
   }
 
   async function compile(reg: string) {
+    if (shippedRegs.includes(reg) && onSelectShipped) {
+      onSelectShipped(reg);
+      setResults(null);
+      setQuery("");
+      setMessage(`EPA Reg. No. ${reg} is one of the scored labels, so its chip is now in the tank.`);
+      return;
+    }
     if (liveLabels.some((label) => label.reg === reg)) {
       setMessage(`EPA Reg. No. ${reg} is already in the tank.`);
       return;

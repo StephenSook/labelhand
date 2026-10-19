@@ -529,6 +529,12 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
                   setLiveLabels((current) => current.filter((label) => label.reg !== reg));
                   setActiveReplay(undefined);
                 }}
+                shippedRegs={PRODUCT_REGISTRATIONS}
+                onSelectShipped={(reg) => {
+                  setSelectedRegs((current) => new Set([...current, reg as ProductRegistration]));
+                  setActiveReplay(undefined);
+                  setValidation(null);
+                }}
               />
               {!liveReady ? (
                 <p className="mt-3 text-sm font-bold" aria-live="polite" data-live-loading>
