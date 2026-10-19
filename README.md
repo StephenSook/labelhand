@@ -73,6 +73,8 @@ Folex 6 EC wants nights above 60°F, so from late October the live forecast bloc
 
 Recompute: `python tools/checkback.py --recorded data/nws_recorded`. The recorded files are large and stay out of git; the result JSON and [`eval/results/checkback-2026-10-19.json`](eval/results/checkback-2026-10-19.json) are committed.
 
+**Every case, misses included.** The app's `/proof` page lists each of the 119 broken hours (field, station wind, and a link that replays the forecast that said go) and each of the 46 gold-set clauses with the rule Labelhand compiled for it, differences first. `python tools/proof_export.py` rebuilds its data from committed files, and a test fails if the committed copy is stale.
+
 ## Measured so far
 
 Three real Georgia cotton defoliation labels: Folex 6 EC (EPA Reg. 5481-504, accepted 2026-03-04), Dropp SC (264-700) and Prep (264-418), 32 pages in total.
