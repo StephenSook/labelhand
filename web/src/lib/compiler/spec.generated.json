@@ -1,0 +1,394 @@
+{
+  "CONVERSIONS": [
+    {
+      "destination_units": [
+        "feet",
+        "foot",
+        "ft"
+      ],
+      "factor": 5280,
+      "source_words": [
+        "mile"
+      ]
+    },
+    {
+      "destination_units": [
+        "inches",
+        "inch",
+        "in"
+      ],
+      "factor": 12,
+      "source_words": [
+        "feet",
+        "foot",
+        "ft"
+      ]
+    },
+    {
+      "destination_units": [
+        "minutes",
+        "minute",
+        "min"
+      ],
+      "factor": 60,
+      "source_words": [
+        "hour"
+      ]
+    },
+    {
+      "destination_units": [
+        "hours",
+        "hour",
+        "hr"
+      ],
+      "factor": 24,
+      "source_words": [
+        "day"
+      ]
+    }
+  ],
+  "DEFINITIONS": {
+    "adjuvant": "adjuvants, oils or surfactants",
+    "aerial_restriction": "a restriction that applies only to aerial application and fits no other parameter",
+    "air_temperature_f": "a daytime, current or mean air temperature condition (not an inversion)",
+    "application_interval_days": "minimum days between applications",
+    "application_method": "equipment or procedure other than height and droplets (aerial setup, boom length, nozzles, pressure, swath displacement), including duties that apply only at some wind speed",
+    "boom_height_in": "height of a ground boom or nozzles above ground or canopy",
+    "buffer_ft": "a minimum distance from a sensitive area, other crop, water or residence, in any unit (feet, miles)",
+    "crop_stage": "any crop growth stage other than a percent of bolls open",
+    "days_before_harvest": "minimum time between application and harvest, in days or hours (harvest can commence after N)",
+    "droplet_size": "required or advised spray droplet size or quality",
+    "grazing_restriction": "grazing or feeding restrictions",
+    "irrigation_restriction": "application through irrigation systems",
+    "max_applications": "maximum number of applications",
+    "max_rate_per_season": "maximum product per acre per season or year",
+    "night_temperature_f": "a nighttime or minimum night temperature condition",
+    "open_boll_pct": "percent of cotton bolls open when applying",
+    "other": "anything else: cleaning, rinsing, storage, and educational statements that describe drift, weather or inversions without telling the applicator what to do",
+    "ppe": "personal protective equipment",
+    "rain_free_hours": "do not apply, or apply only, if rain is or is not expected within N hours of application",
+    "rainfall_expected": "a statement that rain within N hours reduces performance (advice, not a prohibition)",
+    "rate_per_acre": "product rate per acre for one application, including rate-table rows that pick a rate by weather or crop condition",
+    "reentry_hours": "the restricted-entry interval (REI) before workers may enter treated areas, in hours or days",
+    "relative_humidity_pct": "a humidity condition",
+    "release_height_ft": "spray release height above ground or canopy, ground or aerial",
+    "sensitive_area": "a sensitive area named without a distance",
+    "spray_volume_gal_per_acre": "spray volume in gallons per acre",
+    "tank_mix": "whether or how the product may be mixed with other products",
+    "temperature_inversion": "a rule about applying during a temperature inversion or conditions that favor one (not a description of what inversions are)",
+    "wind_speed_mph": "a limit on the wind speed or gusts under which the product may be applied (not a duty that only applies at some wind speed)"
+  },
+  "FOLD": {
+    "\u00ad": "",
+    "\u2013": "-",
+    "\u2014": "-",
+    "\u2018": "'",
+    "\u2019": "'",
+    "\u201c": "\"",
+    "\u201d": "\"",
+    "\ufb01": "fi",
+    "\ufb02": "fl"
+  },
+  "MODELS": {
+    "first_pass": "nvidia/nemotron-3-super-120b-a12b",
+    "lightning": "nvidia/Nemotron-3_5-Lightning",
+    "typing": "nvidia/Nemotron-3-Ultra-550b-a55b"
+  },
+  "PARAMS": [
+    "wind_speed_mph",
+    "air_temperature_f",
+    "night_temperature_f",
+    "rain_free_hours",
+    "rainfall_expected",
+    "temperature_inversion",
+    "relative_humidity_pct",
+    "droplet_size",
+    "boom_height_in",
+    "release_height_ft",
+    "open_boll_pct",
+    "days_before_harvest",
+    "application_interval_days",
+    "max_applications",
+    "rate_per_acre",
+    "max_rate_per_season",
+    "spray_volume_gal_per_acre",
+    "buffer_ft",
+    "reentry_hours",
+    "grazing_restriction",
+    "irrigation_restriction",
+    "tank_mix",
+    "adjuvant",
+    "application_method",
+    "aerial_restriction",
+    "ppe",
+    "crop_stage",
+    "sensitive_area",
+    "other"
+  ],
+  "PRICES": {
+    "nvidia/Nemotron-3-Ultra-550b-a55b": [
+      1.0,
+      3.0
+    ],
+    "nvidia/Nemotron-3_5-Lightning": [
+      0.06,
+      0.24
+    ],
+    "nvidia/nemotron-3-super-120b-a12b": [
+      0.3,
+      0.9
+    ]
+  },
+  "PROMPTS": {
+    "first_pass": "You compile one page of a U.S. EPA pesticide label into machine-checkable rules for a spray-window planner.\nExtract every restriction or requirement that decides WHEN, WHERE or HOW the product may be applied:\nweather (wind, temperature, rain, inversion, humidity), timing and crop stage, rates and limits, intervals,\nbuffers and sensitive areas, application method and equipment, tank-mix permissions or prohibitions,\nre-entry and grazing restrictions, and protective equipment.\n\nRules:\n- \"quote\" must be copied character for character from the page text, one sentence or clause, no paraphrase.\n  Never use \"...\" to join pieces; if a requirement spans two sentences, emit two rules.\n- One rule per constraint. If one sentence states several constraints (a height and a wind limit) or alternatives\n  (7 days at one rate, or 10 days at a higher rate), emit one rule for each, every one quoting the whole sentence,\n  and say in \"summary\" which constraint or alternative that rule is.\n- value and value2 are numbers exactly as written in the quote, in the quote's own unit. Never convert units\n  (3 feet stays 3 with unit \"feet\"; one-half mile stays 0.5 with unit \"mile\" only if \"1/2\" or \"0.5\" is written).\n  If the clause has no number, use null and op \"none\".\n- modality MUST_NOT for prohibitions (\"Do not ...\"), MUST for requirements, ADVISORY for recommendations (\"should\", \"best results\").\n- kind: forecast_series for weather conditions checked against a forecast, solar_window for time-of-day limits,\n  geometry_buffer for distances, counter for counts, rates and intervals, field_obligation for anything the\n  applicator must do or check in the field.\n- applies_to: the crop, application type (ground, aerial) or situation the clause applies to, from the page.\n- Skip first-aid, storage, disposal, container and marketing text. Skip anything not on this page.\n- If the page has no such clauses, return {\"rules\": []}.",
+    "typing": "You type one constraint from a U.S. EPA pesticide label clause. A clause can state several constraints (a height and a wind limit in one sentence): type only the CONSTRAINT TO TYPE, with the parameter whose definition fits it.\n- wind_speed_mph: a limit on the wind speed or gusts under which the product may be applied (not a duty that only applies at some wind speed)\n- air_temperature_f: a daytime, current or mean air temperature condition (not an inversion)\n- night_temperature_f: a nighttime or minimum night temperature condition\n- rain_free_hours: do not apply, or apply only, if rain is or is not expected within N hours of application\n- rainfall_expected: a statement that rain within N hours reduces performance (advice, not a prohibition)\n- temperature_inversion: a rule about applying during a temperature inversion or conditions that favor one (not a description of what inversions are)\n- relative_humidity_pct: a humidity condition\n- droplet_size: required or advised spray droplet size or quality\n- boom_height_in: height of a ground boom or nozzles above ground or canopy\n- release_height_ft: spray release height above ground or canopy, ground or aerial\n- open_boll_pct: percent of cotton bolls open when applying\n- crop_stage: any crop growth stage other than a percent of bolls open\n- days_before_harvest: minimum time between application and harvest, in days or hours (harvest can commence after N)\n- application_interval_days: minimum days between applications\n- max_applications: maximum number of applications\n- rate_per_acre: product rate per acre for one application, including rate-table rows that pick a rate by weather or crop condition\n- max_rate_per_season: maximum product per acre per season or year\n- spray_volume_gal_per_acre: spray volume in gallons per acre\n- buffer_ft: a minimum distance from a sensitive area, other crop, water or residence, in any unit (feet, miles)\n- reentry_hours: the restricted-entry interval (REI) before workers may enter treated areas, in hours or days\n- grazing_restriction: grazing or feeding restrictions\n- irrigation_restriction: application through irrigation systems\n- tank_mix: whether or how the product may be mixed with other products\n- adjuvant: adjuvants, oils or surfactants\n- application_method: equipment or procedure other than height and droplets (aerial setup, boom length, nozzles, pressure, swath displacement), including duties that apply only at some wind speed\n- aerial_restriction: a restriction that applies only to aerial application and fits no other parameter\n- ppe: personal protective equipment\n- sensitive_area: a sensitive area named without a distance\n- other: anything else: cleaning, rinsing, storage, and educational statements that describe drift, weather or inversions without telling the applicator what to do\nvalue and value2 are numbers exactly as written in the clause, in the clause's own unit; never convert units. Use null and op none when the clause states no number. modality: MUST_NOT for prohibitions (do not, must not), MUST for requirements (must, apply only when, required), ADVISORY for recommendations and statements of effect (should, avoid, is recommended, may reduce, best results)."
+  },
+  "SCHEMAS": {
+    "first_pass": {
+      "additionalProperties": false,
+      "properties": {
+        "rules": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "applies_to": {
+                "type": "string"
+              },
+              "kind": {
+                "enum": [
+                  "forecast_series",
+                  "solar_window",
+                  "geometry_buffer",
+                  "counter",
+                  "field_obligation"
+                ],
+                "type": "string"
+              },
+              "modality": {
+                "enum": [
+                  "MUST",
+                  "MUST_NOT",
+                  "ADVISORY"
+                ],
+                "type": "string"
+              },
+              "op": {
+                "enum": [
+                  "lt",
+                  "lte",
+                  "gt",
+                  "gte",
+                  "eq",
+                  "between",
+                  "none"
+                ],
+                "type": "string"
+              },
+              "param": {
+                "enum": [
+                  "wind_speed_mph",
+                  "air_temperature_f",
+                  "night_temperature_f",
+                  "rain_free_hours",
+                  "rainfall_expected",
+                  "temperature_inversion",
+                  "relative_humidity_pct",
+                  "droplet_size",
+                  "boom_height_in",
+                  "release_height_ft",
+                  "open_boll_pct",
+                  "days_before_harvest",
+                  "application_interval_days",
+                  "max_applications",
+                  "rate_per_acre",
+                  "max_rate_per_season",
+                  "spray_volume_gal_per_acre",
+                  "buffer_ft",
+                  "reentry_hours",
+                  "grazing_restriction",
+                  "irrigation_restriction",
+                  "tank_mix",
+                  "adjuvant",
+                  "application_method",
+                  "aerial_restriction",
+                  "ppe",
+                  "crop_stage",
+                  "sensitive_area",
+                  "other"
+                ],
+                "type": "string"
+              },
+              "quote": {
+                "type": "string"
+              },
+              "summary": {
+                "type": "string"
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "value": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "value2": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "modality",
+              "param",
+              "op",
+              "value",
+              "value2",
+              "unit",
+              "applies_to",
+              "summary",
+              "quote"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "rules"
+      ],
+      "type": "object"
+    },
+    "typing": {
+      "additionalProperties": false,
+      "properties": {
+        "modality": {
+          "enum": [
+            "MUST",
+            "MUST_NOT",
+            "ADVISORY"
+          ],
+          "type": "string"
+        },
+        "op": {
+          "enum": [
+            "lt",
+            "lte",
+            "gt",
+            "gte",
+            "eq",
+            "between",
+            "none"
+          ],
+          "type": "string"
+        },
+        "param": {
+          "enum": [
+            "wind_speed_mph",
+            "air_temperature_f",
+            "night_temperature_f",
+            "rain_free_hours",
+            "rainfall_expected",
+            "temperature_inversion",
+            "relative_humidity_pct",
+            "droplet_size",
+            "boom_height_in",
+            "release_height_ft",
+            "open_boll_pct",
+            "days_before_harvest",
+            "application_interval_days",
+            "max_applications",
+            "rate_per_acre",
+            "max_rate_per_season",
+            "spray_volume_gal_per_acre",
+            "buffer_ft",
+            "reentry_hours",
+            "grazing_restriction",
+            "irrigation_restriction",
+            "tank_mix",
+            "adjuvant",
+            "application_method",
+            "aerial_restriction",
+            "ppe",
+            "crop_stage",
+            "sensitive_area",
+            "other"
+          ],
+          "type": "string"
+        },
+        "unit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "value": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "value2": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "param",
+        "op",
+        "value",
+        "value2",
+        "unit",
+        "modality"
+      ],
+      "type": "object"
+    }
+  },
+  "TOPIC": {
+    "air_temperature_f": [
+      "temperature"
+    ],
+    "night_temperature_f": [
+      "night"
+    ],
+    "rain_free_hours": [
+      "rain"
+    ],
+    "rainfall_expected": [
+      "rain"
+    ],
+    "temperature_inversion": [
+      "inversion"
+    ],
+    "wind_speed_mph": [
+      "wind"
+    ]
+  },
+  "TOPIC_WORDS": [
+    "inversion",
+    "night",
+    "rain",
+    "temperature",
+    "wind"
+  ],
+  "VERSIONS": {
+    "floor_source": "EPA PR Notice 2000-5: mandatory statements are written in imperative or directive terms",
+    "prompt": "p2",
+    "typing": "v3"
+  },
+  "VULGAR": {
+    "\u00bc": 0.25,
+    "\u00bd": 0.5,
+    "\u00be": 0.75,
+    "\u2153": 0.3333333333333333,
+    "\u2154": 0.6666666666666666
+  }
+}
