@@ -24,6 +24,7 @@ import {
   recordCompileSpend,
   runColdCompile,
 } from "@/lib/live-limits";
+import { reserveSharedColdCompile } from "@/lib/live-ledger";
 import { assertFederalReg, fetchLabelPdf, listLabelVersions, PplsError } from "@/lib/ppls";
 
 export const runtime = "nodejs";
@@ -276,6 +277,8 @@ export async function POST(request: NextRequest) {
             coldRateReserved,
             requestRateReserved: true,
             work: async (sharedSignal) => {
+              // The per-instance limits above cannot see other instances; this shared ledger can.
+              await reserveSharedColdCompile({ ip, signal: sharedSignal });
               const compileSignal = AbortSignal.any([
                 sharedSignal,
                 AbortSignal.timeout(INTERNAL_DEADLINE_MS),
