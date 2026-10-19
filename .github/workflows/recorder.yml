@@ -19,7 +19,7 @@ jobs:
     env:
       NEBIUS_PROJECT_ID: ${{ vars.NEBIUS_PROJECT_ID }}
       NEBIUS_RECORDER_IMAGE: ${{ vars.NEBIUS_RECORDER_IMAGE }}
-      NEBIUS_JOB_PLATFORM: ${{ vars.NEBIUS_JOB_PLATFORM || 'cpu-e2' }}
+      NEBIUS_JOB_PLATFORM: ${{ vars.NEBIUS_JOB_PLATFORM || 'cpu-d3' }}
       NEBIUS_JOB_PRESET: ${{ vars.NEBIUS_JOB_PRESET || '2vcpu-8gb' }}
       NEBIUS_JOB_SUBNET_ID: ${{ vars.NEBIUS_JOB_SUBNET_ID }}
       NEBIUS_RECORDER_SECRET_SELECTOR: ${{ vars.NEBIUS_RECORDER_SECRET_SELECTOR }}
@@ -85,7 +85,7 @@ jobs:
           set -euo pipefail
           # Job flags and states: https://docs.nebius.com/serverless/jobs/manage
           # Secret selectors: https://docs.nebius.com/mysterybox/overview
-          # Smallest documented eu-north1 CPU pair: https://docs.nebius.com/compute/virtual-machines/types
+          # CPU platforms and presets: https://docs.nebius.com/compute/virtual-machines/types (this project uses cpu-d3, 2vcpu-8gb)
           jobs_json="$(timeout --signal=TERM --kill-after=2s 25s nebius ai job list \
             --parent-id "$NEBIUS_PROJECT_ID" \
             --profile recorder \

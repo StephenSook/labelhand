@@ -16,7 +16,7 @@ The workflow launches one short Serverless AI job at minute 23 of each hour. The
 - Object Storage S3 endpoint: https://docs.nebius.com/object-storage/s3-api
 - Object Storage role actions: https://docs.nebius.com/object-storage/supported-actions
 
-The documented smallest CPU pair in `eu-north1` is `cpu-e2` with `2vcpu-8gb`. Serverless AI requires a minimum 20 GiB disk for CPU jobs. Project availability still must be checked before enabling the schedule.
+This tenant has projects in `eu-west2`, `us-north1` and `us-central1`, not `eu-north1`. On 2026-10-19 `nebius compute platform list` showed `cpu-d3` with `2vcpu-8gb` in all three, so the recorder runs in the `us-central1` project on `cpu-d3` / `2vcpu-8gb`. Serverless AI requires a minimum 20 GiB disk for CPU jobs. The job and the season route read the S3 signing region from the endpoint host, so the endpoint alone selects the region.
 
 ## Prerequisites
 
@@ -41,7 +41,7 @@ Create a temporary directory so credential files never enter the repository:
 
 ```bash
 export PROJECT_ID='<project-id>'
-export REGION_ID='eu-north1'
+export REGION_ID='us-central1'
 export BUCKET_NAME='<globally-unique-labelhand-recorder-bucket>'
 export SUBNET_ID='<existing-subnet-with-outbound-internet>'
 export EXPECTED_VERCEL_PROJECT='<dedicated-labelhand-vercel-project-name>'
@@ -53,7 +53,7 @@ export WRITER_KEY_FILE="$SETUP_DIR/writer-access-key.json"
 export READER_KEY_FILE="$SETUP_DIR/reader-access-key.json"
 ```
 
-The selected subnet must reach `api.weather.gov`, `storage.eu-north1.nebius.cloud`, and the Nebius Container Registry. Confirm it before creating the first job.
+The selected subnet must reach `api.weather.gov`, `storage.$REGION_ID.nebius.cloud`, and the Nebius Container Registry. Confirm it before creating the first job.
 
 ## 1. Bucket
 
@@ -199,7 +199,7 @@ export READER_SECRET_ACCESS_KEY
 
 ## 5. Seed the compact static season
 
-The live index extends the committed static index. Seed the compact files before the first job so issuance counts and history remain continuous.
+The live index extends the committed static index. Seed the compact files before the first job so issuance counts and history remain continuous. A rebuild keeps any seeded issuance of the day it rebuilds (`keep_stored_issuances`), because the seed carries no raw hourly objects.
 
 ```bash
 AWS_ACCESS_KEY_ID="$WRITER_ACCESS_KEY_ID" \
@@ -255,7 +255,7 @@ gh variable set NEBIUS_RECORDER_IMAGE --body "$RECORDER_IMAGE"
 gh variable set NEBIUS_RECORDER_SECRET_SELECTOR --body "$RECORDER_SECRET_ID"
 gh variable set NEBIUS_RECORDER_BUCKET --body "$BUCKET_NAME"
 gh variable set NEBIUS_RECORDER_S3_ENDPOINT --body "https://storage.$REGION_ID.nebius.cloud"
-gh variable set NEBIUS_JOB_PLATFORM --body 'cpu-e2'
+gh variable set NEBIUS_JOB_PLATFORM --body 'cpu-d3'
 gh variable set NEBIUS_JOB_PRESET --body '2vcpu-8gb'
 gh variable set NEBIUS_JOB_SUBNET_ID --body "$SUBNET_ID"
 ```
@@ -298,7 +298,7 @@ Then use `workflow_dispatch` once. Record the job ID, elapsed time, terminal `CO
 
 - No authenticated Nebius command in this document has been run.
 - The inline access-key response paths used by the fail-closed `jq -er` commands have not been checked against an authenticated create response.
-- `cpu-e2` and `2vcpu-8gb` are documented for `eu-north1`, but capacity and Serverless AI availability in this project are not verified.
+- `cpu-d3` and `2vcpu-8gb` are listed for the `us-central1` project; Serverless AI capacity is verified only by the first dispatched job.
 - The `storage.viewer` plus `storage.uploader` role pair is documented by its action union, but has not been exercised together in this tenant.
 - SecretStash injection through the launcher's `editor` role has not been exercised in this tenant.
 - The active-job list schema is primary-source verified but has not been exercised against this project.
