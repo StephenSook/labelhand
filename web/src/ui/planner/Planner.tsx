@@ -37,6 +37,7 @@ import {
 import { WorkingCard, type WorkingStep } from "@/ui";
 import { AnyLabel, MAX_LIVE_LABELS } from "./AnyLabel";
 import { AskTank } from "./AskTank";
+import { CallMe } from "./CallMe";
 import { HourDetail } from "./HourDetail";
 import { RulesDisclosure } from "./RulesDisclosure";
 import { SeasonReplay, useSeasonScores, type SeasonScores } from "./SeasonReplay";
@@ -828,6 +829,8 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
           </p>
         ) : null}
       </section>
+
+      <CallMe field={result.pointKey} fieldName={selectedPointName} tankRegs={result.registrations} jobHours={jobHours} />
 
       <SeasonReplay
         pointName={selectedPointName}
