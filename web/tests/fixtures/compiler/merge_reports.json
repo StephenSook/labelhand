@@ -1,0 +1,402 @@
+[
+  {
+    "name": "one_run_only",
+    "source": "Synthetic merge reports",
+    "input": {
+      "reports": [
+        {
+          "product": "Synthetic product",
+          "reg": "0-0",
+          "model": "test-model",
+          "accepted": [
+            {
+              "id": "one",
+              "page": 1,
+              "param": "wind_speed_mph",
+              "op": "gt",
+              "value": 10,
+              "value2": null,
+              "unit": "mph",
+              "modality": "ADVISORY",
+              "quote": "Applications should be avoided below 2 mph."
+            }
+          ],
+          "rejected": []
+        },
+        {
+          "product": "Synthetic product",
+          "reg": "0-0",
+          "model": "test-model",
+          "accepted": [],
+          "rejected": []
+        },
+        {
+          "product": "Synthetic product",
+          "reg": "0-0",
+          "model": "test-model",
+          "accepted": [],
+          "rejected": []
+        }
+      ],
+      "run_names": [
+        "run-one.json",
+        "run-two.json",
+        "run-three.json"
+      ]
+    },
+    "expected_serialized": "{\"product\":\"Synthetic product\",\"reg\":\"0-0\",\"model\":\"test-model\",\"accepted\":[{\"id\":\"one\",\"page\":1,\"param\":\"wind_speed_mph\",\"op\":\"gt\",\"value\":10,\"value2\":null,\"unit\":\"mph\",\"modality\":\"ADVISORY\",\"quote\":\"Applications should be avoided below 2 mph.\",\"found_in_runs\":[\"run-one.json\"],\"modality_by_run\":{\"run-one.json\":\"ADVISORY\"},\"modality_vote\":{\"ADVISORY\":1}}],\"rejected\":[],\"merged_from\":[\"run-one.json\",\"run-two.json\",\"run-three.json\"]}"
+  },
+  {
+    "name": "all_three_agree",
+    "source": "Synthetic merge reports",
+    "input": {
+      "reports": [
+        {
+          "product": "Synthetic product",
+          "reg": "0-0",
+          "model": "test-model",
+          "accepted": [
+            {
+              "id": "agree-one",
+              "page": 1,
+              "param": "wind_speed_mph",
+              "op": "gt",
+              "value": 10,
+              "value2": null,
+              "unit": "mph",
+              "modality": "MUST_NOT",
+              "quote": "Do not apply when wind speeds exceed 10 mph."
+            }
+          ],
+          "rejected": []
+        },
+        {
+          "product": "Synthetic product",
+          "reg": "0-0",
+          "model": "test-model",
+          "accepted": [
+            {
+              "id": "agree-two",
+              "page": 1,
+              "param": "wind_speed_mph",
+              "op": "gt",
+              "value": 10,
+              "value2": null,
+              "unit": "mph",
+              "modality": "MUST_NOT",
+              "quote": "Do not apply when wind speeds exceed 10 mph."
+            }
+          ],
+          "rejected": []
+        },
+        {
+          "product": "Synthetic product",
+          "reg": "0-0",
+          "model": "test-model",
+          "accepted": [
+            {
+              "id": "agree-three",
+              "page": 1,
+              "param": "wind_speed_mph",
+              "op": "gt",
+              "value": 10,
+              "value2": null,
+              "unit": "mph",
+              "modality": "MUST_NOT",
+              "quote": "Do not apply when wind speeds exceed 10 mph."
+            }
+          ],
+          "rejected": []
+        }
+      ],
+      "run_names": [
+        "run-one.json",
+        "run-two.json",
+        "run-three.json"
+      ]
+    },
+    "expected_serialized": "{\"product\":\"Synthetic product\",\"reg\":\"0-0\",\"model\":\"test-model\",\"accepted\":[{\"id\":\"agree-one\",\"page\":1,\"param\":\"wind_speed_mph\",\"op\":\"gt\",\"value\":10,\"value2\":null,\"unit\":\"mph\",\"modality\":\"MUST_NOT\",\"quote\":\"Do not apply when wind speeds exceed 10 mph.\",\"found_in_runs\":[\"run-one.json\",\"run-two.json\",\"run-three.json\"],\"modality_by_run\":{\"run-one.json\":\"MUST_NOT\",\"run-two.json\":\"MUST_NOT\",\"run-three.json\":\"MUST_NOT\"},\"modality_vote\":{\"MUST_NOT\":3}}],\"rejected\":[],\"merged_from\":[\"run-one.json\",\"run-two.json\",\"run-three.json\"]}"
+  },
+  {
+    "name": "two_to_one_modality_split",
+    "source": "Synthetic merge reports",
+    "input": {
+      "reports": [
+        {
+          "product": "Synthetic product",
+          "reg": "0-0",
+          "model": "test-model",
+          "accepted": [
+            {
+              "id": "split-outlier",
+              "page": 1,
+              "param": "air_temperature_f",
+              "op": "gt",
+              "value": 10,
+              "value2": null,
+              "unit": "mph",
+              "modality": "MUST",
+              "quote": "Tank mix activity is maximum when temperature is above 60 F."
+            }
+          ],
+          "rejected": []
+        },
+        {
+          "product": "Synthetic product",
+          "reg": "0-0",
+          "model": "test-model",
+          "accepted": [
+            {
+              "id": "split-two",
+              "page": 1,
+              "param": "air_temperature_f",
+              "op": "gt",
+              "value": 10,
+              "value2": null,
+              "unit": "mph",
+              "modality": "ADVISORY",
+              "quote": "Tank mix activity is maximum when temperature is above 60 F."
+            }
+          ],
+          "rejected": []
+        },
+        {
+          "product": "Synthetic product",
+          "reg": "0-0",
+          "model": "test-model",
+          "accepted": [
+            {
+              "id": "split-three",
+              "page": 1,
+              "param": "air_temperature_f",
+              "op": "gt",
+              "value": 10,
+              "value2": null,
+              "unit": "mph",
+              "modality": "ADVISORY",
+              "quote": "Tank mix activity is maximum when temperature is above 60 F."
+            }
+          ],
+          "rejected": []
+        }
+      ],
+      "run_names": [
+        "run-one.json",
+        "run-two.json",
+        "run-three.json"
+      ]
+    },
+    "expected_serialized": "{\"product\":\"Synthetic product\",\"reg\":\"0-0\",\"model\":\"test-model\",\"accepted\":[{\"id\":\"split-two\",\"page\":1,\"param\":\"air_temperature_f\",\"op\":\"gt\",\"value\":10,\"value2\":null,\"unit\":\"mph\",\"modality\":\"ADVISORY\",\"quote\":\"Tank mix activity is maximum when temperature is above 60 F.\",\"found_in_runs\":[\"run-one.json\",\"run-two.json\",\"run-three.json\"],\"modality_by_run\":{\"run-one.json\":\"MUST\",\"run-two.json\":\"ADVISORY\",\"run-three.json\":\"ADVISORY\"},\"modality_vote\":{\"ADVISORY\":2,\"MUST\":1}}],\"rejected\":[],\"merged_from\":[\"run-one.json\",\"run-two.json\",\"run-three.json\"]}"
+  },
+  {
+    "name": "three_way_split_acting_not_first",
+    "source": "Synthetic merge reports",
+    "input": {
+      "reports": [
+        {
+          "product": "Synthetic product",
+          "reg": "0-0",
+          "model": "test-model",
+          "accepted": [
+            {
+              "id": "three-advisory",
+              "page": 1,
+              "param": "wind_speed_mph",
+              "op": "gt",
+              "value": 10,
+              "value2": null,
+              "unit": "mph",
+              "modality": "ADVISORY",
+              "quote": "Apply only when wind is below 10 mph."
+            }
+          ],
+          "rejected": []
+        },
+        {
+          "product": "Synthetic product",
+          "reg": "0-0",
+          "model": "test-model",
+          "accepted": [
+            {
+              "id": "three-must",
+              "page": 1,
+              "param": "wind_speed_mph",
+              "op": "gt",
+              "value": 10,
+              "value2": null,
+              "unit": "mph",
+              "modality": "MUST",
+              "quote": "Apply only when wind is below 10 mph."
+            }
+          ],
+          "rejected": []
+        },
+        {
+          "product": "Synthetic product",
+          "reg": "0-0",
+          "model": "test-model",
+          "accepted": [
+            {
+              "id": "three-must-not",
+              "page": 1,
+              "param": "wind_speed_mph",
+              "op": "gt",
+              "value": 10,
+              "value2": null,
+              "unit": "mph",
+              "modality": "MUST_NOT",
+              "quote": "Apply only when wind is below 10 mph."
+            }
+          ],
+          "rejected": []
+        }
+      ],
+      "run_names": [
+        "run-one.json",
+        "run-two.json",
+        "run-three.json"
+      ]
+    },
+    "expected_serialized": "{\"product\":\"Synthetic product\",\"reg\":\"0-0\",\"model\":\"test-model\",\"accepted\":[{\"id\":\"three-must\",\"page\":1,\"param\":\"wind_speed_mph\",\"op\":\"gt\",\"value\":10,\"value2\":null,\"unit\":\"mph\",\"modality\":\"MUST\",\"quote\":\"Apply only when wind is below 10 mph.\",\"found_in_runs\":[\"run-one.json\",\"run-two.json\",\"run-three.json\"],\"modality_by_run\":{\"run-one.json\":\"ADVISORY\",\"run-two.json\":\"MUST\",\"run-three.json\":\"MUST_NOT\"},\"modality_vote\":{\"ADVISORY\":1,\"MUST\":1,\"MUST_NOT\":1}}],\"rejected\":[],\"merged_from\":[\"run-one.json\",\"run-two.json\",\"run-three.json\"]}"
+  },
+  {
+    "name": "same_key_twice_in_one_run",
+    "source": "Synthetic merge reports",
+    "input": {
+      "reports": [
+        {
+          "product": "Synthetic product",
+          "reg": "0-0",
+          "model": "test-model",
+          "accepted": [
+            {
+              "id": "duplicate-advisory",
+              "page": 1,
+              "param": "wind_speed_mph",
+              "op": "gt",
+              "value": 10,
+              "value2": null,
+              "unit": "mph",
+              "modality": "ADVISORY",
+              "quote": "Do not apply when gusts exceed 10 mph."
+            },
+            {
+              "id": "duplicate-acting",
+              "page": 1,
+              "param": "wind_speed_mph",
+              "op": "gt",
+              "value": 10,
+              "value2": null,
+              "unit": "mph",
+              "modality": "MUST_NOT",
+              "quote": "Do not apply when gusts exceed 10 mph."
+            }
+          ],
+          "rejected": []
+        },
+        {
+          "product": "Synthetic product",
+          "reg": "0-0",
+          "model": "test-model",
+          "accepted": [],
+          "rejected": []
+        },
+        {
+          "product": "Synthetic product",
+          "reg": "0-0",
+          "model": "test-model",
+          "accepted": [],
+          "rejected": []
+        }
+      ],
+      "run_names": [
+        "run-one.json",
+        "run-two.json",
+        "run-three.json"
+      ]
+    },
+    "expected_serialized": "{\"product\":\"Synthetic product\",\"reg\":\"0-0\",\"model\":\"test-model\",\"accepted\":[{\"id\":\"duplicate-acting\",\"page\":1,\"param\":\"wind_speed_mph\",\"op\":\"gt\",\"value\":10,\"value2\":null,\"unit\":\"mph\",\"modality\":\"MUST_NOT\",\"quote\":\"Do not apply when gusts exceed 10 mph.\",\"found_in_runs\":[\"run-one.json\"],\"modality_by_run\":{\"run-one.json\":\"MUST_NOT\"},\"modality_vote\":{\"MUST_NOT\":1}}],\"rejected\":[],\"merged_from\":[\"run-one.json\",\"run-two.json\",\"run-three.json\"]}"
+  },
+  {
+    "name": "punctuation_only_quote_differences",
+    "source": "Synthetic merge reports",
+    "input": {
+      "reports": [
+        {
+          "product": "Synthetic product",
+          "reg": "0-0",
+          "model": "test-model",
+          "accepted": [
+            {
+              "id": "punctuation-one",
+              "page": 1,
+              "param": "wind_speed_mph",
+              "op": "gt",
+              "value": 10,
+              "value2": null,
+              "unit": "mph",
+              "modality": "MUST_NOT",
+              "quote": "Do not apply caf\u00e9 rate when rain is expected within 6\u00bd hours."
+            },
+            {
+              "id": "unicode-distinct",
+              "page": 1,
+              "param": "wind_speed_mph",
+              "op": "gt",
+              "value": 10,
+              "value2": null,
+              "unit": "mph",
+              "modality": "ADVISORY",
+              "quote": "Do not apply caf rate when rain is expected within 6 hours."
+            }
+          ],
+          "rejected": []
+        },
+        {
+          "product": "Synthetic product",
+          "reg": "0-0",
+          "model": "test-model",
+          "accepted": [
+            {
+              "id": "punctuation-two",
+              "page": 1,
+              "param": "wind_speed_mph",
+              "op": "gt",
+              "value": 10,
+              "value2": null,
+              "unit": "mph",
+              "modality": "MUST_NOT",
+              "quote": "Do-not-apply caf\u00e9 rate when rain is expected within 6\u00bd hours!"
+            }
+          ],
+          "rejected": []
+        },
+        {
+          "product": "Synthetic product",
+          "reg": "0-0",
+          "model": "test-model",
+          "accepted": [
+            {
+              "id": "punctuation-three",
+              "page": 1,
+              "param": "wind_speed_mph",
+              "op": "gt",
+              "value": 10,
+              "value2": null,
+              "unit": "mph",
+              "modality": "MUST_NOT",
+              "quote": "Do not apply!!! caf\u00e9 rate when rain is expected within 6\u00bd hours..."
+            }
+          ],
+          "rejected": []
+        }
+      ],
+      "run_names": [
+        "run-one.json",
+        "run-two.json",
+        "run-three.json"
+      ]
+    },
+    "expected_serialized": "{\"product\":\"Synthetic product\",\"reg\":\"0-0\",\"model\":\"test-model\",\"accepted\":[{\"id\":\"punctuation-one\",\"page\":1,\"param\":\"wind_speed_mph\",\"op\":\"gt\",\"value\":10,\"value2\":null,\"unit\":\"mph\",\"modality\":\"MUST_NOT\",\"quote\":\"Do not apply caf\u00e9 rate when rain is expected within 6\u00bd hours.\",\"found_in_runs\":[\"run-one.json\",\"run-two.json\",\"run-three.json\"],\"modality_by_run\":{\"run-one.json\":\"MUST_NOT\",\"run-two.json\":\"MUST_NOT\",\"run-three.json\":\"MUST_NOT\"},\"modality_vote\":{\"MUST_NOT\":3}},{\"id\":\"unicode-distinct\",\"page\":1,\"param\":\"wind_speed_mph\",\"op\":\"gt\",\"value\":10,\"value2\":null,\"unit\":\"mph\",\"modality\":\"ADVISORY\",\"quote\":\"Do not apply caf rate when rain is expected within 6 hours.\",\"found_in_runs\":[\"run-one.json\"],\"modality_by_run\":{\"run-one.json\":\"ADVISORY\"},\"modality_vote\":{\"ADVISORY\":1}}],\"rejected\":[],\"merged_from\":[\"run-one.json\",\"run-two.json\",\"run-three.json\"]}"
+  }
+]

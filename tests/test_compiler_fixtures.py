@@ -11,6 +11,7 @@ EXPECTED_FILES = {
     "floor_of.json",
     "guards.json",
     "in_advisory_section.json",
+    "merge_reports.json",
     "quote_numbers.json",
     "restore_units.json",
     "vote.json",
@@ -21,6 +22,15 @@ EXPECTED_SOURCES = {
     "Prep 264-418",
     "Osprey 264-802",
     "Axial XL 100-1256",
+    "Synthetic merge reports",
+}
+EXPECTED_MERGE_CASES = {
+    "one_run_only",
+    "all_three_agree",
+    "two_to_one_modality_split",
+    "three_way_split_acting_not_first",
+    "same_key_twice_in_one_run",
+    "punctuation_only_quote_differences",
 }
 
 
@@ -38,6 +48,18 @@ def test_compiler_fixture_inventory_and_guard_reasons():
         "UNREADABLE_GLYPH",
     }
     assert any(case["expected"] is None for case in loaded["guards.json"])
+    assert {case["name"] for case in loaded["merge_reports.json"]} == EXPECTED_MERGE_CASES
+    for case in loaded["merge_reports.json"]:
+        assert len(case["input"]["reports"]) == 3
+        assert len(case["input"]["run_names"]) == 3
+        assert (
+            json.dumps(
+                json.loads(case["expected_serialized"]),
+                ensure_ascii=False,
+                separators=(",", ":"),
+            )
+            == case["expected_serialized"]
+        )
 
 
 def test_compiler_fixtures_contain_only_small_text_snippets():

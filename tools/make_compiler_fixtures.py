@@ -16,6 +16,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "compiler"))
 
 import compile_label  # noqa: E402
+import merge_runs  # noqa: E402
 import modality  # noqa: E402
 import retype  # noqa: E402
 
@@ -56,6 +57,111 @@ def guard_case(name: str, source: str, rule: dict, page_text: str) -> dict:
         "input": {"rule": rule, "page_text": page_text},
         "expected": compile_label.guard(rule, compile_label.norm(page_text)),
     }
+
+
+def merge_rule(
+    rule_id: str,
+    quote: str,
+    modality_: str = "ADVISORY",
+    param: str = "wind_speed_mph",
+) -> dict:
+    return {
+        "id": rule_id,
+        "page": 1,
+        "param": param,
+        "op": "gt",
+        "value": 10,
+        "value2": None,
+        "unit": "mph",
+        "modality": modality_,
+        "quote": quote,
+    }
+
+
+def merge_report(*rules: dict) -> dict:
+    return {
+        "product": "Synthetic product",
+        "reg": "0-0",
+        "model": "test-model",
+        "accepted": list(rules),
+        "rejected": [],
+    }
+
+
+def merge_case(name: str, reports: list[dict]) -> dict:
+    run_names = ["run-one.json", "run-two.json", "run-three.json"]
+    merged = merge_runs.merge_reports(reports, run_names)
+    return {
+        "name": name,
+        "source": "Synthetic merge reports",
+        "input": {"reports": reports, "run_names": run_names},
+        "expected_serialized": json.dumps(merged, ensure_ascii=False, separators=(",", ":")),
+    }
+
+
+def build_merge_report_fixtures() -> list[dict]:
+    one_run_quote = "Applications should be avoided below 2 mph."
+    agreement_quote = "Do not apply when wind speeds exceed 10 mph."
+    split_quote = "Tank mix activity is maximum when temperature is above 60 F."
+    three_way_quote = "Apply only when wind is below 10 mph."
+    duplicate_quote = "Do not apply when gusts exceed 10 mph."
+    punctuation_quotes = [
+        "Do not apply café rate when rain is expected within 6½ hours.",
+        "Do-not-apply café rate when rain is expected within 6½ hours!",
+        "Do not apply!!! café rate when rain is expected within 6½ hours...",
+    ]
+    return [
+        merge_case(
+            "one_run_only",
+            [merge_report(merge_rule("one", one_run_quote)), merge_report(), merge_report()],
+        ),
+        merge_case(
+            "all_three_agree",
+            [
+                merge_report(merge_rule("agree-one", agreement_quote, "MUST_NOT")),
+                merge_report(merge_rule("agree-two", agreement_quote, "MUST_NOT")),
+                merge_report(merge_rule("agree-three", agreement_quote, "MUST_NOT")),
+            ],
+        ),
+        merge_case(
+            "two_to_one_modality_split",
+            [
+                merge_report(merge_rule("split-outlier", split_quote, "MUST", "air_temperature_f")),
+                merge_report(merge_rule("split-two", split_quote, "ADVISORY", "air_temperature_f")),
+                merge_report(merge_rule("split-three", split_quote, "ADVISORY", "air_temperature_f")),
+            ],
+        ),
+        merge_case(
+            "three_way_split_acting_not_first",
+            [
+                merge_report(merge_rule("three-advisory", three_way_quote)),
+                merge_report(merge_rule("three-must", three_way_quote, "MUST")),
+                merge_report(merge_rule("three-must-not", three_way_quote, "MUST_NOT")),
+            ],
+        ),
+        merge_case(
+            "same_key_twice_in_one_run",
+            [
+                merge_report(
+                    merge_rule("duplicate-advisory", duplicate_quote),
+                    merge_rule("duplicate-acting", duplicate_quote, "MUST_NOT"),
+                ),
+                merge_report(),
+                merge_report(),
+            ],
+        ),
+        merge_case(
+            "punctuation_only_quote_differences",
+            [
+                merge_report(
+                    merge_rule("punctuation-one", punctuation_quotes[0], "MUST_NOT"),
+                    merge_rule("unicode-distinct", "Do not apply caf rate when rain is expected within 6 hours."),
+                ),
+                merge_report(merge_rule("punctuation-two", punctuation_quotes[1], "MUST_NOT")),
+                merge_report(merge_rule("punctuation-three", punctuation_quotes[2], "MUST_NOT")),
+            ],
+        ),
+    ]
 
 
 def build_fixtures(spike_root: pathlib.Path) -> dict[str, list[dict]]:
@@ -249,6 +355,7 @@ def build_fixtures(spike_root: pathlib.Path) -> dict[str, list[dict]]:
         "vote.json": votes,
         "floor_of.json": floor_of,
         "in_advisory_section.json": in_advisory_section,
+        "merge_reports.json": build_merge_report_fixtures(),
     }
 
 
