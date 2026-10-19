@@ -4,11 +4,13 @@ import buildInfo from "@/engine/build-info.json";
 import { Chip, JudgeDoor, Nav, SectionCard, type JudgeStep } from "@/ui";
 import shipEval from "../../../public/data/eval/ship.json";
 
-export const metadata: Metadata = { title: "Judges: five-minute route" };
+export const metadata: Metadata = { title: "Judges: the route" };
 
 const plannerLink = "/app?field=tift&products=5481-504,264-700,264-418&hours=3";
 const recordedLink = `${plannerLink}&replay=tift`;
 const presetQuestion = "Which label sets the strictest wind limit in this tank?";
+// Axial XL was read live once on production, so this link opens from the cache in under a second.
+const liveLabelLink = "/app?field=tift&products=none&hours=3&live=100-1256";
 
 const steps: JudgeStep[] = [
   {
@@ -30,6 +32,16 @@ const steps: JudgeStep[] = [
     ),
     href: `${plannerLink}#season-replay`,
     action: "Open the season strip",
+  },
+  {
+    title: "Put any EPA label in the tank",
+    body: (
+      <p>
+        This link loads Axial XL (EPA Reg. 100-1256), a wheat and barley herbicide, read from EPA&apos;s own PDF by Nemotron 3 Super and marked UNSCORED. Then search for any other product by name or Reg. No. and watch it get read live, page by page.
+      </p>
+    ),
+    href: `${liveLabelLink}#any-label-heading`,
+    action: "Open a live label",
   },
   {
     title: "Read a blocked hour and its clause",
@@ -81,6 +93,16 @@ const steps: JudgeStep[] = [
     href: `${recordedLink}#spray-record`,
     action: "Go to the spray record",
   },
+  {
+    title: "Read every miss",
+    body: (
+      <p>
+        The proof page lists every gold-set clause, every hour the day-ahead forecast got wrong, and the hours Nemotron alone said go when the labels block them.
+      </p>
+    ),
+    href: "/proof",
+    action: "Open the proof page",
+  },
 ];
 
 export default function JudgePage() {
@@ -92,8 +114,8 @@ export default function JudgePage() {
           <Chip icon="3" tone="ink">
             No login or API key
           </Chip>
-          <h1 className="display judge-title">Judges: five minutes</h1>
-          <p className="judge-lede">Run the live check, replay a recorded morning, inspect one clause on its label, ask the tank, then change the tank and keep the record.</p>
+          <h1 className="display judge-title">Judges: about seven minutes</h1>
+          <p className="judge-lede">Run the live check, replay a recorded morning, read a new EPA label live, inspect one clause on its label, ask the tank, change the tank, keep the record, then read every miss.</p>
           <JudgeDoor steps={steps} />
         </SectionCard>
 
@@ -162,6 +184,17 @@ export default function JudgePage() {
               <div>
                 <strong>Ask the tank calls nvidia/Nemotron-3_5-Lightning on Nebius Token Factory at runtime.</strong>
                 <p>Every call&apos;s model, latency, tokens and cost are shown in its trace.</p>
+              </div>
+            </li>
+            <li>
+              <Chip icon="N" tone="sun">RUNTIME</Chip>
+              <div>
+                <strong>Any EPA label is read on request by nvidia/nemotron-3-super-120b-a12b and typed by nvidia/Nemotron-3-Ultra-550b-a55b on Nebius Token Factory.</strong>
+                <p>
+                  The server fetches the newest accepted PDF from EPA, applies the same quote and number guards as the scored labels, and keeps the result in a
+                  private store so the next visitor gets it instantly. These labels have no gold set and are marked UNSCORED. Spend is capped per day across every
+                  server instance.
+                </p>
               </div>
             </li>
           </ul>

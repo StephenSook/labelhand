@@ -72,11 +72,14 @@ test("the home hero runs a live or recorded planner check with a source time", a
 });
 
 test("every judge step resolves to its app target", async ({ page }) => {
+  // The live-label step would spend Token Factory credit; serve the recorded real compile instead.
+  const stream = await readFile(path.join(process.cwd(), "tests/fixtures/live/axial-xl-100-1256.ndjson"), "utf8");
+  await page.route("**/api/labels/compile", (route) => route.fulfill({ status: 200, contentType: "application/x-ndjson", body: stream }));
   await page.goto("/judge");
   const links = await page.locator(".judge-step a[href^='/app']").evaluateAll((anchors) => (
     anchors.map((anchor) => (anchor as HTMLAnchorElement).getAttribute("href")).filter((href): href is string => Boolean(href))
   ));
-  expect(links).toHaveLength(8);
+  expect(links).toHaveLength(9);
 
   for (const href of links) {
     const response = await page.goto(href);
