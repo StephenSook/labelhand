@@ -6,13 +6,13 @@ import copy
 import datetime as dt
 import json
 import os
+import re
 import sys
 from typing import Any
 
 import nws_recorder
 import season_export
 
-REGION = "eu-north1"
 REQUIRED_ENV = (
     "RECORDER_BUCKET",
     "RECORDER_S3_ENDPOINT",
@@ -21,13 +21,22 @@ REQUIRED_ENV = (
 )
 
 
+def region_from_endpoint(endpoint: str) -> str:
+    """Nebius Object Storage signs requests with the region named in its endpoint host."""
+    match = re.fullmatch(r"https://storage\.([a-z0-9-]+)\.nebius\.cloud/?", endpoint.strip())
+    if not match:
+        raise ValueError(f"not a Nebius Object Storage endpoint: {endpoint}")
+    return match.group(1)
+
+
 def create_s3_client():
     import boto3
 
+    endpoint = os.environ["RECORDER_S3_ENDPOINT"]
     return boto3.client(
         "s3",
-        endpoint_url=os.environ["RECORDER_S3_ENDPOINT"],
-        region_name=REGION,
+        endpoint_url=endpoint,
+        region_name=region_from_endpoint(endpoint),
         aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
         aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
     )

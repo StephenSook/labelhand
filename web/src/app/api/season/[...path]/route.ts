@@ -4,7 +4,6 @@ import forecastPoints from "../../../../../public/data/nws_points_cache.json";
 
 export const runtime = "nodejs";
 
-const REGION = "eu-north1";
 const CACHE_CONTROL = "public, s-maxage=300, stale-while-revalidate=60";
 const KNOWN_POINTS = new Set(forecastPoints.map((point) => point.name));
 const REQUIRED_ENV = [
@@ -57,10 +56,15 @@ function storageErrorDetails(error: unknown, key: string) {
   };
 }
 
-function createClient() {
+// Nebius Object Storage signs requests with the region named in its endpoint host.
+export function regionFromEndpoint(endpoint: string | undefined): string | undefined {
+  return /^https:\/\/storage\.([a-z0-9-]+)\.nebius\.cloud\/?$/.exec(endpoint?.trim() ?? "")?.[1];
+}
+
+function createClient(region: string) {
   return new S3Client({
     endpoint: process.env.SEASON_S3_ENDPOINT,
-    region: REGION,
+    region,
     credentials: {
       accessKeyId: process.env.SEASON_READ_KEY_ID!,
       secretAccessKey: process.env.SEASON_READ_SECRET!,
@@ -73,14 +77,15 @@ export async function GET(
   context: { params: Promise<{ path: string[] }> },
 ) {
   const missing = REQUIRED_ENV.filter((name) => !process.env[name]);
-  if (missing.length > 0) return plain("Season Object Storage is not configured on this deployment.", 503);
+  const region = regionFromEndpoint(process.env.SEASON_S3_ENDPOINT);
+  if (missing.length > 0 || !region) return plain("Season Object Storage is not configured on this deployment.", 503);
 
   const { path } = await context.params;
   const key = seasonObjectKey(path);
   if (!key) return plain("The requested season path is invalid.", 400);
 
   try {
-    const result = await createClient().send(new GetObjectCommand({
+    const result = await createClient(region).send(new GetObjectCommand({
       Bucket: process.env.SEASON_BUCKET,
       Key: key,
     }));

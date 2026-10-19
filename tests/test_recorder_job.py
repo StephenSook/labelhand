@@ -105,6 +105,17 @@ def test_rebuild_day_uses_hourly_objects_and_replaces_current_day_count(monkeypa
     }
 
 
+def test_s3_region_comes_from_the_nebius_endpoint():
+    assert recorder_job.region_from_endpoint("https://storage.us-central1.nebius.cloud") == "us-central1"
+    assert recorder_job.region_from_endpoint("https://storage.eu-north1.nebius.cloud/") == "eu-north1"
+    try:
+        recorder_job.region_from_endpoint("https://example.com")
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("a non-Nebius endpoint must be refused")
+
+
 def test_rebuild_day_keeps_seeded_issuances_that_no_hourly_object_backs(monkeypatch):
     # The bucket is seeded from the committed season files; their raw hourly files are not in it.
     day = "2026-10-19"

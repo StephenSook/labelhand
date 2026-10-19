@@ -1,6 +1,6 @@
 import { S3Client } from "@aws-sdk/client-s3";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
-import { GET, seasonObjectKey } from "@/app/api/season/[...path]/route";
+import { GET, regionFromEndpoint, seasonObjectKey } from "@/app/api/season/[...path]/route";
 
 function context(path: string[]) {
   return { params: Promise.resolve({ path }) };
@@ -25,6 +25,17 @@ describe("season Object Storage route", () => {
     expect(seasonObjectKey(["unknown", "2026-10-20.json"])).toBeUndefined();
     expect(seasonObjectKey(["tift", "2026-02-30.json"])).toBeUndefined();
     expect(seasonObjectKey(["tift", "..", "index.json"])).toBeUndefined();
+  });
+
+  test("signs for the region named in the Nebius endpoint and refuses any other host", async () => {
+    expect(regionFromEndpoint("https://storage.us-central1.nebius.cloud")).toBe("us-central1");
+    expect(regionFromEndpoint("https://storage.eu-north1.nebius.cloud/")).toBe("eu-north1");
+    expect(regionFromEndpoint("https://example.com")).toBeUndefined();
+    vi.stubEnv("SEASON_S3_ENDPOINT", "https://storage.example.com");
+    const send = vi.spyOn(S3Client.prototype, "send");
+    const response = await GET(new Request("http://localhost/api/season/index.json"), context(["index.json"]));
+    expect(response.status).toBe(503);
+    expect(send).not.toHaveBeenCalled();
   });
 
   test("returns 503 without credentials and does not call S3", async () => {
