@@ -15,17 +15,16 @@ permissions:
 jobs:
   record:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 20
     env:
       NEBIUS_PROJECT_ID: ${{ vars.NEBIUS_PROJECT_ID }}
       NEBIUS_RECORDER_IMAGE: ${{ vars.NEBIUS_RECORDER_IMAGE }}
       NEBIUS_JOB_PLATFORM: ${{ vars.NEBIUS_JOB_PLATFORM || 'cpu-e2' }}
       NEBIUS_JOB_PRESET: ${{ vars.NEBIUS_JOB_PRESET || '2vcpu-8gb' }}
       NEBIUS_JOB_SUBNET_ID: ${{ vars.NEBIUS_JOB_SUBNET_ID }}
+      NEBIUS_RECORDER_SECRET_SELECTOR: ${{ vars.NEBIUS_RECORDER_SECRET_SELECTOR }}
       RECORDER_BUCKET: ${{ vars.NEBIUS_RECORDER_BUCKET }}
       RECORDER_S3_ENDPOINT: ${{ vars.NEBIUS_RECORDER_S3_ENDPOINT }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.RECORDER_AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.RECORDER_AWS_SECRET_ACCESS_KEY }}
       NEBIUS_SA_CREDENTIALS: ${{ secrets.NEBIUS_SA_CREDENTIALS }}
       RECORDER_STOP_UTC: "2026-12-16T00:00:00Z"
     steps:
@@ -43,10 +42,9 @@ jobs:
             NEBIUS_JOB_PLATFORM
             NEBIUS_JOB_PRESET
             NEBIUS_JOB_SUBNET_ID
+            NEBIUS_RECORDER_SECRET_SELECTOR
             RECORDER_BUCKET
             RECORDER_S3_ENDPOINT
-            AWS_ACCESS_KEY_ID
-            AWS_SECRET_ACCESS_KEY
             NEBIUS_SA_CREDENTIALS
           )
           for name in "${required[@]}"; do
@@ -86,14 +84,109 @@ jobs:
         run: |
           set -euo pipefail
           # Job flags and states: https://docs.nebius.com/serverless/jobs/manage
+          # Secret selectors: https://docs.nebius.com/mysterybox/overview
           # Smallest documented eu-north1 CPU pair: https://docs.nebius.com/compute/virtual-machines/types
-          job_name="labelhand-recorder-$(date -u +%Y%m%d-%H%M%S)"
-          job_env="RECORDER_BUCKET=$RECORDER_BUCKET,RECORDER_S3_ENDPOINT=$RECORDER_S3_ENDPOINT,AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
-          job_id="$(nebius ai job create \
+          jobs_json="$(timeout --signal=TERM --kill-after=2s 25s nebius ai job list \
+            --parent-id "$NEBIUS_PROJECT_ID" \
             --profile recorder \
+            --auth-timeout 10s \
+            --timeout 20s \
+            --per-retry-timeout 5s \
+            --retries 1 \
+            --format json)"
+          active_jobs="$(jq -er '
+            .items as $items
+            | (if $items == null then [] elif ($items | type) == "array" then $items else error("job list items is not an array") end)
+            | [
+                .[]
+                | select((.metadata.name // "") | startswith("labelhand-recorder-"))
+                | (.status.state // "UNKNOWN") as $state
+                | select(["COMPLETED", "FAILED", "CANCELLED", "ERROR"] | index($state) | not)
+                | "\(.metadata.id // "unknown"):\(.metadata.name // "unknown"):\($state)"
+              ]
+            | join(",")
+          ' <<<"$jobs_json")"
+          if [[ -n "$active_jobs" ]]; then
+            echo "::error::An earlier recorder job is still active: $active_jobs"
+            exit 1
+          fi
+
+          job_name="labelhand-recorder-$(date -u +%Y%m%d-%H%M%S)-${GITHUB_RUN_ID}"
+          job_id=""
+          cleanup_needed=0
+
+          reconcile_job_id() {
+            local recovered_id=""
+            for lookup_attempt in 1 2 3 4; do
+              if recovered_id="$(timeout --signal=TERM --kill-after=2s 12s nebius ai job get-by-name \
+                --name "$job_name" \
+                --parent-id "$NEBIUS_PROJECT_ID" \
+                --profile recorder \
+                --auth-timeout 8s \
+                --timeout 8s \
+                --per-retry-timeout 4s \
+                --retries 1 \
+                --format 'jsonpath={.metadata.id}')" && [[ -n "$recovered_id" ]]; then
+                job_id="$recovered_id"
+                cleanup_needed=1
+                echo "Recovered Nebius job $job_id by its unique name."
+                return 0
+              fi
+              echo "::warning::Could not reconcile $job_name on attempt $lookup_attempt/4."
+              if [[ "$lookup_attempt" -lt 4 ]]; then
+                sleep 3
+              fi
+            done
+            return 1
+          }
+
+          cancel_job() {
+            if [[ -z "$job_id" || "$cleanup_needed" -eq 0 ]]; then
+              return 0
+            fi
+            for cancel_attempt in 1 2 3; do
+              if timeout --signal=TERM --kill-after=2s 12s nebius ai job cancel "$job_id" \
+                --profile recorder \
+                --auth-timeout 8s \
+                --timeout 8s \
+                --per-retry-timeout 4s \
+                --retries 1; then
+                cleanup_needed=0
+                echo "Cancellation completed for Nebius job $job_id."
+                return 0
+              fi
+              echo "::warning::Cancellation attempt $cancel_attempt/3 failed for $job_id."
+              if [[ "$cancel_attempt" -lt 3 ]]; then
+                sleep 3
+              fi
+            done
+            echo "::error::Could not cancel Nebius job $job_id after three bounded attempts."
+            return 1
+          }
+
+          cleanup() {
+            result=$?
+            trap - EXIT
+            if [[ "$result" -ne 0 ]]; then
+              cancel_job || true
+            fi
+            exit "$result"
+          }
+          trap cleanup EXIT
+          trap 'exit 130' INT TERM
+
+          created_id=""
+          if created_id="$(timeout --signal=TERM --kill-after=2s 60s nebius ai job create \
+            --profile recorder \
+            --auth-timeout 15s \
+            --per-retry-timeout 10s \
+            --retries 1 \
             --name "$job_name" \
             --image "$NEBIUS_RECORDER_IMAGE" \
-            --env "$job_env" \
+            --env "RECORDER_BUCKET=$RECORDER_BUCKET" \
+            --env "RECORDER_S3_ENDPOINT=$RECORDER_S3_ENDPOINT" \
+            --env-secret "AWS_ACCESS_KEY_ID=$NEBIUS_RECORDER_SECRET_SELECTOR" \
+            --env-secret "AWS_SECRET_ACCESS_KEY=$NEBIUS_RECORDER_SECRET_SELECTOR" \
             --timeout 1h \
             --restart-policy never \
             --platform "$NEBIUS_JOB_PLATFORM" \
@@ -101,38 +194,55 @@ jobs:
             --disk-size 20Gi \
             --subnet-id "$NEBIUS_JOB_SUBNET_ID" \
             --async \
-            --format 'jsonpath={.resource_id}')"
-          if [[ -z "$job_id" ]]; then
-            echo "::error::Nebius returned no job ID."
-            exit 1
+            --format 'jsonpath={.resource_id}')" && [[ -n "$created_id" ]]; then
+            job_id="$created_id"
+            cleanup_needed=1
+          else
+            echo "::warning::Job creation returned no reliable job ID. Reconciling by name."
+            if ! reconcile_job_id; then
+              echo "::error::Could not determine whether Nebius accepted job $job_name."
+              exit 1
+            fi
           fi
           echo "Created Nebius job $job_id"
 
-          for attempt in $(seq 1 36); do
-            if ! state="$(nebius ai job get "$job_id" --profile recorder --format 'jsonpath={.status.state}')"; then
-              echo "::error::Could not read state for $job_id."
-              if ! nebius ai job cancel "$job_id" --profile recorder; then
-                echo "::warning::The follow-up cancel command also failed."
-              fi
-              exit 1
+          poll_deadline=$(( $(date -u +%s) + 540 ))
+          attempt=0
+          while (( $(date -u +%s) < poll_deadline )); do
+            attempt=$((attempt + 1))
+            if state="$(timeout --signal=TERM --kill-after=2s 12s nebius ai job get "$job_id" \
+              --profile recorder \
+              --auth-timeout 8s \
+              --timeout 8s \
+              --per-retry-timeout 4s \
+              --retries 1 \
+              --format 'jsonpath={.status.state}')"; then
+              echo "Job $job_id state=$state poll=$attempt"
+              case "$state" in
+                COMPLETED)
+                  cleanup_needed=0
+                  exit 0
+                  ;;
+                FAILED|ERROR|CANCELLED)
+                  cleanup_needed=0
+                  echo "::error::Nebius job $job_id finished with state $state."
+                  exit 1
+                  ;;
+              esac
+            else
+              echo "::warning::Could not read state for $job_id on poll $attempt."
             fi
-            echo "Job $job_id state=$state poll=$attempt/36"
-            case "$state" in
-              COMPLETED)
-                exit 0
-                ;;
-              FAILED|ERROR|CANCELLED)
-                echo "::error::Nebius job $job_id finished with state $state."
-                exit 1
-                ;;
-            esac
-            if [[ "$attempt" -lt 36 ]]; then
+
+            remaining=$((poll_deadline - $(date -u +%s)))
+            if (( remaining <= 0 )); then
+              break
+            fi
+            if (( remaining < 15 )); then
+              sleep "$remaining"
+            else
               sleep 15
             fi
           done
 
-          echo "::error::Nebius job $job_id did not finish inside the bounded poll window."
-          if ! nebius ai job cancel "$job_id" --profile recorder; then
-            echo "::warning::The timeout cancel command failed."
-          fi
+          echo "::error::Nebius job $job_id did not finish inside the nine-minute poll window."
           exit 1

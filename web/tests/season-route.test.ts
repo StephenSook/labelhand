@@ -65,4 +65,29 @@ describe("season Object Storage route", () => {
     expect(response.status).toBe(404);
     await expect(response.text()).resolves.toContain("not found");
   });
+
+  test("returns 502 and logs safe fields for other storage failures", async () => {
+    vi.spyOn(S3Client.prototype, "send").mockRejectedValue({
+      name: "AccessDenied",
+      $metadata: { httpStatusCode: 403, requestId: "request-1" },
+    });
+    const consoleError = vi.spyOn(console, "error").mockImplementation(() => undefined);
+
+    const response = await GET(
+      new Request("http://localhost/api/season/tift/2026-10-20.json"),
+      context(["tift", "2026-10-20.json"]),
+    );
+
+    expect(response.status).toBe(502);
+    expect(consoleError).toHaveBeenCalledWith(
+      "Season Object Storage read failed.",
+      {
+        key: "season/tift/2026-10-20.json",
+        errorName: "AccessDenied",
+        httpStatusCode: 403,
+        requestId: "request-1",
+      },
+    );
+    expect(JSON.stringify(consoleError.mock.calls)).not.toContain("test-read-secret");
+  });
 });

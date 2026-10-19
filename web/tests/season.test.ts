@@ -141,6 +141,32 @@ describe("season data parser", () => {
     ]);
   });
 
+  test("surfaces live index storage failures", async () => {
+    const committed = {
+      generated_utc: "2026-10-19T18:07:01Z",
+      recorded_span: { first: "2026-10-05T01:19:36Z", last: "2026-10-19T18:07:01Z" },
+      points: { tift: { days: ["2026-10-05"], issuances: 24 } },
+    };
+    vi.stubGlobal("fetch", vi.fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify(committed)))
+      .mockResolvedValueOnce(new Response("storage failed", { status: 502, statusText: "Bad Gateway" })));
+
+    await expect(fetchMergedSeasonIndex()).rejects.toThrow(/HTTP 502/);
+  });
+
+  test("surfaces malformed live indexes", async () => {
+    const committed = {
+      generated_utc: "2026-10-19T18:07:01Z",
+      recorded_span: { first: "2026-10-05T01:19:36Z", last: "2026-10-19T18:07:01Z" },
+      points: { tift: { days: ["2026-10-05"], issuances: 24 } },
+    };
+    vi.stubGlobal("fetch", vi.fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify(committed)))
+      .mockResolvedValueOnce(new Response('{"broken":true}')));
+
+    await expect(fetchMergedSeasonIndex()).rejects.toThrow(/recorded_span/);
+  });
+
   test("prefers the API for a newer day", async () => {
     const live = sampleDay();
     live.day = "2099-01-01";
@@ -168,6 +194,24 @@ describe("season data parser", () => {
       "/api/season/tift/2099-01-01.json",
       "/data/season/tift/2099-01-01.json",
     ]);
+  });
+
+  test("does not hide a newer-day storage failure behind static data", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => new Response("storage failed", {
+      status: 502,
+      statusText: "Bad Gateway",
+    })));
+
+    await expect(fetchSeasonDay("tift", "2099-01-01")).rejects.toThrow(/HTTP 502/);
+  });
+
+  test("does not label an unavailable live source as not recorded", async () => {
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(new Response("not configured", { status: 503, statusText: "Unavailable" }))
+      .mockResolvedValueOnce(new Response("missing", { status: 404, statusText: "Not Found" }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(fetchSeasonDay("tift", "2099-01-01")).rejects.toThrow(/HTTP 503/);
   });
 
   test("turns a missing live and static day into not recorded", async () => {

@@ -41,6 +41,22 @@ function missingObject(error: unknown): boolean {
   return value.name === "NoSuchKey" || value.name === "NotFound" || value.$metadata?.httpStatusCode === 404;
 }
 
+function storageErrorDetails(error: unknown, key: string) {
+  const value = typeof error === "object" && error !== null
+    ? error as { name?: unknown; $metadata?: { httpStatusCode?: unknown; requestId?: unknown } }
+    : undefined;
+  return {
+    key,
+    errorName: typeof value?.name === "string" ? value.name : "UnknownError",
+    httpStatusCode: typeof value?.$metadata?.httpStatusCode === "number"
+      ? value.$metadata.httpStatusCode
+      : undefined,
+    requestId: typeof value?.$metadata?.requestId === "string"
+      ? value.$metadata.requestId
+      : undefined,
+  };
+}
+
 function createClient() {
   return new S3Client({
     endpoint: process.env.SEASON_S3_ENDPOINT,
@@ -84,6 +100,7 @@ export async function GET(
     });
   } catch (error) {
     if (missingObject(error)) return plain("This season recording was not found.", 404);
+    console.error("Season Object Storage read failed.", storageErrorDetails(error, key));
     return plain("The season recording could not be read from Object Storage.", 502);
   }
 }

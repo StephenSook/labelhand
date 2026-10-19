@@ -101,9 +101,58 @@ def write_record(
     )
 
 
+def build_index_day_counts(
+    client,
+    bucket: str,
+    existing: dict[str, Any] | None,
+    day: str,
+    day_documents: dict[str, dict[str, Any]],
+) -> dict[str, dict[str, int]]:
+    points = existing.get("points", {}) if existing is not None else {}
+    if not isinstance(points, dict):
+        raise TypeError("season/index.json points is not an object")
+
+    result: dict[str, dict[str, int]] = {}
+    for point, document in day_documents.items():
+        current = points.get(point, {})
+        if not isinstance(current, dict):
+            raise TypeError(f"season/index.json point {point} is not an object")
+        current_days = current.get("days", [])
+        if not isinstance(current_days, list) or not all(isinstance(item, str) for item in current_days):
+            raise TypeError(f"season/index.json point {point} has invalid days")
+
+        stored_counts = current.get("issuances_by_day")
+        if stored_counts is not None:
+            if not isinstance(stored_counts, dict) or set(stored_counts) != set(current_days):
+                raise TypeError(f"season/index.json point {point} has invalid per-day counts")
+            if not all(isinstance(value, int) and not isinstance(value, bool) and value >= 0 for value in stored_counts.values()):
+                raise TypeError(f"season/index.json point {point} has invalid per-day counts")
+            if current.get("issuances") != sum(stored_counts.values()):
+                raise ValueError(f"season/index.json point {point} count does not match its per-day counts")
+            counts = dict(stored_counts)
+        else:
+            counts = {}
+            for indexed_day in current_days:
+                if indexed_day == day:
+                    continue
+                historical = read_json_optional(client, bucket, f"season/{point}/{indexed_day}.json")
+                if historical is None:
+                    raise ValueError(f"season/index.json includes missing day document {point}/{indexed_day}")
+                if historical.get("point") != point or historical.get("day") != indexed_day:
+                    raise ValueError(f"season day identity does not match {point}/{indexed_day}")
+                issuances = historical.get("issuances")
+                if not isinstance(issuances, list):
+                    raise TypeError(f"season day {point}/{indexed_day} has invalid issuances")
+                counts[indexed_day] = len(issuances)
+
+        counts[day] = len(document["issuances"])
+        result[point] = counts
+    return result
+
+
 def update_index(
     existing: dict[str, Any] | None,
-    previous_days: dict[str, dict[str, Any] | None],
+    day_counts: dict[str, dict[str, int]],
     day_documents: dict[str, dict[str, Any]],
 ) -> dict[str, Any]:
     index = copy.deepcopy(existing) if existing is not None else {"points": {}}
@@ -117,17 +166,17 @@ def update_index(
     last_new = max(fetched, key=dt.datetime.fromisoformat)
     day = next(iter(day_documents.values()))["day"]
 
-    for point, document in day_documents.items():
+    for point in day_documents:
         current = points.setdefault(point, {"days": [], "issuances": 0})
         if not isinstance(current, dict):
             raise TypeError(f"season/index.json point {point} is not an object")
-        old_document = previous_days[point]
-        old_count = len(old_document.get("issuances", [])) if old_document else 0
-        old_total = current.get("issuances", 0)
-        if not isinstance(old_total, int) or old_total < old_count:
-            raise TypeError(f"season/index.json point {point} has an invalid issuance count")
-        current["days"] = sorted(set(current.get("days", [])) | {day})
-        current["issuances"] = old_total - old_count + len(document["issuances"])
+        counts = day_counts[point]
+        if day not in counts:
+            raise ValueError(f"season index counts omit rebuilt day {point}/{day}")
+        ordered_counts = {counted_day: counts[counted_day] for counted_day in sorted(counts)}
+        current["days"] = list(ordered_counts)
+        current["issuances"] = sum(ordered_counts.values())
+        current["issuances_by_day"] = ordered_counts
 
     existing_span = index.get("recorded_span") if isinstance(index.get("recorded_span"), dict) else {}
     first_candidates = [first_new]
@@ -148,9 +197,9 @@ def rebuild_day(client, bucket: str, day: str) -> tuple[int, int]:
     keys = list_hourly_keys(client, bucket, day)
     records = [season_export.parse_hourly_bytes(read_bytes(client, bucket, key), key) for key in keys]
     documents = {point: season_export.build_day(records, point, day) for point in nws_recorder.POINTS}
-    previous = {point: read_json_optional(client, bucket, f"season/{point}/{day}.json") for point in nws_recorder.POINTS}
     existing_index = read_json_optional(client, bucket, "season/index.json")
-    index = update_index(existing_index, previous, documents)
+    day_counts = build_index_day_counts(client, bucket, existing_index, day, documents)
+    index = update_index(existing_index, day_counts, documents)
 
     for point, document in documents.items():
         client.put_object(

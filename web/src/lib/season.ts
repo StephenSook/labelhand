@@ -258,9 +258,14 @@ export async function fetchMergedSeasonIndex(): Promise<SeasonIndex> {
   try {
     const remote = parseSeasonIndex(await fetchSeasonJson("/api/season/index.json"));
     return mergeSeasonIndexes(committed, remote);
-  } catch {
-    return committed;
+  } catch (error) {
+    if (canUseStaticFallback(error)) return committed;
+    throw error;
   }
+}
+
+function canUseStaticFallback(error: unknown): error is SeasonHttpError {
+  return error instanceof SeasonHttpError && (error.status === 404 || error.status === 503);
 }
 
 function newerThanCommitted(point: string, requestedDay: string): boolean {
@@ -324,19 +329,18 @@ export async function fetchSeasonDay(point: string, day: string): Promise<Season
   try {
     return checkedSeasonDay(await fetchSeasonJson(`/api/season/${suffix}`), point, day);
   } catch (error) {
+    if (!canUseStaticFallback(error)) throw error;
     remoteError = error;
   }
   try {
     return checkedSeasonDay(await fetchSeasonJson(staticUrl), point, day);
   } catch (staticError) {
-    if (
-      remoteError instanceof SeasonHttpError
-      && remoteError.status === 404
-      && staticError instanceof SeasonHttpError
-      && staticError.status === 404
-    ) {
-      throw new SeasonNotRecordedError(point, day);
+    if (staticError instanceof SeasonHttpError && staticError.status === 404) {
+      if (remoteError instanceof SeasonHttpError && remoteError.status === 404) {
+        throw new SeasonNotRecordedError(point, day);
+      }
+      throw remoteError;
     }
-    throw remoteError;
+    throw staticError;
   }
 }

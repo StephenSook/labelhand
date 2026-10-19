@@ -9,6 +9,8 @@ The workflow launches one short Serverless AI job at minute 23 of each hour. The
 - CLI installation: https://docs.nebius.com/cli/install
 - Service-account authorized keys and CLI profiles: https://docs.nebius.com/iam/service-accounts/authorized-keys
 - Serverless AI job flags, timeout, restart policy, lifecycle, and same-project registry access: https://docs.nebius.com/serverless/jobs/manage
+- SecretStash secrets and versions: https://docs.nebius.com/mysterybox/secrets/create
+- Access key creation: https://docs.nebius.com/iam/service-accounts/access-keys
 - CPU platforms and presets: https://docs.nebius.com/compute/virtual-machines/types
 - Container Registry helper and image path: https://docs.nebius.com/container-registry/quickstart
 - Object Storage S3 endpoint: https://docs.nebius.com/object-storage/s3-api
@@ -18,7 +20,22 @@ The documented smallest CPU pair in `eu-north1` is `cpu-e2` with `2vcpu-8gb`. Se
 
 ## Prerequisites
 
-Run these commands from Git Bash at the repository root. Use an already authenticated Nebius admin profile that can create IAM and project resources. Install `jq`, the AWS CLI, Docker, GitHub CLI, and Vercel CLI. Replace every angle-bracket value before running.
+Run these commands in one WSL Ubuntu shell from `/mnt/c/dev/Nebius-NVIDIA-Global-AI/lh-recorder`. The first block enables fail-fast shell options for every later block. The Nebius installer supports Ubuntu and macOS, not Git Bash. Enable Docker Desktop's WSL integration and install `jq`, the AWS CLI, GitHub CLI, and Vercel CLI inside WSL. Use an already authenticated Nebius admin profile that can create IAM and project resources. Replace every angle-bracket value before running.
+
+Install and verify the pinned CLI before setup:
+
+```bash
+set -euo pipefail
+cd /mnt/c/dev/Nebius-NVIDIA-Global-AI/lh-recorder
+curl --fail --silent --show-error --location \
+  https://artifacts.nebius.cloud/cli/install.sh \
+  --output /tmp/install-nebius.sh
+NEBIUS_CLI_VERSION=0.12.283 bash /tmp/install-nebius.sh
+export PATH="$HOME/.nebius/bin:$PATH"
+nebius version --full
+```
+
+Confirm the reported version is `0.12.283`. Stop if it differs.
 
 Create a temporary directory so credential files never enter the repository:
 
@@ -28,7 +45,9 @@ export REGION_ID='eu-north1'
 export BUCKET_NAME='<globally-unique-labelhand-recorder-bucket>'
 export SUBNET_ID='<existing-subnet-with-outbound-internet>'
 export EXPECTED_VERCEL_PROJECT='<dedicated-labelhand-vercel-project-name>'
-export SETUP_DIR="$(mktemp -d)"
+SETUP_DIR="$(mktemp -d)"
+test -d "$SETUP_DIR"
+export SETUP_DIR
 export LAUNCHER_CREDENTIALS="$SETUP_DIR/launcher-credentials.json"
 export WRITER_KEY_FILE="$SETUP_DIR/writer-access-key.json"
 export READER_KEY_FILE="$SETUP_DIR/reader-access-key.json"
@@ -39,11 +58,12 @@ The selected subnet must reach `api.weather.gov`, `storage.eu-north1.nebius.clou
 ## 1. Bucket
 
 ```bash
-export BUCKET_ID="$(nebius storage bucket create \
+BUCKET_ID="$(nebius storage bucket create \
   --parent-id "$PROJECT_ID" \
   --name "$BUCKET_NAME" \
   --format jsonpath='{.metadata.id}')"
 test -n "$BUCKET_ID"
+export BUCKET_ID
 ```
 
 ## 2. GitHub Actions launcher identity
@@ -51,14 +71,18 @@ test -n "$BUCKET_ID"
 Serverless AI job creation currently requires the project-scoped `editor` role. Keep this identity separate from the bucket writer.
 
 ```bash
-export LAUNCHER_SA_ID="$(nebius iam service-account create \
+LAUNCHER_SA_ID="$(nebius iam service-account create \
   --parent-id "$PROJECT_ID" \
   --name labelhand-recorder-launcher \
   --format jsonpath='{.metadata.id}')"
-export LAUNCHER_GROUP_ID="$(nebius iam group create \
+test -n "$LAUNCHER_SA_ID"
+export LAUNCHER_SA_ID
+LAUNCHER_GROUP_ID="$(nebius iam group create \
   --parent-id "$PROJECT_ID" \
   --name labelhand-recorder-launchers \
   --format jsonpath='{.metadata.id}')"
+test -n "$LAUNCHER_GROUP_ID"
+export LAUNCHER_GROUP_ID
 nebius iam access-permit create \
   --parent-id "$LAUNCHER_GROUP_ID" \
   --resource-id "$PROJECT_ID" \
@@ -78,14 +102,18 @@ test -s "$LAUNCHER_CREDENTIALS"
 The recorder needs list and read access to rebuild a day, plus put access for raw and compact objects. It does not need delete access.
 
 ```bash
-export WRITER_SA_ID="$(nebius iam service-account create \
+WRITER_SA_ID="$(nebius iam service-account create \
   --parent-id "$PROJECT_ID" \
   --name labelhand-recorder-writer \
   --format jsonpath='{.metadata.id}')"
-export WRITER_GROUP_ID="$(nebius iam group create \
+test -n "$WRITER_SA_ID"
+export WRITER_SA_ID
+WRITER_GROUP_ID="$(nebius iam group create \
   --parent-id "$PROJECT_ID" \
   --name labelhand-recorder-writers \
   --format jsonpath='{.metadata.id}')"
+test -n "$WRITER_GROUP_ID"
+export WRITER_GROUP_ID
 nebius iam access-permit create \
   --parent-id "$WRITER_GROUP_ID" \
   --resource-id "$BUCKET_ID" \
@@ -104,10 +132,30 @@ nebius iam v2 access-key create \
   --description 'Labelhand recorder Object Storage writer' \
   --secret-delivery-mode inline \
   --format json > "$WRITER_KEY_FILE"
-export WRITER_ACCESS_KEY_ID="$(jq -r '.status.aws_access_key_id' "$WRITER_KEY_FILE")"
-export WRITER_SECRET_ACCESS_KEY="$(jq -r '.status.secret' "$WRITER_KEY_FILE")"
+WRITER_ACCESS_KEY_ID="$(jq -er '.status.aws_access_key_id | select(type == "string" and length > 0)' "$WRITER_KEY_FILE")"
 test -n "$WRITER_ACCESS_KEY_ID"
+export WRITER_ACCESS_KEY_ID
+WRITER_SECRET_ACCESS_KEY="$(jq -er '.status.secret | select(type == "string" and length > 0)' "$WRITER_KEY_FILE")"
 test -n "$WRITER_SECRET_ACCESS_KEY"
+export WRITER_SECRET_ACCESS_KEY
+RECORDER_SECRET_PAYLOAD="$(jq -cn \
+  --arg key_id "$WRITER_ACCESS_KEY_ID" \
+  --arg secret "$WRITER_SECRET_ACCESS_KEY" \
+  '[
+    {"key":"AWS_ACCESS_KEY_ID","string_value":$key_id},
+    {"key":"AWS_SECRET_ACCESS_KEY","string_value":$secret}
+  ]')"
+test -n "$RECORDER_SECRET_PAYLOAD"
+RECORDER_SECRET_ID="$(nebius mysterybox secret create \
+  --parent-id "$PROJECT_ID" \
+  --name labelhand-recorder-s3 \
+  --description 'Labelhand recorder Object Storage credentials' \
+  --secret-version-payload "$RECORDER_SECRET_PAYLOAD" \
+  --secret-version-set-primary \
+  --format jsonpath='{.metadata.id}')"
+test -n "$RECORDER_SECRET_ID"
+export RECORDER_SECRET_ID
+unset RECORDER_SECRET_PAYLOAD
 ```
 
 If Nebius rejects the two-role union on one bucket, stop and inspect the tenant. The documented fallback is `storage.object-editor`, but it also grants delete and restore actions and should not be applied without approval.
@@ -115,14 +163,18 @@ If Nebius rejects the two-role union on one bucket, stop and inspect the tenant.
 ## 4. Vercel bucket reader identity
 
 ```bash
-export READER_SA_ID="$(nebius iam service-account create \
+READER_SA_ID="$(nebius iam service-account create \
   --parent-id "$PROJECT_ID" \
   --name labelhand-season-reader \
   --format jsonpath='{.metadata.id}')"
-export READER_GROUP_ID="$(nebius iam group create \
+test -n "$READER_SA_ID"
+export READER_SA_ID
+READER_GROUP_ID="$(nebius iam group create \
   --parent-id "$PROJECT_ID" \
   --name labelhand-season-readers \
   --format jsonpath='{.metadata.id}')"
+test -n "$READER_GROUP_ID"
+export READER_GROUP_ID
 nebius iam access-permit create \
   --parent-id "$READER_GROUP_ID" \
   --resource-id "$BUCKET_ID" \
@@ -137,10 +189,12 @@ nebius iam v2 access-key create \
   --description 'Labelhand season Object Storage reader' \
   --secret-delivery-mode inline \
   --format json > "$READER_KEY_FILE"
-export READER_ACCESS_KEY_ID="$(jq -r '.status.aws_access_key_id' "$READER_KEY_FILE")"
-export READER_SECRET_ACCESS_KEY="$(jq -r '.status.secret' "$READER_KEY_FILE")"
+READER_ACCESS_KEY_ID="$(jq -er '.status.aws_access_key_id | select(type == "string" and length > 0)' "$READER_KEY_FILE")"
 test -n "$READER_ACCESS_KEY_ID"
+export READER_ACCESS_KEY_ID
+READER_SECRET_ACCESS_KEY="$(jq -er '.status.secret | select(type == "string" and length > 0)' "$READER_KEY_FILE")"
 test -n "$READER_SECRET_ACCESS_KEY"
+export READER_SECRET_ACCESS_KEY
 ```
 
 ## 5. Seed the compact static season
@@ -168,12 +222,16 @@ aws --region "$REGION_ID" \
 Build from the repository root because the Dockerfile copies shared recorder code and the tracked point cache.
 
 ```bash
-export REGISTRY_ID="$(nebius registry create \
+REGISTRY_ID="$(nebius registry create \
   --parent-id "$PROJECT_ID" \
   --name labelhand-recorder \
   --format jsonpath='{.metadata.id}')"
+test -n "$REGISTRY_ID"
+export REGISTRY_ID
 export REGISTRY_PATH="${REGISTRY_ID#registry-}"
-export RECORDER_TAG="$(git rev-parse --short=12 HEAD)"
+RECORDER_TAG="$(git rev-parse --short=12 HEAD)"
+test -n "$RECORDER_TAG"
+export RECORDER_TAG
 export RECORDER_IMAGE="cr.$REGION_ID.nebius.cloud/$REGISTRY_PATH/labelhand-recorder:$RECORDER_TAG"
 nebius registry configure-helper
 docker build \
@@ -192,10 +250,9 @@ These commands target the current repository selected by `gh`. Confirm with `gh 
 ```bash
 gh repo view
 gh secret set NEBIUS_SA_CREDENTIALS < "$LAUNCHER_CREDENTIALS"
-printf '%s' "$WRITER_ACCESS_KEY_ID" | gh secret set RECORDER_AWS_ACCESS_KEY_ID
-printf '%s' "$WRITER_SECRET_ACCESS_KEY" | gh secret set RECORDER_AWS_SECRET_ACCESS_KEY
 gh variable set NEBIUS_PROJECT_ID --body "$PROJECT_ID"
 gh variable set NEBIUS_RECORDER_IMAGE --body "$RECORDER_IMAGE"
+gh variable set NEBIUS_RECORDER_SECRET_SELECTOR --body "$RECORDER_SECRET_ID"
 gh variable set NEBIUS_RECORDER_BUCKET --body "$BUCKET_NAME"
 gh variable set NEBIUS_RECORDER_S3_ENDPOINT --body "https://storage.$REGION_ID.nebius.cloud"
 gh variable set NEBIUS_JOB_PLATFORM --body 'cpu-e2'
@@ -240,8 +297,11 @@ Then use `workflow_dispatch` once. Record the job ID, elapsed time, terminal `CO
 ## Not verified
 
 - No authenticated Nebius command in this document has been run.
+- The inline access-key response paths used by the fail-closed `jq -er` commands have not been checked against an authenticated create response.
 - `cpu-e2` and `2vcpu-8gb` are documented for `eu-north1`, but capacity and Serverless AI availability in this project are not verified.
 - The `storage.viewer` plus `storage.uploader` role pair is documented by its action union, but has not been exercised together in this tenant.
+- SecretStash injection through the launcher's `editor` role has not been exercised in this tenant.
+- The active-job list schema is primary-source verified but has not been exercised against this project.
 - The selected subnet's outbound path is not verified.
 - The pinned CLI binary accepts the documented flags in local `--help`; an authenticated job creation with version `0.12.283` is not verified.
 - GitHub Actions scheduled execution, Vercel environment wiring, S3 signature compatibility, live NWS access, duration, and billed cost are not verified.
@@ -251,6 +311,6 @@ After setup and verification, remove the temporary credential files without prin
 ```bash
 rm -rf "$SETUP_DIR"
 unset LAUNCHER_CREDENTIALS WRITER_KEY_FILE READER_KEY_FILE
-unset WRITER_ACCESS_KEY_ID WRITER_SECRET_ACCESS_KEY
+unset WRITER_ACCESS_KEY_ID WRITER_SECRET_ACCESS_KEY RECORDER_SECRET_ID
 unset READER_ACCESS_KEY_ID READER_SECRET_ACCESS_KEY
 ```

@@ -19,6 +19,15 @@ def period(start):
     }
 
 
+def season_day(point, day, count):
+    return {
+        "day": day,
+        "issuances": [{} for _ in range(count)],
+        "point": point,
+        "source": "test fixture",
+    }
+
+
 class MissingObject(Exception):
     response = {"Error": {"Code": "NoSuchKey"}, "ResponseMetadata": {"HTTPStatusCode": 404}}
 
@@ -66,8 +75,8 @@ def test_rebuild_day_uses_hourly_objects_and_replaces_current_day_count(monkeypa
         for hour in (1, 2):
             now = dt.datetime(2026, 10, 19, hour, 0, tzinfo=dt.UTC)
             objects[nws_recorder.record_key("hourly", point, now)] = nws_recorder.encode_record("hourly", point, {"periods": [period(f"2026-10-19T{hour:02d}:00:00+00:00")]}, now)
-        old_day = {"day": day, "issuances": [{"fetched_utc": "old"}], "point": point, "source": "old"}
-        objects[f"season/{point}/{day}.json"] = json.dumps(old_day).encode()
+        objects[f"season/{point}/2026-10-18.json"] = json.dumps(season_day(point, "2026-10-18", 24)).encode()
+        objects[f"season/{point}/{day}.json"] = json.dumps(season_day(point, day, 1)).encode()
     objects["nws_recorded/2026-10-19/0100Z_tift_grid.json.gz"] = b"ignored"
     objects["season/index.json"] = json.dumps(
         {
@@ -85,10 +94,119 @@ def test_rebuild_day_uses_hourly_objects_and_replaces_current_day_count(monkeypa
     tift = json.loads(client.objects[f"season/tift/{day}.json"])
     index = json.loads(client.objects["season/index.json"])
     assert len(tift["issuances"]) == 2
-    assert index["points"]["tift"] == {"days": ["2026-10-18", day], "issuances": 26}
+    assert index["points"]["tift"] == {
+        "days": ["2026-10-18", day],
+        "issuances": 26,
+        "issuances_by_day": {"2026-10-18": 24, day: 2},
+    }
     assert index["recorded_span"] == {
         "first": "2026-10-18T00:00:00+00:00",
         "last": "2026-10-19T02:00:00+00:00",
+    }
+
+
+def test_rebuild_day_retry_does_not_subtract_an_unindexed_day(monkeypatch):
+    day = "2026-10-19"
+    monkeypatch.setattr(nws_recorder, "POINTS", {"tift": (31.4, -83.6)})
+    objects = {}
+    for hour in (1, 2):
+        now = dt.datetime(2026, 10, 19, hour, 0, tzinfo=dt.UTC)
+        objects[nws_recorder.record_key("hourly", "tift", now)] = nws_recorder.encode_record(
+            "hourly",
+            "tift",
+            {"periods": [period(f"2026-10-19T{hour:02d}:00:00+00:00")]},
+            now,
+        )
+    objects["season/tift/2026-10-18.json"] = json.dumps(season_day("tift", "2026-10-18", 24)).encode()
+    objects["season/index.json"] = json.dumps(
+        {
+            "generated_utc": "2026-10-18T23:00:00+00:00",
+            "points": {"tift": {"days": ["2026-10-18"], "issuances": 24}},
+            "recorded_span": {
+                "first": "2026-10-18T00:00:00+00:00",
+                "last": "2026-10-18T23:00:00+00:00",
+            },
+        }
+    ).encode()
+    client = FakeS3(objects)
+    real_put = client.put_object
+    fail_index_once = True
+
+    def put_with_one_index_failure(**kwargs):
+        nonlocal fail_index_once
+        if kwargs["Key"] == "season/index.json" and fail_index_once:
+            fail_index_once = False
+            raise RuntimeError("synthetic index write failure")
+        real_put(**kwargs)
+
+    client.put_object = put_with_one_index_failure
+    try:
+        recorder_job.rebuild_day(client, "test", day)
+    except RuntimeError as error:
+        assert str(error) == "synthetic index write failure"
+    else:
+        raise AssertionError("first rebuild unexpectedly succeeded")
+
+    assert f"season/tift/{day}.json" in client.objects
+    assert recorder_job.rebuild_day(client, "test", day) == (2, 1)
+    index = json.loads(client.objects["season/index.json"])
+    assert index["points"]["tift"] == {
+        "days": ["2026-10-18", day],
+        "issuances": 26,
+        "issuances_by_day": {"2026-10-18": 24, day: 2},
+    }
+
+
+def test_rebuild_day_retry_replaces_an_already_indexed_day_count(monkeypatch):
+    day = "2026-10-19"
+    monkeypatch.setattr(nws_recorder, "POINTS", {"tift": (31.4, -83.6)})
+    objects = {
+        "season/tift/2026-10-18.json": json.dumps(season_day("tift", "2026-10-18", 24)).encode(),
+        f"season/tift/{day}.json": json.dumps(season_day("tift", day, 1)).encode(),
+    }
+    for hour in (1, 2):
+        now = dt.datetime(2026, 10, 19, hour, 0, tzinfo=dt.UTC)
+        objects[nws_recorder.record_key("hourly", "tift", now)] = nws_recorder.encode_record(
+            "hourly",
+            "tift",
+            {"periods": [period(f"2026-10-19T{hour:02d}:00:00+00:00")]},
+            now,
+        )
+    objects["season/index.json"] = json.dumps(
+        {
+            "generated_utc": "2026-10-19T01:00:00+00:00",
+            "points": {"tift": {"days": ["2026-10-18", day], "issuances": 25}},
+            "recorded_span": {
+                "first": "2026-10-18T00:00:00+00:00",
+                "last": "2026-10-19T01:00:00+00:00",
+            },
+        }
+    ).encode()
+    client = FakeS3(objects)
+    real_put = client.put_object
+    fail_index_once = True
+
+    def put_with_one_index_failure(**kwargs):
+        nonlocal fail_index_once
+        if kwargs["Key"] == "season/index.json" and fail_index_once:
+            fail_index_once = False
+            raise RuntimeError("synthetic index write failure")
+        real_put(**kwargs)
+
+    client.put_object = put_with_one_index_failure
+    try:
+        recorder_job.rebuild_day(client, "test", day)
+    except RuntimeError as error:
+        assert str(error) == "synthetic index write failure"
+    else:
+        raise AssertionError("first rebuild unexpectedly succeeded")
+
+    assert recorder_job.rebuild_day(client, "test", day) == (2, 1)
+    index = json.loads(client.objects["season/index.json"])
+    assert index["points"]["tift"] == {
+        "days": ["2026-10-18", day],
+        "issuances": 26,
+        "issuances_by_day": {"2026-10-18": 24, day: 2},
     }
 
 
