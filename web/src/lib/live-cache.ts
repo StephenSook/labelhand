@@ -48,6 +48,7 @@ function isCompiledLiveLabel(value: unknown): value is CompiledLiveLabel {
     && isSha256(value.label_sha256)
     && typeof value.pipeline_version === "string"
     && value.scored === false
+    && typeof value.restricted_use === "boolean"
     && value.complete === true
     && Array.isArray(value.accepted)
     && Array.isArray(value.rejected);

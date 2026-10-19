@@ -42,6 +42,13 @@ const MODALITIES = new Set(["MUST", "MUST_NOT", "ADVISORY"]);
 const OPERATORS = new Set(["lt", "lte", "gt", "gte", "eq", "between", "none"]);
 const PARAMETERS = new Set<string>(spec.PARAMS);
 const CODE_NAME = /^[a-z]{1,5}-?\d/i;
+// The phrase EPA requires on a restricted-use label's front panel, read from the same page text the
+// compiler uses. The three shipped labels were classified by the same phrase (lib/label-restrictions.ts).
+const RESTRICTED_USE = /RESTRICTED\s+USE\s+PESTICIDE/i;
+
+export function hasRestrictedUsePhrase(pages: string[]): boolean {
+  return pages.some((text) => RESTRICTED_USE.test(text));
+}
 
 export interface LiveCompileInput {
   reg: string;
@@ -79,6 +86,7 @@ export interface CompiledLiveLabel extends CompiledLabel {
   extractor: string;
   compiled_utc: string;
   scored: false;
+  restricted_use: boolean;
   complete: boolean;
   pages: number;
   failed_pages: Array<{ page: number; error: string; status?: number }>;
@@ -227,6 +235,9 @@ function selectBrand(input: LiveCompileInput): string | null {
 }
 
 export function assertCompiledShape(compiled: CompiledLiveLabel, pages: string[]): void {
+  if (typeof compiled.restricted_use !== "boolean") {
+    throw new PipelineError("Compiled label has no restricted-use classification.");
+  }
   for (const rule of compiled.accepted) {
     if (!rule.id
       || !Number.isInteger(rule.page)
@@ -403,6 +414,7 @@ export async function compileLiveLabel(
     extractor: `pdfjs-${PDFJS_VERSION}`,
     compiled_utc: (input.now?.() ?? new Date()).toISOString(),
     scored: false,
+    restricted_use: hasRestrictedUsePhrase(extracted.pages),
     complete: failedPages.length === 0 && typingFailures.length === 0,
     pages: extracted.pageCount,
     failed_pages: failedPages,

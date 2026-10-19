@@ -7,6 +7,7 @@ import { evaluate, filterRules, initializeEngine, type ForecastPeriod } from "@/
 import {
   assertCompiledShape,
   compileLiveLabel,
+  hasRestrictedUsePhrase,
   PIPELINE_VERSION,
   type PipelineEvent,
 } from "@/lib/compiler/pipeline";
@@ -92,6 +93,7 @@ describe("live compiler pipeline", () => {
 
     expect(compiled).toMatchObject({
       scored: false,
+      restricted_use: false,
       complete: true,
       pipeline_version: PIPELINE_VERSION,
       tokens_in: 2_000,
@@ -264,5 +266,13 @@ describe("live compiler pipeline", () => {
       usage: expect.objectContaining({ totalTokens: 121_101 }),
       requestIds: ["req-over-ceiling", "req-peer"],
     });
+  });
+});
+
+describe("restricted-use classification", () => {
+  test("finds the front-panel phrase across a line break and ignores ordinary use text", () => {
+    expect(hasRestrictedUsePhrase(["Directions for use", "RESTRICTED USE\nPESTICIDE Due to acute toxicity"])).toBe(true);
+    expect(hasRestrictedUsePhrase(["Restricted use pesticide. For retail sale to certified applicators only."])).toBe(true);
+    expect(hasRestrictedUsePhrase(["Do not use this product in a manner inconsistent with its labeling.", "Use restrictions apply."])).toBe(false);
   });
 });

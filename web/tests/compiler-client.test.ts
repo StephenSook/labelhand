@@ -21,6 +21,7 @@ function compiled(): CompiledLiveLabel {
     extractor: "pdfjs-test",
     compiled_utc: "2026-10-19T20:00:00.000Z",
     scored: false,
+    restricted_use: false,
     complete: true,
     pages: 1,
     failed_pages: [],
