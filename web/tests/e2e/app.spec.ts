@@ -155,12 +155,12 @@ test("the constraint panel runs an in-memory what-if through the planner", async
   expect(dataRequests).toEqual([]);
 });
 
-test("the home, planner, and judge pages never overflow their viewports", async ({ page }) => {
+test("the home, planner, judge, and proof pages never overflow their viewports", async ({ page }) => {
   // 768 switches phone runs to the grid; 1024 widens the grid to 24 hour columns.
   for (const width of [390, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 });
 
-    for (const route of ["/", replayPath, "/judge"]) {
+    for (const route of ["/", replayPath, "/judge", "/proof"]) {
       if (route === replayPath) await openReplay(page);
       else await page.goto(route);
 
@@ -247,7 +247,7 @@ test("the disabled Ask the tank button keeps readable contrast", async ({ page }
 });
 
 test("every page names the product exactly once in its title", async ({ page }) => {
-  for (const route of ["/", "/app", "/judge"]) {
+  for (const route of ["/", "/app", "/judge", "/proof"]) {
     await page.goto(route);
     const title = await page.title();
     expect(title.match(/Labelhand/g)?.length ?? 0, `${route}: "${title}"`).toBe(1);
@@ -264,6 +264,7 @@ test("all Tier 1 pages have zero axe violations and render the requested stills"
       { name: "home", path: "/" },
       { name: "app", path: "/app" },
       { name: "judge", path: "/judge" },
+      { name: "proof", path: "/proof" },
     ]) {
       if (route.name === "app") {
         await page.goto(route.path);
@@ -319,4 +320,18 @@ test("the home page shows the forecast check-back from the committed summary", a
   const card = page.locator(".checkback-card");
   await expect(card).toContainText(`${held} of ${held + broke}`);
   await expect(card.locator("[data-checkback-row]")).toHaveCount(4);
+});
+
+test("the proof page lists every gold clause and every broken forecast hour", async ({ page }) => {
+  const proof = JSON.parse(await readFile(path.join(process.cwd(), "public/data/proof.json"), "utf8")) as {
+    gold: unknown[];
+    checkback: { misses: unknown[] };
+  };
+  await page.goto("/proof");
+  await page.locator("details.proof-all summary").click();
+  await expect(page.locator("#label-clauses .proof-all tbody tr")).toHaveCount(proof.gold.length);
+  for (const day of await page.locator("details.proof-day").all()) await day.locator("summary").click();
+  await expect(page.locator("#forecast-misses tbody tr")).toHaveCount(proof.checkback.misses.length);
+  const issued = page.locator("#forecast-misses tbody a").first();
+  await expect(issued).toHaveAttribute("href", /\/app\?field=.+&issued=2026-.+#season-replay/);
 });

@@ -101,6 +101,7 @@ export function ForecastCheckBack() {
           Every broken tank-mix hour broke on wind: the station measured {mph(topBreak.observed_min)} to {mph(topBreak.observed_max)} where the
           labels allow at most {topBreak.limit?.upper_mph ?? 10} mph ({tank.breaks.length} wind clauses across the three labels). A day-ahead
           forecast is a plan, not a measurement: re-run the planner close to spray time, and measure wind at the boom as the labels require.
+          {" "}<a className="text-link" href="/proof#forecast-misses">See every hour that broke</a>.
         </p>
       ) : null}
 

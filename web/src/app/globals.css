@@ -525,6 +525,52 @@ a {
 .checkback-why { background: var(--sun-soft); border: 2px solid var(--ink); border-radius: var(--radius-card); font-weight: 700; line-height: 1.55; margin: 1.6rem 0 0; padding: 1rem 1.2rem; }
 .checkback-source { color: var(--ink-soft); font-size: 0.9rem; font-weight: 600; line-height: 1.55; margin: 1.2rem 0 0; }
 .checkback-source code { overflow-wrap: anywhere; }
+
+.proof-hero, .proof-card { padding: clamp(2.2rem, 5vw, 5rem); }
+.proof-card { border: 3px solid var(--ink); }
+.proof-title { font-size: clamp(3rem, 8vw, 6.5rem); margin: 0.6rem 0 0; }
+.proof-lede { font-size: 1.15rem; font-weight: 650; line-height: 1.6; margin: 1.2rem 0 0; max-width: 44rem; }
+.proof-tally { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 2rem; max-width: 64rem; }
+.proof-tally-item { background: var(--paper); border: 3px solid var(--ink); border-radius: var(--radius-card); color: var(--ink); display: grid; font-weight: 700; gap: 0.7rem; line-height: 1.5; padding: 1.2rem 1.4rem; text-decoration: none; }
+.proof-tally-item:hover { background: var(--white); }
+.proof-tally-number { font-size: clamp(2.6rem, 6vw, 4.4rem); line-height: 0.95; }
+.proof-heading { font-size: clamp(2rem, 4.6vw, 3.4rem); margin: 0; }
+.proof-subheading { font-size: 1.15rem; font-weight: 850; margin: 2.2rem 0 0; }
+.proof-text { font-weight: 600; line-height: 1.6; margin: 1rem 0 0; max-width: 48rem; }
+.proof-caveat { color: var(--ink-soft); font-size: 0.95rem; }
+.proof-diffs { display: grid; gap: 1rem; list-style: none; margin: 1rem 0 0; max-width: 64rem; padding: 0; }
+.proof-diff { background: var(--white); border: 2px solid var(--ink); border-radius: var(--radius-card); padding: 1.1rem 1.3rem; }
+.proof-diff-head { align-items: center; display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; font-weight: 750; }
+.proof-quote { border-left: 4px solid var(--sun); font-weight: 650; line-height: 1.55; margin: 0.9rem 0 0; padding: 0.1rem 0 0.1rem 0.9rem; }
+.proof-compare { display: grid; gap: 0.6rem 1.4rem; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0.9rem 0 0; }
+.proof-compare dt { color: var(--ink-soft); font-size: 0.85rem; font-weight: 750; }
+.proof-compare dd { font-weight: 850; margin: 0.15rem 0 0; }
+.proof-effect { background: var(--sun-soft); border-radius: 0.8rem; font-weight: 650; line-height: 1.5; margin: 0.9rem 0 0; padding: 0.6rem 0.8rem; }
+.proof-all, .proof-day { border: 2px solid var(--ink); border-radius: var(--radius-card); margin-top: 1rem; max-width: 64rem; }
+.proof-all { margin-top: 1.6rem; }
+.proof-all > summary, .proof-day > summary { cursor: pointer; font-weight: 850; padding: 0.9rem 1.2rem; }
+.proof-day > summary { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; justify-content: space-between; }
+.proof-day-count { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.proof-table-wrap { overflow-x: auto; padding: 0 1.2rem 1.1rem; }
+.proof-table { border-collapse: collapse; font-size: 0.92rem; line-height: 1.45; width: 100%; }
+.proof-table th, .proof-table td { border-top: 1px solid var(--paper-deep); padding: 0.6rem 0.7rem 0.6rem 0; text-align: left; vertical-align: top; }
+.proof-table thead th { border-top: 0; color: var(--ink-soft); font-size: 0.8rem; font-weight: 800; }
+.proof-table tbody th { font-weight: 850; white-space: nowrap; }
+.proof-row-product { color: var(--ink-soft); display: block; font-size: 0.8rem; font-weight: 650; white-space: normal; }
+.proof-row-differs { background: var(--sun-soft); }
+.proof-rules { display: grid; gap: 0.7rem; list-style: none; margin: 1rem 0 0; max-width: 64rem; padding: 0; }
+.proof-rules li { display: grid; font-weight: 650; gap: 0.25rem; line-height: 1.5; }
+.proof-limit { font-weight: 850; }
+.proof-source { color: var(--ink-soft); font-size: 0.9rem; font-weight: 600; line-height: 1.55; margin: 1.6rem 0 0; max-width: 48rem; }
+.proof-source code { overflow-wrap: anywhere; }
+
+@media (max-width: 720px) {
+  .proof-tally, .proof-compare { grid-template-columns: minmax(0, 1fr); }
+  .proof-table thead { display: none; }
+  .proof-table tr { border-top: 1px solid var(--paper-deep); display: grid; gap: 0.2rem; padding: 0.6rem 0; }
+  .proof-table th, .proof-table td { border-top: 0; padding: 0; }
+  .proof-table tbody th { white-space: normal; }
+}
 .architecture-diagram {
   display: grid;
   gap: 1.25rem;

@@ -114,7 +114,8 @@ export default function JudgePage() {
                 <strong>NWS hourly forecasts recorded since Oct 5 for ten Georgia cotton points</strong>
                 <p>
                   The season strip replays them through the same planner. The home page checks day-ahead forecast-permitted hours against the
-                  nearest airport station: <Link className="text-link" href="/#forecast-check-back">did the forecast hold?</Link>
+                  nearest airport station: <Link className="text-link" href="/#forecast-check-back">did the forecast hold?</Link> Every
+                  graded case, misses included, is on <Link className="text-link" href="/proof">the proof page</Link>.
                 </p>
               </div>
             </li>
