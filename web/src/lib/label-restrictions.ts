@@ -11,6 +11,8 @@ const CLASSIFICATIONS: Record<string, Classification> = {
 };
 
 export function isRestrictedUseLabel(label: LabelRecord): boolean {
+  // A live label carries the result of the same phrase check, run on its own page text by the compiler.
+  if (label.unscored && typeof label.restrictedUse === "boolean") return label.restrictedUse;
   const classification = CLASSIFICATIONS[label.reg];
   if (!classification || classification.sha256 !== label.sha256) {
     throw new Error(`Restricted-use classification has not been checked for EPA Reg. ${label.reg} at SHA-256 ${label.sha256}.`);

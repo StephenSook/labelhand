@@ -1,5 +1,6 @@
 import { evaluate, filterRules, type CompiledLabel } from "@/engine";
 import {
+  PRODUCT_REGISTRATIONS,
   REPLAY_POINTS,
   errorText,
   fetchJson,
@@ -9,7 +10,6 @@ import {
   type ForecastPeriod,
   type ForecastPoints,
   type PlannerHour,
-  type ProductRegistration,
   type ReplayForecast,
 } from "@/lib/planner-data";
 
@@ -24,13 +24,16 @@ export type PlannerCheckResult = {
   lon: number;
   hours: PlannerHour[];
   ruleGroups: FilteredRules[];
-  registrations: ProductRegistration[];
+  registrations: string[];
   liveFailure?: string;
 };
 
 type PlannerCheckInput = {
   pointKey: string;
-  registrations: ProductRegistration[];
+  // The three shipped registrations load their committed .ship rules; any other registration
+  // must be supplied here as a label compiled live in this session.
+  registrations: string[];
+  liveLabels?: Record<string, CompiledLabel>;
   points: ForecastPoints;
   source: PlannerSource;
   suppliedReplay?: ReplayForecast;
@@ -41,6 +44,7 @@ type PlannerCheckInput = {
 export async function runPlannerCheck({
   pointKey,
   registrations,
+  liveLabels = {},
   points,
   source,
   suppliedReplay,
@@ -82,7 +86,11 @@ export async function runPlannerCheck({
 
   const rulesStart = performance.now();
   const ruleGroups = await Promise.all(registrations.map(async (reg) => {
-    const compiled = await fetchJson<CompiledLabel>(`/data/compiled/${reg}.ship.json`);
+    const live = liveLabels[reg];
+    if (!live && !isShippedRegistration(reg)) {
+      throw new Error(`EPA Reg. ${reg} has not been compiled in this session.`);
+    }
+    const compiled = live ?? await fetchJson<CompiledLabel>(`/data/compiled/${reg}.ship.json`);
     return await filterRules(compiled, reg);
   }));
   const usedRules = ruleGroups.flatMap((group) => group.used);
@@ -107,4 +115,8 @@ export async function runPlannerCheck({
     registrations,
     liveFailure,
   };
+}
+
+function isShippedRegistration(reg: string): boolean {
+  return (PRODUCT_REGISTRATIONS as readonly string[]).includes(reg);
 }

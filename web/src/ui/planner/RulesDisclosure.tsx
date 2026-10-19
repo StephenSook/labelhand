@@ -19,9 +19,17 @@ export function RulesDisclosure({ groups, labels }: { groups: FilteredRules[]; l
         </span>
       </summary>
       <div className="border-t-[3px] border-[#14213d] p-5 sm:p-7">
-        {groups.map((group) => (
+        {groups.map((group) => {
+          const groupLabel = Object.values(labels).find((label) => label.product === group.product);
+          return (
           <section key={group.product} className="not-last:mb-8" aria-labelledby={`rules-${safeId(group.product)}`}>
             <h3 id={`rules-${safeId(group.product)}`} className="display text-2xl">{group.product}</h3>
+            {groupLabel?.unscored ? (
+              <p className="mt-2 rounded-xl border-2 border-[#14213d] bg-[#ffc53d] px-3 py-2 text-sm font-bold" data-unscored-group>
+                UNSCORED: read live from EPA by Nemotron, one reading, no gold set. Every rule below passed the same quote and number
+                guards as the scored labels; check the sentence on the label before relying on it.
+              </p>
+            ) : null}
 
             <h4 className="mt-4 text-sm font-extrabold uppercase tracking-[0.12em] text-[#236d3b]">Used by the planner</h4>
             {group.used.length === 0 ? (
@@ -76,7 +84,8 @@ export function RulesDisclosure({ groups, labels }: { groups: FilteredRules[]; l
               </ul>
             )}
           </section>
-        ))}
+          );
+        })}
       </div>
     </details>
   );

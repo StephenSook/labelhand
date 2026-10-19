@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { AgentCheckSnapshot } from "@/lib/agent/tools";
 import { runPlannerCheck, type PlannerCheckResult, type PlannerSource } from "@/lib/run-planner";
 import { forecastPermittedWindows } from "@/lib/windows";
+import { requestLiveCompile } from "@/lib/compiler/client";
+import type { CompiledLiveLabel } from "@/lib/compiler/pipeline";
 import { isRestrictedUseLabel } from "@/lib/label-restrictions";
 import type { SprayRecordClause, SprayRecordInput } from "@/lib/spray-record";
 import {
@@ -19,6 +21,7 @@ import {
   pointName,
   type ForecastPoints,
   type LabelIndex,
+  type LabelRecord,
   type PlannerRule,
   type ProductRegistration,
   type ReplayForecast,
@@ -32,6 +35,7 @@ import {
   type Stability,
 } from "@/lib/season-replay";
 import { WorkingCard, type WorkingStep } from "@/ui";
+import { AnyLabel, MAX_LIVE_LABELS } from "./AnyLabel";
 import { AskTank } from "./AskTank";
 import { HourDetail } from "./HourDetail";
 import { RulesDisclosure } from "./RulesDisclosure";
@@ -48,6 +52,7 @@ type PlannerProps = {
   initialIssued?: string;
   initialHour?: string;
   initialQuestion?: string;
+  initialLive?: string;
 };
 
 function issuedFromQuery(value: string | undefined): string | undefined {
@@ -64,6 +69,8 @@ const DEFAULT_FIELD = "tift";
 
 function selectedFromQuery(value: string | undefined): Set<ProductRegistration> {
   if (!value || value === "all") return new Set(PRODUCT_REGISTRATIONS);
+  // A tank of live labels only (live=...) names no shipped product.
+  if (value === "none") return new Set();
   const requested = value.split(",");
   if (
     requested.length === 0
@@ -73,6 +80,26 @@ function selectedFromQuery(value: string | undefined): Set<ProductRegistration> 
     return new Set(PRODUCT_REGISTRATIONS);
   }
   return new Set(PRODUCT_REGISTRATIONS.filter((reg) => requested.includes(reg)));
+}
+
+function liveFromQuery(value: string | undefined): string[] {
+  if (!value) return [];
+  const regs = [...new Set(value.split(",").map((reg) => reg.trim()))];
+  return regs.filter((reg) => /^\d{1,6}-\d{1,5}$/.test(reg)).slice(0, MAX_LIVE_LABELS);
+}
+
+function liveLabelRecord(compiled: CompiledLiveLabel): LabelRecord {
+  return {
+    reg: compiled.reg,
+    product: compiled.product,
+    shortName: compiled.product,
+    accepted: compiled.label_accepted,
+    url: compiled.label_url,
+    bytes: 0,
+    sha256: compiled.label_sha256,
+    unscored: true,
+    restrictedUse: compiled.restricted_use,
+  };
 }
 
 function hoursFromQuery(value: string | undefined): number {
@@ -93,13 +120,16 @@ function workingSteps(current: number, measured: Array<string | undefined>): Wor
   }));
 }
 
-export function Planner({ initialField, initialProducts, initialHours, initialReplay, initialIssued, initialHour, initialQuestion }: PlannerProps) {
+export function Planner({ initialField, initialProducts, initialHours, initialReplay, initialIssued, initialHour, initialQuestion, initialLive }: PlannerProps) {
   const replayPoint = initialReplay && REPLAY_POINTS.has(initialReplay) ? initialReplay : undefined;
   const startIssued = issuedFromQuery(initialIssued);
   const [replayIssued, setReplayIssued] = useState<string | undefined>(startIssued);
   const [stability, setStability] = useState<{ key: string; value: Stability | null }>({ key: "", value: null });
   const [field, setField] = useState(replayPoint ?? initialField ?? DEFAULT_FIELD);
   const [selectedRegs, setSelectedRegs] = useState<Set<ProductRegistration>>(() => selectedFromQuery(initialProducts));
+  const [liveLabels, setLiveLabels] = useState<CompiledLiveLabel[]>([]);
+  const [liveReady, setLiveReady] = useState(() => liveFromQuery(initialLive).length === 0);
+  const liveRequested = useRef(false);
   const [jobHours, setJobHours] = useState(() => hoursFromQuery(initialHours));
   const [activeReplay, setActiveReplay] = useState(replayPoint);
   const [points, setPoints] = useState<ForecastPoints | null>(null);
@@ -137,6 +167,36 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
     return () => { current = false; };
   }, [initialField, replayPoint]);
 
+  useEffect(() => {
+    const regs = liveFromQuery(initialLive);
+    if (regs.length === 0 || liveRequested.current) return;
+    liveRequested.current = true;
+    let current = true;
+    (async () => {
+      const loaded: CompiledLiveLabel[] = [];
+      for (const reg of regs) {
+        try {
+          loaded.push(await requestLiveCompile(reg));
+        } catch (error) {
+          if (current) setValidation(`EPA Reg. No. ${reg} could not be read: ${errorText(error)}`);
+        }
+      }
+      if (!current) return;
+      setLiveLabels(loaded);
+      setLiveReady(true);
+    })();
+    return () => { current = false; };
+  }, [initialLive]);
+
+  const tankRegistrations = useMemo(
+    () => [...PRODUCT_REGISTRATIONS.filter((reg) => selectedRegs.has(reg)), ...liveLabels.map((label) => label.reg)],
+    [liveLabels, selectedRegs],
+  );
+  const tankLabels = useMemo<LabelIndex | null>(
+    () => labels ? { ...labels, ...Object.fromEntries(liveLabels.map((label) => [label.reg, liveLabelRecord(label)])) } : null,
+    [labels, liveLabels],
+  );
+
   const runPlanner = useCallback(async ({ pointKey, source, suppliedReplay, fallbackToReplay = false, seasonIssued }: {
     pointKey: string;
     source: PlannerSource;
@@ -151,7 +211,7 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
       setFailure({ message: `No forecast point named ${pointKey} was found in /data/nws_points_cache.json`, pointKey });
       return;
     }
-    const registrations = [...selectedRegs];
+    const registrations = tankRegistrations;
     if (registrations.length === 0) {
       setValidation("Choose at least one product in the tank.");
       return;
@@ -169,6 +229,7 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
       const checked = await runPlannerCheck({
         pointKey,
         registrations,
+        liveLabels: Object.fromEntries(liveLabels.map((label) => [label.reg, label])),
         points,
         source,
         suppliedReplay,
@@ -204,10 +265,10 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
         setFailure({ message, pointKey });
       }
     }
-  }, [initialHour, labels, points, selectedRegs]);
+  }, [initialHour, labels, liveLabels, points, tankRegistrations]);
 
   useEffect(() => {
-    if (!points || !labels || !configReady || autoRan.current) return;
+    if (!points || !labels || !configReady || !liveReady || autoRan.current) return;
     autoRan.current = true;
     const runDefault = () => runPlanner({
       pointKey: field,
@@ -227,7 +288,7 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
         return runPlanner({ pointKey: field, source: "RECORDED", suppliedReplay: toReplay(issuance), seasonIssued: issuance.fetched_utc });
       })
       .catch(() => runDefault());
-  }, [configReady, field, labels, points, replayPoint, runPlanner, startIssued]);
+  }, [configReady, field, labels, liveReady, points, replayPoint, runPlanner, startIssued]);
 
   useEffect(() => {
     if (!configReady) return;
@@ -235,8 +296,10 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
     params.set("field", field);
     params.set(
       "products",
-      PRODUCT_REGISTRATIONS.filter((reg) => selectedRegs.has(reg)).join(","),
+      PRODUCT_REGISTRATIONS.filter((reg) => selectedRegs.has(reg)).join(",") || "none",
     );
+    if (liveLabels.length > 0) params.set("live", liveLabels.map((label) => label.reg).join(","));
+    else params.delete("live");
     params.set("hours", String(jobHours));
     params.delete("tank");
     if (activeReplay) params.set("replay", activeReplay);
@@ -244,7 +307,7 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
     if (replayIssued) params.set("issued", replayIssued);
     else params.delete("issued");
     window.history.replaceState(null, "", `${window.location.pathname}?${params.toString()}${window.location.hash}`);
-  }, [activeReplay, configReady, field, jobHours, replayIssued, selectedRegs]);
+  }, [activeReplay, configReady, field, jobHours, liveLabels, replayIssued, selectedRegs]);
 
   useEffect(() => {
     if (!result || deepLinkScrolled.current || !window.location.hash) return;
@@ -262,9 +325,9 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
   }, [initialHour, result, selectedHour]);
 
   const pointEntries = useMemo(() => points ? orderedPointEntries(points) : [], [points]);
-  const selectedProducts = result && labels
+  const selectedProducts = result && tankLabels
     ? result.ruleGroups.map((group) => {
-        const label = Object.values(labels).find((candidate) => candidate.product === group.product);
+        const label = Object.values(tankLabels).find((candidate) => candidate.product === group.product);
         return {
           fullName: group.product,
           shortName: label?.shortName ?? group.product,
@@ -322,7 +385,7 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
       if (next.has(reg)) next.delete(reg);
       else next.add(reg);
       setActiveReplay(undefined);
-      setValidation(next.size === 0 ? "Choose at least one product in the tank." : null);
+      setValidation(next.size + liveLabels.length === 0 ? "Choose at least one product in the tank." : null);
       return next;
     });
   }
@@ -353,6 +416,8 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
     setJobHours(snapshot.jobHours);
     setActiveReplay(snapshot.source === "RECORDED" ? snapshot.pointKey : undefined);
     setSelectedRegs(new Set(registrations));
+    // The agent checks the three shipped labels only, so the tank it reports has no live label.
+    setLiveLabels([]);
     setFailure(null);
     setValidation(null);
     setSelectedHour(null);
@@ -452,6 +517,24 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
                   );
                 })}
               </div>
+              <AnyLabel
+                disabled={!labels || !liveReady || Boolean(working)}
+                liveLabels={liveLabels}
+                onAdd={(compiled) => {
+                  setLiveLabels((current) => [...current.filter((label) => label.reg !== compiled.reg), compiled].slice(0, MAX_LIVE_LABELS));
+                  setActiveReplay(undefined);
+                  setValidation(null);
+                }}
+                onRemove={(reg) => {
+                  setLiveLabels((current) => current.filter((label) => label.reg !== reg));
+                  setActiveReplay(undefined);
+                }}
+              />
+              {!liveReady ? (
+                <p className="mt-3 text-sm font-bold" aria-live="polite" data-live-loading>
+                  Reading the live label named in this link from EPA before the first check.
+                </p>
+              ) : null}
             </fieldset>
 
             <div className="mt-7">
@@ -483,7 +566,7 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
 
             <button
               type="submit"
-              disabled={!points || !labels || Boolean(working) || selectedRegs.size === 0}
+              disabled={!points || !labels || Boolean(working) || tankRegistrations.length === 0}
               className="mt-7 inline-flex min-h-14 w-full items-center justify-center rounded-full border-[3px] border-[#14213d] bg-[#ffc53d] px-6 text-lg font-black shadow-[4px_5px_0_#14213d] outline-offset-2 transition-transform hover:-translate-y-0.5 hover:shadow-[5px_7px_0_#14213d] focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#2f8f4e] disabled:cursor-not-allowed disabled:opacity-50"
             >
               Check 156 forecast hours
@@ -514,10 +597,10 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
         )}
       </section>
 
-      {result && labels && (
+      {result && tankLabels && (
         <Results
           result={result}
-          labels={labels}
+          labels={tankLabels}
           pointName={pointName(result.pointKey, points?.[result.pointKey] ?? {})}
           jobHours={jobHours}
           windows={windows}
@@ -639,7 +722,9 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
     ? sprayRecordForWindow(result, labels, selectedPointName, selectedWindow)
     : undefined;
   const nextWindow = windows[0];
-  const tankLabel = products.map((product) => product.shortName).join(", ");
+  const tankLabel = products
+    .map((product) => product.reg && labels[product.reg]?.unscored ? `${product.shortName} (UNSCORED)` : product.shortName)
+    .join(", ");
   const tankDescription = products
     .map((product) => product.reg ? `${product.fullName}, EPA Reg. ${product.reg}` : product.fullName)
     .join("; ");

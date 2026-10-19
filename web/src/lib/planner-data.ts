@@ -21,6 +21,10 @@ export type LabelRecord = {
   url: string;
   bytes: number;
   sha256: string;
+  // Set only for a label compiled live from EPA in this browser session: it has no gold set,
+  // and its restricted-use status comes from the live compile's own page text.
+  unscored?: true;
+  restrictedUse?: boolean;
 };
 
 export type LabelIndex = Record<string, LabelRecord>;

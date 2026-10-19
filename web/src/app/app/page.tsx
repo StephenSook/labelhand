@@ -4,7 +4,7 @@ import { Planner } from "@/ui/planner/Planner";
 
 export const metadata: Metadata = {
   title: "Check a tank", // the root layout's template appends "| Labelhand"
-  description: "Check three EPA cotton defoliation labels against an NWS hourly forecast.",
+  description: "Check EPA pesticide labels in a tank against an NWS hourly forecast.",
 };
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
@@ -26,6 +26,7 @@ export default async function AppPage({ searchParams }: { searchParams: SearchPa
         initialIssued={first(query.issued)}
         initialHour={first(query.hour)}
         initialQuestion={first(query.question)}
+        initialLive={first(query.live)}
       />
     </>
   );
