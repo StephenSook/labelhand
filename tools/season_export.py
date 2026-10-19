@@ -125,12 +125,7 @@ def parse_periods(periods: Any) -> tuple[dict[str, Any], bool, int]:
     return issuance, consecutive, sum(value is None for value in winds)
 
 
-def parse_hourly_file(path: pathlib.Path) -> dict[str, Any]:
-    try:
-        with gzip.open(path, "rt", encoding="utf-8") as handle:
-            record = json.load(handle)
-    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
-        raise BadHourlyFile(f"cannot read gzip JSON: {type(exc).__name__}: {exc}") from exc
+def parse_hourly_record(record: Any, source: str | pathlib.Path) -> dict[str, Any]:
     if not isinstance(record, dict):
         raise BadHourlyFile("record envelope is not an object")
     if record.get("kind") != "hourly":
@@ -155,8 +150,24 @@ def parse_hourly_file(path: pathlib.Path) -> dict[str, Any]:
         "issuance": issuance,
         "consecutive": consecutive,
         "raw_winds": raw_winds,
-        "path": path,
+        "path": source,
     }
+
+
+def parse_hourly_bytes(content: bytes, source: str) -> dict[str, Any]:
+    try:
+        record = json.loads(gzip.decompress(content).decode("utf-8"))
+    except (EOFError, OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise BadHourlyFile(f"cannot read gzip JSON: {type(exc).__name__}: {exc}") from exc
+    return parse_hourly_record(record, source)
+
+
+def parse_hourly_file(path: pathlib.Path) -> dict[str, Any]:
+    try:
+        content = path.read_bytes()
+    except OSError as exc:
+        raise BadHourlyFile(f"cannot read gzip JSON: {type(exc).__name__}: {exc}") from exc
+    return parse_hourly_bytes(content, str(path))
 
 
 def scan_recorded(recorded: pathlib.Path) -> tuple[list[dict[str, Any]], dict[str, Any]]:
@@ -186,11 +197,29 @@ def select_cadence(records: list[dict[str, Any]], cadence_hours: int) -> list[di
     return selected or records[:1]
 
 
+def encode_json(value: Any) -> bytes:
+    return (json.dumps(value, ensure_ascii=False, separators=(",", ":"), sort_keys=True) + "\n").encode("utf-8")
+
+
 def write_json(path: pathlib.Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8", newline="\n") as handle:
-        json.dump(value, handle, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
-        handle.write("\n")
+    path.write_bytes(encode_json(value))
+
+
+def build_day(records: list[dict[str, Any]], point: str, day: str, cadence_hours: int = 1) -> dict[str, Any]:
+    matching = sorted(
+        (record for record in records if record["point"] == point and record["fetched"].astimezone(dt.UTC).date().isoformat() == day),
+        key=lambda record: (record["fetched"], str(record["path"])),
+    )
+    if not matching:
+        raise BadHourlyFile(f"no valid hourly files were found for {point} on {day}")
+    selected = select_cadence(matching, cadence_hours)
+    return {
+        "day": day,
+        "issuances": [record["issuance"] for record in selected],
+        "point": point,
+        "source": SOURCE,
+    }
 
 
 def write_export(

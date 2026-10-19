@@ -19,12 +19,14 @@ from __future__ import annotations
 
 import datetime as dt
 import gzip
+import io
 import json
 import pathlib
 import sys
 import time
 import urllib.error
 import urllib.request
+from collections.abc import Callable
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DATA = ROOT / "data" / "nws_recorded"
@@ -56,7 +58,7 @@ def log(msg: str) -> None:
         fh.write(f"{stamp} {msg}\n")
 
 
-def fetch_json(url: str, attempts: int = 3) -> dict | None:
+def fetch_json(url: str, attempts: int = 3, log_message: Callable[[str], None] = log) -> dict | None:
     last = ""
     for i in range(attempts):
         req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "application/geo+json"})
@@ -67,24 +69,28 @@ def fetch_json(url: str, attempts: int = 3) -> dict | None:
         except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
             last = f"{type(exc).__name__}: {exc}"
             time.sleep(2 + 3 * i)
-    log(f"FETCH_FAIL {url} {last}")
+    log_message(f"FETCH_FAIL {url} {last}")
     return None
 
 
-def resolve_points() -> dict:
-    cache = json.loads(CACHE.read_text(encoding="utf-8")) if CACHE.exists() else {}
+def resolve_points(
+    fetch: Callable[[str, int], dict | None] = fetch_json,
+    log_message: Callable[[str], None] = log,
+    cache_path: pathlib.Path = CACHE,
+) -> dict:
+    cache = json.loads(cache_path.read_text(encoding="utf-8")) if cache_path.exists() else {}
     changed = False
     for name, (lat, lon) in POINTS.items():
         if name in cache and "stations" in cache[name]:
             continue
-        meta = fetch_json(f"https://api.weather.gov/points/{lat},{lon}")
-        props = (meta or {}).get("properties", {})
+        meta = fetch(f"https://api.weather.gov/points/{lat},{lon}", 3)
+        props = meta.get("properties", {}) if isinstance(meta, dict) else {}
         needed = ("forecastHourly", "forecastGridData", "observationStations", "gridId")
         if not all(k in props for k in needed):
-            log(f"POINT_UNRESOLVED {name}")
+            log_message(f"POINT_UNRESOLVED {name}")
             continue
-        stations = fetch_json(props["observationStations"])
-        feats = (stations or {}).get("features", [])
+        stations = fetch(props["observationStations"], 3)
+        feats = stations.get("features", []) if isinstance(stations, dict) else []
         station_ids = [f["properties"]["stationIdentifier"] for f in feats[:4]]
         station = station_ids[0] if station_ids else None
         cache[name] = {
@@ -100,55 +106,91 @@ def resolve_points() -> dict:
         }
         changed = True
     if changed:
-        CACHE.parent.mkdir(parents=True, exist_ok=True)
-        CACHE.write_text(json.dumps(cache, indent=2), encoding="utf-8")
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        cache_path.write_text(json.dumps(cache, indent=2), encoding="utf-8")
     return cache
 
 
-def save(kind: str, name: str, payload: dict, now: dt.datetime) -> None:
-    day = DATA / now.strftime("%Y-%m-%d")
-    day.mkdir(parents=True, exist_ok=True)
-    path = day / f"{now.strftime('%H%M')}Z_{name}_{kind}.json.gz"
+def record_key(kind: str, name: str, now: dt.datetime) -> str:
+    return f"nws_recorded/{now.strftime('%Y-%m-%d')}/{now.strftime('%H%M')}Z_{name}_{kind}.json.gz"
+
+
+def encode_record(kind: str, name: str, payload: dict, now: dt.datetime) -> bytes:
     record = {"fetched_utc": now.isoformat(timespec="seconds"), "point": name, "kind": kind, "data": payload}
-    with gzip.open(path, "wt", encoding="utf-8") as fh:
-        json.dump(record, fh, separators=(",", ":"))
+    encoded = json.dumps(record, separators=(",", ":")).encode("utf-8")
+    output = io.BytesIO()
+    with gzip.GzipFile(fileobj=output, mode="wb", filename="", mtime=0) as handle:
+        handle.write(encoded)
+    return output.getvalue()
+
+
+def save(kind: str, name: str, payload: dict, now: dt.datetime) -> None:
+    relative = pathlib.PurePosixPath(record_key(kind, name, now)).relative_to("nws_recorded")
+    path = DATA.joinpath(*relative.parts)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(encode_record(kind, name, payload, now))
+
+
+def record_once(
+    cache: dict,
+    now: dt.datetime,
+    fetch: Callable[[str, int], dict | None] = fetch_json,
+    save_record: Callable[[str, str, dict, dt.datetime], None] = save,
+    log_message: Callable[[str], None] = log,
+) -> tuple[int, int]:
+    ok = fail = 0
+
+    def checked_save(kind: str, name: str, payload: dict) -> bool:
+        try:
+            save_record(kind, name, payload, now)
+        except Exception as exc:
+            log_message(f"SAVE_FAIL {kind} {name} {type(exc).__name__}: {exc}")
+            return False
+        return True
+
+    for name, meta in cache.items():
+        hourly = fetch(meta["forecastHourly"], 3)
+        hprops = hourly.get("properties", {}) if isinstance(hourly, dict) else {}
+        periods = hprops.get("periods", []) if isinstance(hprops, dict) else []
+        if periods and isinstance(periods[0], dict) and "windSpeed" in periods[0] and "temperature" in periods[0]:
+            if checked_save("hourly", name, hprops):
+                ok += 1
+            else:
+                fail += 1
+        else:
+            log_message(f"BAD_CONTENT hourly {name}")
+            fail += 1
+        if now.hour % 3 == 0:
+            grid = fetch(meta["forecastGridData"], 3)
+            gprops = grid.get("properties", {}) if isinstance(grid, dict) else {}
+            if "temperature" in gprops and "windSpeed" in gprops:
+                if checked_save("grid", name, gprops):
+                    ok += 1
+                else:
+                    fail += 1
+            else:
+                log_message(f"BAD_CONTENT grid {name}")
+                fail += 1
+        saved_obs = False
+        for station in meta.get("stations") or ([meta["station"]] if meta.get("station") else []):
+            obs = fetch(f"https://api.weather.gov/stations/{station}/observations/latest", 1)
+            oprops = obs.get("properties", {}) if isinstance(obs, dict) else {}
+            if "timestamp" in oprops:
+                oprops["_station"] = station
+                if checked_save("obs", name, oprops):
+                    ok += 1
+                    saved_obs = True
+                    break
+        if not saved_obs:
+            log_message(f"BAD_CONTENT obs {name} (no station answered)")
+            fail += 1
+    return ok, fail
 
 
 def main() -> int:
     now = dt.datetime.now(dt.UTC)
     cache = resolve_points()
-    ok = fail = 0
-    for name, meta in cache.items():
-        hourly = fetch_json(meta["forecastHourly"])
-        periods = (hourly or {}).get("properties", {}).get("periods", [])
-        if periods and "windSpeed" in periods[0] and "temperature" in periods[0]:
-            save("hourly", name, hourly["properties"], now)
-            ok += 1
-        else:
-            log(f"BAD_CONTENT hourly {name}")
-            fail += 1
-        if now.hour % 3 == 0:
-            grid = fetch_json(meta["forecastGridData"])
-            gprops = (grid or {}).get("properties", {})
-            if "temperature" in gprops and "windSpeed" in gprops:
-                save("grid", name, gprops, now)
-                ok += 1
-            else:
-                log(f"BAD_CONTENT grid {name}")
-                fail += 1
-        saved_obs = False
-        for station in meta.get("stations") or ([meta["station"]] if meta.get("station") else []):
-            obs = fetch_json(f"https://api.weather.gov/stations/{station}/observations/latest", attempts=1)
-            oprops = (obs or {}).get("properties", {})
-            if "timestamp" in oprops:
-                oprops["_station"] = station
-                save("obs", name, oprops, now)
-                ok += 1
-                saved_obs = True
-                break
-        if not saved_obs:
-            log(f"BAD_CONTENT obs {name} (no station answered)")
-            fail += 1
+    ok, fail = record_once(cache, now)
     log(f"RUN ok={ok} fail={fail} points={len(cache)}")
     return 0 if ok and not fail else (2 if ok else 1)
 
