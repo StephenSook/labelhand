@@ -77,3 +77,12 @@ test("the map page never overflows and has no axe violations", async ({ page }) 
     expect(scan.violations, `map at ${width}px`).toEqual([]);
   }
 });
+
+test("the judge route opens the map on a morning every county could spray", async ({ page }) => {
+  await page.goto("/judge");
+  const href = await page.getByRole("link", { name: /Open the map/ }).getAttribute("href");
+  expect(href).toBe("/map?mode=recorded&day=2026-10-15&hours=3&ahead=3");
+  await page.goto(href!);
+  await waitForMap(page);
+  await expect(page.locator("a[data-county][data-status=open]")).toHaveCount(10);
+});

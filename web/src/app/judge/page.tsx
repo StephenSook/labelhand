@@ -34,6 +34,16 @@ const steps: JudgeStep[] = [
     action: "Open the season strip",
   },
   {
+    title: "See where the tank can spray across all ten fields",
+    body: (
+      <p>
+        The map runs the same check at every field and colors each county by when the labels allow the job. This link opens Thursday, Oct 15, three hours after that morning&apos;s forecast, when every county could start a three-hour job. Drag the map time to watch the windows open and close.
+      </p>
+    ),
+    href: "/map?mode=recorded&day=2026-10-15&hours=3&ahead=3",
+    action: "Open the map",
+  },
+  {
     title: "Put any EPA label in the tank",
     body: (
       <p>
