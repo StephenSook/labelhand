@@ -45,6 +45,11 @@ describe("PPLS client", () => {
     });
   });
 
+  test("preserves an authoritative EPA 404", async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue(new Response(null, { status: 404 }));
+    await expect(listLabelVersions("100-1256", fetchMock)).rejects.toMatchObject({ status: 404 });
+  });
+
   test("rejects state registrations and mismatched PDF file names", () => {
     expect(() => parsePplsFileName("000100-01256-20220503.pdf", "264-802")).toThrow(/does not match/);
     expect(() => parsePplsFileName("000100-01256-20220503.pdf", "WA060010")).toThrow(/federal EPA/);

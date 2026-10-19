@@ -415,7 +415,12 @@ export async function compileLiveLabel(
     accepted: floored,
     rejected,
   };
-  assertCompiledShape(compiled, extracted.pages);
+  try {
+    assertCompiledShape(compiled, extracted.pages);
+  } catch (error) {
+    if (error instanceof PipelineError) updateErrorUsage(error);
+    throw error;
+  }
   input.signal?.removeEventListener("abort", abortFromParent);
   await emit({ type: "done", compiled });
   return compiled;

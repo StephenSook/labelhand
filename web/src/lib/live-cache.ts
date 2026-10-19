@@ -18,6 +18,10 @@ function token(): string | null {
   return process.env.BLOB_READ_WRITE_TOKEN?.trim() || null;
 }
 
+export function liveCacheConfigured(): boolean {
+  return token() !== null;
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -60,7 +64,12 @@ export function fileIndexCacheKey(fileName: string): string {
   return `index/${fileName}.json`;
 }
 
-async function readJson(pathname: string): Promise<unknown | null> {
+export function registrationIndexCacheKey(reg: string): string {
+  if (!/^\d{1,6}-\d{1,5}$/.test(reg)) throw new TypeError("A federal registration number is required for the cache key.");
+  return `registration/${reg}.json`;
+}
+
+async function readJson(pathname: string, signal?: AbortSignal): Promise<unknown | null> {
   const blobToken = token();
   if (!blobToken) return null;
   try {
@@ -68,6 +77,7 @@ async function readJson(pathname: string): Promise<unknown | null> {
       access: "private",
       token: blobToken,
       useCache: false,
+      ...(signal ? { abortSignal: signal } : {}),
     });
     if (!result) return null;
     return await new Response(result.stream).json() as unknown;
@@ -76,22 +86,28 @@ async function readJson(pathname: string): Promise<unknown | null> {
   }
 }
 
-export async function getLiveCacheIndex(fileName: string): Promise<LiveCacheIndex | null> {
-  const value = await readJson(fileIndexCacheKey(fileName));
+export async function getLiveCacheIndex(fileName: string, signal?: AbortSignal): Promise<LiveCacheIndex | null> {
+  const value = await readJson(fileIndexCacheKey(fileName), signal);
   return isLiveCacheIndex(value) ? value : null;
+}
+
+export async function getRegistrationCacheIndex(reg: string, signal?: AbortSignal): Promise<LiveCacheIndex | null> {
+  const value = await readJson(registrationIndexCacheKey(reg), signal);
+  return isLiveCacheIndex(value) && value.reg === reg ? value : null;
 }
 
 export async function getCachedLiveLabel(
   sha256: string,
   pipelineVersion: string,
+  signal?: AbortSignal,
 ): Promise<CompiledLiveLabel | null> {
-  const value = await readJson(compiledCacheKey(sha256, pipelineVersion));
+  const value = await readJson(compiledCacheKey(sha256, pipelineVersion), signal);
   if (!isCompiledLiveLabel(value)) return null;
   if (value.label_sha256 !== sha256 || value.pipeline_version !== pipelineVersion) return null;
   return value;
 }
 
-export async function writeLiveCache(compiled: CompiledLiveLabel): Promise<boolean> {
+export async function writeLiveCache(compiled: CompiledLiveLabel, signal?: AbortSignal): Promise<boolean> {
   const blobToken = token();
   if (!blobToken || !compiled.complete) return false;
   const compiledKey = compiledCacheKey(compiled.label_sha256, compiled.pipeline_version);
@@ -103,6 +119,7 @@ export async function writeLiveCache(compiled: CompiledLiveLabel): Promise<boole
       cacheControlMaxAge: 86_400,
       contentType: JSON_CONTENT_TYPE,
       token: blobToken,
+      ...(signal ? { abortSignal: signal } : {}),
     });
   } catch (error) {
     if (!(error instanceof BlobPreconditionFailedError)) return false;
@@ -118,6 +135,19 @@ export async function writeLiveCache(compiled: CompiledLiveLabel): Promise<boole
     pipelineVersion: compiled.pipeline_version,
   };
   try {
+    await put(registrationIndexCacheKey(compiled.reg), JSON.stringify(index), {
+      access: "private",
+      addRandomSuffix: false,
+      allowOverwrite: true,
+      cacheControlMaxAge: 86_400,
+      contentType: JSON_CONTENT_TYPE,
+      token: blobToken,
+      ...(signal ? { abortSignal: signal } : {}),
+    });
+  } catch {
+    return false;
+  }
+  try {
     await put(fileIndexCacheKey(compiled.label_file), JSON.stringify(index), {
       access: "private",
       addRandomSuffix: false,
@@ -125,9 +155,10 @@ export async function writeLiveCache(compiled: CompiledLiveLabel): Promise<boole
       cacheControlMaxAge: 86_400,
       contentType: JSON_CONTENT_TYPE,
       token: blobToken,
+      ...(signal ? { abortSignal: signal } : {}),
     });
-    return true;
   } catch {
-    return false;
+    // The registration pointer still makes the compiled cache reachable.
   }
+  return true;
 }

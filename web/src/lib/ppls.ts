@@ -67,7 +67,9 @@ function alternateBrandNames(value: unknown): string[] {
 }
 
 async function readJson(response: Response, what: string): Promise<Record<string, unknown>> {
-  if (!response.ok) throw new PplsError(`${what} returned HTTP ${response.status}.`);
+  if (!response.ok) {
+    throw new PplsError(`${what} returned HTTP ${response.status}.`, response.status === 404 ? 404 : 502);
+  }
   try {
     const payload = await response.json() as unknown;
     if (!isRecord(payload)) throw new TypeError("response is not an object");

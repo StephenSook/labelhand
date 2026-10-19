@@ -21,6 +21,8 @@ import {
   fileIndexCacheKey,
   getCachedLiveLabel,
   getLiveCacheIndex,
+  getRegistrationCacheIndex,
+  registrationIndexCacheKey,
   writeLiveCache,
 } from "@/lib/live-cache";
 
@@ -80,21 +82,37 @@ describe("live cache", () => {
     expect(putMock).not.toHaveBeenCalled();
   });
 
-  test("writes the immutable compiled object before its mutable file index", async () => {
+  test("writes the immutable object before its registration and file indexes", async () => {
     expect(await writeLiveCache(compiled())).toBe(true);
-    expect(putMock).toHaveBeenCalledTimes(2);
+    expect(putMock).toHaveBeenCalledTimes(3);
     expect(putMock.mock.calls[0][0]).toBe(compiledCacheKey(SHA, VERSION));
     expect(putMock.mock.calls[0][2]).toMatchObject({ allowOverwrite: false, access: "private" });
-    expect(putMock.mock.calls[1][0]).toBe(fileIndexCacheKey("000100-01256-20220503.pdf"));
+    expect(putMock.mock.calls[1][0]).toBe(registrationIndexCacheKey("100-1256"));
     expect(putMock.mock.calls[1][2]).toMatchObject({ allowOverwrite: true, access: "private" });
+    expect(putMock.mock.calls[2][0]).toBe(fileIndexCacheKey("000100-01256-20220503.pdf"));
+    expect(putMock.mock.calls[2][2]).toMatchObject({ allowOverwrite: true, access: "private" });
   });
 
   test("repairs the index without replacing an existing compiled object", async () => {
     const conflict = new BlobPreconditionFailedErrorMock("already exists");
-    putMock.mockRejectedValueOnce(conflict).mockResolvedValueOnce({});
+    putMock.mockRejectedValueOnce(conflict).mockResolvedValue({});
     expect(await writeLiveCache(compiled())).toBe(true);
+    expect(putMock).toHaveBeenCalledTimes(3);
+    expect(putMock.mock.calls[1][0]).toBe(registrationIndexCacheKey("100-1256"));
+    expect(putMock.mock.calls[2][0]).toBe(fileIndexCacheKey("000100-01256-20220503.pdf"));
+  });
+
+  test("requires the registration pointer but tolerates a missing file index", async () => {
+    putMock.mockResolvedValueOnce({}).mockRejectedValueOnce(new Error("registration failed"));
+    expect(await writeLiveCache(compiled())).toBe(false);
     expect(putMock).toHaveBeenCalledTimes(2);
-    expect(putMock.mock.calls[1][0]).toBe(fileIndexCacheKey("000100-01256-20220503.pdf"));
+
+    putMock.mockReset()
+      .mockResolvedValueOnce({})
+      .mockResolvedValueOnce({})
+      .mockRejectedValueOnce(new Error("file index failed"));
+    expect(await writeLiveCache(compiled())).toBe(true);
+    expect(putMock).toHaveBeenCalledTimes(3);
   });
 
   test("reads only a complete record matching the requested sha and pipeline", async () => {
@@ -104,7 +122,7 @@ describe("live cache", () => {
     expect(await getCachedLiveLabel(SHA, VERSION)).toBeNull();
   });
 
-  test("reads a typed file index and rejects corrupt JSON shapes", async () => {
+  test("reads typed file and registration indexes and rejects corrupt shapes", async () => {
     const index = {
       reg: "100-1256",
       product: "AXIAL XL",
@@ -114,8 +132,14 @@ describe("live cache", () => {
       sha256: SHA,
       pipelineVersion: VERSION,
     };
-    getMock.mockResolvedValueOnce(blobJson(index)).mockResolvedValueOnce(blobJson({ ...index, sha256: "bad" }));
+    getMock
+      .mockResolvedValueOnce(blobJson(index))
+      .mockResolvedValueOnce(blobJson({ ...index, sha256: "bad" }))
+      .mockResolvedValueOnce(blobJson(index))
+      .mockResolvedValueOnce(blobJson({ ...index, reg: "100-9999" }));
     expect(await getLiveCacheIndex(index.fileName)).toEqual(index);
     expect(await getLiveCacheIndex(index.fileName)).toBeNull();
+    expect(await getRegistrationCacheIndex(index.reg)).toEqual(index);
+    expect(await getRegistrationCacheIndex(index.reg)).toBeNull();
   });
 });

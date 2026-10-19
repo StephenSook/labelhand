@@ -1,9 +1,14 @@
+import compilerSpec from "./compiler/spec.generated.json";
+
 export const LIMIT_WINDOW_MS = 10 * 60 * 1_000;
 export const COLD_COMPILES_PER_WINDOW = 3;
 export const CACHE_HITS_PER_WINDOW = 60;
 export const DAILY_BUDGET_USD = 2;
 export const COMPILE_TOKEN_CEILING = 120_000;
 export const MAX_IN_FLIGHT_COLD_COMPILES = 2;
+
+const MAX_TOKEN_PRICE_PER_MILLION = Math.max(...Object.values(compilerSpec.PRICES).flat());
+export const MAX_COMPILE_COST_USD = COMPILE_TOKEN_CEILING * MAX_TOKEN_PRICE_PER_MILLION / 1_000_000;
 
 type LimitKind = "cache" | "cold";
 
@@ -15,8 +20,23 @@ interface LimitResult {
 interface ColdCompileOptions<T> {
   sha256: string;
   ip: string;
-  work: () => Promise<T>;
+  work: (signal: AbortSignal) => Promise<T>;
+  signal?: AbortSignal;
   now?: number;
+  coldRateReserved?: boolean;
+  requestRateReserved?: boolean;
+}
+
+interface BudgetReservation {
+  day: string;
+  amount: number;
+}
+
+interface InFlightEntry {
+  promise: Promise<unknown>;
+  controller: AbortController;
+  consumers: Set<symbol>;
+  settled: boolean;
 }
 
 export interface ColdCompileResult<T> {
@@ -32,10 +52,11 @@ export class LiveLimitError extends Error {
 }
 
 const requestWindows = new Map<string, number[]>();
-const inFlight = new Map<string, Promise<unknown>>();
+const inFlight = new Map<string, InFlightEntry>();
 let activeColdCompiles = 0;
 let budgetDay = "";
 let budgetSpentUsd = 0;
+let budgetReservedUsd = 0;
 
 function dayKey(now: number): string {
   return new Date(now).toISOString().slice(0, 10);
@@ -46,6 +67,69 @@ function refreshBudgetDay(now: number): void {
   if (budgetDay === currentDay) return;
   budgetDay = currentDay;
   budgetSpentUsd = 0;
+  budgetReservedUsd = 0;
+}
+
+function reservationError(): LiveLimitError {
+  return new LiveLimitError("The live label daily budget has been reached. Try again tomorrow.", 503);
+}
+
+function reserveCompileBudget(now: number): BudgetReservation {
+  refreshBudgetDay(now);
+  if (budgetSpentUsd + budgetReservedUsd + MAX_COMPILE_COST_USD > DAILY_BUDGET_USD) {
+    throw reservationError();
+  }
+  budgetReservedUsd += MAX_COMPILE_COST_USD;
+  return { day: budgetDay, amount: MAX_COMPILE_COST_USD };
+}
+
+function releaseCompileBudget(reservation: BudgetReservation): void {
+  if (budgetDay !== reservation.day) return;
+  budgetReservedUsd = Math.max(0, budgetReservedUsd - reservation.amount);
+}
+
+function signalError(signal: AbortSignal): Error {
+  return signal.reason instanceof Error
+    ? signal.reason
+    : new LiveLimitError("The live compile request was cancelled.", 499);
+}
+
+function waitForEntry<T>(entry: InFlightEntry, signal?: AbortSignal): Promise<T> {
+  const consumer = Symbol("live-compile-consumer");
+  entry.consumers.add(consumer);
+  return new Promise<T>((resolve, reject) => {
+    let finished = false;
+    const detach = (reason?: Error) => {
+      if (finished) return;
+      finished = true;
+      if (signal) signal.removeEventListener("abort", onAbort);
+      entry.consumers.delete(consumer);
+      if (!entry.settled && entry.consumers.size === 0 && !entry.controller.signal.aborted) {
+        entry.controller.abort(reason ?? new LiveLimitError("The live compile has no remaining subscribers.", 499));
+      }
+    };
+    const onAbort = () => {
+      const error = signal ? signalError(signal) : new LiveLimitError("The live compile request was cancelled.", 499);
+      detach(error);
+      reject(error);
+    };
+
+    if (signal?.aborted) {
+      onAbort();
+      return;
+    }
+    signal?.addEventListener("abort", onAbort, { once: true });
+    entry.promise.then(
+      (value) => {
+        detach();
+        resolve(value as T);
+      },
+      (error: unknown) => {
+        detach();
+        reject(error);
+      },
+    );
+  });
 }
 
 export function checkRequestLimit(
@@ -72,7 +156,14 @@ export function checkRequestLimit(
 export function assertCacheHitAllowed(ip: string, now = Date.now()): void {
   const result = checkRequestLimit(ip, "cache", now);
   if (!result.allowed) {
-    throw new LiveLimitError("Too many cached label requests. Try again shortly.", 429, result.retryAfterSeconds);
+    throw new LiveLimitError("Too many label requests. Try again shortly.", 429, result.retryAfterSeconds);
+  }
+}
+
+export function assertColdCompileAllowed(ip: string, now = Date.now()): void {
+  const result = checkRequestLimit(ip, "cold", now);
+  if (!result.allowed) {
+    throw new LiveLimitError("Too many cold label compiles. Try again shortly.", 429, result.retryAfterSeconds);
   }
 }
 
@@ -84,8 +175,8 @@ export function assertLiveCompileEnabled(value = process.env.LIVE_COMPILE): void
 
 export function assertDailyBudgetAvailable(now = Date.now()): void {
   refreshBudgetDay(now);
-  if (budgetSpentUsd >= DAILY_BUDGET_USD) {
-    throw new LiveLimitError("The live label daily budget has been reached. Try again tomorrow.", 503);
+  if (budgetSpentUsd + budgetReservedUsd + MAX_COMPILE_COST_USD > DAILY_BUDGET_USD) {
+    throw reservationError();
   }
 }
 
@@ -104,33 +195,63 @@ export function assertCompileTokenCeiling(totalTokens: number): void {
 }
 
 export async function runColdCompile<T>(options: ColdCompileOptions<T>): Promise<ColdCompileResult<T>> {
-  const existing = inFlight.get(options.sha256) as Promise<T> | undefined;
-  if (existing) return { value: await existing, deduplicated: true };
+  if (options.signal?.aborted) throw signalError(options.signal);
+  const existing = inFlight.get(options.sha256);
+  if (existing) {
+    if (!options.requestRateReserved) assertCacheHitAllowed(options.ip, options.now);
+    return { value: await waitForEntry<T>(existing, options.signal), deduplicated: true };
+  }
 
   if (activeColdCompiles >= MAX_IN_FLIGHT_COLD_COMPILES) {
     throw new LiveLimitError("The live compiler is busy. Try again shortly.", 429, 10);
   }
-  const rate = checkRequestLimit(options.ip, "cold", options.now ?? Date.now());
-  if (!rate.allowed) {
-    throw new LiveLimitError("Too many cold label compiles. Try again shortly.", 429, rate.retryAfterSeconds);
+  const now = options.now ?? Date.now();
+  const reservation = reserveCompileBudget(now);
+  try {
+    if (!options.coldRateReserved) assertColdCompileAllowed(options.ip, now);
+  } catch (error) {
+    releaseCompileBudget(reservation);
+    throw error;
   }
-  assertDailyBudgetAvailable(options.now);
 
   activeColdCompiles += 1;
-  const promise = Promise.resolve().then(options.work);
-  inFlight.set(options.sha256, promise);
-  try {
-    return { value: await promise, deduplicated: false };
-  } finally {
-    if (inFlight.get(options.sha256) === promise) inFlight.delete(options.sha256);
-    activeColdCompiles -= 1;
-  }
+  const controller = new AbortController();
+  const entry: InFlightEntry = {
+    promise: Promise.resolve(),
+    controller,
+    consumers: new Set(),
+    settled: false,
+  };
+  const workPromise = Promise.resolve().then(() => options.work(controller.signal));
+  entry.promise = workPromise.then(
+    (value) => {
+      entry.settled = true;
+      return value;
+    },
+    (error: unknown) => {
+      entry.settled = true;
+      throw error;
+    },
+  ).finally(() => {
+    if (inFlight.get(options.sha256) === entry) inFlight.delete(options.sha256);
+    activeColdCompiles = Math.max(0, activeColdCompiles - 1);
+    releaseCompileBudget(reservation);
+  });
+  void entry.promise.catch(() => undefined);
+  inFlight.set(options.sha256, entry);
+  return { value: await waitForEntry<T>(entry, options.signal), deduplicated: false };
 }
 
 export function resetLiveLimitsForTests(): void {
+  for (const entry of inFlight.values()) {
+    if (!entry.controller.signal.aborted) {
+      entry.controller.abort(new LiveLimitError("The live compile limit state was reset.", 499));
+    }
+  }
   requestWindows.clear();
   inFlight.clear();
   activeColdCompiles = 0;
   budgetDay = "";
   budgetSpentUsd = 0;
+  budgetReservedUsd = 0;
 }
