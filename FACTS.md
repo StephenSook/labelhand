@@ -73,6 +73,24 @@ These counts were recomputed from the committed replay periods and `.ship` rules
 | Dropp SC and Prep | `{"PERMITTED":17,"FIELD_CHECK":63,"BLOCKED":76}` | command: filter fixture rules to registrations `264-700,264-418`, run `windows.evaluate`, count `state`; output: `PERMITTED=17,FIELD_CHECK=63,BLOCKED=76` | MEASURED |
 | Folex 6 EC, Dropp SC, and Prep | `{"PERMITTED":17,"FIELD_CHECK":63,"BLOCKED":76}` | command: run `windows.evaluate` with all fixture rules, count `state`; output: `PERMITTED=17,FIELD_CHECK=63,BLOCKED=76` | MEASURED |
 
+## Recorded season and forecast check-back
+
+The season files are exported by `tools/season_export.py`. The check-back runs the planner on the forecast issued closest to 24 hours before each recorded hour and checks every forecast-permitted hour against the station observation recorded for that hour. Only label limits a station can measure are checked; clauses it cannot decide are listed, never counted as held.
+
+| Claim | Exact value | Source | Tag |
+|---|---|---|---|
+| Season recorded span | `{"first":"2026-10-05T01:19:36+00:00","last":"2026-10-19T18:07:01+00:00"}` | `json:web/public/data/season/index.json#recorded_span` | MEASURED |
+| Season issuances per point | `{"ben_hill":{"issuances":339},"berrien":{"issuances":339},"coffee":{"issuances":339},"colquitt":{"issuances":339},"cook":{"issuances":338},"dooly":{"issuances":339},"irwin":{"issuances":339},"mitchell":{"issuances":339},"tift":{"issuances":339},"worth":{"issuances":339}}` | `json:web/public/data/season/index.json#points` | MEASURED |
+| Check-back input files | `{"hourly_files":3389,"valid_hourly_files":3389,"observation_files":3389,"valid_observation_files":3389,"observations_outside_hour_tolerance":0}` | `json:web/public/data/checkback.json#input_counts` | MEASURED |
+| Check-back tank mix, Folex 6 EC, Dropp SC, and Prep | `{"hours_considered":3540,"evaluated_hours":2446,"permitted_a_day_ahead":566,"held":405,"broke":119,"skipped":{"no_obs":791,"no_issuance":303,"missing_measurement":42}}` | `json:web/public/data/checkback.json#tank_mix.pooled` | MEASURED |
+| Check-back Folex 6 EC alone | `{"permitted_a_day_ahead":731,"held":474,"broke":199,"skipped":{"missing_measurement":58}}` | `json:web/public/data/checkback.json#products.5481-504.pooled` | MEASURED |
+| Check-back Dropp SC alone | `{"permitted_a_day_ahead":731,"held":474,"broke":199,"skipped":{"missing_measurement":58}}` | `json:web/public/data/checkback.json#products.264-700.pooled` | MEASURED |
+| Check-back Prep alone | `{"permitted_a_day_ahead":634,"held":427,"broke":159,"skipped":{"missing_measurement":48}}` | `json:web/public/data/checkback.json#products.264-418.pooled` | MEASURED |
+| Every check-back break was wind | `{"tank_and_each_product_break_params":["wind_speed_mph"],"tank_observed_mph":"10.29..16.11","tank_wind_clauses":5}` | command: collect `param`, `observed_min`, `observed_max` over `pooled.breaks` for `tank_mix` and each product in `web/public/data/checkback.json`; output: `{'wind_speed_mph'}` for all four, min `10.289907`, max `16.105941`, 5 rule ids | MEASURED |
+| Tank-mix clauses a station cannot check | `5` | command: count unique `rule` in `tank_mix.not_checkable_clauses`; output: `5` (params `night_temperature_f`, `rain_free_hours`, `temperature_inversion`) | MEASURED |
+| Check-back recompute command | `"python tools/checkback.py --recorded data/nws_recorded"` | `tools/checkback.py`; `data/nws_recorded/` is gitignored at `.gitignore:16`, so the recorded inputs are not in the repo | SOURCED |
+| Recorder ran every hour of the span | `"NOT VERIFIED"` | The recorder ran on a desktop PC through Oct 19 and missed hours while it was off (Tift has no files from 08:07 UTC Oct 16 to 01:07 UTC Oct 17). The app shows recorded against expected issuances per point. | NOT VERIFIED |
+
 ## Data sources and fetch scripts
 
 | Claim | Exact value | Source | Tag |
@@ -112,18 +130,18 @@ The required CI workflow jobs are `python`, `rust`, and `web` at `.github/workfl
 | Claim | Exact value | Source | Tag |
 |---|---|---|---|
 | Python lint | `"passed"` | command: `uv run --active --no-sync ruff check .`; output: `All checks passed!` | MEASURED |
-| Python format | `"29 files already formatted"` | command: `uv run --active --no-sync ruff format --check .`; output: `29 files already formatted` | MEASURED |
-| Python tests | `"79 passed"` | command: `uv run --active --no-sync pytest -q`; output: `79 passed in 0.59s` | MEASURED |
-| Tracked-text em-dash gate | `"31 files scanned, 0 hits"` | PowerShell equivalent of `.github/workflows/ci.yml:30-34`, expanded to tracked and pending files; output: `PASS em-dash files=31` | MEASURED |
+| Python format | `"33 files already formatted"` | command: `uv run --no-sync ruff format --check .`, 2026-10-19; output: `33 files already formatted` | MEASURED |
+| Python tests | `"87 passed"` | command: `uv run --no-sync pytest -q`, 2026-10-19; output: `87 passed in 0.82s` | MEASURED |
+| Tracked-text em-dash gate | `"35 files scanned, 0 hits"` | the `.github/workflows/ci.yml:30-34` command in Git Bash, 2026-10-19; output: `files=35 hits=0` | MEASURED |
 | Rust format | `"passed"` | command: `cargo fmt --check`; exit: `0` | MEASURED |
 | Rust lint | `"passed"` | command: `cargo clippy --all-targets --all-features -- -D warnings`; exit: `0` | MEASURED |
 | Rust tests | `"5 passed: 3 unit and 2 parity"` | command: `cargo test`; output: `3 passed`, `2 passed`, and `0` doc tests | MEASURED |
 | Rust WASM build | `"release build passed"` | command: `wasm-pack build core --target web --release -- --features wasm`; output: `Your wasm pkg is ready to publish at core\\pkg` | MEASURED |
 | Web typecheck | `"passed"` | command from `web/`: `pnpm typecheck`; output: `Types generated successfully`; `tsc --noEmit` exit: `0` | MEASURED |
 | Web lint | `"passed"` | command from `web/`: `pnpm lint`; exit: `0` | MEASURED |
-| Web unit tests | `"24 passed in 6 files"` | command from `web/`: `pnpm test`; output: `Test Files 6 passed`, `Tests 24 passed` | MEASURED |
+| Web unit tests | `"91 passed in 9 files"` | command from `web/`: `pnpm test`, 2026-10-19; output: `Test Files 9 passed`, `Tests 91 passed` | MEASURED |
 | Web production build | `"passed; 6 of 6 static pages generated"` | command from `web/`: `pnpm build`; output: `Compiled successfully`, `Generating static pages (6/6)` | MEASURED |
-| Web end-to-end tests | `"15 passed"` | command from `web/`: `pnpm e2e`; output: `15 passed (30.5s)` | MEASURED |
+| Web end-to-end tests | `"18 passed"` | command from `web/`: `pnpm e2e`, 2026-10-19; output: `18 passed (39.2s)` | MEASURED |
 | Browser data freshness | `"passed with no diff"` | commands: rebuild WASM, `pnpm sync-engine`, then `git diff --exit-code -- web/public/data`; all exits: `0` | MEASURED |
 
 ## Drift found

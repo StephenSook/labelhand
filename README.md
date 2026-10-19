@@ -17,7 +17,7 @@ Labelhand reads the full EPA label of every product in the tank and turns each r
 
 It never says a spray is legal. The applicator stays in charge.
 
-> Built for the **Nebius x NVIDIA Global AI Hackathon** (Best Apps & Agents). Work in progress: the label compiler, planner kernel, web app, source-label viewer and browser-generated application record run today. The phone call and mobile apps are being built.
+> Built for the **Nebius x NVIDIA Global AI Hackathon** (Best Apps & Agents). Work in progress: the label compiler, planner kernel, web app, source-label viewer, browser-generated application record, season replay and forecast check-back run today. Compiling any EPA label from its registration number is being built.
 
 ## How it works
 
@@ -28,7 +28,7 @@ flowchart LR
   C --> D{Deterministic guards<br/>quote on the page?<br/>numbers in the quote?<br/>no spliced quotes?}
   D -- pass --> E[Typed rules with exact quotes]
   D -- fail --> R[REJECTED, with the reason]
-  F[NWS hourly forecast<br/>recorded every hour] --> G[Planner kernel<br/>strictest rule in the tank wins]
+  F[NWS hourly forecast<br/>recorded hourly] --> G[Planner kernel<br/>strictest rule in the tank wins]
   E --> G
   G --> H[Hour-by-hour states<br/>each with its clause]
 ```
@@ -37,7 +37,7 @@ flowchart LR
 2. **Compile.** `compiler/compile_label.py` sends each page to **`nvidia/nemotron-3-super-120b-a12b` on Nebius Token Factory** with a strict JSON schema (guided decoding), so every rule comes back typed: parameter, operator, value, unit, modality (MUST, MUST_NOT, ADVISORY) and the verbatim quote.
 3. **Guard.** Code, not the model, decides what survives. The quote must appear on that page exactly (ignoring only where the PDF extractor put spaces), quotes may not be spliced with "...", and every number in a rule must appear in its own quote. Unit conversions are done in code, never by the model.
 4. **Plan.** `engine/windows.py` evaluates every product's rules against each forecast hour. A rule only drives the planner if its quote names its own topic (a wind rule must mention wind), which stops a mislabeled rule from deciding anything.
-5. **Record.** `tools/nws_recorder.py` saves the NWS forecast and nearest station observation for ten Georgia cotton-county points every hour, because NWS keeps no forecast archive and every result must be replayable.
+5. **Record.** `tools/nws_recorder.py` saves the NWS forecast and nearest station observation for ten Georgia cotton-county points once an hour, because NWS keeps no forecast archive and every result must be replayable. Through Oct 19 it ran on a desktop PC, so hours when that PC was off are missing, and the app states each point's coverage instead of claiming every hour.
 
 ### Rust core
 
@@ -49,6 +49,29 @@ cargo clippy --all-targets --all-features -- -D warnings
 cargo test
 wasm-pack build core --target web --release -- --features wasm
 ```
+
+## The recorded season
+
+Folex 6 EC wants nights above 60°F, so from late October the live forecast blocks the defoliation tank on most Georgia days. A judge opening the app in December would see an empty week. The recorder fixes that with real data instead of a sample.
+
+**Season replay.** `tools/season_export.py` turns the recorder's files into [`web/public/data/season/`](web/public/data/season): 3,389 NWS hourly forecast issuances for the ten points between 2026-10-05 01:19 UTC and 2026-10-19 18:07 UTC (339 per point, 338 for Cook). The planner page shows the season as a strip of days, scores each recorded morning through the same WebAssembly planner, and replays any issuance with its NWS fetch time on screen and in the URL (`issued=`). When the live forecast has no window, a button replays the best recorded morning. Each window also says how many of the 12 forecasts recorded just before it already permitted every hour of it, so a judge can see whether a window was stable or appeared at the last minute.
+
+**Did the day-ahead forecast hold?** `tools/checkback.py` takes each recorded hour, runs the planner on the forecast issued closest to 24 hours earlier, and, for every hour that forecast permitted, checks the label limits an airport weather station can measure against what the station reported.
+
+| Tank | Forecast-permitted a day ahead and checked | Label limits held | Broke |
+|---|---|---|---|
+| Folex 6 EC + Dropp SC + Prep | 524 | **405** | 119 |
+| Folex 6 EC alone | 673 | 474 | 199 |
+| Dropp SC alone | 673 | 474 | 199 |
+| Prep alone | 586 | 427 | 159 |
+
+- Every break was wind, in the tank mix and for each product alone. In the tank mix the station reported 10.3 to 16.1 mph against the 10 mph limit in five wind clauses. No temperature or rain limit broke.
+- The tank-mix forecast permitted 566 hours a day ahead; 42 of them had no observed wind, so they are left out rather than counted as held.
+- 2,446 of the 3,540 point-hours in the span were evaluated. The rest had no station observation recorded (791) or no forecast issued about 24 hours earlier that covered the hour (303).
+- Five tank-mix clauses cannot be checked by a station (temperature inversions and rain after application, for example) and are listed as such, never counted as held.
+- Stations: KABY, KACJ, KDQH, KMGR and KVAD, matched to points in [`web/public/data/checkback.json`](web/public/data/checkback.json).
+
+Recompute: `python tools/checkback.py --recorded data/nws_recorded`. The recorded files are large and stay out of git; the result JSON and [`eval/results/checkback-2026-10-19.json`](eval/results/checkback-2026-10-19.json) are committed.
 
 ## Measured so far
 
