@@ -570,7 +570,8 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
       >
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className={`hand -rotate-1 text-3xl ${nextWindow ? "text-white" : "text-[#8a5a2b]"}`}>{selectedPointName}</p>
+            {/* #5c3a14 on the sun yellow is about 6.4:1; the lighter soil brown was 3.71:1 (axe, 2026-10-19 CI). */}
+            <p className={`hand -rotate-1 text-3xl ${nextWindow ? "text-white" : "text-[#5c3a14]"}`}>{selectedPointName}</p>
             <h2 id="next-window-heading" className="display mt-1 text-5xl sm:text-6xl">Next window</h2>
           </div>
           <span className={`rounded-full border-[3px] px-4 py-2 text-sm font-black ${nextWindow ? "border-white bg-white text-[#155b2c]" : "border-[#14213d] bg-[#fbf7ee]"}`}>
