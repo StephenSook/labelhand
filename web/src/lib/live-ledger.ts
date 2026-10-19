@@ -1,7 +1,11 @@
 import { createHmac, randomUUID } from "node:crypto";
-import { list, put } from "@vercel/blob";
+import { BlobPreconditionFailedError, list, put } from "@vercel/blob";
 
-import { COLD_COMPILES_PER_WINDOW, LIMIT_WINDOW_MS, LiveLimitError } from "./live-limits";
+import {
+  COLD_COMPILES_PER_WINDOW,
+  LIMIT_WINDOW_MS,
+  LiveLimitError,
+} from "./live-limits";
 
 // The counters in live-limits.ts live in one function instance. Vercel can run several at once,
 // and each would start its own budget, so every cold compile also writes one record to this
@@ -11,6 +15,8 @@ import { COLD_COMPILES_PER_WINDOW, LIMIT_WINDOW_MS, LiveLimitError } from "./liv
 export const SHARED_DAILY_COLD_COMPILES = 40;
 export const SHARED_LIFETIME_COLD_COMPILES = 400;
 export const LEDGER_PREFIX = "ledger/cold/";
+export const SHARED_DAILY_PHOTO_READS = 150;
+export const PHOTO_LEDGER_PREFIX = "ledger/photo/";
 
 type BlobList = typeof list;
 type BlobPut = typeof put;
@@ -36,18 +42,32 @@ export function ledgerPath(now: number, visitor: string, id = randomUUID()): str
   return `${LEDGER_PREFIX}${dayOf(now)}/${now}-${visitor}-${id}.json`;
 }
 
-function parseEntry(pathname: string): { day: string; at: number; visitor: string } | null {
-  const match = /^ledger\/cold\/(\d{4}-\d{2}-\d{2})\/(\d+)-([a-f0-9]{16})-[a-f0-9-]+\.json$/.exec(pathname);
+export function photoLedgerPath(now: number, slot: number): string {
+  if (!Number.isInteger(slot) || slot < 0 || slot >= SHARED_DAILY_PHOTO_READS) {
+    throw new RangeError("Photo ledger slot is outside the daily allowance.");
+  }
+  return `${PHOTO_LEDGER_PREFIX}${dayOf(now)}/slots/${String(slot).padStart(3, "0")}.json`;
+}
+
+function parseEntry(pathname: string, prefix: string): { day: string; at: number; visitor: string } | null {
+  if (!pathname.startsWith(prefix)) return null;
+  const match = /^(\d{4}-\d{2}-\d{2})\/(\d+)-([a-f0-9]{16})-[a-f0-9-]+\.json$/.exec(pathname.slice(prefix.length));
   if (!match) return null;
   return { day: match[1], at: Number(match[2]), visitor: match[3] };
 }
 
-async function listEntries(api: { list: BlobList }, token: string, maximum: number, signal?: AbortSignal): Promise<string[]> {
+async function listEntries(
+  api: { list: BlobList },
+  token: string,
+  prefix: string,
+  maximum: number,
+  signal?: AbortSignal,
+): Promise<string[]> {
   const names: string[] = [];
   let cursor: string | undefined;
   do {
     const page = await api.list({
-      prefix: LEDGER_PREFIX,
+      prefix,
       limit: 1_000,
       token,
       ...(cursor ? { cursor } : {}),
@@ -77,7 +97,7 @@ export async function reserveSharedColdCompile({
 
   let entries: string[];
   try {
-    entries = await listEntries(api, token, SHARED_LIFETIME_COLD_COMPILES + 1, signal);
+    entries = await listEntries(api, token, LEDGER_PREFIX, SHARED_LIFETIME_COLD_COMPILES + 1, signal);
   } catch {
     throw new LiveLimitError("The live label spend ledger could not be read, so no compile was started.", 503);
   }
@@ -86,7 +106,7 @@ export async function reserveSharedColdCompile({
   }
 
   const today = dayOf(now);
-  const parsed = entries.map(parseEntry).filter((entry) => entry !== null);
+  const parsed = entries.map((entry) => parseEntry(entry, LEDGER_PREFIX)).filter((entry) => entry !== null);
   if (parsed.filter((entry) => entry.day === today).length >= SHARED_DAILY_COLD_COMPILES) {
     throw new LiveLimitError("The live label daily budget has been reached. Try again tomorrow.", 503);
   }
@@ -113,4 +133,66 @@ export async function reserveSharedColdCompile({
   } catch {
     throw new LiveLimitError("The live label spend ledger could not be written, so no compile was started.", 503);
   }
+}
+
+export async function reserveSharedPhotoRead({
+  ip,
+  now = Date.now(),
+  signal,
+  env = process.env,
+  api = { list, put },
+}: SharedLedgerOptions): Promise<void> {
+  const token = env.BLOB_READ_WRITE_TOKEN?.trim();
+  if (!token) {
+    if (env.VERCEL_ENV === "production") {
+      throw new LiveLimitError("Label photo reading is unavailable because its shared spend ledger is not configured.", 503);
+    }
+    return;
+  }
+
+  let entries: string[];
+  try {
+    entries = await listEntries(
+      api,
+      token,
+      `${PHOTO_LEDGER_PREFIX}${dayOf(now)}/slots/`,
+      SHARED_DAILY_PHOTO_READS + 1,
+      signal,
+    );
+  } catch {
+    throw new LiveLimitError("The label photo spend ledger could not be read, so no photo was sent.", 503);
+  }
+
+  const occupied = new Set(entries.map((entry) => {
+    const match = /\/slots\/(\d{3})\.json$/.exec(entry);
+    return match ? Number(match[1]) : -1;
+  }).filter((slot) => slot >= 0 && slot < SHARED_DAILY_PHOTO_READS));
+  if (occupied.size >= SHARED_DAILY_PHOTO_READS) {
+    throw new LiveLimitError("The label photo daily allowance has been reached. Try again tomorrow.", 503);
+  }
+
+  const visitor = visitorKey(ip, token);
+  const start = Number.parseInt(randomUUID().slice(0, 8), 16) % SHARED_DAILY_PHOTO_READS;
+  for (let offset = 0; offset < SHARED_DAILY_PHOTO_READS; offset += 1) {
+    const slot = (start + offset) % SHARED_DAILY_PHOTO_READS;
+    if (occupied.has(slot)) continue;
+    try {
+      await api.put(photoLedgerPath(now, slot), JSON.stringify({ at: new Date(now).toISOString(), visitor }), {
+        access: "private",
+        addRandomSuffix: false,
+        allowOverwrite: false,
+        contentType: "application/json",
+        token,
+        ...(signal ? { abortSignal: signal } : {}),
+      });
+      return;
+    } catch (error) {
+      if (error instanceof BlobPreconditionFailedError) {
+        occupied.add(slot);
+        continue;
+      }
+      throw new LiveLimitError("The label photo spend ledger could not be written, so no photo was sent.", 503);
+    }
+  }
+  throw new LiveLimitError("The label photo daily allowance has been reached. Try again tomorrow.", 503);
 }

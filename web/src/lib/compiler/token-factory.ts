@@ -22,10 +22,14 @@ export interface TokenFactoryOptions {
   onUsage?: (usage: TokenUsage, requestId: string | null) => void;
 }
 
+export type TokenFactoryContentPart =
+  | { type: "text"; text: string }
+  | { type: "image_url"; image_url: { url: string } };
+
 export interface StrictJsonRequest {
   model: string;
   system: string;
-  user: string;
+  user: string | TokenFactoryContentPart[];
   schemaName: string;
   schema: object;
   maxTokens: number;

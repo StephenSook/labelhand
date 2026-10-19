@@ -3,6 +3,7 @@ import compilerSpec from "./compiler/spec.generated.json";
 export const LIMIT_WINDOW_MS = 10 * 60 * 1_000;
 export const COLD_COMPILES_PER_WINDOW = 3;
 export const CACHE_HITS_PER_WINDOW = 60;
+export const PHOTO_READS_PER_WINDOW = 10;
 export const DAILY_BUDGET_USD = 2;
 export const COMPILE_TOKEN_CEILING = 120_000;
 export const MAX_IN_FLIGHT_COLD_COMPILES = 2;
@@ -10,7 +11,7 @@ export const MAX_IN_FLIGHT_COLD_COMPILES = 2;
 const MAX_TOKEN_PRICE_PER_MILLION = Math.max(...Object.values(compilerSpec.PRICES).flat());
 export const MAX_COMPILE_COST_USD = COMPILE_TOKEN_CEILING * MAX_TOKEN_PRICE_PER_MILLION / 1_000_000;
 
-type LimitKind = "cache" | "cold";
+type LimitKind = "cache" | "cold" | "photo";
 
 interface LimitResult {
   allowed: boolean;
@@ -137,7 +138,11 @@ export function checkRequestLimit(
   kind: LimitKind,
   now = Date.now(),
 ): LimitResult {
-  const maximum = kind === "cold" ? COLD_COMPILES_PER_WINDOW : CACHE_HITS_PER_WINDOW;
+  const maximum = kind === "cold"
+    ? COLD_COMPILES_PER_WINDOW
+    : kind === "photo"
+      ? PHOTO_READS_PER_WINDOW
+      : CACHE_HITS_PER_WINDOW;
   const key = `${kind}:${ip || "unknown"}`;
   const cutoff = now - LIMIT_WINDOW_MS;
   const current = (requestWindows.get(key) ?? []).filter((timestamp) => timestamp > cutoff);
@@ -167,9 +172,22 @@ export function assertColdCompileAllowed(ip: string, now = Date.now()): void {
   }
 }
 
+export function assertPhotoReadAllowed(ip: string, now = Date.now()): void {
+  const result = checkRequestLimit(ip, "photo", now);
+  if (!result.allowed) {
+    throw new LiveLimitError("Too many label photo reads. Try again shortly.", 429, result.retryAfterSeconds);
+  }
+}
+
 export function assertLiveCompileEnabled(value = process.env.LIVE_COMPILE): void {
   if (value?.trim().toLowerCase() === "off") {
     throw new LiveLimitError("Live label compilation is temporarily disabled.", 503);
+  }
+}
+
+export function assertLivePhotoEnabled(value = process.env.LIVE_PHOTO): void {
+  if (value?.trim().toLowerCase() === "off") {
+    throw new LiveLimitError("Label photo reading is temporarily disabled.", 503);
   }
 }
 

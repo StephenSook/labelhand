@@ -6,12 +6,15 @@ import {
   assertCompileTokenCeiling,
   assertDailyBudgetAvailable,
   assertLiveCompileEnabled,
+  assertLivePhotoEnabled,
+  assertPhotoReadAllowed,
   CACHE_HITS_PER_WINDOW,
   COLD_COMPILES_PER_WINDOW,
   COMPILE_TOKEN_CEILING,
   DAILY_BUDGET_USD,
   LiveLimitError,
   MAX_COMPILE_COST_USD,
+  PHOTO_READS_PER_WINDOW,
   recordCompileSpend,
   resetLiveLimitsForTests,
   runColdCompile,
@@ -49,6 +52,15 @@ describe("live compile limits", () => {
       expect(() => assertColdCompileAllowed("192.0.2.3", 10_000)).not.toThrow();
     }
     expect(() => assertColdCompileAllowed("192.0.2.3", 10_000)).toThrow(LiveLimitError);
+  });
+
+  test("keeps the photo window separate from compile traffic", () => {
+    for (let index = 0; index < PHOTO_READS_PER_WINDOW; index += 1) {
+      expect(() => assertPhotoReadAllowed("192.0.2.4", 10_000)).not.toThrow();
+    }
+    expect(() => assertPhotoReadAllowed("192.0.2.4", 10_000)).toThrow(LiveLimitError);
+    expect(() => assertColdCompileAllowed("192.0.2.4", 10_000)).not.toThrow();
+    expect(() => assertCacheHitAllowed("192.0.2.4", 10_000)).not.toThrow();
   });
 
   test("deduplicates a sha without consuming a second cold slot", async () => {
@@ -147,6 +159,8 @@ describe("live compile limits", () => {
 
   test("enforces the kill switch, daily ledger, and token ceiling", () => {
     expect(() => assertLiveCompileEnabled("off")).toThrowError(/disabled/);
+    expect(() => assertLivePhotoEnabled("off")).toThrowError(/disabled/);
+    expect(() => assertLivePhotoEnabled("on")).not.toThrow();
     expect(recordCompileSpend(DAILY_BUDGET_USD, Date.UTC(2026, 9, 19))).toBe(DAILY_BUDGET_USD);
     expect(() => assertDailyBudgetAvailable(Date.UTC(2026, 9, 19))).toThrowError(/budget/);
     expect(() => assertCompileTokenCeiling(COMPILE_TOKEN_CEILING + 1)).toThrowError(/token ceiling/);
