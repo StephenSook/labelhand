@@ -193,10 +193,33 @@ def update_index(
     return index
 
 
+def keep_stored_issuances(client, bucket: str, document: dict[str, Any]) -> dict[str, Any]:
+    """Keep issuances already stored for this day that no hourly object in the bucket backs.
+
+    The bucket is seeded with the committed season files, whose raw hourly files never reach the
+    bucket, so rebuilding a seeded day from hourly objects alone would drop its seeded issuances.
+    """
+    point, day = document["point"], document["day"]
+    stored = read_json_optional(client, bucket, f"season/{point}/{day}.json")
+    if stored is None:
+        return document
+    if stored.get("point") != point or stored.get("day") != day:
+        raise ValueError(f"season day identity does not match {point}/{day}")
+    old = stored.get("issuances")
+    if not isinstance(old, list):
+        raise TypeError(f"season day {point}/{day} has invalid issuances")
+    if not all(isinstance(item, dict) and isinstance(item.get("fetched_utc"), str) for item in old):
+        return document
+    merged = {item["fetched_utc"]: item for item in old}
+    merged.update({item["fetched_utc"]: item for item in document["issuances"]})
+    ordered = sorted(merged, key=dt.datetime.fromisoformat)
+    return {**document, "issuances": [merged[fetched] for fetched in ordered]}
+
+
 def rebuild_day(client, bucket: str, day: str) -> tuple[int, int]:
     keys = list_hourly_keys(client, bucket, day)
     records = [season_export.parse_hourly_bytes(read_bytes(client, bucket, key), key) for key in keys]
-    documents = {point: season_export.build_day(records, point, day) for point in nws_recorder.POINTS}
+    documents = {point: keep_stored_issuances(client, bucket, season_export.build_day(records, point, day)) for point in nws_recorder.POINTS}
     existing_index = read_json_optional(client, bucket, "season/index.json")
     day_counts = build_index_day_counts(client, bucket, existing_index, day, documents)
     index = update_index(existing_index, day_counts, documents)

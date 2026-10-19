@@ -105,6 +105,42 @@ def test_rebuild_day_uses_hourly_objects_and_replaces_current_day_count(monkeypa
     }
 
 
+def test_rebuild_day_keeps_seeded_issuances_that_no_hourly_object_backs(monkeypatch):
+    # The bucket is seeded from the committed season files; their raw hourly files are not in it.
+    day = "2026-10-19"
+    monkeypatch.setattr(nws_recorder, "POINTS", {"tift": (31.4, -83.6)})
+    seeded = {
+        "day": day,
+        "point": "tift",
+        "source": "committed season",
+        "issuances": [
+            {"fetched_utc": "2026-10-19T00:07:01+00:00", "periods": []},
+            {"fetched_utc": "2026-10-19T01:07:01+00:00", "periods": []},
+        ],
+    }
+    now = dt.datetime(2026, 10, 19, 2, 23, tzinfo=dt.UTC)
+    objects = {
+        nws_recorder.record_key("hourly", "tift", now): nws_recorder.encode_record("hourly", "tift", {"periods": [period("2026-10-19T02:00:00+00:00")]}, now),
+        f"season/tift/{day}.json": json.dumps(seeded).encode(),
+        "season/index.json": json.dumps(
+            {
+                "points": {"tift": {"days": [day], "issuances": 2}},
+                "recorded_span": {"first": "2026-10-19T00:07:01+00:00", "last": "2026-10-19T01:07:01+00:00"},
+            }
+        ).encode(),
+    }
+    client = FakeS3(objects)
+
+    recorder_job.rebuild_day(client, "test", day)
+
+    tift = json.loads(client.objects[f"season/tift/{day}.json"])
+    fetched = [issuance["fetched_utc"] for issuance in tift["issuances"]]
+    assert fetched[:2] == ["2026-10-19T00:07:01+00:00", "2026-10-19T01:07:01+00:00"]
+    assert len(fetched) == 3
+    index = json.loads(client.objects["season/index.json"])
+    assert index["points"]["tift"]["issuances_by_day"] == {day: 3}
+
+
 def test_rebuild_day_retry_does_not_subtract_an_unindexed_day(monkeypatch):
     day = "2026-10-19"
     monkeypatch.setattr(nws_recorder, "POINTS", {"tift": (31.4, -83.6)})
