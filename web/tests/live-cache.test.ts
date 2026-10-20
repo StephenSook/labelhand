@@ -120,6 +120,32 @@ describe("live cache", () => {
     expect(putMock.mock.calls[2][0]).toBe(fileIndexCacheKey("000100-01256-20220503.pdf"));
   });
 
+  test("repairs the index when the store answers a taken pathname with a plain BlobError", async () => {
+    // The real store refuses a create-only put on a taken pathname this way, not with a precondition error.
+    const taken = new Error("Vercel Blob: This blob already exists, use `allowOverwrite: true` if you want to overwrite it.");
+    taken.name = "BlobError";
+    putMock.mockRejectedValueOnce(taken).mockResolvedValue({});
+    getMock.mockResolvedValue(blobJson(compiled()));
+    expect(await writeLiveCache(compiled())).toBe(true);
+    expect(getMock.mock.calls[0][0]).toBe(compiledCacheKey(SHA, VERSION));
+    expect(putMock).toHaveBeenCalledTimes(3);
+    expect(putMock.mock.calls[1][0]).toBe(registrationIndexCacheKey("100-1256"));
+  });
+
+  test("does not point the indexes at a taken pathname that holds no valid compile", async () => {
+    const taken = new Error("Vercel Blob: This blob already exists");
+    taken.name = "BlobError";
+    putMock.mockRejectedValueOnce(taken).mockResolvedValue({});
+    getMock.mockResolvedValue(blobJson({ ...compiled(), complete: false }));
+    expect(await writeLiveCache(compiled())).toBe(false);
+    expect(putMock).toHaveBeenCalledTimes(1);
+
+    putMock.mockReset().mockRejectedValueOnce(new Error("Blob store unavailable")).mockResolvedValue({});
+    getMock.mockReset().mockResolvedValue(null);
+    expect(await writeLiveCache(compiled())).toBe(false);
+    expect(putMock).toHaveBeenCalledTimes(1);
+  });
+
   test("requires the registration pointer but tolerates a missing file index", async () => {
     putMock.mockResolvedValueOnce({}).mockRejectedValueOnce(new Error("registration failed"));
     expect(await writeLiveCache(compiled())).toBe(false);

@@ -189,7 +189,7 @@ export async function reserveSharedPhotoRead({
       });
       return;
     } catch (error) {
-      if (error instanceof BlobPreconditionFailedError) {
+      if (error instanceof BlobPreconditionFailedError || await slotTaken(api, token, photoLedgerPath(now, slot), signal)) {
         occupied.add(slot);
         continue;
       }
@@ -197,4 +197,16 @@ export async function reserveSharedPhotoRead({
     }
   }
   throw new LiveLimitError("The label photo daily allowance has been reached. Try again tomorrow.", 503);
+}
+
+// Vercel Blob answers a create-only put on a taken pathname with a plain BlobError
+// ("This blob already exists"), not BlobPreconditionFailedError. When another instance took the
+// slot between our list and our put, the slot now shows up in a listing, so try the next one.
+async function slotTaken(api: { list: BlobList }, token: string, pathname: string, signal?: AbortSignal): Promise<boolean> {
+  try {
+    const page = await api.list({ prefix: pathname, limit: 1, token, ...(signal ? { abortSignal: signal } : {}) });
+    return page.blobs.some((blob) => blob.pathname === pathname);
+  } catch {
+    return false;
+  }
 }

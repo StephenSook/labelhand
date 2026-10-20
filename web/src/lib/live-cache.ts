@@ -160,7 +160,13 @@ export async function writeLiveCache(compiled: CompiledLiveLabel, signal?: Abort
       ...(signal ? { abortSignal: signal } : {}),
     });
   } catch (error) {
-    if (!(error instanceof BlobPreconditionFailedError)) return false;
+    // Vercel Blob answers a create-only put on a taken pathname with a plain BlobError
+    // ("This blob already exists"), not BlobPreconditionFailedError. Another instance may have
+    // cached this label first, so repair the indexes only when a valid entry is already there.
+    if (
+      !(error instanceof BlobPreconditionFailedError)
+      && await getCachedLiveLabel(compiled.label_sha256, compiled.pipeline_version, signal) === null
+    ) return false;
   }
 
   const index: LiveCacheIndex = {

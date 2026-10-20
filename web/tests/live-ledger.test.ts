@@ -1,4 +1,4 @@
-import { BlobPreconditionFailedError } from "@vercel/blob";
+import { BlobError } from "@vercel/blob";
 import { describe, expect, test } from "vitest";
 
 import {
@@ -18,6 +18,9 @@ import { LIVE_COMPILE_READINGS, LiveLimitError } from "@/lib/live-limits";
 const TOKEN = "vercel_blob_rw_test_token";
 const NOW = Date.parse("2026-10-20T15:00:00Z");
 const env = { BLOB_READ_WRITE_TOKEN: TOKEN, VERCEL_ENV: "production" };
+
+// The error the real store returns for a create-only put on a taken pathname.
+const ALREADY_EXISTS = "This blob already exists, use `allowOverwrite: true` if you want to overwrite it. Or `addRandomSuffix: true` to generate a unique filename.";
 
 // A stand-in for the shared Blob store: list pages through stored names, put appends.
 function fakeStore(initial: string[] = [], failList = false, failPut = false) {
@@ -41,7 +44,7 @@ function fakeStore(initial: string[] = [], failList = false, failPut = false) {
     }) as never,
     put: (async (pathname: string) => {
       if (failPut) throw new Error("blob write failed");
-      if (names.includes(pathname)) throw new BlobPreconditionFailedError();
+      if (names.includes(pathname)) throw new BlobError(ALREADY_EXISTS);
       names.push(pathname);
       written.push(pathname);
       return { pathname };
