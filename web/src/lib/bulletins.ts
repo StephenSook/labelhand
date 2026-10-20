@@ -37,6 +37,13 @@ export const MAX_BULLETIN_REGS = 8;
 export const BULLETIN_REG_PATTERN = /^\d{1,6}-\d{1,5}$/;
 const MONTH_PATTERN = /^(\d{4})-(0[1-9]|1[0-2])$/;
 
+// BLT writes registration numbers without leading zeros ("264-1241", "61842-55").
+export function canonicalRegistration(reg: string): string {
+  if (!BULLETIN_REG_PATTERN.test(reg)) return reg;
+  const [company, product] = reg.split("-").map(Number);
+  return `${company}-${product}`;
+}
+
 // Window clock times are Eastern, so the application month is the Eastern calendar month.
 export function easternMonth(date: Date): string {
   const parts = new Intl.DateTimeFormat("en-US", {
@@ -98,8 +105,10 @@ function unavailable(reason: string): BulletinCheck {
 }
 
 // The card trusts only a fully formed "checked" answer. Anything else, including a checked answer
-// with one malformed row, renders as unavailable, so a broken response never reads as "no limits".
-export function parseBulletinResponse(payload: unknown): BulletinCheck {
+// with one malformed row or a limitation for a product that was not asked about, renders as
+// unavailable, so a broken response never reads as "no limits".
+export function parseBulletinResponse(payload: unknown, requestedRegs?: string[]): BulletinCheck {
+  const requested = requestedRegs ? new Set(requestedRegs.map(canonicalRegistration)) : undefined;
   if (!isRecord(payload)) return unavailable("The bulletin check did not return an object.");
   if (payload.status === "unavailable") {
     return unavailable(typeof payload.reason === "string" && payload.reason ? payload.reason : "The bulletin check was unavailable.");
@@ -134,6 +143,9 @@ export function parseBulletinResponse(payload: unknown): BulletinCheck {
       || typeof limitation.reg !== "string" || !BULLETIN_REG_PATTERN.test(limitation.reg)
     ) {
       return unavailable("The bulletin check returned a malformed limitation.");
+    }
+    if (requested && !requested.has(canonicalRegistration(limitation.reg))) {
+      return unavailable(`The bulletin check returned a limitation for EPA Reg. No. ${limitation.reg}, which is not in this tank.`);
     }
     parsedLimitations.push({ pula_id: limitation.pula_id, code: limitation.code, text: limitation.text, reg: limitation.reg });
   }

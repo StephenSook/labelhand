@@ -227,6 +227,14 @@ describe("the bulletin check", () => {
     expect(result.limitations).toEqual([expect.objectContaining({ pula_id: 121, code: "DC125", reg: CONTROL_REG })]);
   });
 
+  // The end-to-end card test serves these two answers, so they must stay what the checker returns.
+  test.each<[string, { lat: number; lon: number }, string[]]>([
+    ["answer-tift-tank-2026-11.json", TIFT, TANK],
+    ["answer-dooly-stryax-2026-11.json", DOOLY_PULA_121, [CONTROL_REG]],
+  ])("%s is the checker's answer for its recorded EPA responses", async (file, point, regs) => {
+    expect(await checkBulletins(query(point, regs), fakeFetch().impl, NOW)).toEqual(fixture(file));
+  });
+
   test("every upstream call carries an abort signal for the 8 second limit", async () => {
     const upstream = fakeFetch();
     await checkBulletins(query(TIFT, TANK), upstream.impl, NOW);

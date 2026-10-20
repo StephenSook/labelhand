@@ -1,0 +1,20 @@
+{
+  "status": "checked",
+  "pulas": [
+    {
+      "pula_id": 121,
+      "event_name": "Dicamba 2026",
+      "effective_date": "2026-02-09T00:00:00.000Z"
+    }
+  ],
+  "limitations": [
+    {
+      "pula_id": 121,
+      "code": "DC125",
+      "text": "This crop use is located within a PULA. Therefore, 3 ADDITIONAL points (for a total of 6 points) of runoff/erosion mitigations must be achieved for this crop use using the Mitigation Menu (https://www.epa.gov/pesticides/mitigation-menu).",
+      "reg": "264-1241"
+    }
+  ],
+  "checkedAt": "2026-10-20T21:00:00.000Z",
+  "source": "EPA Bulletins Live! Two data services at blt.epa.gov (informational, not a Bulletin)"
+}

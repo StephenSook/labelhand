@@ -14,6 +14,7 @@
 import {
   BULLETIN_REG_PATTERN,
   MAX_BULLETIN_REGS,
+  canonicalRegistration,
   easternMonth,
   monthIndex,
   type BulletinCheck,
@@ -94,11 +95,9 @@ function coordinate(raw: string, name: string, limit: number): number {
   return Number(value.toFixed(6));
 }
 
-// BLT stores registration numbers without leading zeros ("264-1241", "61842-55").
 function normalizeReg(reg: string): string {
   if (!BULLETIN_REG_PATTERN.test(reg)) throw new BltInputError(`${reg || "An empty value"} is not a federal EPA Reg. No. such as 264-700.`);
-  const [company, product] = reg.split("-").map(Number);
-  return `${company}-${product}`;
+  return canonicalRegistration(reg);
 }
 
 export function parseBulletinQuery(params: URLSearchParams, now: Date = new Date()): BulletinQuery {

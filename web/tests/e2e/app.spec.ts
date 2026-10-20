@@ -2,6 +2,7 @@ import { mkdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
+import { bulletinMonthLabel, easternMonth, monthIndex } from "../../src/lib/bulletins";
 
 const replayPath = "/app?field=tift&products=5481-504,264-700,264-418&hours=3&replay=tift";
 const stillsDir = String.raw`C:\Users\STEVEB~1\AppData\Local\Temp\claude\C--Users-stevebillz\2a521d3f-5761-476e-8197-9d532949c28b\scratchpad\stills-ui`;
@@ -66,6 +67,8 @@ test("unticking a product re-checks the tank on the forecast already shown", asy
   // What a fresh load of the two-product tank shows on the same recorded forecast.
   await page.goto("/app?field=tift&products=264-700,264-418&hours=3&replay=tift");
   await expect(page.locator("[data-hour-cell]")).toHaveCount(156);
+  // Read the card once its Bulletins Live! Two line has an answer, not while it is still checking.
+  await expect(card.locator("[data-bulletin]")).not.toHaveAttribute("data-bulletin-status", "checking");
   const expectedCard = (await card.textContent()) ?? "";
   expect(expectedCard).toContain("Tank: Dropp SC, Prep");
 
@@ -79,14 +82,104 @@ test("unticking a product re-checks the tank on the forecast already shown", asy
   await expect(page).toHaveURL(/products=264-700%2C264-418.*replay=tift/);
 });
 
-test("the next-window card points to this field's Endangered Species Protection Bulletin", async ({ page }) => {
+test("with no live check the next-window card points to this field's Endangered Species Protection Bulletin", async ({ page }) => {
+  // The test server runs with LABELHAND_BLT_LIVE=off, so /api/bulletins answers unavailable.
   await openReplay(page);
   const bulletin = page.locator("#next-window [data-bulletin]");
+  await expect(bulletin).toHaveAttribute("data-bulletin-status", "unavailable");
   await expect(bulletin).toContainText("Endangered species limits are not checked here.");
   await expect(bulletin).toContainText("31.4, -83.6");
   const link = bulletin.getByRole("link", { name: "Bulletins Live! Two" });
   await expect(link).toHaveAttribute("href", "https://blt.epa.gov/blt/public");
   await expect(link).toHaveAttribute("target", "_blank");
+});
+
+test("the next-window card shows each Bulletins Live! Two answer without calling EPA", async ({ page }) => {
+  const fixtures = path.join(process.cwd(), "tests/fixtures/blt");
+  // Answers the checker returns for recorded EPA responses (pinned in tests/blt.test.ts).
+  const noLimits = JSON.parse(await readFile(path.join(fixtures, "answer-tift-tank-2026-11.json"), "utf8"));
+  const stryax = JSON.parse(await readFile(path.join(fixtures, "answer-dooly-stryax-2026-11.json"), "utf8"));
+  // The real STRYAX limitation in PULA 121, credited to Dropp SC in this test only so the card has a
+  // tank product to list it under. Bulletins Live! Two lists no limitation for Dropp SC.
+  const limits = {
+    ...stryax,
+    limitations: (stryax.limitations as Array<Record<string, unknown>>).map((limitation) => ({ ...limitation, reg: "264-700" })),
+  };
+  const unavailable = { status: "unavailable", reason: "BLT pulas_public returned HTTP 500." };
+
+  const asked: URL[] = [];
+  const epaRequests: string[] = [];
+  page.on("request", (request) => {
+    if (new URL(request.url()).hostname.endsWith("epa.gov")) epaRequests.push(request.url());
+  });
+  let reply: { status: number; body: unknown } = { status: 200, body: noLimits };
+  let release = () => {};
+  const held = new Promise<void>((resolve) => { release = resolve; });
+  await page.route((url) => url.pathname === "/api/bulletins", async (route) => {
+    asked.push(new URL(route.request().url()));
+    await held;
+    await route.fulfill({ status: reply.status, contentType: "application/json", body: JSON.stringify(reply.body) });
+  });
+
+  const card = page.locator("#next-window");
+  const bulletin = card.locator("[data-bulletin]");
+  await openReplay(page);
+  await expect(bulletin).toHaveAttribute("data-bulletin-status", "checking");
+  await expect(bulletin).toHaveText("Checking EPA's Bulletins Live! Two for endangered species limits at this field...");
+
+  const first = asked[0];
+  expect(first.searchParams.get("lat")).toBe("31.4");
+  expect(first.searchParams.get("lon")).toBe("-83.6");
+  expect(first.searchParams.get("regs")).toBe("5481-504,264-700,264-418");
+  const month = first.searchParams.get("month") ?? "";
+  const current = monthIndex(easternMonth(new Date()));
+  expect(monthIndex(month)).not.toBeNull();
+  expect(monthIndex(month)! - current!).toBeGreaterThanOrEqual(0);
+  expect(monthIndex(month)! - current!).toBeLessThanOrEqual(6);
+  const monthLabel = bulletinMonthLabel(month);
+
+  // Green card (the recorded tift forecast has a window), no limits.
+  release();
+  await expect(bulletin).toHaveAttribute("data-bulletin-status", "no-limits");
+  await expect(card.getByRole("button", { name: "Show this window in the timeline" })).toBeVisible();
+  await expect(bulletin).toHaveText(
+    `EPA Bulletins Live! Two lists no endangered species limits for these products at this field in ${monthLabel}. Informational, not a Bulletin.`,
+  );
+  await expect(bulletin.getByRole("link", { name: "Bulletins Live! Two" })).toHaveAttribute("href", "https://blt.epa.gov/blt/public");
+  await expect(bulletin).toHaveAttribute("data-bulletin-checked-at", "2026-10-20T21:00:00.000Z");
+  expect((await new AxeBuilder({ page }).include("#next-window").analyze()).violations).toEqual([]);
+
+  // Limits found: each limitation is listed under its tank product with its code and PULA.
+  reply = { status: 200, body: limits };
+  await page.getByRole("checkbox", { name: /5481-504/ }).uncheck();
+  await expect(bulletin).toHaveAttribute("data-bulletin-status", "limits");
+  expect(asked.at(-1)?.searchParams.get("regs")).toBe("264-700,264-418");
+  const dropp = bulletin.locator('[data-bulletin-reg="264-700"]');
+  await expect(dropp).toContainText("Dropp SC, EPA Reg. 264-700");
+  await expect(dropp.locator("[data-bulletin-limitation]")).toHaveCount(1);
+  await expect(dropp.locator("[data-bulletin-limitation]")).toContainText("DC125, PULA 121: This crop use is located within a PULA.");
+  await expect(bulletin).toContainText(`lists endangered species limits for these products at this field in ${monthLabel}. Informational, not a Bulletin.`);
+  await expect(bulletin).toContainText("Search 31.4, -83.6 in Bulletins Live! Two. Get the official bulletin there before you spray.");
+  await expect(bulletin.getByRole("link", { name: "Bulletins Live! Two" })).toHaveAttribute("target", "_blank");
+  expect((await new AxeBuilder({ page }).include("#next-window").analyze()).violations).toEqual([]);
+
+  // Unavailable: the manual pointer comes back.
+  reply = { status: 502, body: unavailable };
+  await page.getByRole("checkbox", { name: /264-418/ }).uncheck();
+  await expect(bulletin).toHaveAttribute("data-bulletin-status", "unavailable");
+  expect(asked.at(-1)?.searchParams.get("regs")).toBe("264-700");
+  await expect(bulletin).toContainText("Endangered species limits are not checked here. In EPA's Bulletins Live! Two, search 31.4, -83.6");
+
+  // Yellow card (no window fits a 12-hour job), limits found.
+  reply = { status: 200, body: limits };
+  await page.goto("/app?field=tift&products=264-700&hours=12&replay=tift");
+  await expect(page.locator("[data-hour-cell]")).toHaveCount(156);
+  await expect(card).toContainText("No forecast-permitted window fits this 12-hour job");
+  await expect(bulletin).toHaveAttribute("data-bulletin-status", "limits");
+  expect(monthIndex(asked.at(-1)?.searchParams.get("month") ?? "")).toBe(current);
+  expect((await new AxeBuilder({ page }).include("#next-window").analyze()).violations).toEqual([]);
+
+  expect(epaRequests).toEqual([]);
 });
 
 test("the home hero runs a live or recorded planner check with a source time", async ({ page }) => {

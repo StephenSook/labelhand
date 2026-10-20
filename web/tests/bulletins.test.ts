@@ -6,6 +6,7 @@ import {
   bulletinCoordinates,
   bulletinMonth,
   bulletinMonthLabel,
+  canonicalRegistration,
   easternMonth,
   parseBulletinResponse,
 } from "@/lib/bulletins";
@@ -80,5 +81,22 @@ describe("the bulletin request and answer", () => {
     ["a PULA without an id", { ...checked, pulas: [{ event_name: "Dicamba 2026", effective_date: null }] }],
   ])("treats %s as unavailable, never as no limits", (_name, payload) => {
     expect(parseBulletinResponse(payload).status).toBe("unavailable");
+  });
+
+  test("a limitation for a product that is not in the tank is not shown as this tank's", () => {
+    expect(parseBulletinResponse(checked, ["264-1241"]).status).toBe("checked");
+    expect(parseBulletinResponse(checked, ["000264-01241"]).status).toBe("checked");
+    expect(parseBulletinResponse(checked, ["264-700", "264-418"])).toEqual({
+      status: "unavailable",
+      reason: expect.stringContaining("264-1241"),
+    });
+  });
+});
+
+describe("registration numbers", () => {
+  test("are written the way BLT stores them", () => {
+    expect(canonicalRegistration("000264-00700")).toBe("264-700");
+    expect(canonicalRegistration("61842-55")).toBe("61842-55");
+    expect(canonicalRegistration("GA-120005")).toBe("GA-120005");
   });
 });

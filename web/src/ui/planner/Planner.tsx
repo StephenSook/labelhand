@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { AgentCheckSnapshot } from "@/lib/agent/tools";
-import { BULLETINS_LIVE_TWO_URL, bulletinCoordinates } from "@/lib/bulletins";
+import { bulletinMonth } from "@/lib/bulletins";
 import { labelsCoverResult, runPlannerCheck, type PlannerCheckResult, type PlannerSource } from "@/lib/run-planner";
 import { forecastPermittedWindows } from "@/lib/windows";
 import { requestLiveCompile } from "@/lib/compiler/client";
@@ -39,6 +39,7 @@ import { WorkingCard, type WorkingStep } from "@/ui";
 import { AnyLabel, MAX_LIVE_LABELS } from "./AnyLabel";
 import { InstallButton } from "@/ui/AppShell";
 import { AskTank } from "./AskTank";
+import { BulletinCheck } from "./BulletinCheck";
 import { CallMe } from "./CallMe";
 import { HourDetail } from "./HourDetail";
 import { RulesDisclosure } from "./RulesDisclosure";
@@ -889,20 +890,15 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
         <p className={`mt-5 border-t-2 pt-4 text-sm font-bold ${nextWindow ? "border-white/45" : "border-[#14213d]/35"}`}>
           {counts.PERMITTED} FORECAST-PERMITTED · {counts.FIELD_CHECK} FIELD CHECK · {counts.BLOCKED} BLOCKED hours
         </p>
-        {/* Labelhand reads label weather limits only. EPA's Bulletins Live! Two holds the field-specific
-            endangered species limits; its Location Search takes "latitude, longitude" (checked 2026-10-20). */}
-        <p data-bulletin className={`mt-3 text-sm font-semibold ${nextWindow ? "text-white/90" : "text-[#14213d]/80"}`}>
-          Endangered species limits are not checked here. In EPA&apos;s{" "}
-          <a
-            href={BULLETINS_LIVE_TWO_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-black underline decoration-2 underline-offset-4 outline-offset-2 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-current"
-          >
-            Bulletins Live! Two
-          </a>
-          , search <span className="whitespace-nowrap font-black">{bulletinCoordinates(result.lat, result.lon)}</span> and enter each EPA Reg. No. in the tank to see this field&apos;s bulletin.
-        </p>
+        {/* Every registration in the tank, live labels included, for the next window's month. */}
+        <BulletinCheck
+          lat={result.lat}
+          lon={result.lon}
+          regs={result.registrations}
+          month={bulletinMonth(nextWindow?.start)}
+          labels={labels}
+          onDark={Boolean(nextWindow)}
+        />
         {result.liveFailure ? (
           <p className={`mt-3 rounded-xl border-2 p-3 text-sm font-bold ${nextWindow ? "border-white bg-white/10" : "border-[#8a5a2b] bg-[#fbf7ee]/55"}`}>
             The live NWS request failed, so this first check uses the recorded forecast: {result.liveFailure}
