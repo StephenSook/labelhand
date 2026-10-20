@@ -184,6 +184,11 @@ The season files are exported by `tools/season_export.py`. The check-back runs t
 | API routes | `["/api/agent","/api/alerts/confirm","/api/alerts/run","/api/alerts/start","/api/alerts/voice/stop","/api/alerts/voice/why","/api/label-pdf/[reg]","/api/labels/compile","/api/labels/photo","/api/labels/search","/api/season/[...path]"]` | command: enumerate `route.ts` below `web/src/app` on main d64b10b, 2026-10-20 | MEASURED |
 | Agent per-IP limit | `{"requests":20,"window_minutes":10,"scope":"best effort per Node instance"}` | `web/src/app/api/agent/route.ts:14-15,33-36,88-102`; local static audit output: `RATE_LIMIT_COUNT=20`, `RATE_LIMIT_WINDOW_MS=600000` | MEASURED |
 | Agent daily token budget | `{"tokens":2000000,"reset":"UTC date","scope":"best effort per Node instance"}` | `web/src/app/api/agent/route.ts:16,33-36,105-110,141,199-205`; local static audit output: `DAILY_TOKEN_BUDGET=2000000` | MEASURED |
+| Agent tool order | `"check_tank first; then final_answer at once for a when or window question; otherwise one get_clause round, then final_answer"` | `web/src/lib/agent/tool-choice.ts:17-23` | MEASURED |
+| Answer guard | `"every cited rule id, window index and number must appear in a tool result; Latin script only; ends as a sentence; no unscoped no-window claim and no window called blocked when check_tank returned a window"` | `web/src/lib/agent/guard.ts:307` (`guardFinalAnswer`); `web/tests/agent-guard.test.ts` | MEASURED |
+| Number reading in the guard | `"a comma joins digits only as a thousands separator (pages 7,8 is 7 and 8); a minus counts only with no letter, digit or dot before it (3-7 PM is 3 and 7)"` | `web/src/lib/agent/guard.ts:17-30`; test `reading numbers out of a summary` in `web/tests/agent-guard.test.ts` | MEASURED |
+| Repair of a false window sentence | `"if the only failure is a no-window or window-blocked sentence and check_tank returned windows, that sentence is removed, every returned window is listed, and the page says what was removed"` | `web/src/lib/agent/guard.ts:367` (`dropWindowClaims`); `web/src/lib/agent/loop.ts:297`; `web/src/ui/planner/AskTank.tsx` (`data-answer-edit`) | MEASURED |
+| Agent cost per question on production | `["0.000254","0.000258","0.000575","0.000582","0.000584"]` | five Ask the tank runs on labelhand-web.vercel.app, main e77fadc, 2026-10-20 05:58 to 06:08 UTC; each value is the page trace's `total cost`; all five passed the guard | MEASURED |
 
 ## Live label reading, map, alerts and offline use
 
@@ -220,9 +225,9 @@ The required CI workflow jobs are `python`, `rust`, and `web` at `.github/workfl
 | Rust WASM build | `"release build passed"` | command: `wasm-pack build core --target web --release -- --features wasm`; output: `Your wasm pkg is ready to publish at core\\pkg` | MEASURED |
 | Web typecheck | `"passed"` | command from `web/`: `pnpm typecheck`; output: `Types generated successfully`; `tsc --noEmit` exit: `0` | MEASURED |
 | Web lint | `"passed"` | command from `web/`: `pnpm lint`; exit: `0` | MEASURED |
-| Web unit tests | `"303 passed in 33 files"` | command from `web/`: `pnpm test`, 2026-10-20; output: `Test Files 33 passed`, `Tests 303 passed` | MEASURED |
+| Web unit tests | `"348 passed in 37 files"` | command from `web/`: `pnpm test` on `02fe2f5`, 2026-10-20; output: `Test Files 37 passed`, `Tests 348 passed` | MEASURED |
 | Web production build | `"passed; 17 of 17 static pages generated"` | command from `web/`: `pnpm build`, 2026-10-20; output: `Generating static pages using 7 workers (17/17)` | MEASURED |
-| Web end-to-end tests | `"35 passed"` | command from `web/`: `pnpm e2e` against `pnpm start`, 2026-10-20; output: `35 passed (1.8m)` | MEASURED |
+| Web end-to-end tests | `"36 passed"` | command from `web/`: `pnpm e2e` against `pnpm start` on `02fe2f5`, 2026-10-20; output: `36 passed (1.4m)` | MEASURED |
 | Browser data freshness | `"passed with no diff"` | commands: rebuild WASM, `pnpm sync-engine`, then `git diff --exit-code -- web/public/data`; all exits: `0` | MEASURED |
 
 ## Drift found
