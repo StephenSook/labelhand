@@ -1,5 +1,5 @@
 import { REPLAY_POINTS } from "@/lib/planner-data";
-import { guardFinalAnswer, prepareFinalAnswer, type FinalAnswerArgs, type ToolResultRecord } from "./guard";
+import { dropWindowClaims, guardFinalAnswer, prepareFinalAnswer, type FinalAnswerArgs, type ToolResultRecord } from "./guard";
 import {
   AGENT_TOOL_NAMES,
   FIELD_KEYS,
@@ -289,6 +289,22 @@ export async function runAgentLoop(
             answer,
             fallbackText: null,
             guard,
+            trace,
+            latestCheck: runtime.latestCheck,
+            totalCostUsd,
+          };
+        }
+        const repair = dropWindowClaims(answer, toolResults);
+        const repairedCheck = repair ? guardFinalAnswer(repair.answer, toolResults) : null;
+        if (repair && repairedCheck?.passed) {
+          const removedNote = `Removed ${repair.removed.length === 1 ? "a sentence" : "sentences"} that contradicted the planner: ${repair.removed.map((sentence) => `"${sentence}"`).join(" ")} The planner returned ${repair.windowCount} forecast-permitted ${repair.windowCount === 1 ? "window" : "windows"}, listed below.`;
+          const repairedGuard: AgentGuardTrace = { type: "guard", ...repairedCheck, notes: [...prepared.notes, removedNote] };
+          lastGuard = repairedGuard;
+          trace.push(repairedGuard);
+          return {
+            answer: repair.answer,
+            fallbackText: null,
+            guard: repairedGuard,
             trace,
             latestCheck: runtime.latestCheck,
             totalCostUsd,

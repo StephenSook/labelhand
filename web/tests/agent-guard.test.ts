@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { guardFinalAnswer, prepareFinalAnswer, SUMMARY_MAX_CHARACTERS, type ToolResultRecord } from "@/lib/agent/guard";
+import { dropWindowClaims, guardFinalAnswer, prepareFinalAnswer, SUMMARY_MAX_CHARACTERS, type ToolResultRecord } from "@/lib/agent/guard";
 
 const toolResults: ToolResultRecord[] = [
   {
@@ -505,5 +505,41 @@ describe("scoped sentences about windows stay allowed (Grok review, 2026-10-20)"
   test("a length that is not the job checked is not a denial of the list", () => {
     const threeHourJob: ToolResultRecord[] = [{ name: "check_tank", result: { job_hours: 3, windows: [{ index: 0, label: "Wed (6 h)" }, { index: 1, label: "Thu (11 h)" }] } }];
     expect(guardFinalAnswer({ summary: "No 6-hour window opens.", cited_rule_ids: [], window_indices: [0, 1] }, threeHourJob).passed).toBe(true);
+  });
+});
+
+describe("an answer that is right about the label but wrong about windows", () => {
+  const checked: ToolResultRecord[] = [
+    {
+      name: "check_tank",
+      result: {
+        job_hours: 3,
+        windows: [{ index: 0, label: "Wed (6 h)" }, { index: 1, label: "Thu (11 h)" }],
+        binding_clauses: [{ rule_id: "264-700-p5-1", page: 5, quote: "Do not apply when wind speed exceeds 10 mph.", why: "wind up to 15 mph" }],
+      },
+    },
+  ];
+  const production = {
+    summary: "The strictest wind limit is 10 mph, set by DROPP SC (264-700, page 5). The forecast wind up to 15 mph exceeds all 10 mph limits, so no window is permitted.",
+    cited_rule_ids: ["264-700-p5-1"],
+    window_indices: [],
+  };
+
+  test("loses only the false sentence and lists the windows the planner returned", () => {
+    expect(guardFinalAnswer(production, checked).passed).toBe(false);
+    const repair = dropWindowClaims(production, checked);
+    expect(repair?.removed).toEqual(["The forecast wind up to 15 mph exceeds all 10 mph limits, so no window is permitted."]);
+    expect(repair?.answer.summary).toBe("The strictest wind limit is 10 mph, set by DROPP SC (264-700, page 5).");
+    expect(repair?.answer.window_indices).toEqual([0, 1]);
+    expect(guardFinalAnswer(repair!.answer, checked).passed).toBe(true);
+  });
+
+  test("is not used when the whole answer is the false claim", () => {
+    expect(dropWindowClaims({ summary: "No window is permitted.", cited_rule_ids: [], window_indices: [] }, checked)).toBeNull();
+  });
+
+  test("is not used when the planner really returned no window", () => {
+    const none: ToolResultRecord[] = [{ name: "check_tank", result: { job_hours: 3, windows: [] } }];
+    expect(dropWindowClaims(production, none)).toBeNull();
   });
 });

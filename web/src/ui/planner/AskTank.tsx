@@ -165,7 +165,14 @@ export function AskTank({ initialQuestion, context, onCheck, onClause, onWindow 
               Guard {result.guard.passed ? "passed" : "failed"}
             </span>
           </div>
-          {result.answer ? <p className="mt-4 text-lg font-bold leading-relaxed">{result.answer.summary}</p> : (
+          {result.answer ? (
+            <>
+              <p className="mt-4 text-lg font-bold leading-relaxed">{result.answer.summary}</p>
+              {result.guard.notes?.filter((note) => note.startsWith("Removed")).map((note) => (
+                <p key={note} data-answer-edit className="mt-2 text-sm">{note}</p>
+              ))}
+            </>
+          ) : (
             <>
               {result.plannerSummary ? (
                 <div data-planner-summary className="mt-4">

@@ -343,3 +343,39 @@ export function guardFinalAnswer(
 
   return { passed: reasons.length === 0, reasons };
 }
+
+// A limit or "why" answer can be right about the label and still add one false sentence about
+// windows: on 2026-10-20 Lightning answered the wind-limit question correctly and then wrote "No
+// window is returned" four times while check_tank had returned two. That sentence is removed in code
+// and the page says so; the windows the planner returned are listed instead. Anything else the guard
+// refuses still sends the answer back to the model.
+export type WindowClaimRepair = {
+  answer: FinalAnswerArgs;
+  removed: string[];
+  windowCount: number;
+};
+
+export function dropWindowClaims(answer: FinalAnswerArgs, toolResults: readonly ToolResultRecord[]): WindowClaimRepair | null {
+  const successful = toolResults.filter((entry) => !(isRecord(entry.result) && typeof entry.result.error === "string"));
+  const latestCheck = [...successful].reverse().find((entry) => entry.name === "check_tank")?.result;
+  if (!isRecord(latestCheck) || !Array.isArray(latestCheck.windows)) return null;
+  const windowIndices = latestCheck.windows
+    .filter(isRecord)
+    .map((window) => window.index)
+    .filter((index): index is number => Number.isInteger(index));
+  if (windowIndices.length === 0) return null;
+  const jobHours = typeof latestCheck.job_hours === "number" ? latestCheck.job_hours : undefined;
+  const removed: string[] = [];
+  const kept: string[] = [];
+  for (const sentence of sentencesOf(answer.summary)) {
+    const claims = noWindowReasons(sentence, windowIndices.length, jobHours);
+    if (claims.length > 0) removed.push(sentence);
+    else kept.push(sentence);
+  }
+  if (removed.length === 0 || kept.length === 0) return null;
+  return {
+    answer: { ...answer, summary: kept.join(" "), window_indices: windowIndices },
+    removed,
+    windowCount: windowIndices.length,
+  };
+}
