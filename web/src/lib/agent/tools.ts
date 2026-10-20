@@ -154,7 +154,7 @@ function hourLabel(value: string): string {
   return hourFormatter.format(new Date(value));
 }
 
-function windowLabel(window: ForecastWindow): string {
+export function windowLabel(window: ForecastWindow): string {
   return `${hourLabel(window.start)} to ${hourLabel(window.end)} (${window.length} h)`;
 }
 

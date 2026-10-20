@@ -338,3 +338,27 @@ test("the proof page lists every gold clause and every broken forecast hour", as
   const issued = page.locator("#forecast-misses tbody a").first();
   await expect(issued).toHaveAttribute("href", /\/app\?field=.+&issued=2026-.+#season-replay/);
 });
+
+test("an answer's window chips name the hours, not the window index", async ({ page }) => {
+  // Two scripted model steps: check_tank on the page's recorded forecast, then a grounded final answer.
+  let step = 0;
+  await page.route("**/api/agent", (route) => {
+    step += 1;
+    const call = step === 1
+      ? { id: "call-check", type: "function", function: { name: "check_tank", arguments: JSON.stringify({ field: "tift", products: ["5481-504", "264-700", "264-418"], job_hours: 3, forecast: "recorded" }) } }
+      : { id: "call-final", type: "function", function: { name: "final_answer", arguments: JSON.stringify({ summary: "Window 0 is forecast-permitted.", cited_rule_ids: [], window_indices: [0] }) } };
+    return route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ message: { role: "assistant", content: null, tool_calls: [call] }, model: "scripted", latencyMs: 1, usage: { inputTokens: 1, outputTokens: 1 }, costUsd: 0, requestId: `scripted-${step}` }),
+    });
+  });
+  await page.goto(`${replayPath}&question=${encodeURIComponent("When can I spray?")}#ask-the-tank`);
+  await waitForAutoRun(page);
+  await page.locator("#ask-the-tank button[type=submit]").click();
+
+  const chip = page.locator("[data-agent-result] [data-agent-window='0']");
+  await expect(chip).toBeVisible({ timeout: 30_000 });
+  await expect(chip).toHaveText(/^\w{3}, \w{3} \d{1,2}, \d{1,2} (AM|PM) to \w{3}, \w{3} \d{1,2}, \d{1,2} (AM|PM) \(\d+ h\)$/u);
+  await expect(chip).not.toHaveText("Window 0");
+});

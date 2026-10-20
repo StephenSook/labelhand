@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { runAgentLoop, type AgentPageContext, type AgentRunResult, type AgentTraceEntry } from "@/lib/agent/loop";
-import type { AgentCheckSnapshot } from "@/lib/agent/tools";
+import { windowLabel, type AgentCheckSnapshot } from "@/lib/agent/tools";
 import { WorkingCard, type WorkingStep } from "@/ui";
 import { ShowOnLabel } from "@/ui/ShowOnLabel";
 
@@ -213,9 +213,14 @@ export function AskTank({ initialQuestion, context, onCheck, onClause, onWindow 
             <div className="mt-5">
               <p className="text-xs font-extrabold uppercase tracking-[0.12em]">Forecast-permitted windows</p>
               <div className="mt-2 flex flex-wrap gap-2">
-                {result.answer.window_indices.map((index) => (
-                  <button key={index} type="button" onClick={() => onWindow(index)} className="min-h-11 rounded-full border-2 border-[#14213d] bg-[#216a38] px-4 py-2 font-extrabold text-white">Window {index}</button>
-                ))}
+                {result.answer.window_indices.map((index) => {
+                  const window = result.latestCheck?.windows[index];
+                  return (
+                    <button key={index} type="button" data-agent-window={index} onClick={() => onWindow(index)} className="min-h-11 rounded-full border-2 border-[#14213d] bg-[#216a38] px-4 py-2 font-extrabold text-white">
+                      {window ? windowLabel(window) : `Window ${index}`}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           ) : null}
