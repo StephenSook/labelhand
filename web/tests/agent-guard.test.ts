@@ -543,3 +543,44 @@ describe("an answer that is right about the label but wrong about windows", () =
     expect(dropWindowClaims(production, none)).toBeNull();
   });
 });
+
+// Local run 2026-10-20: every answer to "Why is the next blocked hour at Worth blocked?" was refused
+// with "Number 7,8 did not appear in a tool result" because the parser read "pages 7,8" as one number.
+describe("reading numbers out of a summary", () => {
+  const clauses: ToolResultRecord[] = [
+    {
+      name: "check_tank",
+      result: {
+        job_hours: 4,
+        windows: [{ index: 0, label: "Wed Oct 7, 3 PM to 7 PM (4 h)" }],
+        binding_clauses: [
+          { rule_id: "264-700-p7-2", page: 7 },
+          { rule_id: "264-700-p8-3", page: 8 },
+        ],
+        forecast_hours: [1236],
+        pages: [5, 8],
+      },
+    },
+  ];
+  const guardSays = (summary: string) => guardFinalAnswer({ summary, cited_rule_ids: [], window_indices: [] }, clauses);
+
+  test.each([
+    "See pages 7,8 of the label.",
+    "See pages 7, 8 of the label.",
+    "Wind 3-7 PM stays under the limit.",
+    "The planner checked 1,236 hours.",
+    "The planner checked 1236 hours.",
+    "Rule 264-700-p8-3 applies.",
+  ])("accepts %s", (summary) => {
+    expect(guardSays(summary)).toEqual({ passed: true, reasons: [] });
+  });
+
+  test("still refuses a number the tools never returned", () => {
+    expect(guardSays("See pages 7,9 of the label.").reasons).toEqual(["Number 9 did not appear in a tool result."]);
+    expect(guardSays("The planner checked 1,237 hours.").reasons).toEqual(["Number 1237 did not appear in a tool result."]);
+  });
+
+  test("keeps a real negative number", () => {
+    expect(guardSays("Low of -3 overnight.").reasons).toEqual(["Number -3 did not appear in a tool result."]);
+  });
+});

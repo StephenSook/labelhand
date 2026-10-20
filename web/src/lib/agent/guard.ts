@@ -14,10 +14,19 @@ export type GuardResult = {
   reasons: string[];
 };
 
-const NUMBER_PATTERN = /-?\d+(?:[.,]\d+)*/g;
+// A comma joins digits only as a thousands separator ("1,236"), so "pages 7,8" reads as 7 and 8.
+// A minus sign counts only when no letter, digit or dot comes right before it, so "3-7 PM" and
+// "264-700" read as positive numbers. Thousands separators are dropped before comparing.
+const NUMBER_PATTERN = /(?:(?<![\w.])-)?(?:\d{1,3}(?:,\d{3})+(?!\d)|\d+)(?:\.\d+)?/g;
+const PLAIN_NUMBER_PATTERN = /(?:(?<![\w.])-)?\d+(?:\.\d+)?/g;
 
 function numbersIn(value: string): Set<string> {
-  return new Set(value.match(NUMBER_PATTERN) ?? []);
+  return new Set((value.match(NUMBER_PATTERN) ?? []).map((match) => match.replace(/,/g, "")));
+}
+
+// Tool results are JSON, where "[1,236]" is two numbers. Both readings count as present.
+function toolNumbersIn(value: string): Set<string> {
+  return new Set([...numbersIn(value), ...(value.match(PLAIN_NUMBER_PATTERN) ?? [])]);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -327,7 +336,7 @@ export function guardFinalAnswer(
     }
   }
 
-  const toolNumbers = numbersIn(toolText);
+  const toolNumbers = toolNumbersIn(toolText);
   for (const number of numbersIn(answer.summary)) {
     if (!toolNumbers.has(number)) {
       reasons.push(`Number ${number} did not appear in a tool result.`);
