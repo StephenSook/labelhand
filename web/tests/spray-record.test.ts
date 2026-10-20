@@ -77,5 +77,7 @@ describe("spray record PDF", () => {
       "Actual end time",
       "Wind measured at the boom",
     ]) expect(text).toContain(blank);
-  });
+    // This one test loads the WebAssembly planner, plans 156 hours, writes the PDF and reads it back.
+    // It takes about 2 s on a desktop and took 6.7 s on a CI runner (main 909bce9), past Vitest's 5 s.
+  }, 30_000);
 });
