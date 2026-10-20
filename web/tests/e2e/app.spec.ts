@@ -79,6 +79,16 @@ test("unticking a product re-checks the tank on the forecast already shown", asy
   await expect(page).toHaveURL(/products=264-700%2C264-418.*replay=tift/);
 });
 
+test("the next-window card points to this field's Endangered Species Protection Bulletin", async ({ page }) => {
+  await openReplay(page);
+  const bulletin = page.locator("#next-window [data-bulletin]");
+  await expect(bulletin).toContainText("Endangered species limits are not checked here.");
+  await expect(bulletin).toContainText("31.4, -83.6");
+  const link = bulletin.getByRole("link", { name: "Bulletins Live! Two" });
+  await expect(link).toHaveAttribute("href", "https://blt.epa.gov/blt/public");
+  await expect(link).toHaveAttribute("target", "_blank");
+});
+
 test("the home hero runs a live or recorded planner check with a source time", async ({ page }) => {
   await page.goto("/");
   const card = page.locator("[data-live-hero]");
