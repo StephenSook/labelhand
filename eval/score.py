@@ -23,7 +23,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "compiler"))
 sys.path.insert(0, str(ROOT / "engine"))
 from compile_label import norm, num_str, squash  # noqa: E402
-from windows import TOPIC  # noqa: E402  (the same filter the planner applies)
+from windows import TOPIC, other_crop  # noqa: E402  (the same filters the planner applies)
 
 GOLD = ROOT / "eval" / "gold_v1.json"
 COMPILED = ROOT / "data" / "compiled"
@@ -88,9 +88,9 @@ def score_label(gold_items: list[dict], rules: list[dict]) -> dict:
     good = [r for r in planner_rules if matches_gold(r)]
     false_pos = [{"id": r["id"], "param": r["param"], "modality": r["modality"], "quote": r["quote"][:120]} for r in planner_rules if r not in good]
     # Acting rules: the ones engine/windows.py can turn into BLOCKED or FIELD_CHECK (a parameter it evaluates,
-    # a MUST or MUST_NOT modality, and the topic word in the quote). A wrong acting rule changes an hour's state;
+    # a MUST or MUST_NOT modality, the topic word in the quote, and not scoped to another crop). A wrong acting rule changes an hour's state;
     # a wrong advisory rule only adds a note. This is the precision that matters for harm.
-    acting = [r for r in rules if r["param"] in TOPIC and r["modality"] in ACTING and all(w in r["quote"].lower() for w in TOPIC[r["param"]])]
+    acting = [r for r in rules if r["param"] in TOPIC and r["modality"] in ACTING and all(w in r["quote"].lower() for w in TOPIC[r["param"]]) and not other_crop(r)]
     acting_good = [r for r in acting if any(g["modality"] in ACTING for g in matching_gold(r))]
     acting_fp = [
         {

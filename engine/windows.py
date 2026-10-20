@@ -16,7 +16,7 @@ Rules reach the planner only after two deterministic filters:
 This is the Python reference implementation. The Rust core (wasm + UniFFI) must produce identical output
 on the same inputs; tests/fixtures hold the shared cases.
 
-Run: python engine/windows.py --point tift --tank 5481-504 264-700 264-418 --hours 48
+Run: python engine/windows.py --point tift --tank 5481-504 228-653 228-659 --hours 48
 """
 
 from __future__ import annotations
@@ -51,6 +51,18 @@ RAIN_EXPECTED_POP = 50
 RAIN_UNSURE_POP = 20
 # Window for temperature advisories: the night low and the mean are taken over the next 24 forecast hours.
 ADVISORY_HOURS = 24
+# Labelhand plans cotton. The compiler records each rule's applies_to; a rule the label scopes to one of these
+# crops, and not to cotton, is listed as skipped instead of driving the plan (Super Boll, 228-659, limits its
+# higher tobacco rates to days below 65 F, a sentence about tobacco only). Kept narrow on purpose: skipping a
+# rule relaxes the plan, so only a crop these labels actually carry is named.
+OTHER_CROPS = ("tobacco",)
+
+
+def other_crop(rule: dict) -> str | None:
+    """The crop a rule is scoped to when that is one of OTHER_CROPS and not cotton, else None."""
+    applies = (rule.get("applies_to") or "").lower()
+    crop = next((c for c in OTHER_CROPS if c in applies), None)
+    return crop if crop and "cotton" not in applies else None
 
 
 # Shipped configuration: majority modality vote across three p2 + typing v3 + OCR + PR 2000-5 floor runs.
@@ -71,10 +83,14 @@ def load_rules(reg: str, rules_suffix: str = DEFAULT_RULES) -> tuple[str, list[d
         if key in seen:
             continue  # same clause compiled twice
         seen.add(key)
-        if all(w in q for w in words):
-            used.append({**r, "product": rep["product"], "reg": reg})
-        else:
+        if not all(w in q for w in words):
             skipped.append({"id": r["id"], "param": r["param"], "why": f"quote lacks {words}"})
+            continue
+        crop = other_crop(r)
+        if crop:
+            skipped.append({"id": r["id"], "param": r["param"], "why": f"applies to {crop}, not cotton"})
+            continue
+        used.append({**r, "product": rep["product"], "reg": reg})
     return rep["product"], used, skipped
 
 
@@ -306,7 +322,7 @@ def evaluate(rules: list[dict], periods: list[dict], lat: float, lon: float, hou
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--point", default="tift")
-    ap.add_argument("--tank", nargs="+", default=["5481-504", "264-700", "264-418"])
+    ap.add_argument("--tank", nargs="+", default=["5481-504", "228-653", "228-659"])
     ap.add_argument("--hours", type=int, default=48)
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--rules", default=DEFAULT_RULES, help="compiled rule-set suffix in data/compiled/")

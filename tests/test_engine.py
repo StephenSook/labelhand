@@ -172,3 +172,20 @@ def test_advisory_wind_is_reported():
     calm = r("wind_speed_mph", "lt", 2, "ADVISORY", "Application should be avoided below 2 mph.", "t-11")
     out = windows.evaluate([calm], [period(NOON, "0 mph", 0)], LAT, LON, 1)[0]
     assert out["advisories"][0]["why"] == "forecast wind 0 mph < 2 mph"
+
+
+def test_a_rule_the_label_scopes_to_tobacco_only_is_skipped_with_its_reason(tmp_path, monkeypatch):
+    rule = {"id": "s-1", "page": 6, "param": "air_temperature_f", "op": "lt", "value": 65, "value2": None, "unit": "F", "modality": "MUST"}
+    compiled = {
+        "product": "TEST",
+        "accepted": [
+            {**rule, "applies_to": "tobacco (flue-cured only)", "quote": "If the higher rates are used, only apply if temperatures are below 65 F."},
+            {**rule, "id": "s-2", "applies_to": "cotton and tobacco", "quote": "Apply only when temperatures are below 65 F on cotton or tobacco."},
+            {**rule, "id": "s-3", "applies_to": "all applications", "quote": "Do not apply when temperatures exceed 95 F."},
+        ],
+    }
+    (tmp_path / "0-0.ship.json").write_text(__import__("json").dumps(compiled), encoding="utf-8")
+    monkeypatch.setattr(windows, "COMPILED", tmp_path)
+    _, used, skipped = windows.load_rules("0-0")
+    assert [u["id"] for u in used] == ["s-2", "s-3"]
+    assert skipped == [{"id": "s-1", "param": "air_temperature_f", "why": "applies to tobacco, not cotton"}]

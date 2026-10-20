@@ -15,6 +15,9 @@ pub const TOPIC: [(&str, &[&str]); 6] = [
     ("night_temperature_f", &["night"]),
     ("air_temperature_f", &["temperature"]),
 ];
+// Labelhand plans cotton. A rule whose applies_to names one of these crops and not cotton is skipped,
+// mirroring OTHER_CROPS in engine/windows.py. Kept narrow: skipping a rule relaxes the plan.
+pub const OTHER_CROPS: [&str; 1] = ["tobacco"];
 pub const RAIN_EXPECTED_POP: f64 = 50.0;
 pub const RAIN_UNSURE_POP: f64 = 20.0;
 pub const ADVISORY_HOURS: usize = 24;
@@ -163,18 +166,34 @@ pub fn load_rules(compiled: &CompiledLabel, reg: &str) -> LoadRulesResult {
         if !seen.insert(key) {
             continue;
         }
-        if words.iter().all(|word| quote.contains(word)) {
-            let mut rule = source_rule.clone();
-            rule.product = Some(compiled.product.clone());
-            rule.reg = Some(reg.to_owned());
-            used.push(rule);
-        } else {
+        if !words.iter().all(|word| quote.contains(word)) {
             skipped.push(SkippedRule {
                 id: source_rule.id.clone(),
                 param: source_rule.param.clone(),
                 why: format!("quote lacks {}", tuple_repr(words)),
             });
+            continue;
         }
+        let applies = source_rule
+            .extra
+            .get("applies_to")
+            .and_then(Value::as_str)
+            .unwrap_or("")
+            .to_lowercase();
+        if let Some(crop) = OTHER_CROPS.iter().find(|crop| applies.contains(*crop))
+            && !applies.contains("cotton")
+        {
+            skipped.push(SkippedRule {
+                id: source_rule.id.clone(),
+                param: source_rule.param.clone(),
+                why: format!("applies to {crop}, not cotton"),
+            });
+            continue;
+        }
+        let mut rule = source_rule.clone();
+        rule.product = Some(compiled.product.clone());
+        rule.reg = Some(reg.to_owned());
+        used.push(rule);
     }
 
     LoadRulesResult {
@@ -753,7 +772,10 @@ mod tests {
 
     use serde_json::json;
 
-    use super::{GateState, Period, Rule, gate, mph, py_fixed_zero, py_general};
+    use super::{
+        CompiledLabel, GateState, Period, Rule, SkippedRule, gate, load_rules, mph, py_fixed_zero,
+        py_general,
+    };
 
     #[test]
     fn python_number_formats_cover_kernel_values() {
@@ -762,6 +784,36 @@ mod tests {
         assert_eq!(py_general(1_234_567.0), "1.23457e+06");
         assert_eq!(py_fixed_zero(2.5), "2");
         assert_eq!(py_fixed_zero(3.5), "4");
+    }
+
+    #[test]
+    fn a_rule_the_label_scopes_to_tobacco_only_is_skipped_with_its_reason() {
+        let compiled: CompiledLabel = serde_json::from_value(json!({
+            "product": "TEST",
+            "accepted": [
+                {"id": "s-1", "page": 6, "param": "air_temperature_f", "op": "lt", "value": 65, "value2": null, "unit": "F",
+                 "modality": "MUST", "applies_to": "tobacco (flue-cured only)",
+                 "quote": "If the higher rates are used, only apply if temperatures are below 65 F."},
+                {"id": "s-2", "page": 6, "param": "air_temperature_f", "op": "lt", "value": 65, "value2": null, "unit": "F",
+                 "modality": "MUST", "applies_to": "cotton and tobacco",
+                 "quote": "Apply only when temperatures are below 65 F on cotton or tobacco."},
+                {"id": "s-3", "page": 6, "param": "air_temperature_f", "op": "lt", "value": 95, "value2": null, "unit": "F",
+                 "modality": "MUST", "applies_to": "all applications",
+                 "quote": "Do not apply when temperatures exceed 95 F."}
+            ]
+        }))
+        .expect("compiled label parses");
+        let result = load_rules(&compiled, "0-0");
+        let used: Vec<&str> = result.used.iter().map(|rule| rule.id.as_str()).collect();
+        assert_eq!(used, ["s-2", "s-3"]);
+        assert_eq!(
+            result.skipped,
+            [SkippedRule {
+                id: "s-1".to_owned(),
+                param: "air_temperature_f".to_owned(),
+                why: "applies to tobacco, not cotton".to_owned(),
+            }]
+        );
     }
 
     #[test]
