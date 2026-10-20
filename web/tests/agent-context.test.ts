@@ -1,5 +1,5 @@
 import { describe, expect, test, vi } from "vitest";
-import { AGENT_SYSTEM_PROMPT, questionWithContext } from "@/lib/agent/loop";
+import { AGENT_SYSTEM_PROMPT, checkContextFor, questionWithContext } from "@/lib/agent/loop";
 import { AGENT_TOOL_DEFINITIONS, createAgentToolRuntime, executeAgentTool } from "@/lib/agent/tools";
 
 describe("Ask the tank checks what the page shows", () => {
@@ -30,6 +30,37 @@ describe("Ask the tank checks what the page shows", () => {
     expect(questionWithContext("Is it worth spraying today?", page)).toContain("field tift;");
     expect(questionWithContext("Why can't I spray if rain is expected within 6 hours?", page)).toContain("job length 3 hours");
     expect(questionWithContext("Does Dropp need a 24-hour rain-free period?", page)).toContain("job length 3 hours");
+  });
+
+  test("county and job length cases from the Grok review", () => {
+    const page = { field: "tift", products: ["5481-504"], jobHours: 3, forecast: "recorded" as const };
+    const field = (question: string) => checkContextFor(question, page).field;
+    const job = (question: string) => checkContextFor(question, page).jobHours;
+    expect(field("When can I spray at Cook instead of Tift?")).toBe("cook");
+    expect(field("Is Cook open, or should I use Tift?")).toBe("cook");
+    expect(field("Is it Worth spraying at Cook?")).toBe("cook");
+    expect(field("Worth spraying today?")).toBe("tift");
+    expect(field("Cook the schedule down to one product?")).toBe("tift");
+    expect(field("What should I spray for coffee leaf spot?")).toBe("tift");
+    expect(field("Wait for coffee to dry, then spray.")).toBe("tift");
+    expect(field("I am looking for worth in the label.")).toBe("tift");
+    expect(field("Is Coffee County open tomorrow?")).toBe("coffee");
+    expect(job("Can I run a 2.5-hour job?")).toBe(3);
+    expect(job("Can I run a 2.5 hour job tomorrow?")).toBe(3);
+    expect(job("Do not spray for 6 hours after rain.")).toBe(3);
+    expect(job("the 6-hour spray interval on the label")).toBe(3);
+  });
+
+  test("another county gets a recorded forecast only where one is committed", () => {
+    const page = { field: "tift", products: ["5481-504"], jobHours: 3, forecast: "recorded" as const, issued: "2026-10-10T11:07:02+00:00" };
+    const benHill = checkContextFor("Is Ben Hill open for a 6-hour job tomorrow?", page);
+    expect(benHill).toMatchObject({ field: "ben_hill", forecast: "live" });
+    expect(benHill.issued).toBeUndefined();
+    const worth = checkContextFor("What about at Worth?", page);
+    expect(worth).toMatchObject({ field: "worth", forecast: "recorded" });
+    expect(worth.issued).toBeUndefined();
+    expect(checkContextFor("Why is the next hour blocked?", page)).toMatchObject({ field: "tift", forecast: "recorded", issued: "2026-10-10T11:07:02+00:00" });
+    expect(questionWithContext("Why is the next hour blocked?", page)).toContain("forecast recorded (the issuance of 2026-10-10T11:07:02+00:00)");
   });
 
   test("without a page the question goes as typed", () => {

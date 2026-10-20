@@ -339,15 +339,16 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
     : [];
   const usedRules = result?.ruleGroups.flatMap((group) => group.used) ?? [];
   const windows = result ? forecastPermittedWindows(result.hours, jobHours) : [];
-  // Ask the tank checks what this page shows. It can replay the committed recorded forecast, not a
-  // season issuance, so a season replay hands it the live forecast and says so in the trace.
+  // Ask the tank checks what this page shows: the committed recorded forecast, the season issuance
+  // being replayed, or the live forecast.
   const agentProducts = PRODUCT_REGISTRATIONS.filter((reg) => selectedRegs.has(reg));
   const agentContext = agentProducts.length > 0
     ? {
       field: result?.pointKey ?? field,
       products: agentProducts,
       jobHours,
-      forecast: activeReplay && !replayIssued ? "recorded" as const : "live" as const,
+      forecast: activeReplay || replayIssued ? "recorded" as const : "live" as const,
+      issued: replayIssued,
     }
     : undefined;
   const seasonPoint = result ? points?.[result.pointKey] : undefined;

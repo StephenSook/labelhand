@@ -121,6 +121,8 @@ export type AgentToolRuntime = {
   // Every clause under an id is kept, so get_clause never answers with a different sentence than
   // the one the planner cited.
   rulesById: Map<string, Rule[]>;
+  // The county and forecast the page is showing, so check_tank can load the same forecast.
+  page?: { field: string; forecast: "live" | "recorded"; issued?: string };
 };
 
 export function createAgentToolRuntime(): AgentToolRuntime {
@@ -192,7 +194,11 @@ async function checkTank(args: unknown, runtime: AgentToolRuntime): Promise<Agen
   if (input.forecast !== undefined && input.forecast !== "live" && input.forecast !== "recorded") {
     throw new TypeError("check_tank forecast must be live or recorded.");
   }
-  const wantRecorded = input.forecast === "recorded";
+  // The page's own forecast applies when the agent checks the page's county: the committed recorded
+  // forecast, or the season issuance the page is replaying. A forecast the model names wins.
+  const page = runtime.page?.field === field ? runtime.page : undefined;
+  const wanted = input.forecast === "live" || input.forecast === "recorded" ? input.forecast : page?.forecast ?? "live";
+  const issued = wanted === "recorded" ? page?.issued : undefined;
 
   const engine = await import("@/engine");
   const planner = await import("@/lib/planner-data");
@@ -209,23 +215,32 @@ async function checkTank(args: unknown, runtime: AgentToolRuntime): Promise<Agen
   let source: SourceKind = "LIVE";
   let periods: import("@/engine").ForecastPeriod[];
   let fetchedAt: string;
-  if (wantRecorded && !planner.REPLAY_POINTS.has(field)) {
-    throw new RangeError(`No recorded forecast exists for ${field}.`);
-  }
-  try {
-    // The page may be replaying a recorded forecast; the agent then checks the same one.
-    if (wantRecorded) throw new Error("recorded forecast requested");
-    const live = await planner.fetchLivePeriods(point.forecastHourly);
-    periods = live.periods;
-    fetchedAt = live.fetchedAt;
-  } catch (liveError) {
-    if (!planner.REPLAY_POINTS.has(field)) {
-      throw new Error(`Live forecast failed: ${planner.errorText(liveError)} No recorded fallback is available for ${field}.`);
-    }
-    const replay = await planner.fetchReplay(field);
+  if (issued) {
+    const season = await import("@/lib/season");
+    // Day files are UTC days, so the issued timestamp's UTC date names the file, as on the page.
+    const recorded = await season.fetchSeasonDay(field, new Date(issued).toISOString().slice(0, 10));
+    const issuance = recorded.issuances.find((candidate) => Date.parse(candidate.fetched_utc) === Date.parse(issued));
+    if (!issuance) throw new Error(`No forecast issued at ${issued} was recorded for ${field}.`);
     source = "RECORDED";
-    periods = replay.periods;
-    fetchedAt = replay.forecast_fetched_utc;
+    periods = season.issuanceToPeriods(issuance);
+    fetchedAt = issuance.fetched_utc;
+  } else {
+    // Only Tift, Worth and Colquitt have a committed recorded forecast; other counties check live.
+    const useRecorded = wanted === "recorded" && planner.REPLAY_POINTS.has(field);
+    try {
+      if (useRecorded) throw new Error("recorded forecast requested");
+      const live = await planner.fetchLivePeriods(point.forecastHourly);
+      periods = live.periods;
+      fetchedAt = live.fetchedAt;
+    } catch (liveError) {
+      if (!planner.REPLAY_POINTS.has(field)) {
+        throw new Error(`Live forecast failed: ${planner.errorText(liveError)} No recorded fallback is available for ${field}.`);
+      }
+      const replay = await planner.fetchReplay(field);
+      source = "RECORDED";
+      periods = replay.periods;
+      fetchedAt = replay.forecast_fetched_utc;
+    }
   }
 
   const ruleGroups = await Promise.all(products.map(async (reg) => {

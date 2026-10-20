@@ -1,3 +1,4 @@
+import { REPLAY_POINTS } from "@/lib/planner-data";
 import { guardFinalAnswer, prepareFinalAnswer, type FinalAnswerArgs, type ToolResultRecord } from "./guard";
 import {
   AGENT_TOOL_NAMES,
@@ -9,7 +10,7 @@ import {
   type AgentToolName,
 } from "./tools";
 
-export const AGENT_SYSTEM_PROMPT = `You help a Georgia cotton applicator understand the Labelhand planner. You must use check_tank before answering any question about forecast windows. When the user message ends with a page context line, call check_tank with exactly that field, those products, that job length and that forecast unless the question names others. Answer the question that was asked. For a question about a limit or which label is strictest, read the binding_clauses quotes, use get_clause for the full text, and name the product, the page and the limit. Do not describe windows unless the question asks when. You may state only facts that appear in tool results from this conversation. Never say spraying is legal. Say forecast-permitted and remind the user that field checks required by the label remain their responsibility. For a when or window question, call check_tank and then call final_answer directly with every returned window index. Do not state how many windows there are; the page lists every window index you return. Keep the summary under 300 characters, at most three short sentences. If no window is returned, say so in one sentence and name the clause that blocks the most hours. Counts in check_tank are hours, never windows. Use get_clause only when the user asks why or asks about a label limit. Never invent or abbreviate a rule ID. Copy a rule_id exactly from check_tank binding_clauses. End by calling final_answer with a summary, cited rule IDs, and window indices. Do not answer in ordinary text.`;
+export const AGENT_SYSTEM_PROMPT = `You help a Georgia cotton applicator understand the Labelhand planner. You must use check_tank before answering any question about forecast windows. When the user message ends with a page context line, call check_tank with exactly that field, those products, that job length and that forecast. Answer the question that was asked. For a question about a limit or which label is strictest, read the binding_clauses quotes, use get_clause for the full text, and name the product, the page and the limit. Do not describe windows unless the question asks when. You may state only facts that appear in tool results from this conversation. Never say spraying is legal. Say forecast-permitted and remind the user that field checks required by the label remain their responsibility. For a when or window question, call check_tank and then call final_answer directly with every returned window index. Do not state how many windows there are; the page lists every window index you return. Keep the summary under 300 characters, at most three short sentences. If no window is returned, say so in one sentence and name the clause that blocks the most hours. Counts in check_tank are hours, never windows. Use get_clause only when the user asks why or asks about a label limit. Never invent or abbreviate a rule ID. Copy a rule_id exactly from check_tank binding_clauses. End by calling final_answer with a summary, cited rule IDs, and window indices. Do not answer in ordinary text.`;
 
 type ToolCall = {
   id: string;
@@ -96,36 +97,70 @@ export type AgentPageContext = {
   products: string[];
   jobHours: number;
   forecast: "live" | "recorded";
+  // The season issuance the page replays, when it replays one instead of the committed forecast.
+  issued?: string;
 };
 
-// Lightning followed the page's 3-hour job even when the question said "a 4-hour job", so a field
-// or job length named in the question replaces the page's value here, in code.
-// "Worth" and "Cook" are also English words ("is it worth spraying?"), so a county counts only when
-// it is capitalized ("Worth", "Ben Hill") or follows a place word ("at worth", "in ben hill").
+// The field, job and forecast check_tank should use for this question.
+export type AgentCheckContext = {
+  field: string;
+  products: string[];
+  jobHours: number;
+  forecast: "live" | "recorded";
+  issued?: string;
+};
+
+// These county names are also ordinary words ("is it worth spraying", "cook a tank", "coffee leaf
+// spot"), so on their own they count only when capitalized and not starting the sentence.
+const ORDINARY_WORD_COUNTIES = new Set(["worth", "cook", "coffee"]);
+
+// Lightning followed the page's 3-hour job even when the question said "a 4-hour job", so a county
+// or job length named in the question replaces the page's value here, in code. A county after a
+// place word ("at Cook instead of Tift") wins over a bare name, and the earliest one wins.
 function fieldNamedIn(question: string): string | undefined {
-  return FIELD_KEYS.find((key) => {
+  const placed: Array<{ key: string; index: number }> = [];
+  const bare: Array<{ key: string; index: number }> = [];
+  for (const key of FIELD_KEYS) {
     const words = key.split("_");
-    const capitalized = words.map((word) => word[0]!.toUpperCase() + word.slice(1)).join("[ _-]");
     const lower = words.join("[ _-]");
-    return new RegExp(`\\b${capitalized}\\b`).test(question)
-      || new RegExp(`\\b(?:at|in|for|near|around)\\s+${lower}\\b`, "i").test(question);
-  });
+    const capitalized = words.map((word) => word[0]!.toUpperCase() + word.slice(1)).join("[ _-]");
+    const place = new RegExp(`\\b(?:at|in|near|around)\\s+(${lower})\\b|\\b(${lower})\\s+county\\b`, "i").exec(question);
+    if (place) placed.push({ key, index: place.index });
+    for (const match of question.matchAll(new RegExp(`\\b${capitalized}\\b`, "g"))) {
+      const sentenceStart = /(?:^|[.!?]\s+)$/.test(question.slice(0, match.index));
+      if (ORDINARY_WORD_COUNTIES.has(key) && sentenceStart) continue;
+      bare.push({ key, index: match.index });
+      break;
+    }
+  }
+  const pick = (found: Array<{ key: string; index: number }>) => found.sort((a, b) => a.index - b.index)[0]?.key;
+  return pick(placed) ?? pick(bare);
 }
 
-// Only a length tied to the job counts. "Rain within 6 hours" or "a 24-hour rain-free period" is a
-// label condition, not the job the applicator wants to run.
+// Only a whole number of hours tied to the job counts: "a 4-hour job", "a job of 5 hours". "Rain
+// within 6 hours", "a 24-hour rain-free period" and "do not spray for 6 hours after rain" are label
+// conditions, and "2.5-hour" is not read as 5.
 function jobHoursNamedIn(question: string): number | undefined {
-  const match = question.match(/\b(\d{1,2})[\s-]*(?:hours?|hrs?)[\s-]+(?:job|run|spray|application)\b/i)
-    ?? question.match(/\b(?:job|spray(?:ing)?|application)\s+(?:of|for|lasting)\s+(\d{1,2})\s*(?:hours?|hrs?)\b/i);
+  const match = question.match(/(?<![\d.])\b(\d{1,2})[\s-]*(?:hours?|hrs?)[\s-]+job\b/i)
+    ?? question.match(/\bjob\s+(?:of|for|lasting)\s+(?<![\d.])(\d{1,2})\s*(?:hours?|hrs?)\b/i);
   const hours = match ? Number(match[1]) : NaN;
   return Number.isInteger(hours) && hours >= 1 && hours <= 12 ? hours : undefined;
 }
 
-export function questionWithContext(question: string, context?: AgentPageContext): string {
-  if (!context) return question;
+export function checkContextFor(question: string, context: AgentPageContext): AgentCheckContext {
   const field = fieldNamedIn(question) ?? context.field;
   const jobHours = jobHoursNamedIn(question) ?? context.jobHours;
-  const line = `Page context: field ${field}; products ${context.products.join(", ")}; job length ${jobHours} hours; forecast ${context.forecast}.`;
+  if (field === context.field) return { field, products: context.products, jobHours, forecast: context.forecast, issued: context.issued };
+  // Another county: only Tift, Worth and Colquitt have a committed recorded forecast.
+  const forecast = context.forecast === "recorded" && REPLAY_POINTS.has(field) ? "recorded" : "live";
+  return { field, products: context.products, jobHours, forecast };
+}
+
+export function questionWithContext(question: string, context?: AgentPageContext): string {
+  if (!context) return question;
+  const check = checkContextFor(question, context);
+  const forecast = check.issued ? `recorded (the issuance of ${check.issued})` : check.forecast;
+  const line = `Page context: field ${check.field}; products ${check.products.join(", ")}; job length ${check.jobHours} hours; forecast ${forecast}.`;
   return `${question}\n\n${line}`;
 }
 
@@ -138,6 +173,7 @@ export async function runAgentLoop(
   const trace: AgentTraceEntry[] = [];
   const toolResults: ToolResultRecord[] = [];
   const runtime = createAgentToolRuntime();
+  if (context) runtime.page = checkContextFor(question, context);
   let totalCostUsd = 0;
   let lastGuard: AgentGuardTrace | null = null;
 
