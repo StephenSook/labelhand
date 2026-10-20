@@ -1,0 +1,247 @@
+{
+ "suffix": ".union.p2.typed.v3.ocr.mf",
+ "gold_version": "v1",
+ "labels": {
+  "5481-504": {
+   "gold": 24,
+   "coverage": 24,
+   "typed": 24,
+   "value_n": 20,
+   "value_ok": 19,
+   "modality_ok": 21,
+   "planner_rules": 42,
+   "planner_good": 35,
+   "coverage_recall": 1.0,
+   "typed_recall": 1.0,
+   "value_exact": 0.95,
+   "modality_acc": 0.875,
+   "planner_precision": 0.833,
+   "acting_rules": 6,
+   "acting_good": 5,
+   "acting_precision": 0.833,
+   "gold_acting": 5,
+   "gold_acting_hit": 5,
+   "acting_recall": 1.0,
+   "acting_missed": [],
+   "missed": [],
+   "mistyped": [],
+   "planner_false_positives": [
+    {
+     "id": "5481-504-p7-7",
+     "param": "boom_height_in",
+     "modality": "MUST",
+     "quote": "For ground rig applications, apply product no more than 4 feet above the ground or the crop canopy and only when wind sp"
+    },
+    {
+     "id": "5481-504-p8-5",
+     "param": "wind_speed_mph",
+     "modality": "ADVISORY",
+     "quote": "If the windspeed is 10 miles per hour or less, applicators must use \u00bd swath displacement upwind at the downwind edge of "
+    },
+    {
+     "id": "5481-504-p6-3",
+     "param": "droplet_size",
+     "modality": "ADVISORY",
+     "quote": "Larger droplets more effectively reach the lower leaves."
+    },
+    {
+     "id": "5481-504-p7-8",
+     "param": "boom_height_in",
+     "modality": "MUST",
+     "quote": "For ground rig applications, apply product no more than 4 feet above the ground or the crop canopy and only when wind sp"
+    },
+    {
+     "id": "5481-504-p9-1",
+     "param": "temperature_inversion",
+     "modality": "ADVISORY",
+     "quote": "Drift potential is high during a temperature inversion."
+    },
+    {
+     "id": "5481-504-p9-4",
+     "param": "wind_speed_mph",
+     "modality": "ADVISORY",
+     "quote": "Drift potential is lowest between wind speeds of 2 -10 mph."
+    },
+    {
+     "id": "5481-504-p9-20",
+     "param": "open_boll_pct",
+     "modality": "ADVISORY",
+     "quote": "For best results, apply the combination to mature cotton plants with 60% or more open bolls."
+    }
+   ],
+   "acting_false_positives": [
+    {
+     "id": "5481-504-p10-5",
+     "param": "air_temperature_f",
+     "gold_modalities": [
+      "ADVISORY"
+     ],
+     "quote": "\u2022 Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after applic"
+    }
+   ],
+   "model": "nvidia/nemotron-3-super-120b-a12b+nvidia/Nemotron-3-Ultra-550b-a55b"
+  },
+  "228-653": {
+   "gold": 27,
+   "coverage": 25,
+   "typed": 21,
+   "value_n": 17,
+   "value_ok": 14,
+   "modality_ok": 21,
+   "planner_rules": 33,
+   "planner_good": 27,
+   "coverage_recall": 0.926,
+   "typed_recall": 0.778,
+   "value_exact": 0.824,
+   "modality_acc": 1.0,
+   "planner_precision": 0.818,
+   "acting_rules": 2,
+   "acting_good": 2,
+   "acting_precision": 1.0,
+   "gold_acting": 2,
+   "gold_acting_hit": 2,
+   "acting_recall": 1.0,
+   "acting_missed": [],
+   "missed": [
+    "FF-TEMP-RATE",
+    "FF-NIGHT-TRIBUFOS"
+   ],
+   "mistyped": [
+    {
+     "gold": "FF-MATURE",
+     "got": [
+      "crop_stage"
+     ]
+    },
+    {
+     "gold": "FF-NIGHT-COC",
+     "got": [
+      "adjuvant"
+     ]
+    },
+    {
+     "gold": "FF-TEMP-60-65",
+     "got": [
+      "rate_per_acre"
+     ]
+    },
+    {
+     "gold": "FF-NIGHT-65",
+     "got": [
+      "rate_per_acre"
+     ]
+    }
+   ],
+   "planner_false_positives": [
+    {
+     "id": "228-653-p5-1",
+     "param": "droplet_size",
+     "modality": "ADVISORY",
+     "quote": "The best drift management strategy is to apply the largest droplets that provide sufficient coverage and control."
+    },
+    {
+     "id": "228-653-p5-6",
+     "param": "droplet_size",
+     "modality": "ADVISORY",
+     "quote": "Consider using low-drift nozzles."
+    },
+    {
+     "id": "228-653-p5-8",
+     "param": "droplet_size",
+     "modality": "ADVISORY",
+     "quote": "Nozzle Orientation - Orienting nozzles so that the spray is emitted backwards, parallel to the airstream with produce la"
+    },
+    {
+     "id": "228-653-p5-9",
+     "param": "droplet_size",
+     "modality": "ADVISORY",
+     "quote": "Nozzle Type - Solid stream nozzles (such as disc and core with swirl plate removed) oriented straight back produce large"
+    },
+    {
+     "id": "228-653-p5-12",
+     "param": "boom_height_in",
+     "modality": "ADVISORY",
+     "quote": "Setting the boom at the lowest referenced height (if specified) which provides uniform coverage reduces the exposure of "
+    },
+    {
+     "id": "228-653-p5-17",
+     "param": "temperature_inversion",
+     "modality": "ADVISORY",
+     "quote": "Drift potential is high during a temperature inversion."
+    }
+   ],
+   "acting_false_positives": [],
+   "model": "nvidia/nemotron-3-super-120b-a12b+nvidia/Nemotron-3-Ultra-550b-a55b"
+  },
+  "228-659": {
+   "gold": 13,
+   "coverage": 12,
+   "typed": 11,
+   "value_n": 6,
+   "value_ok": 6,
+   "modality_ok": 9,
+   "planner_rules": 15,
+   "planner_good": 13,
+   "coverage_recall": 0.923,
+   "typed_recall": 0.846,
+   "value_exact": 1.0,
+   "modality_acc": 0.818,
+   "planner_precision": 0.867,
+   "acting_rules": 4,
+   "acting_good": 4,
+   "acting_precision": 1.0,
+   "gold_acting": 3,
+   "gold_acting_hit": 3,
+   "acting_recall": 1.0,
+   "acting_missed": [],
+   "missed": [
+    "S-BOLLS-MATURE"
+   ],
+   "mistyped": [
+    {
+     "gold": "S-DEFOLIANT-BOLLS",
+     "got": [
+      "crop_stage"
+     ]
+    }
+   ],
+   "planner_false_positives": [
+    {
+     "id": "228-659-p7-1",
+     "param": "air_temperature_f",
+     "modality": "MUST",
+     "quote": "Hot and dry 80\u00b0F or higher"
+    },
+    {
+     "id": "228-659-p8-12",
+     "param": "air_temperature_f",
+     "modality": "MUST",
+     "quote": "If the higher rates are used, only apply if temperatures are below 65\u00baF on the day of application."
+    }
+   ],
+   "acting_false_positives": [],
+   "model": "nvidia/nemotron-3-super-120b-a12b+nvidia/Nemotron-3-Ultra-550b-a55b"
+  }
+ },
+ "overall": {
+  "gold": 64,
+  "coverage": 61,
+  "typed": 56,
+  "value_n": 43,
+  "value_ok": 39,
+  "modality_ok": 51,
+  "planner_rules": 90,
+  "planner_good": 75,
+  "acting_rules": 12,
+  "acting_good": 11,
+  "gold_acting": 10,
+  "gold_acting_hit": 10,
+  "coverage_recall": 0.953,
+  "typed_recall": 0.875,
+  "value_exact": 0.907,
+  "modality_acc": 0.911,
+  "planner_precision": 0.833,
+  "acting_precision": 0.917,
+  "acting_recall": 1.0
+ }
+}

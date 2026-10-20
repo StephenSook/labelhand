@@ -1,0 +1,250 @@
+{
+ "suffix": ".union.p2r3.typed.v3.ocr.mf",
+ "gold_version": "v1",
+ "labels": {
+  "5481-504": {
+   "gold": 24,
+   "coverage": 24,
+   "typed": 24,
+   "value_n": 20,
+   "value_ok": 20,
+   "modality_ok": 21,
+   "planner_rules": 44,
+   "planner_good": 38,
+   "coverage_recall": 1.0,
+   "typed_recall": 1.0,
+   "value_exact": 1.0,
+   "modality_acc": 0.875,
+   "planner_precision": 0.864,
+   "acting_rules": 5,
+   "acting_good": 5,
+   "acting_precision": 1.0,
+   "gold_acting": 5,
+   "gold_acting_hit": 5,
+   "acting_recall": 1.0,
+   "acting_missed": [],
+   "missed": [],
+   "mistyped": [],
+   "planner_false_positives": [
+    {
+     "id": "5481-504-p10-8",
+     "param": "open_boll_pct",
+     "modality": "MUST",
+     "quote": "\u2022 Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after applic"
+    },
+    {
+     "id": "5481-504-p6-2",
+     "param": "night_temperature_f",
+     "modality": "ADVISORY",
+     "quote": "Diesel oil (3 to 5 gallons by air or 5 to 10 gallons by ground) may be helpful when night temperatures drop below 60\u00b0F, "
+    },
+    {
+     "id": "5481-504-p7-8",
+     "param": "boom_height_in",
+     "modality": "MUST",
+     "quote": "For ground rig applications, apply product no more than 4 feet above the ground or the crop canopy and only when wind sp"
+    },
+    {
+     "id": "5481-504-p9-2",
+     "param": "temperature_inversion",
+     "modality": "ADVISORY",
+     "quote": "Drift potential is high during a temperature inversion."
+    },
+    {
+     "id": "5481-504-p9-3",
+     "param": "wind_speed_mph",
+     "modality": "ADVISORY",
+     "quote": "Drift potential is lowest between wind speeds of 2 -10 mph."
+    },
+    {
+     "id": "5481-504-p9-17",
+     "param": "open_boll_pct",
+     "modality": "ADVISORY",
+     "quote": "For best results, apply the combination to mature cotton plants with 60% or more open bolls."
+    }
+   ],
+   "acting_false_positives": [],
+   "model": "nvidia/nemotron-3-super-120b-a12b+nvidia/Nemotron-3-Ultra-550b-a55b"
+  },
+  "228-653": {
+   "gold": 27,
+   "coverage": 26,
+   "typed": 22,
+   "value_n": 18,
+   "value_ok": 16,
+   "modality_ok": 20,
+   "planner_rules": 33,
+   "planner_good": 28,
+   "coverage_recall": 0.963,
+   "typed_recall": 0.815,
+   "value_exact": 0.889,
+   "modality_acc": 0.909,
+   "planner_precision": 0.848,
+   "acting_rules": 3,
+   "acting_good": 2,
+   "acting_precision": 0.667,
+   "gold_acting": 2,
+   "gold_acting_hit": 2,
+   "acting_recall": 1.0,
+   "acting_missed": [],
+   "missed": [
+    "FF-TEMP-RATE"
+   ],
+   "mistyped": [
+    {
+     "gold": "FF-MATURE",
+     "got": [
+      "crop_stage"
+     ]
+    },
+    {
+     "gold": "FF-NIGHT-COC",
+     "got": [
+      "adjuvant"
+     ]
+    },
+    {
+     "gold": "FF-TEMP-60-65",
+     "got": [
+      "rate_per_acre"
+     ]
+    },
+    {
+     "gold": "FF-NIGHT-65",
+     "got": [
+      "rate_per_acre"
+     ]
+    }
+   ],
+   "planner_false_positives": [
+    {
+     "id": "228-653-p5-1",
+     "param": "droplet_size",
+     "modality": "ADVISORY",
+     "quote": "The best drift management strategy is to apply the largest droplets that provide sufficient coverage and control."
+    },
+    {
+     "id": "228-653-p5-7",
+     "param": "droplet_size",
+     "modality": "ADVISORY",
+     "quote": "Nozzle Orientation - Orienting nozzles so that the spray is emitted backwards, parallel to the airstream with produce la"
+    },
+    {
+     "id": "228-653-p5-8",
+     "param": "droplet_size",
+     "modality": "ADVISORY",
+     "quote": "Nozzle Type - Solid stream nozzles (such as disc and core with swirl plate removed) oriented straight back produce large"
+    },
+    {
+     "id": "228-653-p5-11",
+     "param": "boom_height_in",
+     "modality": "ADVISORY",
+     "quote": "Setting the boom at the lowest referenced height (if specified) which provides uniform coverage reduces the exposure of "
+    },
+    {
+     "id": "228-653-p5-16",
+     "param": "temperature_inversion",
+     "modality": "ADVISORY",
+     "quote": "Drift potential is high during a temperature inversion."
+    }
+   ],
+   "acting_false_positives": [
+    {
+     "id": "228-653-p5-2",
+     "param": "wind_speed_mph",
+     "gold_modalities": [
+      "ADVISORY"
+     ],
+     "quote": "Drift potential increases at wind speeds of less than 3 mph (due to inversion potential) or more than 10 mph."
+    }
+   ],
+   "model": "nvidia/nemotron-3-super-120b-a12b+nvidia/Nemotron-3-Ultra-550b-a55b"
+  },
+  "228-659": {
+   "gold": 13,
+   "coverage": 13,
+   "typed": 11,
+   "value_n": 6,
+   "value_ok": 6,
+   "modality_ok": 10,
+   "planner_rules": 18,
+   "planner_good": 14,
+   "coverage_recall": 1.0,
+   "typed_recall": 0.846,
+   "value_exact": 1.0,
+   "modality_acc": 0.909,
+   "planner_precision": 0.778,
+   "acting_rules": 4,
+   "acting_good": 4,
+   "acting_precision": 1.0,
+   "gold_acting": 3,
+   "gold_acting_hit": 3,
+   "acting_recall": 1.0,
+   "acting_missed": [],
+   "missed": [],
+   "mistyped": [
+    {
+     "gold": "S-BOLLS-MATURE",
+     "got": [
+      "crop_stage"
+     ]
+    },
+    {
+     "gold": "S-DEFOLIANT-BOLLS",
+     "got": [
+      "crop_stage"
+     ]
+    }
+   ],
+   "planner_false_positives": [
+    {
+     "id": "228-659-p7-23",
+     "param": "air_temperature_f",
+     "modality": "ADVISORY",
+     "quote": "Hot and dry 80\u00b0F or higher"
+    },
+    {
+     "id": "228-659-p7-24",
+     "param": "air_temperature_f",
+     "modality": "MUST",
+     "quote": "Cool but above 65\u00b0F or"
+    },
+    {
+     "id": "228-659-p8-2",
+     "param": "rainfall_expected",
+     "modality": "MUST",
+     "quote": "If a major storm is expected, delay application of this product."
+    },
+    {
+     "id": "228-659-p8-17",
+     "param": "air_temperature_f",
+     "modality": "MUST",
+     "quote": "If the higher rates are used, only apply if temperatures are below 65\u00baF on the day of application."
+    }
+   ],
+   "acting_false_positives": [],
+   "model": "nvidia/nemotron-3-super-120b-a12b+nvidia/Nemotron-3-Ultra-550b-a55b"
+  }
+ },
+ "overall": {
+  "gold": 64,
+  "coverage": 63,
+  "typed": 57,
+  "value_n": 44,
+  "value_ok": 42,
+  "modality_ok": 51,
+  "planner_rules": 95,
+  "planner_good": 80,
+  "acting_rules": 12,
+  "acting_good": 11,
+  "gold_acting": 10,
+  "gold_acting_hit": 10,
+  "coverage_recall": 0.984,
+  "typed_recall": 0.891,
+  "value_exact": 0.955,
+  "modality_acc": 0.895,
+  "planner_precision": 0.842,
+  "acting_precision": 0.917,
+  "acting_recall": 1.0
+ }
+}

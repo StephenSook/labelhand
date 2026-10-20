@@ -38,6 +38,7 @@
  "228-653": {
   "reg": "228-653",
   "product": "FREEFALL SC COTTON DEFOLIANT",
+  "shortName": "FreeFall SC",
   "accepted": "2021-05-14",
   "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00653-20210514.pdf",
   "file": "data/labels/000228-00653-20210514.pdf",
@@ -49,6 +50,7 @@
  "228-659": {
   "reg": "228-659",
   "product": "ETHEPHON E-AG 6 PLANT GROWTH REGULATOR",
+  "shortName": "Super Boll",
   "accepted": "2022-08-08",
   "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00659-20220808.pdf",
   "file": "data/labels/000228-00659-20220808.pdf",

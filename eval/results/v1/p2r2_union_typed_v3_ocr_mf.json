@@ -1,0 +1,249 @@
+{
+ "suffix": ".union.p2r2.typed.v3.ocr.mf",
+ "gold_version": "v1",
+ "labels": {
+  "5481-504": {
+   "gold": 24,
+   "coverage": 24,
+   "typed": 24,
+   "value_n": 20,
+   "value_ok": 20,
+   "modality_ok": 21,
+   "planner_rules": 45,
+   "planner_good": 37,
+   "coverage_recall": 1.0,
+   "typed_recall": 1.0,
+   "value_exact": 1.0,
+   "modality_acc": 0.875,
+   "planner_precision": 0.822,
+   "acting_rules": 6,
+   "acting_good": 6,
+   "acting_precision": 1.0,
+   "gold_acting": 5,
+   "gold_acting_hit": 5,
+   "acting_recall": 1.0,
+   "acting_missed": [],
+   "missed": [],
+   "mistyped": [],
+   "planner_false_positives": [
+    {
+     "id": "5481-504-p9-2",
+     "param": "temperature_inversion",
+     "modality": "ADVISORY",
+     "quote": "Temperature inversions are characterized by increasing temperature with altitude and are common on nights with limited c"
+    },
+    {
+     "id": "5481-504-p10-7",
+     "param": "open_boll_pct",
+     "modality": "ADVISORY",
+     "quote": "\u2022 Tank mix activity is maximum when 60% or more bolls are open and the mean 24 -hour temperature before and after applic"
+    },
+    {
+     "id": "5481-504-p6-3",
+     "param": "droplet_size",
+     "modality": "ADVISORY",
+     "quote": "Larger droplets more effectively reach the lower leaves."
+    },
+    {
+     "id": "5481-504-p7-8",
+     "param": "boom_height_in",
+     "modality": "MUST",
+     "quote": "For ground rig applications, apply product no more than 4 feet above the ground or the crop canopy and only when wind sp"
+    },
+    {
+     "id": "5481-504-p8-20",
+     "param": "boom_height_in",
+     "modality": "ADVISORY",
+     "quote": "For ground equipment, the boom should remain level with the crop and have minimal bounce."
+    },
+    {
+     "id": "5481-504-p9-2",
+     "param": "temperature_inversion",
+     "modality": "ADVISORY",
+     "quote": "Drift potential is high during a temperature inversion."
+    },
+    {
+     "id": "5481-504-p9-7",
+     "param": "wind_speed_mph",
+     "modality": "ADVISORY",
+     "quote": "Drift potential is lowest between wind speeds of 2 -10 mph."
+    },
+    {
+     "id": "5481-504-p9-22",
+     "param": "open_boll_pct",
+     "modality": "ADVISORY",
+     "quote": "For best results, apply the combination to mature cotton plants with 60% or more open bolls."
+    }
+   ],
+   "acting_false_positives": [],
+   "model": "nvidia/nemotron-3-super-120b-a12b+nvidia/Nemotron-3-Ultra-550b-a55b"
+  },
+  "228-653": {
+   "gold": 27,
+   "coverage": 26,
+   "typed": 23,
+   "value_n": 19,
+   "value_ok": 19,
+   "modality_ok": 21,
+   "planner_rules": 35,
+   "planner_good": 29,
+   "coverage_recall": 0.963,
+   "typed_recall": 0.852,
+   "value_exact": 1.0,
+   "modality_acc": 0.913,
+   "planner_precision": 0.829,
+   "acting_rules": 4,
+   "acting_good": 2,
+   "acting_precision": 0.5,
+   "gold_acting": 2,
+   "gold_acting_hit": 2,
+   "acting_recall": 1.0,
+   "acting_missed": [],
+   "missed": [
+    "FF-TEMP-RATE"
+   ],
+   "mistyped": [
+    {
+     "gold": "FF-MATURE",
+     "got": [
+      "crop_stage"
+     ]
+    },
+    {
+     "gold": "FF-NIGHT-COC",
+     "got": [
+      "adjuvant"
+     ]
+    },
+    {
+     "gold": "FF-TEMP-60-65",
+     "got": [
+      "rate_per_acre"
+     ]
+    }
+   ],
+   "planner_false_positives": [
+    {
+     "id": "228-653-p5-1",
+     "param": "droplet_size",
+     "modality": "ADVISORY",
+     "quote": "The best drift management strategy is to apply the largest droplets that provide sufficient coverage and control."
+    },
+    {
+     "id": "228-653-p5-7",
+     "param": "droplet_size",
+     "modality": "ADVISORY",
+     "quote": "With most nozzle types, narrower spray angles produce larger droplets."
+    },
+    {
+     "id": "228-653-p5-8",
+     "param": "droplet_size",
+     "modality": "ADVISORY",
+     "quote": "Consider using low-drift nozzles."
+    },
+    {
+     "id": "228-653-p5-10",
+     "param": "droplet_size",
+     "modality": "ADVISORY",
+     "quote": "Nozzle Orientation - Orienting nozzles so that the spray is emitted backwards, parallel to the airstream with produce la"
+    },
+    {
+     "id": "228-653-p5-11",
+     "param": "droplet_size",
+     "modality": "ADVISORY",
+     "quote": "Nozzle Type - Solid stream nozzles (such as disc and core with swirl plate removed) oriented straight back produce large"
+    },
+    {
+     "id": "228-653-p5-14",
+     "param": "boom_height_in",
+     "modality": "ADVISORY",
+     "quote": "Setting the boom at the lowest referenced height (if specified) which provides uniform coverage reduces the exposure of "
+    }
+   ],
+   "acting_false_positives": [
+    {
+     "id": "228-653-p5-2",
+     "param": "wind_speed_mph",
+     "gold_modalities": [
+      "ADVISORY"
+     ],
+     "quote": "Drift potential increases at wind speeds of less than 3 mph (due to inversion potential) or more than 10 mph."
+    },
+    {
+     "id": "228-653-p8-15",
+     "param": "night_temperature_f",
+     "gold_modalities": [
+      "ADVISORY"
+     ],
+     "quote": "Use this product in a tank mix with a product containing tribufos (such as FOLEX 6 EC, Reg. No. 5481-504) to improve def"
+    }
+   ],
+   "model": "nvidia/nemotron-3-super-120b-a12b+nvidia/Nemotron-3-Ultra-550b-a55b"
+  },
+  "228-659": {
+   "gold": 13,
+   "coverage": 11,
+   "typed": 10,
+   "value_n": 6,
+   "value_ok": 6,
+   "modality_ok": 8,
+   "planner_rules": 13,
+   "planner_good": 12,
+   "coverage_recall": 0.846,
+   "typed_recall": 0.769,
+   "value_exact": 1.0,
+   "modality_acc": 0.8,
+   "planner_precision": 0.923,
+   "acting_rules": 4,
+   "acting_good": 4,
+   "acting_precision": 1.0,
+   "gold_acting": 3,
+   "gold_acting_hit": 3,
+   "acting_recall": 1.0,
+   "acting_missed": [],
+   "missed": [
+    "S-INV2",
+    "S-BOLLS-MATURE"
+   ],
+   "mistyped": [
+    {
+     "gold": "S-DEFOLIANT-BOLLS",
+     "got": [
+      "crop_stage"
+     ]
+    }
+   ],
+   "planner_false_positives": [
+    {
+     "id": "228-659-p8-11",
+     "param": "air_temperature_f",
+     "modality": "MUST",
+     "quote": "If the higher rates are used, only apply if temperatures are below 65\u00baF on the day of application."
+    }
+   ],
+   "acting_false_positives": [],
+   "model": "nvidia/nemotron-3-super-120b-a12b+nvidia/Nemotron-3-Ultra-550b-a55b"
+  }
+ },
+ "overall": {
+  "gold": 64,
+  "coverage": 61,
+  "typed": 57,
+  "value_n": 45,
+  "value_ok": 45,
+  "modality_ok": 50,
+  "planner_rules": 93,
+  "planner_good": 78,
+  "acting_rules": 14,
+  "acting_good": 12,
+  "gold_acting": 10,
+  "gold_acting_hit": 10,
+  "coverage_recall": 0.953,
+  "typed_recall": 0.891,
+  "value_exact": 1.0,
+  "modality_acc": 0.877,
+  "planner_precision": 0.839,
+  "acting_precision": 0.857,
+  "acting_recall": 1.0
+ }
+}
