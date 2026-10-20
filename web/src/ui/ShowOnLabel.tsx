@@ -106,8 +106,10 @@ export function ShowOnLabel({ source, className = "", id }: {
           const span = textLayer.textDivs[index];
           if (!span) continue;
           span.dataset.labelHighlight = "true";
-          span.style.background = "rgba(255, 197, 61, 0.72)";
-          span.style.boxShadow = "0 0 0 2px rgba(255, 197, 61, 0.72)";
+          // The text layer sits above the canvas, so a plain fill tints the label's black text pale.
+          // Multiply keeps the text black and turns only the white paper yellow.
+          span.style.background = "rgb(255, 205, 64)";
+          span.style.mixBlendMode = "multiply";
           highlighted = true;
         }
         textLayer.textDivs[indexes[0]]?.scrollIntoView({ block: "center", inline: "center" });
