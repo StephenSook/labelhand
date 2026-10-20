@@ -8,7 +8,8 @@ Metrics, per label and overall:
   planner_precision accepted rules typed with a planner parameter that match a gold clause of that
                    parameter group; the rest are planner false positives (mistyped or out of scope)
 
-Run: python eval/score.py [--suffix .typed] [--out eval/results/NAME.json]
+Run: python eval/score.py [--suffix .typed] [--gold eval/gold_v0.json] [--out eval/results/NAME.json]
+(default gold: v1, the shipped tank; v0 scores the development tank)
 """
 
 from __future__ import annotations
@@ -24,7 +25,7 @@ sys.path.insert(0, str(ROOT / "engine"))
 from compile_label import norm, num_str, squash  # noqa: E402
 from windows import TOPIC  # noqa: E402  (the same filter the planner applies)
 
-GOLD = ROOT / "eval" / "gold_v0.json"
+GOLD = ROOT / "eval" / "gold_v1.json"
 COMPILED = ROOT / "data" / "compiled"
 GROUPS = [{"release_height_ft", "boom_height_in"}, {"rain_free_hours", "rainfall_expected"}]
 PLANNER = {
@@ -137,10 +138,11 @@ def score_label(gold_items: list[dict], rules: list[dict]) -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--suffix", default="", help="compiled file suffix, e.g. .typed or .union")
+    ap.add_argument("--gold", type=pathlib.Path, default=GOLD)
     ap.add_argument("--out", default=None)
     a = ap.parse_args()
-    gold = json.loads(GOLD.read_text(encoding="utf-8"))
-    report, tot = {"suffix": a.suffix, "labels": {}}, {}
+    gold = json.loads(a.gold.read_text(encoding="utf-8"))
+    report, tot = {"suffix": a.suffix, "gold_version": gold["version"], "labels": {}}, {}
     for reg, items in gold["labels"].items():
         comp = json.loads((COMPILED / f"{reg}{a.suffix}.json").read_text(encoding="utf-8"))
         s = score_label(items, comp["accepted"])
