@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { AgentCheckSnapshot } from "@/lib/agent/tools";
-import { bulletinMonth } from "@/lib/bulletins";
+import { bulletinMonths } from "@/lib/bulletins";
 import { labelsCoverResult, runPlannerCheck, type PlannerCheckResult, type PlannerSource } from "@/lib/run-planner";
 import { forecastPermittedWindows } from "@/lib/windows";
 import { requestLiveCompile } from "@/lib/compiler/client";
@@ -791,6 +791,7 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
     ? sprayRecordForWindow(result, labels, selectedPointName, selectedWindow)
     : undefined;
   const nextWindow = windows[0];
+  const bulletinMonth = bulletinMonths(nextWindow?.start, nextWindow?.end);
   const tankLabel = products
     .map((product) => product.reg && labels[product.reg]?.unscored ? `${product.shortName} (UNSCORED)` : product.shortName)
     .join(", ");
@@ -890,12 +891,13 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
         <p className={`mt-5 border-t-2 pt-4 text-sm font-bold ${nextWindow ? "border-white/45" : "border-[#14213d]/35"}`}>
           {counts.PERMITTED} FORECAST-PERMITTED · {counts.FIELD_CHECK} FIELD CHECK · {counts.BLOCKED} BLOCKED hours
         </p>
-        {/* Every registration in the tank, live labels included, for the next window's month. */}
+        {/* Every registration in the tank, live labels included, for every month the next window touches. */}
         <BulletinCheck
           lat={result.lat}
           lon={result.lon}
           regs={result.registrations}
-          month={bulletinMonth(nextWindow?.start)}
+          month={bulletinMonth.check}
+          fromMonth={bulletinMonth.from}
           labels={labels}
           onDark={Boolean(nextWindow)}
         />

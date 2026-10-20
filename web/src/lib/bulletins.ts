@@ -66,24 +66,38 @@ export function monthIndex(month: string): number | null {
 
 // Bulletins Live! Two offers the current month and the next six. A recorded forecast's window can
 // sit in a month that has already passed, so the card checks the current month instead.
-export function bulletinMonth(windowStart: string | undefined, now: Date = new Date()): string {
+//
+// A window can cross into the next month (a 12-hour run from 11 PM on October 31). EPA's month
+// filter keeps every limitation effective before the first of the following month, so the last
+// month a window touches lists everything an earlier month does and more. The card checks that
+// month and names every month the window touches.
+export type BulletinMonths = { check: string; from: string };
+
+export function bulletinMonths(windowStart: string | undefined, windowEnd?: string, now: Date = new Date()): BulletinMonths {
   const current = easternMonth(now);
-  if (!windowStart) return current;
-  const start = new Date(windowStart);
-  if (Number.isNaN(start.getTime())) return current;
-  const windowMonth = easternMonth(start);
-  const windowIndex = monthIndex(windowMonth);
   const currentIndex = monthIndex(current);
-  if (windowIndex === null || currentIndex === null) return current;
-  if (windowIndex < currentIndex || windowIndex > currentIndex + 6) return current;
-  return windowMonth;
+  const inRange = (instant: number): string | null => {
+    if (Number.isNaN(instant) || currentIndex === null) return null;
+    const month = easternMonth(new Date(instant));
+    const index = monthIndex(month);
+    return index !== null && index >= currentIndex && index <= currentIndex + 6 ? month : null;
+  };
+  const start = windowStart ? new Date(windowStart).getTime() : Number.NaN;
+  // The window end is the first instant after its last permitted hour.
+  const end = windowEnd ? new Date(windowEnd).getTime() - 1 : start;
+  const months = [inRange(start), inRange(end)].filter((month): month is string => month !== null).sort();
+  if (months.length === 0) return { check: current, from: current };
+  return { check: months[months.length - 1], from: months[0] };
 }
 
-export function bulletinMonthLabel(month: string): string {
-  const index = monthIndex(month);
-  if (index === null) return month;
-  return new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric", timeZone: "UTC" })
-    .format(new Date(Date.UTC(Math.floor(index / 12), index % 12, 15)));
+export function bulletinMonthLabel(month: string, from: string = month): string {
+  const name = (value: string) => {
+    const index = monthIndex(value);
+    if (index === null) return value;
+    return new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric", timeZone: "UTC" })
+      .format(new Date(Date.UTC(Math.floor(index / 12), index % 12, 15)));
+  };
+  return from === month ? name(month) : `${name(from)} and ${name(month)}`;
 }
 
 export function bulletinCheckPath(lat: number, lon: number, regs: string[], month: string): string {

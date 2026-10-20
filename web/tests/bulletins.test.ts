@@ -4,8 +4,8 @@ import {
   BULLETINS_LIVE_TWO_URL,
   bulletinCheckPath,
   bulletinCoordinates,
-  bulletinMonth,
   bulletinMonthLabel,
+  bulletinMonths,
   canonicalRegistration,
   easternMonth,
   parseBulletinResponse,
@@ -32,19 +32,30 @@ describe("the month the card checks", () => {
   });
 
   test("is the next window's month", () => {
-    expect(bulletinMonth("2026-11-02T13:00:00Z", now)).toBe("2026-11");
-    expect(bulletinMonth("2026-10-22T13:00:00Z", now)).toBe("2026-10");
+    expect(bulletinMonths("2026-11-02T13:00:00Z", "2026-11-02T20:00:00Z", now)).toEqual({ check: "2026-11", from: "2026-11" });
+    expect(bulletinMonths("2026-10-22T13:00:00Z", undefined, now)).toEqual({ check: "2026-10", from: "2026-10" });
+  });
+
+  test("is the last month a window touches when the window crosses into the next month", () => {
+    // Twelve permitted hours from 11 PM Eastern on October 31 run to 10 AM EST on November 1.
+    expect(bulletinMonths("2026-11-01T03:00:00Z", "2026-11-01T15:00:00Z", now)).toEqual({ check: "2026-11", from: "2026-10" });
+  });
+
+  test("does not count the instant a window ends as a month it touches", () => {
+    // Two permitted hours, 10 PM to midnight Eastern on October 31.
+    expect(bulletinMonths("2026-11-01T02:00:00Z", "2026-11-01T04:00:00Z", now)).toEqual({ check: "2026-10", from: "2026-10" });
   });
 
   test("is this month when there is no window, or when a recorded window has passed", () => {
-    expect(bulletinMonth(undefined, now)).toBe("2026-10");
-    expect(bulletinMonth("2026-09-15T13:00:00Z", now)).toBe("2026-10");
-    expect(bulletinMonth("not a time", now)).toBe("2026-10");
+    expect(bulletinMonths(undefined, undefined, now)).toEqual({ check: "2026-10", from: "2026-10" });
+    expect(bulletinMonths("2026-09-15T13:00:00Z", "2026-09-15T20:00:00Z", now)).toEqual({ check: "2026-10", from: "2026-10" });
+    expect(bulletinMonths("not a time", undefined, now)).toEqual({ check: "2026-10", from: "2026-10" });
   });
 
   test("is named the way the card prints it", () => {
     expect(bulletinMonthLabel("2026-11")).toBe("November 2026");
     expect(bulletinMonthLabel("2027-01")).toBe("January 2027");
+    expect(bulletinMonthLabel("2026-11", "2026-10")).toBe("October 2026 and November 2026");
   });
 });
 

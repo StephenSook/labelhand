@@ -44,11 +44,14 @@ async function requestBulletinCheck(path: string, regs: string[], signal: AbortS
   return { status: "unavailable", reason: parsed.status === "unavailable" ? parsed.reason : `HTTP ${response.status}` };
 }
 
-export function BulletinCheck({ lat, lon, regs, month, labels, onDark }: {
+export function BulletinCheck({ lat, lon, regs, month, fromMonth = month, labels, onDark }: {
   lat: number;
   lon: number;
   regs: string[];
+  // The month EPA is asked about: the last one the window touches (see bulletinMonths).
   month: string;
+  // The first month the window touches, for the card's wording only.
+  fromMonth?: string;
   labels: LabelIndex;
   onDark: boolean;
 }) {
@@ -80,7 +83,7 @@ export function BulletinCheck({ lat, lon, regs, month, labels, onDark }: {
       ? "unavailable"
       : shown.limitations.length === 0 ? "no-limits" : "limits";
   const tone = onDark ? "text-white/90" : "text-[#14213d]/80";
-  const monthLabel = bulletinMonthLabel(month);
+  const monthLabel = bulletinMonthLabel(month, fromMonth);
   const coordinates = <span className="whitespace-nowrap font-black">{bulletinCoordinates(lat, lon)}</span>;
 
   return (
