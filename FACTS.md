@@ -70,6 +70,18 @@ The live compiler keeps the prior worst-case spend envelope while taking three r
 | Shared daily reading ceiling | `{"requests":13,"readings_per_request":3,"maximum_readings":39,"prior_single_reading_cap":40}` | `web/src/lib/live-ledger.ts`; arithmetic: `13 * 3 = 39 <= 40` | MEASURED |
 | Shared lifetime reading ceiling | `{"requests":133,"readings_per_request":3,"maximum_readings":399,"prior_single_reading_cap":400}` | `web/src/lib/live-ledger.ts`; arithmetic: `133 * 3 = 399 <= 400` | MEASURED |
 
+### Live three-reading measurement
+
+This is the single paid live compile authorized for this change. It used the newest EPA PPLS label for Axial XL and made no retry at the reading level.
+
+| Claim | Exact value | Source | Tag |
+|---|---|---|---|
+| Measured label | `{"registration":"100-1256","product":"AXIAL XL","accepted":"2022-05-03","file_name":"000100-01256-20220503.pdf","label_sha256":"79bf4aedc997858f1267832e11fed6d4bc1437382b6bb1eb643513e5b975d68c"}` | `json:eval/results/live-3run-2026-10-19.json#source` | MEASURED |
+| Per-reading rules, latency, tokens, and cost | `{"1":{"attempts":1,"accepted_rules":58,"rejected_rules":0,"latency_ms":15247,"total_tokens":37040,"cost_usd":0.0237838},"2":{"attempts":1,"accepted_rules":70,"rejected_rules":1,"latency_ms":15920,"total_tokens":39204,"cost_usd":0.025904},"3":{"attempts":1,"accepted_rules":54,"rejected_rules":2,"latency_ms":15250,"total_tokens":35900,"cost_usd":0.0226146}}` | `json:eval/results/live-3run-2026-10-19.json#summary.reading_metrics` | MEASURED |
+| Merged rules by reading support | `{"merged_rule_count":99,"found_in_readings":{"1":53,"2":13,"3":33}}` | `json:eval/results/live-3run-2026-10-19.json#summary.merge` | MEASURED |
+| Rules with modality splits | `{"rules_with_split":3}` | `json:eval/results/live-3run-2026-10-19.json#summary.modality_splits` | MEASURED |
+| Total wall time, tokens, and cost | `{"wall_time_ms":17116,"pipeline_latency_ms":17091,"tokens_in":88536,"tokens_out":23608,"total_tokens":112144,"cost_usd":0.0723024}` | `json:eval/results/live-3run-2026-10-19.json#summary.totals` | MEASURED |
+
 ## EPA label photo reading
 
 The inputs below are rendered pages from real EPA PPLS labels. They are not photos. Each image row, including the source PDF hash, selected page, read, verdict, latency, token counts, and cost, remains in the receipt.
