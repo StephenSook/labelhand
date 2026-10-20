@@ -173,16 +173,29 @@ export async function fetchJson<T>(url: string): Promise<T> {
   return (await response.json()) as T;
 }
 
+// With no signal, the service worker answers with the last forecast this device saved and names
+// the moment it saved it in this header, so the page reports an offline copy, never a fresh one.
+export const OFFLINE_COPY_HEADER = "x-labelhand-offline-copy";
+
 export async function fetchLivePeriods(url: string): Promise<{
   periods: ForecastPeriod[];
   fetchedAt: string;
+  offlineCopy: boolean;
 }> {
-  const payload = await fetchJson<{ properties?: { periods?: ForecastPeriod[] } }>(url);
+  const response = await fetch(url, { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error(`${url} returned HTTP ${response.status} ${response.statusText}`.trim());
+  }
+  const payload = (await response.json()) as { properties?: { periods?: ForecastPeriod[] } };
   const periods = payload.properties?.periods;
   if (!Array.isArray(periods) || periods.length === 0) {
     throw new Error(`${url} returned no properties.periods forecast array`);
   }
-  return { periods, fetchedAt: new Date().toISOString() };
+  const savedAt = response.headers.get(OFFLINE_COPY_HEADER);
+  if (savedAt !== null) {
+    return { periods, fetchedAt: Number.isNaN(Date.parse(savedAt)) ? new Date(0).toISOString() : savedAt, offlineCopy: true };
+  }
+  return { periods, fetchedAt: new Date().toISOString(), offlineCopy: false };
 }
 
 export async function fetchReplay(point: string): Promise<ReplayForecast> {

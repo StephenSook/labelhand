@@ -36,6 +36,7 @@ import {
 } from "@/lib/season-replay";
 import { WorkingCard, type WorkingStep } from "@/ui";
 import { AnyLabel, MAX_LIVE_LABELS } from "./AnyLabel";
+import { InstallButton } from "@/ui/AppShell";
 import { AskTank } from "./AskTank";
 import { CallMe } from "./CallMe";
 import { HourDetail } from "./HourDetail";
@@ -460,6 +461,10 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
             <p className="mt-4 max-w-xl rounded-2xl border-2 border-[#14213d] bg-[#fbf7ee]/85 p-4 text-sm font-semibold">
               FORECAST-PERMITTED means the forecast satisfies every planner-readable rule. FIELD CHECK means the forecast cannot decide. The applicator makes the field decision.
             </p>
+            <InstallButton className="mt-4 min-h-12 rounded-full border-[3px] border-[#14213d] bg-[#ffc53d] px-5 font-black shadow-[3px_4px_0_#14213d]" />
+            <p className="mt-3 max-w-xl text-sm font-semibold">
+              Once this page has loaded on a phone, it opens with no signal and checks the last forecast it saved, marked OFFLINE COPY.
+            </p>
           </div>
 
           <form
@@ -753,15 +758,20 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
             <p className={`hand -rotate-1 text-3xl ${nextWindow ? "text-white" : "text-[#5c3a14]"}`}>{selectedPointName}</p>
             <h2 id="next-window-heading" className="display mt-1 text-5xl sm:text-6xl">Next window</h2>
           </div>
-          <span className={`rounded-full border-[3px] px-4 py-2 text-sm font-black ${nextWindow ? "border-white bg-white text-[#155b2c]" : "border-[#14213d] bg-[#fbf7ee]"}`}>
-            {result.source}
+          <span
+            data-offline-copy={result.offlineCopy ? "true" : undefined}
+            className={`rounded-full border-[3px] px-4 py-2 text-sm font-black ${nextWindow ? "border-white bg-white text-[#155b2c]" : "border-[#14213d] bg-[#fbf7ee]"}`}
+          >
+            {result.offlineCopy ? "OFFLINE COPY" : result.source}
           </span>
         </div>
 
         <p className={`mt-4 text-sm font-semibold ${nextWindow ? "text-white/85" : "text-[#14213d]/75"}`}>
-          {result.source === "LIVE"
-            ? "NWS response received"
-            : seasonIssued ? "Season replay: NWS forecast issued and recorded" : "NWS forecast recorded"} at {formatForecastTime(result.fetchedAt)}
+          {result.offlineCopy
+            ? "No connection: this is the last NWS forecast this device saved, fetched"
+            : result.source === "LIVE"
+              ? "NWS response received"
+              : seasonIssued ? "Season replay: NWS forecast issued and recorded" : "NWS forecast recorded"} at {formatForecastTime(result.fetchedAt)}
         </p>
         <p className="mt-3 font-bold" title={tankDescription} aria-label={`Tank products: ${tankDescription}`}>
           Tank: {tankLabel}

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import type { ReactNode } from "react";
+import { ServiceWorker } from "@/ui/AppShell";
 import "./globals.css";
 
 const display = localFont({
@@ -37,7 +38,10 @@ export const viewport: Viewport = { themeColor: "#2f8f4e" };
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html className={`${display.variable} ${body.variable} ${hand.variable}`} lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <ServiceWorker />
+      </body>
     </html>
   );
 }

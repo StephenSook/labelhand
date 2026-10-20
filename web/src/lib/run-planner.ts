@@ -26,6 +26,8 @@ export type PlannerCheckResult = {
   ruleGroups: FilteredRules[];
   registrations: string[];
   liveFailure?: string;
+  // True when the device had no connection and the forecast is the last copy it saved.
+  offlineCopy?: boolean;
 };
 
 type PlannerCheckInput = {
@@ -64,6 +66,7 @@ export async function runPlannerCheck({
   let fetchedAt: string;
   let resolvedSource = source;
   let liveFailure: string | undefined;
+  let offlineCopy = false;
   if (source === "RECORDED") {
     const replay = suppliedReplay ?? await fetchReplay(pointKey);
     periods = replay.periods;
@@ -73,6 +76,7 @@ export async function runPlannerCheck({
       const live = await fetchLivePeriods(point.forecastHourly);
       periods = live.periods;
       fetchedAt = live.fetchedAt;
+      offlineCopy = live.offlineCopy;
     } catch (error) {
       if (!fallbackToReplay || !REPLAY_POINTS.has(pointKey)) throw error;
       const replay = await fetchReplay(pointKey);
@@ -114,6 +118,7 @@ export async function runPlannerCheck({
     ruleGroups,
     registrations,
     liveFailure,
+    offlineCopy,
   };
 }
 

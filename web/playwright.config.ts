@@ -7,7 +7,9 @@ export default defineConfig({
   timeout: 120_000,
   retries: process.env.CI ? 1 : 0,
   workers: 1,
-  use: { baseURL, trace: "retain-on-failure" },
+  // Tests mock NWS and the label APIs with page.route, which a service worker would bypass, so
+  // workers are blocked here and allowed only in tests/e2e/pwa.spec.ts.
+  use: { baseURL, trace: "retain-on-failure", serviceWorkers: "block" },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: process.env.BASE_URL
     ? undefined
