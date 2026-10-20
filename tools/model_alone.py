@@ -712,12 +712,11 @@ def summarize(result: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def public_summary(result: dict[str, Any], source: str) -> dict[str, Any]:
+def public_model_entry(result: dict[str, Any], source: str) -> dict[str, Any]:
     summary = copy.deepcopy(result["summary"])
     unsafe_go = summary.pop("unsafe_go")
     summary.pop("lost_window")
     return {
-        "schema_version": result["schema_version"],
         "generated_utc": result["run"].get("finished_utc"),
         "model": result["preregistration"]["model_alone"]["model"],
         "tank_registrations": list(REGISTRATIONS),
@@ -727,6 +726,22 @@ def public_summary(result: dict[str, Any], source: str) -> dict[str, Any]:
         "unsafe_go_hours": unsafe_go,
         "source": source,
     }
+
+
+def public_summary(result: dict[str, Any], source: str) -> dict[str, Any]:
+    return {"schema_version": result["schema_version"], **public_model_entry(result, source)}
+
+
+def public_bundle(receipts: list[tuple[dict[str, Any], str]]) -> dict[str, Any]:
+    models = [public_model_entry(result, source) for result, source in receipts]
+    model_ids = [entry["model"] for entry in models]
+    if len(set(model_ids)) != len(model_ids):
+        raise ValueError("public summary model ids must be unique")
+    try:
+        default_entry = next(entry for entry in models if entry["model"] == DEFAULT_MODEL)
+    except StopIteration as exc:
+        raise ValueError(f"public summary must include {DEFAULT_MODEL}") from exc
+    return {"schema_version": 2, **copy.deepcopy(default_entry), "models": models}
 
 
 def persist(result: dict[str, Any], out: pathlib.Path, summary_out: pathlib.Path | None, prereg_hash: str) -> None:

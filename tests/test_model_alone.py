@@ -9,7 +9,13 @@ import pathlib
 
 import model_alone
 
+ROOT = pathlib.Path(__file__).parents[1]
 FIXTURE = pathlib.Path(__file__).parent / "fixtures" / "engine" / "worth.json"
+MODEL_RECEIPTS = (
+    ("eval/results/model-alone-2026-10-19.json", "nvidia/nemotron-3-super-120b-a12b"),
+    ("eval/results/model-alone-ultra-2026-10-19.json", "nvidia/Nemotron-3-Ultra-550b-a55b"),
+    ("eval/results/model-alone-lightning-2026-10-19.json", "nvidia/Nemotron-3_5-Lightning"),
+)
 
 
 def fixture() -> dict:
@@ -77,6 +83,40 @@ def test_public_summary_records_selected_model_and_receipt_source():
 
     assert summary["model"] == "nvidia/Nemotron-3_5-Lightning"
     assert summary["source"] == "eval/results/lightning.json"
+
+
+def test_committed_public_bundle_matches_receipts_and_preserves_super_contract():
+    receipts = []
+    prompt_hashes: dict[str, str] = {}
+    for source, model in MODEL_RECEIPTS:
+        receipt = json.loads((ROOT / source).read_text(encoding="utf-8"))
+        assert receipt["preregistration"]["model_alone"]["model"] == model
+        assert receipt["preregistration"]["model_alone"]["response_schema_revision"] == 2
+        for case in receipt["cases"]:
+            prompt_hash = case.get("prompt_sha256")
+            if prompt_hash is None:
+                continue
+            expected = prompt_hashes.setdefault(case["id"], prompt_hash)
+            assert prompt_hash == expected
+        receipts.append((receipt, source))
+
+    expected = model_alone.public_bundle(receipts)
+    actual = json.loads((ROOT / "web/public/data/model-alone.json").read_text(encoding="utf-8"))
+
+    assert actual == expected
+    assert actual["schema_version"] == 2
+    assert [entry["model"] for entry in actual["models"]] == [model for _, model in MODEL_RECEIPTS]
+    for key in (
+        "generated_utc",
+        "model",
+        "tank_registrations",
+        "sample_dates_local",
+        "status",
+        "pooled",
+        "unsafe_go_hours",
+        "source",
+    ):
+        assert actual[key] == actual["models"][0][key]
 
 
 def test_sample_selection_picks_first_recording_after_seven_and_ignores_earlier_recording():

@@ -135,9 +135,19 @@ The obvious alternative is to hand a big model the labels and the forecast and a
 - **The 3 unsafe hours** are Worth on Oct 11, 1 to 3 PM. The forecast said 15 mph; the labels' limit is 10 mph; the model wrote "wind ≤10 mph" and said go.
 - **The 73 hours** are all hours where the planner's sun-angle rule flags a possible temperature inversion, which every label in the tank forbids. The model reasoned "no temperature inversion reported", treating a forecast that cannot see inversions as one that rules them out.
 - **It also cites well and finds few windows.** All 1,440 cited sentences are verbatim on the cited page. It marked 314 of the planner's forecast-permitted hours as field check.
-- **Neither side is the ground truth.** Station wind broke 89 of the planner's checked go hours because the forecast itself was wrong, which is why the planner says to re-run close to spray time. This is one model, one prompt and one run.
+- **Neither side is the ground truth.** Station wind broke 89 of the planner's checked go hours because the forecast itself was wrong, which is why the planner says to re-run close to spray time. The Super receipt is one model, one prompt and one run.
 
-The first schema left the hours array open, and all 10 of its calls came back with a single hour. That receipt is kept as [`eval/results/model-alone-2026-10-19.schema-v1.json`](eval/results/model-alone-2026-10-19.schema-v1.json). Revision 2 requires exactly 48 hours; sample, prompt, metrics and budget did not change. Command: `python tools/model_alone.py --recorded data/nws_recorded --text-dir data/text --out eval/results/model-alone-2026-10-19.json --summary-out web/public/data/model-alone.json` (Token Factory spend $0.54). Full per-hour detail: [`eval/results/model-alone-2026-10-19.json`](eval/results/model-alone-2026-10-19.json).
+The same revision-2 prompt, response schema, cases, temperature and metrics were then run with Nemotron Ultra and Lightning under one combined $2.50 cap. Their case prompt hashes match Super's. The two receipts spent $2.48905938 together. The cap stopped both follow-up runs before all 30 cases completed, so their results use the listed denominators and are not presented as full 1,440-hour runs.
+
+| Model | Complete / planned | Hours compared | Model go hours | Unsafe go hours | Cited sentences matched | Go hours held / broke | Failures and stops | Cost |
+|---|---:|---:|---:|---:|---:|---:|---|---:|
+| Super, `nvidia/nemotron-3-super-120b-a12b` | 30 / 30 | 1,440 | 111 | 3 | 1,440 / 1,440 | 51 / 17 | none | $0.542526 |
+| Ultra, `nvidia/Nemotron-3-Ultra-550b-a55b` | 24 / 30 | 1,152 | 0 | 0 | 609 / 1,152 | 0 / 0 | 4 invalid cases; 1 budget stop; 1 not attempted | $2.355753 |
+| Lightning, `nvidia/Nemotron-3_5-Lightning` | 27 / 30 | 1,296 | 75 | 1 | 814 / 1,296 | 62 / 3 | 0 invalid cases; 1 budget stop; 2 not attempted | $0.13330638 |
+
+Ultra exhausted the existing three-attempt policy on four cases before the shared cap stopped it. Lightning returned valid output for every attempted case before its cap stop. The full partial receipts remain denominator-preserving: [`Ultra`](eval/results/model-alone-ultra-2026-10-19.json) and [`Lightning`](eval/results/model-alone-lightning-2026-10-19.json).
+
+The first schema left the hours array open, and all 10 of its calls came back with a single hour. That receipt is kept as [`eval/results/model-alone-2026-10-19.schema-v1.json`](eval/results/model-alone-2026-10-19.schema-v1.json). Revision 2 requires exactly 48 hours; sample, prompt, metrics and budget did not change. Super command: `python tools/model_alone.py --recorded data/nws_recorded --text-dir data/text --out eval/results/model-alone-2026-10-19.json` (Token Factory spend $0.54). Full per-hour detail: [`eval/results/model-alone-2026-10-19.json`](eval/results/model-alone-2026-10-19.json).
 
 ### Tank-composition clauses
 

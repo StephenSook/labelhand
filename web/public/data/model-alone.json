@@ -1,5 +1,5 @@
 {
- "schema_version": 1,
+ "schema_version": 2,
  "generated_utc": "2026-10-19T20:58:58+00:00",
  "model": "nvidia/nemotron-3-super-120b-a12b",
  "tank_registrations": [
@@ -244,5 +244,472 @@
    ]
   }
  ],
- "source": "eval/results/model-alone-2026-10-19.json"
+ "source": "eval/results/model-alone-2026-10-19.json",
+ "models": [
+  {
+   "generated_utc": "2026-10-19T20:58:58+00:00",
+   "model": "nvidia/nemotron-3-super-120b-a12b",
+   "tank_registrations": [
+    "5481-504",
+    "264-700",
+    "264-418"
+   ],
+   "sample_dates_local": [
+    "2026-10-06",
+    "2026-10-10",
+    "2026-10-14"
+   ],
+   "status": "complete",
+   "pooled": {
+    "planned_cases": 30,
+    "selected_cases": 30,
+    "successful_cases": 30,
+    "failed_cases": 0,
+    "missing_issuance_cases": 0,
+    "not_attempted_cases": 0,
+    "hours_compared": 1440,
+    "agreement_matrix_model_x_planner": {
+     "PERMITTED": {
+      "PERMITTED": 35,
+      "BLOCKED": 3,
+      "FIELD_CHECK": 73
+     },
+     "BLOCKED": {
+      "PERMITTED": 11,
+      "BLOCKED": 43,
+      "FIELD_CHECK": 20
+     },
+     "FIELD_CHECK": {
+      "PERMITTED": 314,
+      "BLOCKED": 217,
+      "FIELD_CHECK": 724
+     }
+    },
+    "unsafe_go_count": 3,
+    "lost_window_count": 11,
+    "quote_check": {
+     "matched": 1440,
+     "total": 1440,
+     "fraction": 1.0
+    },
+    "against_observations": {
+     "model_permitted": {
+      "permitted_hours": 111,
+      "with_observation": 78,
+      "no_observation": 33,
+      "held": 51,
+      "broke": 17,
+      "skipped_missing_measurement": 10,
+      "not_checkable": 0
+     },
+     "planner_permitted": {
+      "permitted_hours": 360,
+      "with_observation": 310,
+      "no_observation": 50,
+      "held": 197,
+      "broke": 89,
+      "skipped_missing_measurement": 24,
+      "not_checkable": 0
+     }
+    },
+    "model_calls": {
+     "attempts": 30,
+     "prompt_tokens": 1235834,
+     "completion_tokens": 190862,
+     "total_tokens": 1426696,
+     "latency_ms": 1371365,
+     "cost_usd": 0.542526,
+     "reported_cost_usd": 0.542526,
+     "unknown_cost_attempts": 0,
+     "budget_accounted_cost_usd": 0.542526
+    }
+   },
+   "unsafe_go_hours": [
+    {
+     "point": "worth",
+     "date_local": "2026-10-10",
+     "hour_index": 30,
+     "time": "2026-10-11T13:00:00-04:00",
+     "model_reason": "All label conditions satisfied: wind ≤10 mph, no temperature inversion reported.",
+     "model_citation": {
+      "registration": "5481-504",
+      "page": 8,
+      "sentence": "• Do not apply when wind speeds exceed 10 miles per hour at the application site.",
+      "quote_match": true
+     },
+     "planner_rules": [
+      {
+       "rule_id": "5481-504-p7-8",
+       "parameter": "wind_speed_mph",
+       "product": "FOLEX® 6 EC",
+       "page": 7,
+       "quote": "For ground rig applications, apply product no more than 4 feet above the ground or the crop canopy and only when wind speed is 10 mph or less at the application site as measured by an anemometer.",
+       "why": "forecast wind up to 15 mph > 10 mph"
+      },
+      {
+       "rule_id": "5481-504-p8-4",
+       "parameter": "wind_speed_mph",
+       "product": "FOLEX® 6 EC",
+       "page": 8,
+       "quote": "Do not apply when wind speeds exceed 10 miles per hour at the application site.",
+       "why": "forecast wind up to 15 mph > 10 mph"
+      },
+      {
+       "rule_id": "5481-504-p8-10",
+       "parameter": "wind_speed_mph",
+       "product": "FOLEX® 6 EC",
+       "page": 8,
+       "quote": "Do not apply when wind speeds exceed 10 mph at the application site.",
+       "why": "forecast wind up to 15 mph > 10 mph"
+      },
+      {
+       "rule_id": "264-700-p5-1",
+       "parameter": "wind_speed_mph",
+       "product": "DROPP SC COTTON DEFOLIANT",
+       "page": 5,
+       "quote": "Do not apply Dropp® SC by ground or air when wind speeds exceed ten (10) miles per hour at the time of application.",
+       "why": "forecast wind up to 15 mph > 10 mph"
+      },
+      {
+       "rule_id": "264-418-p5-13",
+       "parameter": "wind_speed_mph",
+       "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
+       "page": 5,
+       "quote": "Do not apply when wind speeds exceed 10 miles per hour at the application site.",
+       "why": "forecast wind up to 15 mph > 10 mph"
+      }
+     ]
+    },
+    {
+     "point": "worth",
+     "date_local": "2026-10-10",
+     "hour_index": 31,
+     "time": "2026-10-11T14:00:00-04:00",
+     "model_reason": "All label conditions satisfied: wind ≤10 mph, no temperature inversion reported.",
+     "model_citation": {
+      "registration": "5481-504",
+      "page": 8,
+      "sentence": "• Do not apply when wind speeds exceed 10 miles per hour at the application site.",
+      "quote_match": true
+     },
+     "planner_rules": [
+      {
+       "rule_id": "5481-504-p7-8",
+       "parameter": "wind_speed_mph",
+       "product": "FOLEX® 6 EC",
+       "page": 7,
+       "quote": "For ground rig applications, apply product no more than 4 feet above the ground or the crop canopy and only when wind speed is 10 mph or less at the application site as measured by an anemometer.",
+       "why": "forecast wind up to 15 mph > 10 mph"
+      },
+      {
+       "rule_id": "5481-504-p8-4",
+       "parameter": "wind_speed_mph",
+       "product": "FOLEX® 6 EC",
+       "page": 8,
+       "quote": "Do not apply when wind speeds exceed 10 miles per hour at the application site.",
+       "why": "forecast wind up to 15 mph > 10 mph"
+      },
+      {
+       "rule_id": "5481-504-p8-10",
+       "parameter": "wind_speed_mph",
+       "product": "FOLEX® 6 EC",
+       "page": 8,
+       "quote": "Do not apply when wind speeds exceed 10 mph at the application site.",
+       "why": "forecast wind up to 15 mph > 10 mph"
+      },
+      {
+       "rule_id": "264-700-p5-1",
+       "parameter": "wind_speed_mph",
+       "product": "DROPP SC COTTON DEFOLIANT",
+       "page": 5,
+       "quote": "Do not apply Dropp® SC by ground or air when wind speeds exceed ten (10) miles per hour at the time of application.",
+       "why": "forecast wind up to 15 mph > 10 mph"
+      },
+      {
+       "rule_id": "264-418-p5-13",
+       "parameter": "wind_speed_mph",
+       "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
+       "page": 5,
+       "quote": "Do not apply when wind speeds exceed 10 miles per hour at the application site.",
+       "why": "forecast wind up to 15 mph > 10 mph"
+      }
+     ]
+    },
+    {
+     "point": "worth",
+     "date_local": "2026-10-10",
+     "hour_index": 32,
+     "time": "2026-10-11T15:00:00-04:00",
+     "model_reason": "All label conditions satisfied: wind ≤10 mph, no temperature inversion reported.",
+     "model_citation": {
+      "registration": "5481-504",
+      "page": 8,
+      "sentence": "• Do not apply when wind speeds exceed 10 miles per hour at the application site.",
+      "quote_match": true
+     },
+     "planner_rules": [
+      {
+       "rule_id": "5481-504-p7-8",
+       "parameter": "wind_speed_mph",
+       "product": "FOLEX® 6 EC",
+       "page": 7,
+       "quote": "For ground rig applications, apply product no more than 4 feet above the ground or the crop canopy and only when wind speed is 10 mph or less at the application site as measured by an anemometer.",
+       "why": "forecast wind up to 15 mph > 10 mph"
+      },
+      {
+       "rule_id": "5481-504-p8-4",
+       "parameter": "wind_speed_mph",
+       "product": "FOLEX® 6 EC",
+       "page": 8,
+       "quote": "Do not apply when wind speeds exceed 10 miles per hour at the application site.",
+       "why": "forecast wind up to 15 mph > 10 mph"
+      },
+      {
+       "rule_id": "5481-504-p8-10",
+       "parameter": "wind_speed_mph",
+       "product": "FOLEX® 6 EC",
+       "page": 8,
+       "quote": "Do not apply when wind speeds exceed 10 mph at the application site.",
+       "why": "forecast wind up to 15 mph > 10 mph"
+      },
+      {
+       "rule_id": "264-700-p5-1",
+       "parameter": "wind_speed_mph",
+       "product": "DROPP SC COTTON DEFOLIANT",
+       "page": 5,
+       "quote": "Do not apply Dropp® SC by ground or air when wind speeds exceed ten (10) miles per hour at the time of application.",
+       "why": "forecast wind up to 15 mph > 10 mph"
+      },
+      {
+       "rule_id": "264-418-p5-13",
+       "parameter": "wind_speed_mph",
+       "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
+       "page": 5,
+       "quote": "Do not apply when wind speeds exceed 10 miles per hour at the application site.",
+       "why": "forecast wind up to 15 mph > 10 mph"
+      }
+     ]
+    }
+   ],
+   "source": "eval/results/model-alone-2026-10-19.json"
+  },
+  {
+   "generated_utc": "2026-10-20T00:44:11+00:00",
+   "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+   "tank_registrations": [
+    "5481-504",
+    "264-700",
+    "264-418"
+   ],
+   "sample_dates_local": [
+    "2026-10-06",
+    "2026-10-10",
+    "2026-10-14"
+   ],
+   "status": "partial_budget",
+   "pooled": {
+    "planned_cases": 30,
+    "selected_cases": 30,
+    "successful_cases": 24,
+    "failed_cases": 5,
+    "missing_issuance_cases": 0,
+    "not_attempted_cases": 1,
+    "hours_compared": 1152,
+    "agreement_matrix_model_x_planner": {
+     "PERMITTED": {
+      "PERMITTED": 0,
+      "BLOCKED": 0,
+      "FIELD_CHECK": 0
+     },
+     "BLOCKED": {
+      "PERMITTED": 180,
+      "BLOCKED": 190,
+      "FIELD_CHECK": 446
+     },
+     "FIELD_CHECK": {
+      "PERMITTED": 107,
+      "BLOCKED": 26,
+      "FIELD_CHECK": 203
+     }
+    },
+    "unsafe_go_count": 0,
+    "lost_window_count": 180,
+    "quote_check": {
+     "matched": 609,
+     "total": 1152,
+     "fraction": 0.528646
+    },
+    "against_observations": {
+     "model_permitted": {
+      "permitted_hours": 0,
+      "with_observation": 0,
+      "no_observation": 0,
+      "held": 0,
+      "broke": 0,
+      "skipped_missing_measurement": 0,
+      "not_checkable": 0
+     },
+     "planner_permitted": {
+      "permitted_hours": 287,
+      "with_observation": 245,
+      "no_observation": 42,
+      "held": 146,
+      "broke": 78,
+      "skipped_missing_measurement": 21,
+      "not_checkable": 0
+     }
+    },
+    "model_calls": {
+     "attempts": 36,
+     "prompt_tokens": 1483002,
+     "completion_tokens": 290917,
+     "total_tokens": 1773919,
+     "latency_ms": 639806,
+     "cost_usd": 2.355753,
+     "reported_cost_usd": 2.355753,
+     "unknown_cost_attempts": 0,
+     "budget_accounted_cost_usd": 2.355753
+    }
+   },
+   "unsafe_go_hours": [],
+   "source": "eval/results/model-alone-ultra-2026-10-19.json"
+  },
+  {
+   "generated_utc": "2026-10-20T01:00:47+00:00",
+   "model": "nvidia/Nemotron-3_5-Lightning",
+   "tank_registrations": [
+    "5481-504",
+    "264-700",
+    "264-418"
+   ],
+   "sample_dates_local": [
+    "2026-10-06",
+    "2026-10-10",
+    "2026-10-14"
+   ],
+   "status": "partial_budget",
+   "pooled": {
+    "planned_cases": 30,
+    "selected_cases": 30,
+    "successful_cases": 27,
+    "failed_cases": 1,
+    "missing_issuance_cases": 0,
+    "not_attempted_cases": 2,
+    "hours_compared": 1296,
+    "agreement_matrix_model_x_planner": {
+     "PERMITTED": {
+      "PERMITTED": 20,
+      "BLOCKED": 1,
+      "FIELD_CHECK": 54
+     },
+     "BLOCKED": {
+      "PERMITTED": 146,
+      "BLOCKED": 216,
+      "FIELD_CHECK": 332
+     },
+     "FIELD_CHECK": {
+      "PERMITTED": 166,
+      "BLOCKED": 7,
+      "FIELD_CHECK": 354
+     }
+    },
+    "unsafe_go_count": 1,
+    "lost_window_count": 146,
+    "quote_check": {
+     "matched": 814,
+     "total": 1296,
+     "fraction": 0.628086
+    },
+    "against_observations": {
+     "model_permitted": {
+      "permitted_hours": 75,
+      "with_observation": 65,
+      "no_observation": 10,
+      "held": 62,
+      "broke": 3,
+      "skipped_missing_measurement": 0,
+      "not_checkable": 0
+     },
+     "planner_permitted": {
+      "permitted_hours": 332,
+      "with_observation": 283,
+      "no_observation": 49,
+      "held": 178,
+      "broke": 84,
+      "skipped_missing_measurement": 21,
+      "not_checkable": 0
+     }
+    },
+    "model_calls": {
+     "attempts": 28,
+     "prompt_tokens": 1153453,
+     "completion_tokens": 267080,
+     "total_tokens": 1420533,
+     "latency_ms": 887955,
+     "cost_usd": 0.13330638,
+     "reported_cost_usd": 0.13330638,
+     "unknown_cost_attempts": 0,
+     "budget_accounted_cost_usd": 0.13330638
+    }
+   },
+   "unsafe_go_hours": [
+    {
+     "point": "tift",
+     "date_local": "2026-10-06",
+     "hour_index": 23,
+     "time": "2026-10-07T06:00:00-04:00",
+     "model_reason": "Folex 6 EC label: \"Do not apply when weather conditions favor drift from the treated area.\" Forecast hour 23: wind 15 mph NE, precip 0%, \"Partly Sunny\" - no precip, wind 15 mph exceeds 10 mph, but Folex label says conditions \"favor drift\"; high wind may favor drift. However, Dropp SC label: \"Do not apply when wind speeds exceed 10 miles per hour at the application site.\" Wind 15 mph exceeds 10 mph rule. Prep label: \"DO NOT APPLY PREP™ BRAND ETHEPHON FOR COTTON AND TOBACCO IF RAIN IS EXPECTED WITHIN 6 HOURS.\" Forecast hour 23: precip 0% - no rain expected. Dropp SC wind violation blocks. BLOCKED.",
+     "model_citation": {
+      "registration": "5481-504",
+      "page": 5,
+      "sentence": "Do not apply FOLEX 6 EC through any type of irrigation system.",
+      "quote_match": true
+     },
+     "planner_rules": [
+      {
+       "rule_id": "5481-504-p7-8",
+       "parameter": "wind_speed_mph",
+       "product": "FOLEX® 6 EC",
+       "page": 7,
+       "quote": "For ground rig applications, apply product no more than 4 feet above the ground or the crop canopy and only when wind speed is 10 mph or less at the application site as measured by an anemometer.",
+       "why": "forecast wind up to 15 mph > 10 mph"
+      },
+      {
+       "rule_id": "5481-504-p8-4",
+       "parameter": "wind_speed_mph",
+       "product": "FOLEX® 6 EC",
+       "page": 8,
+       "quote": "Do not apply when wind speeds exceed 10 miles per hour at the application site.",
+       "why": "forecast wind up to 15 mph > 10 mph"
+      },
+      {
+       "rule_id": "5481-504-p8-10",
+       "parameter": "wind_speed_mph",
+       "product": "FOLEX® 6 EC",
+       "page": 8,
+       "quote": "Do not apply when wind speeds exceed 10 mph at the application site.",
+       "why": "forecast wind up to 15 mph > 10 mph"
+      },
+      {
+       "rule_id": "264-700-p5-1",
+       "parameter": "wind_speed_mph",
+       "product": "DROPP SC COTTON DEFOLIANT",
+       "page": 5,
+       "quote": "Do not apply Dropp® SC by ground or air when wind speeds exceed ten (10) miles per hour at the time of application.",
+       "why": "forecast wind up to 15 mph > 10 mph"
+      },
+      {
+       "rule_id": "264-418-p5-13",
+       "parameter": "wind_speed_mph",
+       "product": "PREP BRAND ETHEPHON FOR COTTON AND TOBACCO",
+       "page": 5,
+       "quote": "Do not apply when wind speeds exceed 10 miles per hour at the application site.",
+       "why": "forecast wind up to 15 mph > 10 mph"
+      }
+     ]
+    }
+   ],
+   "source": "eval/results/model-alone-lightning-2026-10-19.json"
+  }
+ ]
 }
