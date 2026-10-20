@@ -180,10 +180,30 @@ The season files are exported by `tools/season_export.py`. The check-back runs t
 
 | Claim | Exact value | Source | Tag |
 |---|---|---|---|
-| App routes | `["/","/app","/judge"]` | command: enumerate `page.tsx` below `web/src/app`; output: `/page.tsx`, `/app/page.tsx`, `/judge/page.tsx` | MEASURED |
-| API routes | `["/api/agent","/api/label-pdf/[reg]"]` | command: enumerate `route.ts` below `web/src/app`; output: `/api/agent/route.ts`, `/api/label-pdf/[reg]/route.ts` | MEASURED |
+| App routes | `["/","/app","/judge","/map","/proof"]` | command: enumerate `page.tsx` below `web/src/app` on main d64b10b, 2026-10-20 | MEASURED |
+| API routes | `["/api/agent","/api/alerts/confirm","/api/alerts/run","/api/alerts/start","/api/alerts/voice/stop","/api/alerts/voice/why","/api/label-pdf/[reg]","/api/labels/compile","/api/labels/photo","/api/labels/search","/api/season/[...path]"]` | command: enumerate `route.ts` below `web/src/app` on main d64b10b, 2026-10-20 | MEASURED |
 | Agent per-IP limit | `{"requests":20,"window_minutes":10,"scope":"best effort per Node instance"}` | `web/src/app/api/agent/route.ts:14-15,33-36,88-102`; local static audit output: `RATE_LIMIT_COUNT=20`, `RATE_LIMIT_WINDOW_MS=600000` | MEASURED |
 | Agent daily token budget | `{"tokens":2000000,"reset":"UTC date","scope":"best effort per Node instance"}` | `web/src/app/api/agent/route.ts:16,33-36,105-110,141,199-205`; local static audit output: `DAILY_TOKEN_BUDGET=2000000` | MEASURED |
+
+## Live label reading, map, alerts and offline use
+
+A label not in the shipped tank is read live: the browser streams `/api/labels/compile`, which reads the EPA label three times with the same models as the compiler and merges the readings like `compiler/merge_runs.py`. Live rules are unscored; the gold set covers only the three shipped labels.
+
+| Claim | Exact value | Source | Tag |
+|---|---|---|---|
+| Readings per live compile | `3` | `web/src/lib/live-limits.ts:9` (`LIVE_COMPILE_READINGS`) | MEASURED |
+| Shared live compile caps | `{"per_day":13,"lifetime":133}` | `web/src/lib/live-ledger.ts:17-18` (`SHARED_DAILY_COLD_COMPILES`, `SHARED_LIFETIME_COLD_COMPILES`) | MEASURED |
+| Recorded live compile, AXIAL XL (EPA 100-1256) | `{"rules_per_reading":[62,72,80],"merged_rules":128,"found_in_all_three":28,"found_in_two":26,"found_in_one":74,"pages":20,"latency_ms":19743,"cost_usd":0.0768177}` | `web/tests/fixtures/live/axial-xl-100-1256.ndjson`, final `done` event: `reading_records[].accepted_rules`, `accepted` length, `found_in_runs` length per accepted rule, `pages`, `latency_ms`, `cost_usd` | MEASURED |
+| Map counties drawn | `43` | command: count `counties` in `web/public/data/map/south-georgia.json`, 2026-10-20 | MEASURED |
+| Map boundary source | `"us-atlas counties-10m (US Census cartographic boundaries 1:10,000,000)"` | `json:web/public/data/map/south-georgia.json#source` | MEASURED |
+| Map points with a recorded forecast | `["ben_hill","berrien","coffee","colquitt","cook","dooly","irwin","mitchell","tift","worth"]` | command: sorted keys of `points` in `web/public/data/season/index.json`, 2026-10-20 | MEASURED |
+| Alert phone check and call services | `{"phone_check":"Twilio Verify v2","call":"Twilio Programmable Voice calls.create"}` | `web/src/lib/alerts/twilio.ts:36,50,59` | MEASURED |
+| Alert caps | `{"verify_code_ttl_minutes":10,"calls_per_subscription_per_day":3,"calls_per_phone_per_day":9,"calls_total_per_day":30,"verify_starts_per_phone_per_day":5,"verify_starts_per_client_per_day":20,"verify_starts_total_per_day":100}` | `web/src/lib/alerts/service.ts:33`; `web/src/lib/alerts/storage.ts:15-20` | MEASURED |
+| Alert planning horizon | `"36 hours"` | `web/src/lib/alerts/planner.ts:12` | MEASURED |
+| Alert runner trigger | `"hourly recorder job posts /api/alerts/run when repository variable RECORDER_ALERTS is true"` | `.github/workflows/recorder.yml:5,30,182-186` | MEASURED |
+| Installable app manifest | `{"name":"Labelhand","start_url":"/app","display":"standalone","icons":3}` | `web/src/app/manifest.ts` | MEASURED |
+| Offline forecast copy | `{"header":"x-labelhand-offline-copy","badge":"OFFLINE COPY","forecast_cache":"labelhand-forecasts"}` | `web/public/sw.js:8,11`; `web/src/lib/planner-data.ts` (`OFFLINE_COPY_HEADER`); `web/src/ui/planner/Planner.tsx` | MEASURED |
+| Offline end-to-end test | `"one first visit, no reload, every loaded file cached, then offline: 156 hour cells and OFFLINE COPY"` | `web/tests/e2e/pwa.spec.ts`; CI web job on d64b10b passed; with the page-to-worker forecast handoff removed, this test fails (local mutation check, 2026-10-20) | MEASURED |
 
 ## Tests and CI
 
@@ -192,18 +212,18 @@ The required CI workflow jobs are `python`, `rust`, and `web` at `.github/workfl
 | Claim | Exact value | Source | Tag |
 |---|---|---|---|
 | Python lint | `"passed"` | command: `uv run --active --no-sync ruff check .`; output: `All checks passed!` | MEASURED |
-| Python format | `"33 files already formatted"` | command: `uv run --no-sync ruff format --check .`, 2026-10-19; output: `33 files already formatted` | MEASURED |
-| Python tests | `"87 passed"` | command: `uv run --no-sync pytest -q`, 2026-10-19; output: `87 passed in 0.82s` | MEASURED |
-| Tracked-text em-dash gate | `"35 files scanned, 0 hits"` | the `.github/workflows/ci.yml:30-34` command in Git Bash, 2026-10-19; output: `files=35 hits=0` | MEASURED |
+| Python format | `"46 files already formatted"` | command: `uv run ruff format --check .`, 2026-10-20; output: `46 files already formatted` | MEASURED |
+| Python tests | `"113 passed"` | command: `uv run pytest -q`, 2026-10-20; output: `113 passed in 3.77s` | MEASURED |
+| Tracked-text em-dash gate | `"49 files scanned, 0 hits"` | the `.github/workflows/ci.yml:30-34` command in Git Bash, 2026-10-20; output: `files=49 hits=0` | MEASURED |
 | Rust format | `"passed"` | command: `cargo fmt --check`; exit: `0` | MEASURED |
 | Rust lint | `"passed"` | command: `cargo clippy --all-targets --all-features -- -D warnings`; exit: `0` | MEASURED |
 | Rust tests | `"5 passed: 3 unit and 2 parity"` | command: `cargo test`; output: `3 passed`, `2 passed`, and `0` doc tests | MEASURED |
 | Rust WASM build | `"release build passed"` | command: `wasm-pack build core --target web --release -- --features wasm`; output: `Your wasm pkg is ready to publish at core\\pkg` | MEASURED |
 | Web typecheck | `"passed"` | command from `web/`: `pnpm typecheck`; output: `Types generated successfully`; `tsc --noEmit` exit: `0` | MEASURED |
 | Web lint | `"passed"` | command from `web/`: `pnpm lint`; exit: `0` | MEASURED |
-| Web unit tests | `"91 passed in 9 files"` | command from `web/`: `pnpm test`, 2026-10-19; output: `Test Files 9 passed`, `Tests 91 passed` | MEASURED |
-| Web production build | `"passed; 6 of 6 static pages generated"` | command from `web/`: `pnpm build`; output: `Compiled successfully`, `Generating static pages (6/6)` | MEASURED |
-| Web end-to-end tests | `"18 passed"` | command from `web/`: `pnpm e2e`, 2026-10-19; output: `18 passed (39.2s)` | MEASURED |
+| Web unit tests | `"303 passed in 33 files"` | command from `web/`: `pnpm test`, 2026-10-20; output: `Test Files 33 passed`, `Tests 303 passed` | MEASURED |
+| Web production build | `"passed; 17 of 17 static pages generated"` | command from `web/`: `pnpm build`, 2026-10-20; output: `Generating static pages using 7 workers (17/17)` | MEASURED |
+| Web end-to-end tests | `"35 passed"` | command from `web/`: `pnpm e2e` against `pnpm start`, 2026-10-20; output: `35 passed (1.8m)` | MEASURED |
 | Browser data freshness | `"passed with no diff"` | commands: rebuild WASM, `pnpm sync-engine`, then `git diff --exit-code -- web/public/data`; all exits: `0` | MEASURED |
 
 ## Drift found
@@ -225,4 +245,6 @@ The required CI workflow jobs are `python`, `rust`, and `web` at `.github/workfl
 | The deployed web app is live now | `"NOT VERIFIED"` | Check needed: make a timestamped read-only request to `https://labelhand-web.vercel.app` and record the status and response. No live request was needed for this fact sheet. | NOT VERIFIED |
 | Four Token Factory models passed the capability probe with subsecond first-token times | `"NOT VERIFIED"` | Check needed: commit or retain the probe receipt with model IDs, request IDs, capability outcomes, and timings. The claim appears in README.md but no underlying receipt was found. | NOT VERIFIED |
 | Nebius AI Cloud GPU cost for OCR | `"NOT VERIFIED"` | Check needed: read the billed job cost for the retained OCR job. The cost rows above cover Token Factory only. | NOT VERIFIED |
-| A phone call or mobile app is shipped | `"NOT VERIFIED"` | Check needed: point to a shipped implementation and an end-to-end result. Neither is part of the current web and planner evidence. | NOT VERIFIED |
+| An alert call has reached a real subscriber | `"NOT VERIFIED"` | The phone check and call code ship (rows above), but no subscriber had confirmed a number by 2026-10-20. Check needed: an `alerts/log/` entry with a Twilio call SID after a confirmed subscription. | NOT VERIFIED |
+| A native mobile app is shipped | `"NOT VERIFIED"` | The web app installs from the browser as a web app with an offline forecast copy; there is no App Store or Play Store build. | NOT VERIFIED |
+| A live compile returns the same rules every run | `"DO NOT CLAIM"` | Each live compile reads the label three times at temperature 0 and the merged count still varies; only the AXIAL XL run above is committed as a receipt. | NOT VERIFIED |
