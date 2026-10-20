@@ -85,6 +85,8 @@ describe("ordering and text", () => {
     expect(mapSummary(statuses, 3)).toBe("1 of 3 fields can start a 3-hour job now. 1 more open later in the forecast.");
     expect(mapSummary(statuses.slice(1), 3, "at Thu 2 PM")).toBe("No field can start a 3-hour job at Thu 2 PM. 1 of 2 open later in the forecast.");
     expect(mapSummary(statuses.slice(2), 3)).toBe("No field has a 3-hour job anywhere in the forecast.");
+    expect(mapSummary([statuses[0]!, statuses[0]!], 3, "at Thu 10 AM")).toBe("All 2 fields can start a 3-hour job at Thu 10 AM.");
+    expect(mapSummary([statuses[0]!, statuses[2]!], 3)).toBe("1 of 2 fields can start a 3-hour job now. The rest have no 3-hour job in the forecast.");
     expect(statusHeadline(statuses[2]!, 3)).toBe("No 3-hour window");
   });
 });

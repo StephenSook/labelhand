@@ -86,6 +86,10 @@ export function mapSummary(statuses: PointStatus[], jobHours: number, when = "no
   const later = statuses.filter((status) => status.kind === "later").length;
   const total = statuses.length;
   const job = `${jobHours}-hour job`;
+  if (open > 0 && open === total) return `All ${total} fields can start a ${job} ${when}.`;
+  if (open > 0 && later === 0) {
+    return `${open} of ${total} fields can start a ${job} ${when}. The rest have no ${job} in the forecast.`;
+  }
   if (open > 0) {
     return `${open} of ${total} fields can start a ${job} ${when}. ${later} more open later in the forecast.`;
   }

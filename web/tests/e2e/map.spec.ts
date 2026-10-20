@@ -26,7 +26,7 @@ test("moving the map time opens the counties whose window has started", async ({
   await waitForMap(page);
   await page.locator("#map-ahead").fill("3");
   await expect(page.locator("[data-map-time]")).toContainText("3 hours later");
-  await expect(page.locator("#map-summary")).toContainText("10 of 10 fields can start a 3-hour job at Thu 10 AM");
+  await expect(page.locator("#map-summary")).toContainText("All 10 fields can start a 3-hour job at Thu 10 AM");
   await expect(page.locator("a[data-county][data-status=open]")).toHaveCount(10);
   await expect(page).toHaveURL(/ahead=3/);
 });
