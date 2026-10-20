@@ -4,6 +4,7 @@ import path from "node:path";
 import { evaluate, filterRules, initializeEngine, type CompiledLabel, type Rule } from "@/engine";
 import type { AgentBindingClause, AgentCheckTankResult } from "@/lib/agent/tools";
 import { getCachedLiveLabelStrict, getRegistrationCacheIndexStrict } from "@/lib/live-cache";
+import { assertActiveRegistration, listLabelVersions } from "@/lib/ppls";
 import { parseForecastPoints, parseLabelIndex, pointName, type ForecastPeriod, type PlannerHour } from "@/lib/planner-data";
 import { forecastPermittedWindows, rankLimitingClauses, type ForecastWindow } from "@/lib/windows";
 
@@ -30,7 +31,9 @@ async function initializeNodeEngine(): Promise<void> {
   return nodeEngine;
 }
 
-async function compiledLabel(reg: string): Promise<{ compiled: CompiledLabel; name: string }> {
+type TankOptions = { pplsFetch?: typeof fetch };
+
+async function compiledLabel(reg: string, options: TankOptions = {}): Promise<{ compiled: CompiledLabel; name: string }> {
   const labelIndex = parseLabelIndex(await readPublicJson<unknown>("labels/index.json"));
   if (SHIPPED_REGISTRATIONS.has(reg)) {
     const label = labelIndex[reg];
@@ -41,6 +44,9 @@ async function compiledLabel(reg: string): Promise<{ compiled: CompiledLabel; na
     };
   }
 
+  // A live label is rechecked with EPA before every run, as the compile route does, so a call never names a
+  // product whose registration EPA has since cancelled. If EPA does not answer, this run fails and no call goes out.
+  assertActiveRegistration(await listLabelVersions(reg, options.pplsFetch));
   const index = await getRegistrationCacheIndexStrict(reg);
   if (!index) throw new RangeError(`EPA Reg. ${reg} has not been compiled into the live cache.`);
   const cached = await getCachedLiveLabelStrict(index.sha256, index.pipelineVersion);
@@ -48,10 +54,10 @@ async function compiledLabel(reg: string): Promise<{ compiled: CompiledLabel; na
   return { compiled: cached, name: cached.product };
 }
 
-export async function loadAlertTank(registrations: string[]): Promise<TankProduct[]> {
+export async function loadAlertTank(registrations: string[], options: TankOptions = {}): Promise<TankProduct[]> {
   await initializeNodeEngine();
   return Promise.all(registrations.map(async (reg) => {
-    const label = await compiledLabel(reg);
+    const label = await compiledLabel(reg, options);
     const filtered = await filterRules(label.compiled, reg);
     return { reg, name: label.name, rules: filtered.used };
   }));
