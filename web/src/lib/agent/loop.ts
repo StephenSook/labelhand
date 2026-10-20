@@ -100,13 +100,23 @@ export type AgentPageContext = {
 
 // Lightning followed the page's 3-hour job even when the question said "a 4-hour job", so a field
 // or job length named in the question replaces the page's value here, in code.
+// "Worth" and "Cook" are also English words ("is it worth spraying?"), so a county counts only when
+// it is capitalized ("Worth", "Ben Hill") or follows a place word ("at worth", "in ben hill").
 function fieldNamedIn(question: string): string | undefined {
-  const text = question.toLowerCase();
-  return FIELD_KEYS.find((key) => new RegExp(`\\b${key.replace("_", "[ _-]")}\\b`).test(text));
+  return FIELD_KEYS.find((key) => {
+    const words = key.split("_");
+    const capitalized = words.map((word) => word[0]!.toUpperCase() + word.slice(1)).join("[ _-]");
+    const lower = words.join("[ _-]");
+    return new RegExp(`\\b${capitalized}\\b`).test(question)
+      || new RegExp(`\\b(?:at|in|for|near|around)\\s+${lower}\\b`, "i").test(question);
+  });
 }
 
+// Only a length tied to the job counts. "Rain within 6 hours" or "a 24-hour rain-free period" is a
+// label condition, not the job the applicator wants to run.
 function jobHoursNamedIn(question: string): number | undefined {
-  const match = question.match(/\b(\d{1,2})[\s-]*(?:hours?|hrs?)\b/i);
+  const match = question.match(/\b(\d{1,2})[\s-]*(?:hours?|hrs?)[\s-]+(?:job|run|spray|application)\b/i)
+    ?? question.match(/\b(?:job|spray(?:ing)?|application)\s+(?:of|for|lasting)\s+(\d{1,2})\s*(?:hours?|hrs?)\b/i);
   const hours = match ? Number(match[1]) : NaN;
   return Number.isInteger(hours) && hours >= 1 && hours <= 12 ? hours : undefined;
 }

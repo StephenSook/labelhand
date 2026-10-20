@@ -19,9 +19,17 @@ describe("Ask the tank checks what the page shows", () => {
   test("a job length or field named in the question replaces the page's", () => {
     const page = { field: "tift", products: ["5481-504"], jobHours: 3, forecast: "recorded" as const };
     expect(questionWithContext("When can I spray at Worth for a 4-hour job?", page)).toContain("field worth; products 5481-504; job length 4 hours");
-    expect(questionWithContext("Is Ben Hill open for 6 hours tomorrow?", page)).toContain("field ben_hill; products 5481-504; job length 6 hours");
+    expect(questionWithContext("Is Ben Hill open for a 6-hour job tomorrow?", page)).toContain("field ben_hill; products 5481-504; job length 6 hours");
+    expect(questionWithContext("Can I spray at cook for a job of 5 hours?", page)).toContain("field cook; products 5481-504; job length 5 hours");
     expect(questionWithContext("Why is the next hour blocked?", page)).toContain("field tift; products 5481-504; job length 3 hours");
     expect(questionWithContext("Can I run a 40-hour job?", page)).toContain("job length 3 hours");
+  });
+
+  test("ordinary words and label conditions do not change the page's field or job", () => {
+    const page = { field: "tift", products: ["5481-504"], jobHours: 3, forecast: "recorded" as const };
+    expect(questionWithContext("Is it worth spraying today?", page)).toContain("field tift;");
+    expect(questionWithContext("Why can't I spray if rain is expected within 6 hours?", page)).toContain("job length 3 hours");
+    expect(questionWithContext("Does Dropp need a 24-hour rain-free period?", page)).toContain("job length 3 hours");
   });
 
   test("without a page the question goes as typed", () => {
