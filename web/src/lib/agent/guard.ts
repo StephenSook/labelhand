@@ -150,16 +150,35 @@ const OTHER_NOT_PERMITTED = /\b(?:the other|another)\b(?:\s+\S+){0,12}?\b(?:woul
 
 // "No application window is permitted" while check_tank returned windows (Ask the tank, local run
 // 2026-10-20, wind-limit question): the count check reads digits and number words, not "no".
+// Only an unscoped denial of the whole list is refused. "No window opens before Thursday", "there is
+// no window on Monday" and "no window is blocked by wind" can all be true while windows came back.
 const NO_WINDOW_CLAIM = new RegExp(
-  `\\bno(?:\\s+(?:${WINDOW_MODIFIER}|application|spray|spraying|job|\\d+-hour)){0,4}\\s+windows?\\b`,
+  `\\bno(?:\\s+(?:${WINDOW_MODIFIER}|application|spray|spraying|job)){0,4}\\s+windows?\\b`,
   "i",
 );
+// "No 3-hour window" denies the list only when 3 hours is the job check_tank ran.
+const NO_LENGTH_WINDOW_CLAIM = /\bno\s+(\d+)-hour\s+windows?\b/i;
+const DENIAL_SCOPE = /\b(?:before|after|until|on|but|except|blocked|monday|tuesday|wednesday|thursday|friday|saturday|sunday|today|tonight|tomorrow|morning|afternoon|evening|night)\b/i;
 
-function noWindowReasons(summary: string, permittedCount: number): string[] {
+// "Wed window blocked by 264-418 rain clause" about a window check_tank returned as
+// forecast-permitted (local run 2026-10-20, 4-hour question). A returned window is never blocked.
+// "All other windows are blocked" is the exclusivity check's claim, and "are not blocked" and "no
+// window is blocked" are denials.
+const WINDOW_CALLED_BLOCKED = /(?<!\b(?:other|no)\s)\bwindows?\b(?:\s+(?!not\b|never\b)[\w'-]+){0,2}?\s+(?:(?:is|are|was|were)\s+)?(?:blocked|not permitted)\b/i;
+
+function noWindowReasons(summary: string, permittedCount: number, jobHours: number | undefined): string[] {
   if (permittedCount === 0) return [];
-  const match = summary.match(NO_WINDOW_CLAIM);
-  if (!match) return [];
-  return [`The summary says "${match[0]}", but check_tank returned ${permittedCount} permitted windows.`];
+  const reasons: string[] = [];
+  for (const sentence of sentencesOf(summary)) {
+    if (DENIAL_SCOPE.test(sentence)) continue;
+    const none = sentence.match(NO_WINDOW_CLAIM);
+    const length = sentence.match(NO_LENGTH_WINDOW_CLAIM);
+    const denial = none?.[0] ?? (length && Number(length[1]) === jobHours ? length[0] : undefined);
+    if (denial) reasons.push(`The summary says "${denial}", but check_tank returned ${permittedCount} permitted windows.`);
+  }
+  const blocked = summary.match(WINDOW_CALLED_BLOCKED);
+  if (blocked) reasons.push(`The summary says "${blocked[0]}", but every window check_tank returned is forecast-permitted.`);
+  return reasons;
 }
 
 function sentencesOf(summary: string): string[] {
@@ -318,7 +337,8 @@ export function guardFinalAnswer(
   reasons.push(...scriptAndEndingReasons(answer));
   reasons.push(...exclusivityReasons(answer.summary, windowRecords.length));
   reasons.push(...windowCountReasons(answer.summary, windowRecords.length));
-  reasons.push(...noWindowReasons(answer.summary, windowRecords.length));
+  const checkedJobHours = isRecord(latestCheck) && typeof latestCheck.job_hours === "number" ? latestCheck.job_hours : undefined;
+  reasons.push(...noWindowReasons(answer.summary, windowRecords.length, checkedJobHours));
   reasons.push(...scopeReasons(answer.summary, successfulResults, windowRecords));
 
   return { passed: reasons.length === 0, reasons };

@@ -453,11 +453,57 @@ describe("a summary that says no window while windows came back", () => {
     expect(verdict.reasons.join(" ")).toContain("check_tank returned 2 permitted windows");
   });
 
+  test.each([
+    "Wed window blocked by 264-418 rain clause. Thu window blocked by wind clauses.",
+    "Both windows are blocked by wind.",
+    "The Thursday window is not permitted.",
+  ])("is refused when it calls a returned window blocked: %s", (summary) => {
+    const verdict = guardFinalAnswer({ summary, cited_rule_ids: [], window_indices: [] }, twoWindows);
+    expect(verdict.passed).toBe(false);
+    expect(verdict.reasons.join(" ")).toContain("every window check_tank returned is forecast-permitted");
+  });
+
+  test("blocked hours outside the windows are fine to mention", () => {
+    expect(guardFinalAnswer({
+      summary: "Window 0 and window 1 are forecast-permitted. Rain and wind block the hours before them.",
+      cited_rule_ids: ["5481-504-p8-4"],
+      window_indices: [0, 1],
+    }, twoWindows).passed).toBe(true);
+  });
+
   test("passes when check_tank really returned none", () => {
     expect(guardFinalAnswer({ summary: "No forecast-permitted window this week.", cited_rule_ids: ["5481-504-p8-4"], window_indices: [] }, noWindows).passed).toBe(true);
   });
 
   test("a sentence about a label limit with no window claim passes", () => {
     expect(guardFinalAnswer({ summary: "All three labels set the same wind limit, so no label is stricter on wind.", cited_rule_ids: ["5481-504-p8-4"], window_indices: [0, 1] }, twoWindows).passed).toBe(true);
+  });
+});
+
+describe("scoped sentences about windows stay allowed (Grok review, 2026-10-20)", () => {
+  const twoWindowsTwelve: ToolResultRecord[] = [
+    {
+      name: "check_tank",
+      result: {
+        job_hours: 12,
+        windows: [
+          { index: 0, label: "Wed Oct 7, 1 PM to 7 PM (6 h)" },
+          { index: 1, label: "Thu Oct 8, 8 AM to 7 PM (11 h)" },
+        ],
+        binding_clauses: [{ rule_id: "5481-504-p8-4", page: 8 }],
+      },
+    },
+  ];
+  test.each([
+    "There is no window on Monday.",
+    "No window opens before Thursday.",
+    "No window is blocked by the wind limit.",
+  ])("passes: %s", (summary) => {
+    expect(guardFinalAnswer({ summary, cited_rule_ids: [], window_indices: [0, 1] }, twoWindowsTwelve).passed).toBe(true);
+  });
+
+  test("a length that is not the job checked is not a denial of the list", () => {
+    const threeHourJob: ToolResultRecord[] = [{ name: "check_tank", result: { job_hours: 3, windows: [{ index: 0, label: "Wed (6 h)" }, { index: 1, label: "Thu (11 h)" }] } }];
+    expect(guardFinalAnswer({ summary: "No 6-hour window opens.", cited_rule_ids: [], window_indices: [0, 1] }, threeHourJob).passed).toBe(true);
   });
 });
