@@ -36,11 +36,11 @@ export function RulesDisclosure({ groups, labels }: { groups: FilteredRules[]; l
               <p className="mt-2 font-semibold">No rule from this product passed the topic check.</p>
             ) : (
               <div className="mt-2 grid gap-3 lg:grid-cols-2">
-                {group.used.map((rule) => {
+                {group.used.map((rule, index) => {
                   const label = rule.reg ? labels[rule.reg] : undefined;
                   const page = Number(rule.page);
                   return (
-                  <article data-quote-card key={`${group.product}-${rule.id}`} className="rounded-2xl border-2 border-[#14213d] bg-white p-4">
+                  <article data-quote-card key={`${group.product}-${rule.id}-${index}`} className="rounded-2xl border-2 border-[#14213d] bg-white p-4">
                     <dl className="grid grid-cols-2 gap-x-3 gap-y-1 text-sm">
                       <RuleFact term="Rule" value={rule.id} />
                       <RuleFact term="Page" value={String(rule.page)} />
@@ -76,8 +76,8 @@ export function RulesDisclosure({ groups, labels }: { groups: FilteredRules[]; l
               <p className="mt-2 text-sm font-semibold text-[#14213d]/70">No rules were skipped.</p>
             ) : (
               <ul className="mt-2 grid gap-2">
-                {group.skipped.map((rule) => (
-                  <li key={`${group.product}-${rule.id}`} className="rounded-xl border-2 border-[#14213d]/30 bg-[#ffc53d]/15 px-3 py-2 text-sm font-semibold">
+                {group.skipped.map((rule, index) => (
+                  <li key={`${group.product}-${rule.id}-${index}`} className="rounded-xl border-2 border-[#14213d]/30 bg-[#ffc53d]/15 px-3 py-2 text-sm font-semibold">
                     <span className="font-black">{rule.id}</span> · {rule.param} · {rule.why}
                   </li>
                 ))}

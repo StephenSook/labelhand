@@ -111,7 +111,11 @@ export type AgentCheckSnapshot = {
 export type AgentToolRuntime = {
   latestCheck?: AgentCheckSnapshot;
   labels?: LabelIndex;
-  rulesById: Map<string, Rule>;
+  // Rule ids are numbered per reading, so after the readings are merged one id can name more than
+  // one clause on the same label (5481-504-p9-2 is both a wind advisory and an inversion advisory).
+  // Every clause under an id is kept, so get_clause never answers with a different sentence than
+  // the one the planner cited.
+  rulesById: Map<string, Rule[]>;
 };
 
 export function createAgentToolRuntime(): AgentToolRuntime {
@@ -216,7 +220,11 @@ async function checkTank(args: unknown, runtime: AgentToolRuntime): Promise<Agen
   }));
   runtime.rulesById.clear();
   for (const group of ruleGroups) {
-    for (const rule of group.used) runtime.rulesById.set(rule.id, rule);
+    for (const rule of group.used) {
+      const sameId = runtime.rulesById.get(rule.id);
+      if (sameId) sameId.push(rule);
+      else runtime.rulesById.set(rule.id, [rule]);
+    }
   }
   const rules = ruleGroups.flatMap((group) => group.used);
   const hours = await engine.evaluate(rules, periods, point.lat, point.lon, 156) as PlannerHour[];
@@ -232,8 +240,10 @@ async function checkTank(args: unknown, runtime: AgentToolRuntime): Promise<Agen
   for (const hour of hours) {
     if (hour.state === "PERMITTED") continue;
     for (const citation of [...hour.blocked, ...hour.checks]) {
-      if (seenRules.has(citation.rule)) continue;
-      seenRules.add(citation.rule);
+      // Keyed by sentence too: two clauses can share a rule id (see AgentToolRuntime.rulesById).
+      const clauseKey = `${citation.product}\u0000${citation.rule}\u0000${citation.quote}`;
+      if (seenRules.has(clauseKey)) continue;
+      seenRules.add(clauseKey);
       bindingClauses.push({
         rule_id: citation.rule,
         product: citation.product,
@@ -283,8 +293,19 @@ async function checkTank(args: unknown, runtime: AgentToolRuntime): Promise<Agen
 function getClause(args: unknown, runtime: AgentToolRuntime) {
   const input = requireRecord(args, "get_clause");
   const ruleId = typeof input.rule_id === "string" ? input.rule_id : "";
-  const rule = runtime.rulesById.get(ruleId);
-  if (!rule) throw new RangeError(`Rule ${ruleId || "(missing)"} was not returned by this conversation's check_tank call.`);
+  const sameId = runtime.rulesById.get(ruleId);
+  if (!sameId?.length) throw new RangeError(`Rule ${ruleId || "(missing)"} was not returned by this conversation's check_tank call.`);
+  const [rule, ...others] = sameId;
+  const clause = clauseFields(rule, runtime);
+  if (others.length === 0) return clause;
+  return {
+    ...clause,
+    note: `Rule id ${ruleId} names ${sameId.length} clauses on this label. Each one is listed; quote the one check_tank cited.`,
+    other_clauses_with_this_id: others.map((other) => clauseFields(other, runtime)),
+  };
+}
+
+function clauseFields(rule: Rule, runtime: AgentToolRuntime) {
   const registration = typeof rule.reg === "string" ? rule.reg : undefined;
   const label = registration ? runtime.labels?.[registration] : undefined;
   const page = rule.page;

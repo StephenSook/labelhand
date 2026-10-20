@@ -1,6 +1,7 @@
 import { Stamp } from "@/ui";
 import { ShowOnLabel, type LabelSource } from "@/ui/ShowOnLabel";
 import type { SprayRecordInput } from "@/lib/spray-record";
+import { collapseRepeatedClauses } from "@/lib/citations";
 import {
   displayState,
   type Citation,
@@ -118,6 +119,7 @@ function CitationSection({ title, empty, citations, kind, labels, usedRules }: {
   labels: LabelIndex;
   usedRules: PlannerRule[];
 }) {
+  const shown = collapseRepeatedClauses(citations);
   return (
     <section className="mt-7" aria-labelledby={`citation-${kind}`}>
       <div className="flex flex-wrap items-baseline gap-3">
@@ -126,11 +128,11 @@ function CitationSection({ title, empty, citations, kind, labels, usedRules }: {
           <p className="text-sm font-bold text-[#14213d]/70">Advisories do not change the hour state.</p>
         )}
       </div>
-      {citations.length === 0 ? (
+      {shown.length === 0 ? (
         <p className="mt-2 text-sm font-semibold text-[#14213d]/65">{empty}</p>
       ) : (
         <div className="mt-3 grid gap-4 lg:grid-cols-2">
-          {citations.map((citation, index) => {
+          {shown.map((citation, index) => {
             const source = labelSource(citation, labels, usedRules);
             return (
               <article
