@@ -129,6 +129,14 @@ export class AlertBlobStore {
     }));
   }
 
+  private async exists(pathname: string): Promise<boolean> {
+    return (await this.api.get(pathname, {
+      access: "private",
+      token: this.config.blobToken,
+      useCache: false,
+    })) !== null;
+  }
+
   private async write(pathname: string, value: unknown, allowOverwrite: boolean): Promise<boolean> {
     try {
       await this.api.put(pathname, JSON.stringify(value), {
@@ -140,7 +148,12 @@ export class AlertBlobStore {
       });
       return true;
     } catch (error) {
-      if (!allowOverwrite && isPreconditionFailure(error)) return false;
+      if (allowOverwrite) throw error;
+      if (isPreconditionFailure(error)) return false;
+      // Vercel Blob answers a create-only put on a taken pathname with a plain BlobError
+      // ("This blob already exists"), not BlobPreconditionFailedError. Ask the store
+      // whether the pathname is taken before treating the failure as unexpected.
+      if (await this.exists(pathname)) return false;
       throw error;
     }
   }

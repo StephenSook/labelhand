@@ -55,8 +55,10 @@ function fakeBlob() {
     }) as never,
     put: vi.fn(async (pathname: string, body: string, options: { allowOverwrite?: boolean }) => {
       if (objects.has(pathname) && options.allowOverwrite === false) {
-        const error = new Error("already exists");
-        error.name = "BlobPreconditionFailedError";
+        // What Vercel Blob actually throws for a create-only put on a taken pathname:
+        // a plain BlobError, not BlobPreconditionFailedError (that one is for ifMatch).
+        const error = new Error("Vercel Blob: This blob already exists, use `allowOverwrite: true` if you want to overwrite it. Or `addRandomSuffix: true` to generate a unique filename.");
+        error.name = "BlobError";
         throw error;
       }
       objects.set(pathname, body);
