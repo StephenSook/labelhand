@@ -29,7 +29,7 @@ describe("spray record PDF", () => {
     expect(tift).toBeDefined();
 
     const rules: Rule[] = [];
-    for (const reg of ["5481-504", "264-700", "264-418"]) {
+    for (const reg of ["5481-504", "228-653", "228-659"]) {
       const compiled = await readJson<CompiledLabel>(`public/data/compiled/${reg}.ship.json`);
       rules.push(...(await filterRules(compiled, reg)).used);
     }
@@ -66,7 +66,7 @@ describe("spray record PDF", () => {
       pageTexts.push(content.items.filter((item): item is typeof item & { str: string } => "str" in item).map((item) => item.str).join(" "));
     }
     const text = pageTexts.join(" ").replace(/\s+/gu, " ");
-    for (const reg of ["5481-504", "264-700", "264-418"]) expect(text).toContain(reg);
+    for (const reg of ["5481-504", "228-653", "228-659"]) expect(text).toContain(reg);
     expect(text).toContain(clause.quote);
     for (const blank of [
       "Applicator name",

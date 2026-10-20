@@ -6,7 +6,7 @@ import shipEval from "../../../public/data/eval/ship.json";
 
 export const metadata: Metadata = { title: "Judges: the route" };
 
-const plannerLink = "/app?field=tift&products=5481-504,264-700,264-418&hours=3";
+const plannerLink = "/app?field=tift&products=5481-504,228-653,228-659&hours=3";
 const recordedLink = `${plannerLink}&replay=tift`;
 const presetQuestion = "Which label sets the strictest wind limit in this tank?";
 // Axial XL was read live once on production, so this link opens from the cache in under a second.
@@ -37,10 +37,10 @@ const steps: JudgeStep[] = [
     title: "See where the tank can spray across all ten fields",
     body: (
       <p>
-        The map runs the same check at every field and colors each county by when the labels allow the job. This link opens Thursday, Oct 15, three hours after that morning&apos;s forecast, when every county could start a three-hour job. Drag the map time to watch the windows open and close.
+        The map runs the same check at every field and colors each county by when the labels allow the job. This link opens Monday, Oct 12, three hours after that morning&apos;s forecast, when every county could start a three-hour job. Drag the map time to watch the windows open and close.
       </p>
     ),
-    href: "/map?mode=recorded&day=2026-10-15&hours=3&ahead=3",
+    href: "/map?mode=recorded&day=2026-10-12&hours=3&ahead=3",
     action: "Open the map",
   },
   {

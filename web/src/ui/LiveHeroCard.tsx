@@ -65,7 +65,7 @@ export function LiveHeroCard() {
         <p className="hand hero-live-note">live check unavailable</p>
         <h2 id="hero-live-error" className="display">The forecast check did not run.</h2>
         <p className="hero-live-error">{state.message}</p>
-        <SquashButton href="/app?field=tift&products=5481-504,264-700,264-418&hours=3" variant="secondary">
+        <SquashButton href="/app?field=tift&products=5481-504,228-653,228-659&hours=3" variant="secondary">
           Open the planner
         </SquashButton>
       </section>

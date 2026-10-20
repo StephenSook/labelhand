@@ -29,8 +29,8 @@ const data = checkback as unknown as CheckBack;
 const ROWS: Array<{ key: string; label: string; scenario: Scenario }> = [
   { key: "tank", label: "All three in the tank", scenario: data.tank_mix },
   { key: "5481-504", label: "Folex 6 EC alone", scenario: data.products["5481-504"] },
-  { key: "264-700", label: "Dropp SC alone", scenario: data.products["264-700"] },
-  { key: "264-418", label: "Prep alone", scenario: data.products["264-418"] },
+  { key: "228-653", label: "FreeFall SC alone", scenario: data.products["228-653"] },
+  { key: "228-659", label: "Super Boll alone", scenario: data.products["228-659"] },
 ];
 
 // Held and broke are the two states of one checked hour. Green is the planner's own

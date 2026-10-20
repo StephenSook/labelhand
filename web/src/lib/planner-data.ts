@@ -1,4 +1,4 @@
-export const PRODUCT_REGISTRATIONS = ["5481-504", "264-700", "264-418"] as const;
+export const PRODUCT_REGISTRATIONS = ["5481-504", "228-653", "228-659"] as const;
 
 export type ProductRegistration = (typeof PRODUCT_REGISTRATIONS)[number];
 

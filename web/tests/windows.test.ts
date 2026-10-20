@@ -77,7 +77,7 @@ describe("forecastPermittedWindows", () => {
     >("public/data/nws_points_cache.json");
 
     const rules: Rule[] = [];
-    for (const reg of ["5481-504", "264-700", "264-418"]) {
+    for (const reg of ["5481-504", "228-653", "228-659"]) {
       const compiled = await readJson<CompiledLabel>(
         `public/data/compiled/${reg}.ship.json`,
       );

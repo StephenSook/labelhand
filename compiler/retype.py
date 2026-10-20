@@ -13,7 +13,7 @@ modality (Folex's "use FOLEX 6 EC alone" below 60 F nights came back MUST in one
 disagreements are resolved toward the safety side: if any vote says MUST or MUST_NOT, the rule stays acting,
 because a missed limit can mark a forbidden hour as permitted. Every vote is kept on the rule.
 
-Run: python compiler/retype.py 5481-504 264-700 264-418 [--model nvidia/Nemotron-3-Ultra-550b-a55b] [--suffix ""] [--votes 3]
+Run: python compiler/retype.py 5481-504 228-653 228-659 [--model nvidia/Nemotron-3-Ultra-550b-a55b] [--suffix ""] [--votes 3]
 """
 
 from __future__ import annotations

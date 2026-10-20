@@ -33,7 +33,7 @@ describe("Rust WASM adapter", () => {
     const tift = pointCache.find((point) => point.name === "tift");
     expect(tift).toBeDefined();
 
-    const registrations = ["5481-504", "264-700", "264-418"];
+    const registrations = ["5481-504", "228-653", "228-659"];
     const rules: Rule[] = [];
     for (const reg of registrations) {
       const compiled = await readJson<CompiledLabel>(

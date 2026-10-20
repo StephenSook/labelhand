@@ -167,8 +167,8 @@ def build_merge_report_fixtures() -> list[dict]:
 def build_fixtures(spike_root: pathlib.Path) -> dict[str, list[dict]]:
     sources = {
         "Folex 6 EC 5481-504": read_rules(ROOT / "web/public/data/compiled/5481-504.ship.json"),
-        "Dropp SC 264-700": read_rules(ROOT / "web/public/data/compiled/264-700.ship.json"),
-        "Prep 264-418": read_rules(ROOT / "web/public/data/compiled/264-418.ship.json"),
+        "Dropp SC 264-700": read_rules(ROOT / "data/compiled/264-700.ship.json"),
+        "Prep 264-418": read_rules(ROOT / "data/compiled/264-418.ship.json"),
         "Osprey 264-802": read_rules(spike_root / "runs/design/264-802.first.json"),
         "Axial XL 100-1256": read_rules(spike_root / "runs/axial/100-1256.first.json"),
     }

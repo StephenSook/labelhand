@@ -1,6 +1,8 @@
 """Compare Nemotron's direct label reading with Labelhand's compiled-rule planner.
 
-The evaluation is fixed to the preregistered Folex 6 EC, Dropp SC, and Prep tank,
+The evaluation runs on the tank Labelhand ships (TANK below). The committed 2026-10-19 receipts were
+preregistered on the development tank, Folex 6 EC, Dropp SC and Prep, before Dropp SC was found cancelled;
+they keep their own tank in each receipt. Each run is fixed to its tank,
 three October 2026 mornings, and the first 48 forecast hours. Recorded NWS and
 station inputs stay outside git; only the result receipts are committed.
 """
@@ -32,7 +34,8 @@ import windows  # noqa: E402
 from compile_label import BASE, PRICES, guard, norm  # noqa: E402
 
 DEFAULT_MODEL = "nvidia/nemotron-3-super-120b-a12b"
-REGISTRATIONS = ("5481-504", "264-700", "264-418")
+TANK = {"5481-504": "Folex 6 EC", "228-653": "FreeFall SC", "228-659": "Super Boll"}
+REGISTRATIONS = tuple(TANK)
 SAMPLE_DATES = (dt.date(2026, 10, 6), dt.date(2026, 10, 10), dt.date(2026, 10, 14))
 LOCAL_ZONE_NAME = "America/New_York"
 LOCAL_ZONE = ZoneInfo(LOCAL_ZONE_NAME)
@@ -87,7 +90,7 @@ def preregistration(locked_utc: str, model: str = DEFAULT_MODEL, budget_usd: flo
     return {
         "locked_before_first_model_call_utc": locked_utc,
         "tank": {
-            "products": ["Folex 6 EC", "Dropp SC", "Prep"],
+            "products": list(TANK.values()),
             "registrations": list(REGISTRATIONS),
         },
         "sample": {
@@ -110,8 +113,8 @@ def preregistration(locked_utc: str, model: str = DEFAULT_MODEL, budget_usd: flo
             ),
             "thinking": False,
             "label_input": (
-                "full saved text-layer pages for all three labels; the saved 264-700 OCR second reading is also "
-                "shown page by page, matching the compiler pipeline's available readings"
+                "full saved text-layer pages for every label in the tank; a saved OCR second reading, where one "
+                "exists, is also shown page by page, matching the compiler pipeline's available readings"
             ),
             "forecast_columns": [
                 "start time in local time",
@@ -188,24 +191,35 @@ def load_label_pages(text_dir: pathlib.Path) -> dict[str, dict[int, list[dict[st
             raise ValueError(f"{path} must be a non-empty JSON array of page strings")
         pages[registration] = {index: [{"reading": "text-layer", "text": text}] for index, text in enumerate(value, 1)}
 
-    ocr_path = text_dir / "264-700.ocr.json"
-    ocr = json.loads(ocr_path.read_text(encoding="utf-8"))
     label_index_path = text_dir.parent / "labels" / "index.json"
     label_index = json.loads(label_index_path.read_text(encoding="utf-8"))
-    expected_label_sha = label_index["264-700"]["sha256"]
-    if ocr.get("label_sha256") != expected_label_sha:
-        raise ValueError(f"{ocr_path} was made from a different label file ({ocr.get('label_sha256')} != {expected_label_sha})")
-    ocr_pages = ocr.get("pages")
-    if not isinstance(ocr_pages, dict):
-        raise ValueError(f"{ocr_path} must contain a pages object")
-    for page_text, text in ocr_pages.items():
-        if not str(page_text).isdigit() or not isinstance(text, str):
-            raise ValueError(f"{ocr_path} has an invalid page entry")
-        page = int(page_text)
-        if page not in pages["264-700"]:
-            raise ValueError(f"{ocr_path} contains unknown page {page}")
-        pages["264-700"][page].append({"reading": "ocr-second-reading", "text": text})
+    for registration in REGISTRATIONS:
+        ocr_path = text_dir / f"{registration}.ocr.json"
+        if not ocr_path.exists():
+            continue
+        ocr = json.loads(ocr_path.read_text(encoding="utf-8"))
+        expected_label_sha = label_index[registration]["sha256"]
+        if ocr.get("label_sha256") != expected_label_sha:
+            raise ValueError(f"{ocr_path} was made from a different label file ({ocr.get('label_sha256')} != {expected_label_sha})")
+        ocr_pages = ocr.get("pages")
+        if not isinstance(ocr_pages, dict):
+            raise ValueError(f"{ocr_path} must contain a pages object")
+        for page_text, text in ocr_pages.items():
+            if not str(page_text).isdigit() or not isinstance(text, str):
+                raise ValueError(f"{ocr_path} has an invalid page entry")
+            page = int(page_text)
+            if page not in pages[registration]:
+                raise ValueError(f"{ocr_path} contains unknown page {page}")
+            pages[registration][page].append({"reading": "ocr-second-reading", "text": text})
     return pages
+
+
+def tank_line() -> str:
+    """'Folex 6 EC (EPA registration 5481-504) + FreeFall SC (228-653) + ...' for the prompt."""
+    names = [f"{name} ({reg})" for reg, name in TANK.items()]
+    first_reg, first_name = next(iter(TANK.items()))
+    names[0] = f"{first_name} (EPA registration {first_reg})"
+    return " + ".join(names)
 
 
 def render_label_pages(label_pages: dict[str, dict[int, list[dict[str, str]]]]) -> str:
@@ -263,7 +277,7 @@ to decide a mandatory label condition, return FIELD_CHECK rather than PERMITTED.
         "FIELD_CHECK (the forecast cannot decide), with the label sentence and page you relied on."
     )
     return f"""TANK
-Folex 6 EC (EPA registration 5481-504) + Dropp SC (264-700) + Prep (264-418).
+{tank_line()}.
 
 {definitions}
 
@@ -719,7 +733,7 @@ def public_model_entry(result: dict[str, Any], source: str) -> dict[str, Any]:
     return {
         "generated_utc": result["run"].get("finished_utc"),
         "model": result["preregistration"]["model_alone"]["model"],
-        "tank_registrations": list(REGISTRATIONS),
+        "tank_registrations": list(result["preregistration"]["tank"]["registrations"]),
         "sample_dates_local": [day.isoformat() for day in SAMPLE_DATES],
         "status": result["run"]["status"],
         "pooled": summary,

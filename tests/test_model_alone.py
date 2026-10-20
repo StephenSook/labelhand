@@ -74,7 +74,11 @@ def test_preregistration_records_selected_model_and_budget():
 def test_public_summary_records_selected_model_and_receipt_source():
     result = {
         "schema_version": 1,
-        "preregistration": {"model_alone": {"model": "nvidia/Nemotron-3_5-Lightning"}},
+        "preregistration": {
+            "model_alone": {"model": "nvidia/Nemotron-3_5-Lightning"},
+            # A receipt names its own tank; the 2026-10-19 receipts ran on the development tank.
+            "tank": {"registrations": ["5481-504", "264-700", "264-418"]},
+        },
         "run": {"finished_utc": "2026-10-19T00:00:00+00:00", "status": "complete"},
         "summary": {"unsafe_go": [], "lost_window": [], "hours_compared": 1},
     }
@@ -83,6 +87,7 @@ def test_public_summary_records_selected_model_and_receipt_source():
 
     assert summary["model"] == "nvidia/Nemotron-3_5-Lightning"
     assert summary["source"] == "eval/results/lightning.json"
+    assert summary["tank_registrations"] == ["5481-504", "264-700", "264-418"]
 
 
 def test_committed_public_bundle_matches_receipts_and_preserves_super_contract():

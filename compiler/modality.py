@@ -29,7 +29,7 @@ an ADVISORY rule to acting when all of these hold, and never lowers a modality:
 A raised rule keeps the model's answer in modality_model and the reason in modality_floor.
 
 Run after compiler/retype.py (no API calls; needs the label PDFs that tools/ppls_fetch.py downloads):
-    python compiler/modality.py 5481-504 264-700 264-418 --suffix .union.p2.typed.v3 --tag .mf
+    python compiler/modality.py 5481-504 228-653 228-659 --suffix .union.p2.typed.v3 --tag .mf
 """
 
 from __future__ import annotations

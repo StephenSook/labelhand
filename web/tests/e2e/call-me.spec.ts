@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 
-const replayPath = "/app?field=tift&products=5481-504,264-700,264-418&hours=3&replay=tift";
+const replayPath = "/app?field=tift&products=5481-504,228-653,228-659&hours=3&replay=tift";
 
 async function openPlanner(page: Page) {
   await page.goto(replayPath);
@@ -29,7 +29,7 @@ test("verifies a number and subscribes it for the planned field and tank", async
   await expect(page.locator("[data-call-me]")).toHaveAttribute("data-call-me", "active");
 
   expect(sent).toEqual([
-    { field: "tift", tankRegs: ["5481-504", "264-700", "264-418"], jobHours: 3, phoneNumber: "+12295550100", channel: "sms" },
+    { field: "tift", tankRegs: ["5481-504", "228-653", "228-659"], jobHours: 3, phoneNumber: "+12295550100", channel: "sms" },
     { verificationId: "11111111-1111-4111-8111-111111111111", code: "123456" },
   ]);
 });

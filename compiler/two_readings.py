@@ -15,7 +15,7 @@ U+FFFD and the OCR as LaTeX superscripts. Spliced quotes stay rejected. The numb
 rule, and the rule is typed by the same typing pass as every other rule (compiler/retype.py).
 
 Run after compiler/retype.py, before compiler/modality.py:
-    python compiler/two_readings.py 5481-504 264-700 264-418 --suffix .union.p2.typed.v3
+    python compiler/two_readings.py 5481-504 228-653 228-659 --suffix .union.p2.typed.v3
 Labels with no data/text/<reg>.ocr.json are written through unchanged.
 """
 

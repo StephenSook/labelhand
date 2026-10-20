@@ -1,10 +1,10 @@
 """Export every graded case, misses included, for the web app's /proof page.
 
 Two parts, both recomputed from committed files only:
-  gold        each of the 46 gold-set clauses with what the shipped `.ship` rules made of it,
+  gold        each gold-set clause (v1: 64) with what the shipped `.ship` rules made of it,
               using the same matching as eval/score.py
   checkback   every tank-mix hour the day-ahead forecast permitted where the station then saw a
-              label limit exceeded, from eval/results/checkback-2026-10-19.json
+              label limit exceeded, from eval/results/checkback-2026-10-20.json
 
 Run: python tools/proof_export.py [--check]
 """
@@ -27,7 +27,7 @@ from windows import TOPIC  # noqa: E402
 
 COMPILED = ROOT / "data" / "compiled"
 LABELS = ROOT / "data" / "labels" / "index.json"
-CHECKBACK = ROOT / "eval" / "results" / "checkback-2026-10-19.json"
+CHECKBACK = ROOT / "eval" / "results" / "checkback-2026-10-20.json"
 OUT = ROOT / "web" / "public" / "data" / "proof.json"
 SUFFIX = ".ship"
 TANK = "tank_mix"

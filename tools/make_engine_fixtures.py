@@ -6,7 +6,10 @@ trimmed to the fields the kernel reads) and the Python reference output. The Rus
 
 NWS forecasts are U.S. government works. Rule quotes come from the compiled labels already in data/compiled.
 
-Run: python tools/make_engine_fixtures.py [--points tift worth colquitt] [--hours 156]
+Run: python tools/make_engine_fixtures.py [--points tift worth colquitt] [--hours 156] [--keep-forecast]
+
+--keep-forecast reuses each fixture's frozen forecast and swaps only the rules, so a tank change does not
+also move the replay the web app shows (it serves these periods, see web/scripts/sync-engine.mjs).
 """
 
 from __future__ import annotations
@@ -22,18 +25,22 @@ sys.path.insert(0, str(ROOT / "engine"))
 import windows  # noqa: E402
 
 OUT = ROOT / "tests" / "fixtures" / "engine"
-TANK = ["5481-504", "264-700", "264-418"]
+TANK = ["5481-504", "228-653", "228-659"]
 PERIOD_FIELDS = ("startTime", "isDaytime", "temperature", "windSpeed", "probabilityOfPrecipitation")
 RULE_FIELDS = ("id", "page", "product", "reg", "param", "op", "value", "value2", "unit", "modality", "quote")
 
 
-def build(point: str, hours: int, rules_suffix: str) -> dict:
+def build(point: str, hours: int, rules_suffix: str, keep_forecast: bool = False) -> dict:
     meta = json.loads(windows.CACHE.read_text(encoding="utf-8"))[point]
     rules = []
     for reg in TANK:
         rules += windows.load_rules(reg, rules_suffix)[1]
     rules = [{k: r.get(k) for k in RULE_FIELDS} for r in rules]
-    fetched, periods = windows.latest_forecast(point)
+    if keep_forecast:
+        frozen = json.loads((OUT / f"{point}.json").read_text(encoding="utf-8"))
+        fetched, periods = frozen["forecast_fetched_utc"], frozen["periods"]
+    else:
+        fetched, periods = windows.latest_forecast(point)
     periods = [{k: p.get(k) for k in PERIOD_FIELDS} for p in periods]
     expected = windows.evaluate(rules, periods, meta["lat"], meta["lon"], hours)
     return {
@@ -55,10 +62,11 @@ def main() -> int:
     ap.add_argument("--points", nargs="+", default=["tift", "worth", "colquitt"])
     ap.add_argument("--hours", type=int, default=156)
     ap.add_argument("--rules", default=windows.DEFAULT_RULES)
+    ap.add_argument("--keep-forecast", action="store_true", help="reuse each fixture's frozen forecast periods")
     a = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
     for point in a.points:
-        fx = build(point, a.hours, a.rules)
+        fx = build(point, a.hours, a.rules, a.keep_forecast)
         path = OUT / f"{point}.json"
         path.write_text(json.dumps(fx, indent=1, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
         states = [h["state"] for h in fx["expected"]]

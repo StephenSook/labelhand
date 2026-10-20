@@ -5,7 +5,7 @@ every run of non-word characters removed. Modalities are counted once per run. A
 in at least two runs wins; a tie keeps the first acting modality, then the first modality.
 
 Run:
-    python compiler/merge_runs.py 5481-504 264-700 264-418
+    python compiler/merge_runs.py 5481-504 228-653 228-659
 """
 
 from __future__ import annotations

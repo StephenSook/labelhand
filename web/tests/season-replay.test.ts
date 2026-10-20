@@ -130,7 +130,7 @@ describe("season replay on the committed recording and the committed WASM planne
     const wasm = await readFile(path.join(projectRoot, "src/engine/pkg/labelhand_core_bg.wasm"));
     await initializeEngine(new Uint8Array(wasm).buffer);
     const rules: Rule[] = [];
-    for (const reg of ["5481-504", "264-700", "264-418"]) {
+    for (const reg of ["5481-504", "228-653", "228-659"]) {
       const compiled = await readJson<CompiledLabel>(`public/data/compiled/${reg}.ship.json`);
       rules.push(...(await filterRules(compiled, reg)).used);
     }

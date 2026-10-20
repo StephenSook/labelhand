@@ -1,5 +1,6 @@
 import type { FilterRulesResult, Rule } from "@/engine";
 import type { ForecastPeriod, LabelIndex, PlannerHour } from "@/lib/planner-data";
+import { PRODUCT_REGISTRATIONS } from "@/lib/planner-data";
 import type { ForecastWindow } from "@/lib/windows";
 import { SUMMARY_MAX_CHARACTERS, type FinalAnswerArgs } from "./guard";
 
@@ -33,7 +34,7 @@ export const AGENT_TOOL_DEFINITIONS = [
             minItems: 1,
             maxItems: 3,
             uniqueItems: true,
-            items: { type: "string", enum: ["5481-504", "264-700", "264-418"] },
+            items: { type: "string", enum: [...PRODUCT_REGISTRATIONS] },
           },
           job_hours: { type: "integer", minimum: 1, maximum: 12 },
           forecast: {
@@ -183,7 +184,7 @@ async function checkTank(args: unknown, runtime: AgentToolRuntime): Promise<Agen
   const field = typeof input.field === "string" ? input.field : "";
   const products = Array.isArray(input.products) ? input.products : [];
   const jobHours = input.job_hours;
-  const allowed = new Set(["5481-504", "264-700", "264-418"]);
+  const allowed = new Set<string>(PRODUCT_REGISTRATIONS);
   if (!field) throw new TypeError("check_tank field must be a non-empty string.");
   if (products.length < 1 || products.length > 3 || products.some((reg) => typeof reg !== "string" || !allowed.has(reg))) {
     throw new TypeError("check_tank products must contain one to three supported registration numbers.");

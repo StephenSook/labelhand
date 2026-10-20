@@ -18,15 +18,18 @@ test("a recorded morning colors all ten counties and lists them soonest first", 
   await expect(page.locator("#map-summary")).toHaveText("No field can start a 3-hour job now. 10 of 10 open later in the forecast.");
   await expect(page.locator("a[data-county][data-status=later]")).toHaveCount(10);
   await expect(page.locator("[data-map-source]")).toContainText("Thu, Oct 15");
-  await expect(page.locator("[data-row=tift]")).toContainText("Thu 10 AM to 6 PM, 8 hours long");
+  // FreeFall SC reads a forecast of 0 mph as a field check (its calm-wind sentence), so Thursday's calm
+  // daytime hours are not a window and the first Tift window is Friday.
+  await expect(page.locator("[data-row=tift]")).toContainText("Fri 11 AM to 7 PM, 8 hours long");
 });
 
 test("moving the map time opens the counties whose window has started", async ({ page }) => {
-  await page.goto(recordedPath);
+  await page.goto("/map?mode=recorded&day=2026-10-12&hours=3");
   await waitForMap(page);
+  await expect(page.locator("#map-summary")).toHaveText("No field can start a 3-hour job now. 10 of 10 open later in the forecast.");
   await page.locator("#map-ahead").fill("3");
   await expect(page.locator("[data-map-time]")).toContainText("3 hours later");
-  await expect(page.locator("#map-summary")).toContainText("All 10 fields can start a 3-hour job at Thu 10 AM");
+  await expect(page.locator("#map-summary")).toContainText("All 10 fields can start a 3-hour job at Mon 10 AM");
   await expect(page.locator("a[data-county][data-status=open]")).toHaveCount(10);
   await expect(page).toHaveURL(/ahead=3/);
 });
@@ -35,7 +38,7 @@ test("a county opens the planner on the same recorded forecast", async ({ page }
   await page.goto(recordedPath);
   await waitForMap(page);
   const href = await page.locator("a[data-county=worth]").getAttribute("href");
-  expect(href).toMatch(/^\/app\?field=worth&products=5481-504%2C264-700%2C264-418&hours=3&issued=2026-10-15T/);
+  expect(href).toMatch(/^\/app\?field=worth&products=5481-504%2C228-653%2C228-659&hours=3&issued=2026-10-15T/);
   await page.goto(href!);
   await expect(page.locator("[data-forecast-source]")).toHaveAttribute("data-forecast-source", "RECORDED", { timeout: 30_000 });
 });
@@ -81,7 +84,7 @@ test("the map page never overflows and has no axe violations", async ({ page }) 
 test("the judge route opens the map on a morning every county could spray", async ({ page }) => {
   await page.goto("/judge");
   const href = await page.getByRole("link", { name: /Open the map/ }).getAttribute("href");
-  expect(href).toBe("/map?mode=recorded&day=2026-10-15&hours=3&ahead=3");
+  expect(href).toBe("/map?mode=recorded&day=2026-10-12&hours=3&ahead=3");
   await page.goto(href!);
   await waitForMap(page);
   await expect(page.locator("a[data-county][data-status=open]")).toHaveCount(10);

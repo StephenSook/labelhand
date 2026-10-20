@@ -33,7 +33,7 @@ test("with no signal the planner opens and checks the last saved forecast, label
 
   // One first visit, no reload: the forecast lands before the worker controls the page, and the
   // page must still hand it over for the next visit.
-  await page.goto("/app?field=tift&products=5481-504,264-700,264-418&hours=3");
+  await page.goto("/app?field=tift&products=5481-504,228-653,228-659&hours=3");
   await expect(page.locator("[data-forecast-source]")).toHaveAttribute("data-forecast-source", "LIVE", { timeout: 30_000 });
   await expect(page.locator("[data-offline-copy]")).toHaveCount(0);
   await expect

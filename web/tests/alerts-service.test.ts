@@ -92,7 +92,7 @@ function subscription(overrides: Partial<AlertSubscription> = {}): AlertSubscrip
     verifiedAt: "2026-10-06T09:05:00.000Z",
     active: true,
     field: "tift",
-    tankRegs: ["5481-504", "264-700", "264-418"],
+    tankRegs: ["5481-504", "228-653", "228-659"],
     jobHours: 3,
     phoneNumber: "+15555550123",
     phoneHash: phoneLookupHash("+15555550123", config.runSecret),
@@ -108,8 +108,8 @@ function evidence(start = "2026-10-07T13:00:00-04:00"): AlertPlannerEvidence {
     fieldName: "Tift",
     products: [
       { reg: "5481-504", name: "Folex 6 EC" },
-      { reg: "264-700", name: "Dropp SC" },
-      { reg: "264-418", name: "Prep" },
+      { reg: "228-653", name: "FreeFall SC" },
+      { reg: "228-659", name: "Super Boll" },
     ],
     source: "LIVE",
     fetchedAt: NOW.toISOString(),
@@ -117,7 +117,7 @@ function evidence(start = "2026-10-07T13:00:00-04:00"): AlertPlannerEvidence {
     calledWindow: { start, end, hours: 3 },
     agentCheck: {
       field: "Tift",
-      products: ["5481-504", "264-700", "264-418"],
+      products: ["5481-504", "228-653", "228-659"],
       job_hours: 3,
       source: { kind: "LIVE", time: NOW.toISOString() },
       counts: { FORECAST_PERMITTED: 3, FIELD_CHECK: 2, BLOCKED: 4 },
@@ -156,7 +156,7 @@ describe("alert verification", () => {
     const deps = dependencies(store, twilio);
     const started = await startVerification({
       field: "tift",
-      tankRegs: ["5481-504", "264-700", "264-418"],
+      tankRegs: ["5481-504", "228-653", "228-659"],
       jobHours: 3,
       phoneNumber: "+15555550123",
       channel: "sms",
@@ -190,7 +190,7 @@ describe("alert verification", () => {
     const deps = dependencies(store, twilio);
     const request = {
       field: "tift",
-      tankRegs: ["5481-504", "264-700", "264-418"],
+      tankRegs: ["5481-504", "228-653", "228-659"],
       jobHours: 3,
       phoneNumber: "+15555550123",
     };

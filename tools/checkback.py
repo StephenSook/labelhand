@@ -17,7 +17,7 @@ sys.path.insert(0, str(ROOT / "engine"))
 
 import windows  # noqa: E402
 
-REGISTRATIONS = ("5481-504", "264-700", "264-418")
+REGISTRATIONS = ("5481-504", "228-653", "228-659")
 OBS_TOLERANCE = dt.timedelta(minutes=40)
 ISSUANCE_TOLERANCE = dt.timedelta(minutes=90)
 KM_PER_INTERNATIONAL_MILE = 1.609344
@@ -441,7 +441,7 @@ def load_scenarios() -> dict[str, dict[str, Any]]:
         "tank_mix": {
             "key": "tank_mix",
             "registrations": list(REGISTRATIONS),
-            "product": "Folex + Dropp + Prep tank mix",
+            "product": "Folex + FreeFall + Super Boll tank mix",
             "rules": tank_rules,
             "topic_skipped": [item for registration in REGISTRATIONS for item in products[registration]["topic_skipped"]],
         },

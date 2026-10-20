@@ -6,13 +6,13 @@ describe("Ask the tank checks what the page shows", () => {
   test("the question carries the page's field, tank, job length and forecast", () => {
     const content = questionWithContext("Which label sets the strictest wind limit in this tank?", {
       field: "tift",
-      products: ["5481-504", "264-700", "264-418"],
+      products: ["5481-504", "228-653", "228-659"],
       jobHours: 3,
       forecast: "recorded",
     });
     expect(content).toBe(
       "Which label sets the strictest wind limit in this tank?\n\n"
-      + "Page context: field tift; products 5481-504, 264-700, 264-418; job length 3 hours; forecast recorded.",
+      + "Page context: field tift; products 5481-504, 228-653, 228-659; job length 3 hours; forecast recorded.",
     );
   });
 

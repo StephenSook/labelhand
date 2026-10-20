@@ -4,7 +4,7 @@ import type { AgentCheckTankResult } from "@/lib/agent/tools";
 
 const base: AgentCheckTankResult = {
   field: "Tift",
-  products: ["5481-504", "264-700", "264-418"],
+  products: ["5481-504", "228-653", "228-659"],
   job_hours: 4,
   source: { kind: "LIVE", time: "2026-10-19T17:28:00Z" },
   counts: { FORECAST_PERMITTED: 0, FIELD_CHECK: 0, BLOCKED: 156 },

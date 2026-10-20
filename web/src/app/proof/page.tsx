@@ -81,7 +81,7 @@ function modelName(id: string): string {
   return id;
 }
 const ACTING = new Set(["MUST", "MUST_NOT"]);
-const TANK = "5481-504,264-700,264-418";
+const TANK = "5481-504,228-653,228-659";
 
 const hourFormatter = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", hour: "numeric" });
 const dayFormatter = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", weekday: "short", month: "short", day: "numeric" });
@@ -164,7 +164,7 @@ export default function ProofPage() {
   const days = missesByDay(misses);
   const brokenRules = Object.entries(rules);
   const windOnly = brokenRules.length > 0 && brokenRules.every(([, rule]) => rule.param === "wind_speed_mph");
-  const regs = ["5481-504", "264-700", "264-418"].filter((reg) => reg in data.products);
+  const regs = ["5481-504", "228-653", "228-659"].filter((reg) => reg in data.products);
   const matrix = alone.pooled.agreement_matrix_model_x_planner;
   const modelGo = matrix.PERMITTED.PERMITTED + matrix.PERMITTED.BLOCKED + matrix.PERMITTED.FIELD_CHECK;
   const plannerGo = matrix.PERMITTED.PERMITTED + matrix.BLOCKED.PERMITTED + matrix.FIELD_CHECK.PERMITTED;

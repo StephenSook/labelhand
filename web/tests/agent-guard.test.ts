@@ -86,7 +86,7 @@ describe("final answer guard", () => {
       name: "check_tank",
       result: {
         field: "Tift",
-        products: ["5481-504", "264-700", "264-418"],
+        products: ["5481-504", "228-653", "228-659"],
         job_hours: 4,
         counts: { FORECAST_PERMITTED: 38, FIELD_CHECK: 71 },
         windows: [
@@ -327,7 +327,7 @@ const tiftNoWindows = (): ToolResultRecord[] => [
     name: "check_tank",
     result: {
       field: "Tift",
-      products: ["5481-504", "264-700", "264-418"],
+      products: ["5481-504", "228-653", "228-659"],
       job_hours: 4,
       counts: { FORECAST_PERMITTED: 0, FIELD_CHECK: 0, BLOCKED: 156 },
       windows: [],

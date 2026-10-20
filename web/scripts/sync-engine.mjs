@@ -16,7 +16,7 @@ const engineFiles = [
   "labelhand_core.d.ts",
   "labelhand_core_bg.wasm.d.ts",
 ];
-const registrations = ["5481-504", "264-700", "264-418"];
+const registrations = ["5481-504", "228-653", "228-659"];
 const replayPoints = ["tift", "worth", "colquitt"];
 
 async function readJson(file) {

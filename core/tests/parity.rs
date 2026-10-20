@@ -93,7 +93,7 @@ fn evaluate_matches_every_frozen_fixture_per_hour() {
 #[test]
 fn load_rules_matches_the_fixture_rule_order_and_fields() {
     let root = repo_root();
-    let regs = ["5481-504", "264-700", "264-418"];
+    let regs = ["5481-504", "228-653", "228-659"];
     let fields = [
         "id", "page", "product", "reg", "param", "op", "value", "value2", "unit", "modality",
         "quote",

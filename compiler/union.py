@@ -5,7 +5,7 @@ found it. Both inputs already passed the compiler's guards, so the union adds no
 
 Output: data/compiled/<reg>.union.json, ready for compiler/retype.py --suffix .union
 
-Run: python compiler/union.py 5481-504 264-700 264-418 [--passes "" .Nemotron-3-Ultra-550b-a55b]
+Run: python compiler/union.py 5481-504 228-653 228-659 [--passes "" .Nemotron-3-Ultra-550b-a55b]
 """
 
 from __future__ import annotations

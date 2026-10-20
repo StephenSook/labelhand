@@ -4,7 +4,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 import { bulletinMonthLabel, easternMonth, monthIndex } from "../../src/lib/bulletins";
 
-const replayPath = "/app?field=tift&products=5481-504,264-700,264-418&hours=3&replay=tift";
+const replayPath = "/app?field=tift&products=5481-504,228-653,228-659&hours=3&replay=tift";
 const stillsDir = String.raw`C:\Users\STEVEB~1\AppData\Local\Temp\claude\C--Users-stevebillz\2a521d3f-5761-476e-8197-9d532949c28b\scratchpad\stills-ui`;
 
 async function openReplay(page: Page) {
@@ -41,21 +41,21 @@ test("the planner runs on first load without a click", async ({ page }) => {
 });
 
 test("a field, product, and job-length deep link reproduces its state", async ({ page }) => {
-  await page.goto("/app?field=worth&products=5481-504,264-700&hours=4");
+  await page.goto("/app?field=worth&products=5481-504,228-653&hours=4");
   await waitForAutoRun(page);
 
   await expect(page.locator("#field")).toHaveValue("worth");
   await expect(page.locator("#job-hours")).toHaveValue("4");
   await expect(page.getByRole("checkbox", { name: /5481-504/ })).toBeChecked();
-  await expect(page.getByRole("checkbox", { name: /264-700/ })).toBeChecked();
-  await expect(page.getByRole("checkbox", { name: /264-418/ })).not.toBeChecked();
-  await expect(page).toHaveURL(/field=worth.*products=5481-504%2C264-700.*hours=4/);
+  await expect(page.getByRole("checkbox", { name: /228-653/ })).toBeChecked();
+  await expect(page.getByRole("checkbox", { name: /228-659/ })).not.toBeChecked();
+  await expect(page).toHaveURL(/field=worth.*products=5481-504%2C228-653.*hours=4/);
 
   await page.goto("/app?field=unknown&products=5481-504,unknown&hours=99");
   await waitForAutoRun(page);
   await expect(page.locator("#field")).toHaveValue("tift");
   await expect(page.locator("#job-hours")).toHaveValue("3");
-  for (const reg of ["5481-504", "264-700", "264-418"]) {
+  for (const reg of ["5481-504", "228-653", "228-659"]) {
     await expect(page.getByRole("checkbox", { name: new RegExp(reg) })).toBeChecked();
   }
 });
@@ -65,12 +65,12 @@ test("unticking a product re-checks the tank on the forecast already shown", asy
   const tank = page.getByLabel(/^Tank products:/);
 
   // What a fresh load of the two-product tank shows on the same recorded forecast.
-  await page.goto("/app?field=tift&products=264-700,264-418&hours=3&replay=tift");
+  await page.goto("/app?field=tift&products=228-653,228-659&hours=3&replay=tift");
   await expect(page.locator("[data-hour-cell]")).toHaveCount(156);
   // Read the card once its Bulletins Live! Two line has an answer, not while it is still checking.
   await expect(card.locator("[data-bulletin]")).not.toHaveAttribute("data-bulletin-status", "checking");
   const expectedCard = (await card.textContent()) ?? "";
-  expect(expectedCard).toContain("Tank: Dropp SC, Prep");
+  expect(expectedCard).toContain("Tank: FreeFall SC, Super Boll");
 
   await openReplay(page);
   await expect(tank).toHaveAttribute("aria-label", /5481-504/);
@@ -79,7 +79,7 @@ test("unticking a product re-checks the tank on the forecast already shown", asy
   await expect(tank).not.toHaveAttribute("aria-label", /5481-504/);
   await expect(card).toHaveText(expectedCard);
   await expect(page.getByText("RECORDED", { exact: true })).toBeVisible();
-  await expect(page).toHaveURL(/products=264-700%2C264-418.*replay=tift/);
+  await expect(page).toHaveURL(/products=228-653%2C228-659.*replay=tift/);
 });
 
 test("with no live check the next-window card points to this field's Endangered Species Protection Bulletin", async ({ page }) => {
@@ -273,7 +273,7 @@ test("the constraint panel runs an in-memory what-if through the planner", async
   page.on("request", (request) => {
     if (new URL(request.url()).pathname.startsWith("/data/")) dataRequests.push(request.url());
   });
-  await panel.getByRole("button", { name: /^Check without PREP/ }).click();
+  await panel.getByRole("button", { name: /^Check without .*EPA Reg\. 228-659$/ }).click();
 
   const outcome = panel.locator("[data-what-if-result]");
   await expect(outcome).toContainText("31 of 156 forecast-permitted hours");
@@ -416,7 +416,7 @@ test("all Tier 1 pages have zero axe violations and render the requested stills"
 
 // Season replay runs on the committed NWS recording, so these checks hold in any month.
 test("the season strip replays the best recorded morning with its window and stability", async ({ page }) => {
-  await page.goto("/app?field=tift&products=5481-504,264-700,264-418&hours=4");
+  await page.goto("/app?field=tift&products=5481-504,228-653,228-659&hours=4");
   await waitForAutoRun(page);
   const strip = page.locator("#season-replay ol li");
   await expect(strip.first()).toBeVisible({ timeout: 30_000 });
@@ -431,7 +431,7 @@ test("the season strip replays the best recorded morning with its window and sta
 });
 
 test("an issued deep link reopens that recorded forecast", async ({ page }) => {
-  await page.goto("/app?field=tift&products=5481-504,264-700,264-418&hours=4&issued=2026-10-10T11:07:02%2B00:00");
+  await page.goto("/app?field=tift&products=5481-504,228-653,228-659&hours=4&issued=2026-10-10T11:07:02%2B00:00");
   await expect(page.locator("#next-window")).toContainText("Season replay", { timeout: 30_000 });
   await expect(page.locator("#next-window")).toContainText("Oct 10, 2026");
   await expect(page.locator("[data-hour-cell]")).toHaveCount(156);
@@ -468,7 +468,7 @@ test("an answer's window chips name the hours, not the window index", async ({ p
   await page.route("**/api/agent", (route) => {
     step += 1;
     const call = step === 1
-      ? { id: "call-check", type: "function", function: { name: "check_tank", arguments: JSON.stringify({ field: "tift", products: ["5481-504", "264-700", "264-418"], job_hours: 3, forecast: "recorded" }) } }
+      ? { id: "call-check", type: "function", function: { name: "check_tank", arguments: JSON.stringify({ field: "tift", products: ["5481-504", "228-653", "228-659"], job_hours: 3, forecast: "recorded" }) } }
       : { id: "call-final", type: "function", function: { name: "final_answer", arguments: JSON.stringify({ summary: "Window 0 is forecast-permitted.", cited_rule_ids: [], window_indices: [0] }) } };
     return route.fulfill({
       status: 200,

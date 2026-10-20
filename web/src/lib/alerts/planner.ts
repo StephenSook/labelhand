@@ -12,7 +12,7 @@ import type { AlertPlannerEvidence, AlertSubscription } from "./types";
 
 const HORIZON_MS = 36 * 60 * 60 * 1_000;
 const ENGINE_HOURS = 156;
-const SHIPPED_REGISTRATIONS = new Set(["5481-504", "264-700", "264-418"]);
+const SHIPPED_REGISTRATIONS = new Set(["5481-504", "228-653", "228-659"]);
 const projectRoot = process.cwd();
 
 type TankProduct = { reg: string; name: string; rules: Rule[] };
