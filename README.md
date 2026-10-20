@@ -17,7 +17,7 @@ Labelhand reads the full EPA label of every product in the tank and turns each r
 
 It never says a spray is legal. The applicator stays in charge.
 
-> Built for the **Nebius x NVIDIA Global AI Hackathon** (Best Apps & Agents). Running today: the label compiler, planner kernel, web app, source-label viewer, browser-generated application record, season replay, forecast check-back, any EPA label read live (found by search or by a photo of the jug), and a map of all ten fields. A phone call when a window opens is built and waits on the carrier account.
+> Built for the **Nebius x NVIDIA Global AI Hackathon** (Best Apps & Agents). Running today: the label compiler, planner kernel, web app, source-label viewer, browser-generated application record, season replay, forecast check-back, any EPA label read live (found by search or by a photo of the jug), a map of all ten fields, and a phone call when a window opens for a subscribed field and tank. On Oct 20 it called the builder's own phone twice from production; no applicator has subscribed yet.
 
 ## How it works
 

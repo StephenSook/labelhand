@@ -205,6 +205,7 @@ A label not in the shipped tank is read live: the browser streams `/api/labels/c
 | Alert caps | `{"verify_code_ttl_minutes":10,"calls_per_subscription_per_day":3,"calls_per_phone_per_day":9,"calls_total_per_day":30,"verify_starts_per_phone_per_day":5,"verify_starts_per_client_per_day":20,"verify_starts_total_per_day":100}` | `web/src/lib/alerts/service.ts:33`; `web/src/lib/alerts/storage.ts:15-20` | MEASURED |
 | Alert planning horizon | `"36 hours"` | `web/src/lib/alerts/planner.ts:12` | MEASURED |
 | Alert runner trigger | `"hourly recorder job posts /api/alerts/run when repository variable RECORDER_ALERTS is true"` | `.github/workflows/recorder.yml:5,30,182-186` | MEASURED |
+| Production alert calls to the builder's own phone | `{"2026-10-20T16:16:11Z":{"field":"tift","called":1,"answered":false},"2026-10-20T18:21:52Z":{"field":"tift","called":0,"duplicate":1},"2026-10-20T18:26:41Z":{"fields_scanned":2,"called":1,"duplicate":1,"answered":true}}` | command: `POST https://labelhand-web.vercel.app/api/alerts/run` with the run secret, at each time shown; outputs: `called 1`, then `scanned 1, called 0, duplicate 1` (the Tift window already called was not called again), then `scanned 2, called 1, duplicate 1` after a Worth subscription was confirmed. The 16:16 call completed unanswered (Twilio call status `completed`, 8 s). The 18:26 call was answered (phone screen recording, in-call timer past 0:39). | MEASURED |
 | Installable app manifest | `{"name":"Labelhand","start_url":"/app","display":"standalone","icons":3}` | `web/src/app/manifest.ts` | MEASURED |
 | Offline forecast copy | `{"header":"x-labelhand-offline-copy","badge":"OFFLINE COPY","forecast_cache":"labelhand-forecasts"}` | `web/public/sw.js:8,11`; `web/src/lib/planner-data.ts` (`OFFLINE_COPY_HEADER`); `web/src/ui/planner/Planner.tsx` | MEASURED |
 | Offline end-to-end test | `"one first visit, no reload, every loaded file cached, then offline: 156 hour cells and OFFLINE COPY"` | `web/tests/e2e/pwa.spec.ts`; CI web job on d64b10b passed; with the page-to-worker forecast handoff removed, this test fails (local mutation check, 2026-10-20) | MEASURED |
@@ -225,9 +226,9 @@ The required CI workflow jobs are `python`, `rust`, and `web` at `.github/workfl
 | Rust WASM build | `"release build passed"` | command: `wasm-pack build core --target web --release -- --features wasm`; output: `Your wasm pkg is ready to publish at core\\pkg` | MEASURED |
 | Web typecheck | `"passed"` | command from `web/`: `pnpm typecheck`; output: `Types generated successfully`; `tsc --noEmit` exit: `0` | MEASURED |
 | Web lint | `"passed"` | command from `web/`: `pnpm lint`; exit: `0` | MEASURED |
-| Web unit tests | `"348 passed in 37 files"` | command from `web/`: `pnpm test` on `02fe2f5`, 2026-10-20; output: `Test Files 37 passed`, `Tests 348 passed` | MEASURED |
+| Web unit tests | `"354 passed in 39 files"` | command from `web/`: `pnpm test` with commits `a24cb0e` and `787d92d`, 2026-10-20; output: `Test Files 39 passed`, `Tests 354 passed` | MEASURED |
 | Web production build | `"passed; 17 of 17 static pages generated"` | command from `web/`: `pnpm build`, 2026-10-20; output: `Generating static pages using 7 workers (17/17)` | MEASURED |
-| Web end-to-end tests | `"36 passed"` | command from `web/`: `pnpm e2e` against `pnpm start` on `02fe2f5`, 2026-10-20; output: `36 passed (1.4m)` | MEASURED |
+| Web end-to-end tests | `"37 passed"` | command from `web/`: `pnpm e2e` against `pnpm start` on `787d92d`, 2026-10-20; output: `37 passed (1.4m)` | MEASURED |
 | Browser data freshness | `"passed with no diff"` | commands: rebuild WASM, `pnpm sync-engine`, then `git diff --exit-code -- web/public/data`; all exits: `0` | MEASURED |
 
 ## Drift found
@@ -250,6 +251,6 @@ The required CI workflow jobs are `python`, `rust`, and `web` at `.github/workfl
 | The deployed web app is live now | `"NOT VERIFIED"` | Check needed: make a timestamped read-only request to `https://labelhand-web.vercel.app` and record the status and response. No live request was needed for this fact sheet. | NOT VERIFIED |
 | Four Token Factory models passed the capability probe with subsecond first-token times | `"NOT VERIFIED"` | Check needed: commit or retain the probe receipt with model IDs, request IDs, capability outcomes, and timings. The claim appears in README.md but no underlying receipt was found. | NOT VERIFIED |
 | Nebius AI Cloud GPU cost for OCR | `"NOT VERIFIED"` | Check needed: read the billed job cost for the retained OCR job. The cost rows above cover Token Factory only. | NOT VERIFIED |
-| An alert call has reached a real subscriber | `"NOT VERIFIED"` | The phone check and call code ship (rows above), but no subscriber had confirmed a number by 2026-10-20. Check needed: an `alerts/log/` entry with a Twilio call SID after a confirmed subscription. | NOT VERIFIED |
+| An alert call has reached an applicator | `"NOT VERIFIED"` | Both production calls so far went to the builder's own phone (row above). Check needed: a subscription confirmed by an applicator and the call that followed it. | NOT VERIFIED |
 | A native mobile app is shipped | `"NOT VERIFIED"` | The web app installs from the browser as a web app with an offline forecast copy; there is no App Store or Play Store build. | NOT VERIFIED |
 | A live compile returns the same rules every run | `"DO NOT CLAIM"` | Two committed live compiles of the same AXIAL XL label merged 99 and 128 rules (rows above), at temperature 0 with three readings each. | NOT VERIFIED |
