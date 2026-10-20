@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { AGENT_SYSTEM_PROMPT } from "@/lib/agent/loop";
+import { allowedToolNames } from "@/lib/agent/tool-choice";
 import { AGENT_TOOL_DEFINITIONS, AGENT_TOOL_NAMES } from "@/lib/agent/tools";
 import {
   AGENT_MODEL,
@@ -108,18 +109,6 @@ function resetBudgetIfNeeded() {
   }
 }
 
-function hasSuccessfulToolResult(messages: ValidMessage[], name: string): boolean {
-  return messages.some((message) => {
-    if (message.role !== "tool" || message.name !== name || typeof message.content !== "string") return false;
-    try {
-      const result = JSON.parse(message.content) as unknown;
-      return !(isRecord(result) && typeof result.error === "string");
-    } catch {
-      return false;
-    }
-  });
-}
-
 export async function POST(request: NextRequest) {
   let body: unknown;
   try {
@@ -138,15 +127,8 @@ export async function POST(request: NextRequest) {
   resetBudgetIfNeeded();
   if (tokensUsedToday >= DAILY_TOKEN_BUDGET) return errorResponse("The daily model token budget is exhausted.", 429);
 
-  const firstQuestion = validated.messages.find((message) => message.role === "user")?.content ?? "";
-  const hasCheck = hasSuccessfulToolResult(validated.messages, "check_tank");
-  const asksForWindows = /\bwhen\b|\bwindows?\b/i.test(firstQuestion);
-  const allowedToolNames = !hasCheck
-    ? new Set(["check_tank"])
-    : asksForWindows
-      ? new Set(["final_answer"])
-      : new Set(["get_clause", "final_answer"]);
-  const allowedTools = AGENT_TOOL_DEFINITIONS.filter((tool) => allowedToolNames.has(tool.function.name));
+  const allowedNames = allowedToolNames(validated.messages);
+  const allowedTools = AGENT_TOOL_DEFINITIONS.filter((tool) => allowedNames.has(tool.function.name));
   const toolChoice = allowedTools.length === 1
     ? { type: "function", function: { name: allowedTools[0].function.name } }
     : "required";
