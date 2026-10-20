@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { describe, expect, test, vi } from "vitest";
 
 import {
+  assertActiveRegistration,
   fetchLabelPdf,
   listLabelVersions,
   MAX_PDF_BYTES,
@@ -43,6 +44,27 @@ describe("PPLS client", () => {
       accepted: "2022-05-03",
       url: "https://www3.epa.gov/pesticides/chem_search/ppls/000100-01256-20220503.pdf",
     });
+  });
+
+  test("reads the registration status and cancellation fields", async () => {
+    const item = { ...productFixture.items[0], product_status: "Inactive", product_status_date: "January 15, 2014", cancel_flag: "Yes", cancellationreason: "Company Request" };
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue(jsonResponse({ ...productFixture, items: [item] }));
+    const product = await listLabelVersions("100-1256", fetchMock);
+    expect(product).toMatchObject({ status: "Inactive", statusDate: "January 15, 2014", cancelled: true, cancellationReason: "Company Request" });
+    expect(() => assertActiveRegistration(product)).toThrow(/as cancelled since January 15, 2014 \(Company Request\)/);
+  });
+
+  test("accepts only an active, uncancelled registration", async () => {
+    const product = await listLabelVersions("100-1256", vi.fn<typeof fetch>().mockResolvedValue(jsonResponse(productFixture)));
+    expect(() => assertActiveRegistration(product)).not.toThrow();
+    expect(() => assertActiveRegistration({ ...product, cancelled: true })).toThrow(/as cancelled/);
+    expect(() => assertActiveRegistration({ ...product, status: "Inactive" })).toThrow(/as inactive/);
+    expect(() => assertActiveRegistration({ ...product, status: "" })).toThrow(/as not active/);
+    try {
+      assertActiveRegistration({ ...product, status: "" });
+    } catch (error) {
+      expect(error).toMatchObject({ status: 422 });
+    }
   });
 
   test("preserves an authoritative EPA 404", async () => {

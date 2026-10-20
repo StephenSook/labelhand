@@ -27,6 +27,9 @@ export interface PplsProduct {
   reg: string;
   product: string;
   status: string;
+  statusDate: string;
+  cancelled: boolean;
+  cancellationReason: string;
   alternateBrandNames: string[];
   versions: PplsLabelVersion[];
 }
@@ -173,9 +176,27 @@ export async function listLabelVersions(reg: string, fetchImpl: typeof fetch = f
     reg: normalizedReg,
     product: asString(item.productname),
     status: asString(item.product_status),
+    statusDate: asString(item.product_status_date),
+    cancelled: asString(item.cancel_flag).toLowerCase() === "yes",
+    cancellationReason: asString(item.cancellationreason),
     alternateBrandNames: alternateBrandNames(item.altbrandnames),
     versions,
   };
+}
+
+// PPLS keeps every label EPA ever accepted, including labels of cancelled registrations (Dropp SC,
+// 264-700, is "Inactive" with cancel_flag "Yes" since January 15, 2014). A plan built on one of
+// those labels would look current, so only an active, uncancelled registration is compiled.
+export function assertActiveRegistration(product: PplsProduct): void {
+  if (product.status === "Active" && !product.cancelled) return;
+  const status = product.cancelled ? "cancelled" : (product.status ? product.status.toLowerCase() : "not active");
+  const since = product.statusDate ? ` since ${product.statusDate}` : "";
+  const reason = product.cancellationReason ? ` (${product.cancellationReason})` : "";
+  const name = product.product || "This product";
+  throw new PplsError(
+    `EPA lists ${name}, EPA Reg. No. ${product.reg}, as ${status}${since}${reason}. Labelhand plans only with products whose registration EPA lists as active.`,
+    422,
+  );
 }
 
 export function sha256(bytes: Uint8Array): string {

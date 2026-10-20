@@ -282,6 +282,33 @@ describe("label compile route", () => {
     expect(compileMock).not.toHaveBeenCalled();
   });
 
+  test("refuses a cancelled registration before downloading its label, even with a cached compile", async () => {
+    // The status fields EPA PPLS returned for Dropp SC, 264-700, on 2026-10-20, on the AXIAL XL fixture.
+    const item = { ...productFixture.items[0], product_status: "Inactive", product_status_date: "January 15, 2014", cancel_flag: "Yes", cancellationreason: "Company Request" };
+    const cached = compiled();
+    getRegistrationMock.mockResolvedValue({
+      reg: cached.reg,
+      product: cached.product,
+      fileName: cached.label_file,
+      accepted: cached.label_accepted,
+      labelUrl: cached.label_url,
+      sha256: cached.label_sha256,
+      pipelineVersion: cached.pipeline_version,
+    });
+    getCachedMock.mockResolvedValue(cached);
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue(new Response(JSON.stringify({ ...productFixture, items: [item] }), {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    }));
+    vi.stubGlobal("fetch", fetchMock);
+    await expect(readCompileStream(await POST(request()))).rejects.toThrow(
+      "EPA lists AXIAL XL, EPA Reg. No. 100-1256, as cancelled since January 15, 2014 (Company Request).",
+    );
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(getCachedMock).not.toHaveBeenCalled();
+    expect(compileMock).not.toHaveBeenCalled();
+  });
+
   test("returns 503 before opening a stream when the kill switch is off", async () => {
     vi.stubEnv("LIVE_COMPILE", "off");
     const response = await POST(request());

@@ -25,7 +25,7 @@ import {
   runColdCompile,
 } from "@/lib/live-limits";
 import { reserveSharedColdCompile } from "@/lib/live-ledger";
-import { assertFederalReg, fetchLabelPdf, listLabelVersions, PplsError } from "@/lib/ppls";
+import { assertActiveRegistration, assertFederalReg, fetchLabelPdf, listLabelVersions, PplsError } from "@/lib/ppls";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -201,6 +201,7 @@ export async function POST(request: NextRequest) {
           }
 
           throwIfAborted(workAbort.signal);
+          assertActiveRegistration(product);
           const version = product.versions[0];
           await send({
             type: "listed",

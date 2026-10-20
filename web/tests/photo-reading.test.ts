@@ -35,6 +35,9 @@ function product(overrides: Partial<PplsProduct> = {}): PplsProduct {
     reg: "100-1256",
     product: "AXIAL XL HERBICIDE",
     status: "Active",
+    statusDate: "",
+    cancelled: false,
+    cancellationReason: "",
     alternateBrandNames: [],
     versions: [{
       reg: "100-1256",
