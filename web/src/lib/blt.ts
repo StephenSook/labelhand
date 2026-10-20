@@ -31,8 +31,12 @@ export const BLT_CACHE_SECONDS = 3 * 60 * 60;
 // Positive controls. A "no limitations" answer counts only when both still return their known
 // PULAs: a point in Ware County, GA inside PULAs 91, 96, 97 and 110, and STRYAX HERBICIDE
 // (EPA Reg. No. 264-1241), limited in PULAs 111, 121, 122 and 123 (both checked 2026-10-20).
+// They are asked again for every empty answer, never cached: an outage that empties the map for
+// every point must not ride on a control that passed earlier.
 export const CONTROL_POINT = { lat: 31.31097, lon: -82.43219 } as const;
 export const CONTROL_REG = "264-1241";
+export const CONTROL_POINT_PULAS = [91, 96, 97, 110] as const;
+export const CONTROL_REG_PULAS = [111, 121, 122, 123] as const;
 
 const USER_AGENT = "labelhand (github.com/StephenSook/labelhand)";
 const POINT_FIELDS = "pula_id,core_pula_id,polygon_pula_id,event_name,effective_date";
@@ -290,18 +294,16 @@ async function candidatePulas(regs: string[], month: string, fetchImpl: typeof f
   return parseCandidatePulas(await fetchJson(candidatePulasUrl(regs, month), "BLT pulas_public", fetchImpl));
 }
 
-const controlCache = new Map<string, number>();
-
-async function controlsPass(month: string, fetchImpl: typeof fetch, now: number): Promise<boolean> {
-  const cachedUntil = controlCache.get(month);
-  if (cachedUntil !== undefined && cachedUntil > now) return true;
+// Both controls must return every PULA they are known to have. A non-empty answer that lacks them
+// is as untrustworthy as an empty one.
+async function controlsPass(month: string, fetchImpl: typeof fetch): Promise<boolean> {
   const [point, product] = await Promise.all([
     pointPulas(CONTROL_POINT.lat, CONTROL_POINT.lon, fetchImpl),
     candidatePulas([CONTROL_REG], month, fetchImpl),
   ]);
-  const passed = point.length > 0 && product.length > 0;
-  if (passed) controlCache.set(month, now + BLT_CACHE_SECONDS * 1000);
-  return passed;
+  const pointIds = new Set(point.map((pula) => pula.pula_id));
+  const productIds = new Set(product.map((pula) => pula.pula_id));
+  return CONTROL_POINT_PULAS.every((id) => pointIds.has(id)) && CONTROL_REG_PULAS.every((id) => productIds.has(id));
 }
 
 function unavailable(reason: string): BulletinCheck {
@@ -348,8 +350,8 @@ export async function checkBulletins(
     });
 
     if (matched.length === 0) {
-      if (!await controlsPass(query.month, fetchImpl, now.getTime())) {
-        return unavailable("EPA's control point or control product came back empty, so an empty answer here cannot be trusted.");
+      if (!await controlsPass(query.month, fetchImpl)) {
+        return unavailable("EPA's control point or control product did not return its known PULAs, so an empty answer here cannot be trusted.");
       }
       return checked([]);
     }
@@ -399,5 +401,4 @@ export async function checkBulletinsCached(
 
 export function clearBulletinCache(): void {
   answers.clear();
-  controlCache.clear();
 }

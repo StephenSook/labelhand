@@ -262,6 +262,31 @@ describe("the bulletin check", () => {
     if (result.status === "unavailable") expect(result.reason.length).toBeGreaterThan(0);
   });
 
+  // A control that answers with something other than its known PULAs proves nothing about the
+  // service. Both shapes below parse cleanly, so only the id check stops them.
+  test.each<[string, Record<string, Reply>]>([
+    ["the control point returns a PULA it is not in", {
+      [pointQueryUrl(CONTROL_POINT.lat, CONTROL_POINT.lon)]: { status: 200, body: { features: [{ attributes: { pula_id: 71 } }] } },
+    }],
+    ["the control product returns a PULA it is not limited in", {
+      [candidatePulasUrl([CONTROL_REG], MONTH)]: {
+        status: 200,
+        body: [{ pula_id: 1, core_pula_id: null, effective_date: "2020-01-01T00:00:00.000Z", status: "effective" }],
+      },
+    }],
+  ])("an empty answer is never returned when %s", async (_name, overrides) => {
+    const result = await checkBulletins(query(TIFT, TANK), fakeFetch(overrides).impl, NOW);
+    expect(result).toEqual({ status: "unavailable", reason: expect.stringContaining("known PULAs") });
+  });
+
+  test("the controls are asked again for every empty answer, so an earlier pass cannot cover a later outage", async () => {
+    expect((await checkBulletins(query(TIFT, TANK), fakeFetch().impl, NOW)).status).toBe("checked");
+    const later = fakeFetch({ [pointQueryUrl(CONTROL_POINT.lat, CONTROL_POINT.lon)]: { status: 200, body: { features: [] } } });
+    const result = await checkBulletins(query(TIFT, TANK), later.impl, new Date(NOW.getTime() + 60_000));
+    expect(result.status).toBe("unavailable");
+    expect(later.calls).toContain(pointQueryUrl(CONTROL_POINT.lat, CONTROL_POINT.lon));
+  });
+
   test("a matched PULA with no limitation text is unavailable, not checked", async () => {
     const result = await checkBulletins(query(DOOLY_PULA_121, [CONTROL_REG]), fakeFetch({
       [limitationsUrl([121], [CONTROL_REG])]: { status: 200, body: [] },
