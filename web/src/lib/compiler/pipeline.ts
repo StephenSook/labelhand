@@ -121,13 +121,15 @@ export interface CompiledLiveLabel extends ReadingReport {
   latency_ms: number;
   merged_from: string[];
   accepted: Array<MergedRule<CompilerRule>>;
+  // Set only on a stored compile served while EPA PPLS did not answer, so the registration was not
+  // rechecked as active. Never written to the cache.
+  status_unchecked?: true;
 }
 
 export type PipelineEvent =
   | { type: "listed"; reg: string; product: string; fileName: string; accepted: string }
   | { type: "pdf"; bytes: number; sha256: string; accepted: string }
-  // statusUnchecked: EPA PPLS did not answer, so the registration was not rechecked as active.
-  | { type: "cached"; compiled: CompiledLiveLabel; statusUnchecked?: boolean }
+  | { type: "cached"; compiled: CompiledLiveLabel }
   | { type: "extracted"; pages: number }
   | { type: "page"; n: number; of: number; accepted: number; rejected: number; reading?: number; attempt?: number }
   | { type: "typing"; done: number; of: number; reading?: number; attempt?: number }

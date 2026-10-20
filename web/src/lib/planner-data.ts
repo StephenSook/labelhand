@@ -25,6 +25,8 @@ export type LabelRecord = {
   // and its restricted-use status comes from the live compile's own page text.
   unscored?: true;
   restrictedUse?: boolean;
+  // A live label served from storage while EPA did not answer; its registration status was not rechecked.
+  statusUnchecked?: true;
 };
 
 export type LabelIndex = Record<string, LabelRecord>;

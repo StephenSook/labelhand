@@ -212,7 +212,7 @@ describe("label compile route", () => {
     });
     expect(result).toEqual(cached);
     expect(events.map(({ type }) => type)).toEqual(["listed", "cached"]);
-    expect(events[1]).not.toHaveProperty("statusUnchecked");
+    expect(result).not.toHaveProperty("status_unchecked");
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(compileMock).not.toHaveBeenCalled();
   });
@@ -256,10 +256,10 @@ describe("label compile route", () => {
     const result = await readCompileStream(await POST(request()), (event) => {
       events.push(event);
     });
-    expect(result).toEqual(cached);
     expect(events.map(({ type }) => type)).toEqual(["listed", "cached"]);
-    // The status check could not run, and the event says so.
-    expect(events[1]).toMatchObject({ type: "cached", statusUnchecked: true });
+    // The status check could not run, and the label served says so; the stored copy is not changed.
+    expect(result).toEqual({ ...cached, status_unchecked: true });
+    expect(cached).not.toHaveProperty("status_unchecked");
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(compileMock).not.toHaveBeenCalled();
   });

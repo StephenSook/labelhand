@@ -25,7 +25,6 @@ type Progress = {
   accepted?: string;
   kilobytes?: number;
   cached?: boolean;
-  statusUnchecked?: boolean;
   pages?: number;
   readings: Record<number, ReadingProgress>;
 };
@@ -50,7 +49,7 @@ export function advance(progress: Progress, event: PipelineEvent): Progress {
     case "pdf":
       return { ...progress, kilobytes: Math.round(event.bytes / 1024), accepted: event.accepted };
     case "cached":
-      return { ...progress, cached: true, statusUnchecked: event.statusUnchecked === true };
+      return { ...progress, cached: true };
     case "extracted":
       return { ...progress, pages: event.pages };
     case "page": {
@@ -171,7 +170,7 @@ export function AnyLabel({ disabled, liveLabels, onAdd, onRemove, shippedRegs = 
       onAdd(compiled);
       setResults(null);
       setQuery("");
-      if (progress.statusUnchecked) {
+      if (compiled.status_unchecked) {
         setMessage(`EPA's label system did not answer, so Labelhand could not recheck that EPA Reg. No. ${reg} is still active. Its rules come from the label read on ${compiled.compiled_utc.slice(0, 10)}.`);
       }
     } catch (error) {
@@ -286,6 +285,11 @@ export function AnyLabel({ disabled, liveLabels, onAdd, onRemove, shippedRegs = 
                   EPA Reg. {label.reg}, accepted {label.label_accepted}. {label.accepted.length} rules kept, {label.rejected.length} rejected by the guards.
                   {label.complete ? "" : " Some pages or second readings failed, so this reading is incomplete."}
                 </span>
+                {label.status_unchecked ? (
+                  <span className="mt-1 block text-xs font-black" data-status-unchecked>
+                    EPA&apos;s label system did not answer, so Labelhand could not recheck that this registration is still active.
+                  </span>
+                ) : null}
                 <span className="mt-1 block text-xs font-bold" data-reading-vote>{readingVote(label)}</span>
               </span>
               <button

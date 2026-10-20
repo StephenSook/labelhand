@@ -21,12 +21,6 @@ describe("live label progress", () => {
     expect(progress.readings[1]).toMatchObject({ pagesDone: 1, kept: 2, rejected: 1 });
   });
 
-  test("a cached result served while EPA did not answer is marked as not rechecked", () => {
-    const compiled = {} as CompiledLiveLabel;
-    expect(advance(EMPTY_PROGRESS, { type: "cached", compiled, statusUnchecked: true })).toMatchObject({ cached: true, statusUnchecked: true });
-    expect(advance(EMPTY_PROGRESS, { type: "cached", compiled })).toMatchObject({ cached: true, statusUnchecked: false });
-  });
-
   test("the vote line names each reading's count and the merged result", () => {
     const label = {
       reading_records: [3, 1, 2].map((reading) => ({ reading, accepted_rules: reading * 10 })),

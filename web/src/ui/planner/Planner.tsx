@@ -92,7 +92,7 @@ function liveFromQuery(value: string | undefined): string[] {
   return regs.filter((reg) => /^\d{1,6}-\d{1,5}$/.test(reg)).slice(0, MAX_LIVE_LABELS);
 }
 
-function liveLabelRecord(compiled: CompiledLiveLabel): LabelRecord {
+export function liveLabelRecord(compiled: CompiledLiveLabel): LabelRecord {
   return {
     reg: compiled.reg,
     product: compiled.product,
@@ -103,6 +103,7 @@ function liveLabelRecord(compiled: CompiledLiveLabel): LabelRecord {
     sha256: compiled.label_sha256,
     unscored: true,
     restrictedUse: compiled.restricted_use,
+    ...(compiled.status_unchecked ? { statusUnchecked: true as const } : {}),
   };
 }
 
@@ -793,7 +794,12 @@ function Results({ result, labels, pointName: selectedPointName, jobHours, windo
   const nextWindow = windows[0];
   const bulletinMonth = bulletinMonths(nextWindow?.start, nextWindow?.end);
   const tankLabel = products
-    .map((product) => product.reg && labels[product.reg]?.unscored ? `${product.shortName} (UNSCORED)` : product.shortName)
+    .map((product) => {
+      if (!product.reg || !labels[product.reg]?.unscored) return product.shortName;
+      return labels[product.reg]?.statusUnchecked
+        ? `${product.shortName} (UNSCORED, EPA STATUS NOT RECHECKED)`
+        : `${product.shortName} (UNSCORED)`;
+    })
     .join(", ");
   const tankDescription = products
     .map((product) => product.reg ? `${product.fullName}, EPA Reg. ${product.reg}` : product.fullName)
