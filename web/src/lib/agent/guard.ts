@@ -148,6 +148,20 @@ const THE_REST_DENIED = /\bthe rest\b(?:\s+\S+){0,6}?\s+(?:are|were)\s+(?:blocke
 const OTHER_IS_BLOCKED = /\b(?:the other|another)\b(?:\s+\S+){0,8}?\s+(?:is|are|was|were)\s+blocked\b/i;
 const OTHER_NOT_PERMITTED = /\b(?:the other|another)\b(?:\s+\S+){0,12}?\b(?:would block|not permitted|aren't permitted|isn't permitted)\b/i;
 
+// "No application window is permitted" while check_tank returned windows (Ask the tank, local run
+// 2026-10-20, wind-limit question): the count check reads digits and number words, not "no".
+const NO_WINDOW_CLAIM = new RegExp(
+  `\\bno(?:\\s+(?:${WINDOW_MODIFIER}|application|spray|spraying|job|\\d+-hour)){0,4}\\s+windows?\\b`,
+  "i",
+);
+
+function noWindowReasons(summary: string, permittedCount: number): string[] {
+  if (permittedCount === 0) return [];
+  const match = summary.match(NO_WINDOW_CLAIM);
+  if (!match) return [];
+  return [`The summary says "${match[0]}", but check_tank returned ${permittedCount} permitted windows.`];
+}
+
 function sentencesOf(summary: string): string[] {
   return summary.split(/(?<=[.!?])\s+/).map((part) => part.trim()).filter((part) => part.length > 0);
 }
@@ -304,6 +318,7 @@ export function guardFinalAnswer(
   reasons.push(...scriptAndEndingReasons(answer));
   reasons.push(...exclusivityReasons(answer.summary, windowRecords.length));
   reasons.push(...windowCountReasons(answer.summary, windowRecords.length));
+  reasons.push(...noWindowReasons(answer.summary, windowRecords.length));
   reasons.push(...scopeReasons(answer.summary, successfulResults, windowRecords));
 
   return { passed: reasons.length === 0, reasons };

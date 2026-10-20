@@ -424,3 +424,40 @@ describe("plural window counts", () => {
     )).toEqual({ passed: true, reasons: [] });
   });
 });
+
+describe("a summary that says no window while windows came back", () => {
+  const twoWindows: ToolResultRecord[] = [
+    {
+      name: "check_tank",
+      result: {
+        job_hours: 3,
+        windows: [
+          { index: 0, label: "Wed Oct 7, 1 PM to 7 PM (6 h)" },
+          { index: 1, label: "Thu Oct 8, 8 AM to 7 PM (11 h)" },
+        ],
+        binding_clauses: [{ rule_id: "5481-504-p8-4", page: 8, quote: "wind speed exceeds 10 mph" }],
+      },
+    },
+  ];
+  const noWindows: ToolResultRecord[] = [
+    { name: "check_tank", result: { job_hours: 3, windows: [], binding_clauses: [{ rule_id: "5481-504-p8-4", page: 8 }] } },
+  ];
+
+  test.each([
+    "No application window is permitted because forecast wind exceeds the limit.",
+    "There are no forecast-permitted windows this week.",
+    "No 3-hour window opens.",
+  ])("is refused when check_tank returned windows: %s", (summary) => {
+    const verdict = guardFinalAnswer({ summary, cited_rule_ids: [], window_indices: [] }, twoWindows);
+    expect(verdict.passed).toBe(false);
+    expect(verdict.reasons.join(" ")).toContain("check_tank returned 2 permitted windows");
+  });
+
+  test("passes when check_tank really returned none", () => {
+    expect(guardFinalAnswer({ summary: "No forecast-permitted window this week.", cited_rule_ids: ["5481-504-p8-4"], window_indices: [] }, noWindows).passed).toBe(true);
+  });
+
+  test("a sentence about a label limit with no window claim passes", () => {
+    expect(guardFinalAnswer({ summary: "All three labels set the same wind limit, so no label is stricter on wind.", cited_rule_ids: ["5481-504-p8-4"], window_indices: [0, 1] }, twoWindows).passed).toBe(true);
+  });
+});
