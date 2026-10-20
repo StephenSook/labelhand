@@ -1,6 +1,7 @@
 import { guardFinalAnswer, prepareFinalAnswer, type FinalAnswerArgs, type ToolResultRecord } from "./guard";
 import {
   AGENT_TOOL_NAMES,
+  FIELD_KEYS,
   createAgentToolRuntime,
   executeAgentTool,
   type AgentCheckSnapshot,
@@ -8,7 +9,7 @@ import {
   type AgentToolName,
 } from "./tools";
 
-export const AGENT_SYSTEM_PROMPT = `You help a Georgia cotton applicator understand the Labelhand planner. You must use check_tank before answering any question about forecast windows. You may state only facts that appear in tool results from this conversation. Never say spraying is legal. Say forecast-permitted and remind the user that field checks required by the label remain their responsibility. For a when or window question, call check_tank and then call final_answer directly with every returned window index. Do not state how many windows there are; the page lists every window index you return. Keep the summary under 300 characters, at most three short sentences. If no window is returned, say so in one sentence and name the clause that blocks the most hours. Counts in check_tank are hours, never windows. Use get_clause only when the user asks why or asks about a label limit. Never invent or abbreviate a rule ID. Copy a rule_id exactly from check_tank binding_clauses. End by calling final_answer with a summary, cited rule IDs, and window indices. Do not answer in ordinary text.`;
+export const AGENT_SYSTEM_PROMPT = `You help a Georgia cotton applicator understand the Labelhand planner. You must use check_tank before answering any question about forecast windows. When the user message ends with a page context line, call check_tank with exactly that field, those products, that job length and that forecast unless the question names others. Answer the question that was asked. For a question about a limit or which label is strictest, read the binding_clauses quotes, use get_clause for the full text, and name the product, the page and the limit. Do not describe windows unless the question asks when. You may state only facts that appear in tool results from this conversation. Never say spraying is legal. Say forecast-permitted and remind the user that field checks required by the label remain their responsibility. For a when or window question, call check_tank and then call final_answer directly with every returned window index. Do not state how many windows there are; the page lists every window index you return. Keep the summary under 300 characters, at most three short sentences. If no window is returned, say so in one sentence and name the clause that blocks the most hours. Counts in check_tank are hours, never windows. Use get_clause only when the user asks why or asks about a label limit. Never invent or abbreviate a rule ID. Copy a rule_id exactly from check_tank binding_clauses. End by calling final_answer with a summary, cited rule IDs, and window indices. Do not answer in ordinary text.`;
 
 type ToolCall = {
   id: string;
@@ -88,11 +89,42 @@ function isToolName(value: string): value is AgentToolName {
   return (AGENT_TOOL_NAMES as readonly string[]).includes(value);
 }
 
+// What the planner on the page is showing, so the agent checks the same field, tank, job length and
+// forecast instead of guessing them.
+export type AgentPageContext = {
+  field: string;
+  products: string[];
+  jobHours: number;
+  forecast: "live" | "recorded";
+};
+
+// Lightning followed the page's 3-hour job even when the question said "a 4-hour job", so a field
+// or job length named in the question replaces the page's value here, in code.
+function fieldNamedIn(question: string): string | undefined {
+  const text = question.toLowerCase();
+  return FIELD_KEYS.find((key) => new RegExp(`\\b${key.replace("_", "[ _-]")}\\b`).test(text));
+}
+
+function jobHoursNamedIn(question: string): number | undefined {
+  const match = question.match(/\b(\d{1,2})[\s-]*(?:hours?|hrs?)\b/i);
+  const hours = match ? Number(match[1]) : NaN;
+  return Number.isInteger(hours) && hours >= 1 && hours <= 12 ? hours : undefined;
+}
+
+export function questionWithContext(question: string, context?: AgentPageContext): string {
+  if (!context) return question;
+  const field = fieldNamedIn(question) ?? context.field;
+  const jobHours = jobHoursNamedIn(question) ?? context.jobHours;
+  const line = `Page context: field ${field}; products ${context.products.join(", ")}; job length ${jobHours} hours; forecast ${context.forecast}.`;
+  return `${question}\n\n${line}`;
+}
+
 export async function runAgentLoop(
   question: string,
   onStatus?: (status: string) => void,
+  context?: AgentPageContext,
 ): Promise<AgentRunResult> {
-  const messages: AgentMessage[] = [{ role: "user", content: question }];
+  const messages: AgentMessage[] = [{ role: "user", content: questionWithContext(question, context) }];
   const trace: AgentTraceEntry[] = [];
   const toolResults: ToolResultRecord[] = [];
   const runtime = createAgentToolRuntime();
@@ -105,11 +137,18 @@ export async function runAgentLoop(
       throw new Error(`The agent reached the 14-message conversation limit before final_answer. Partial trace: ${sequence}.`);
     }
     onStatus?.(`Calling Nemotron, model step ${callIndex + 1} of ${MAX_MODEL_CALLS}`);
-    const response = await fetch("/api/agent", {
+    const request = () => fetch("/api/agent", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ messages }),
     });
+    let response = await request();
+    // Token Factory sometimes stalls on a longer conversation and the route gives up at 25 s with a
+    // 504 (2026-10-20 04:30 UTC, production and local alike). One retry of the same step is cheap.
+    if (response.status === 504) {
+      onStatus?.(`Calling Nemotron, model step ${callIndex + 1} of ${MAX_MODEL_CALLS} (Token Factory was slow, trying once more)`);
+      response = await request();
+    }
     const payload = await response.json() as RouteResponse;
     if (!response.ok || !payload.message) {
       throw new Error(payload.error ?? `The agent route returned HTTP ${response.status}.`);

@@ -36,6 +36,11 @@ export const AGENT_TOOL_DEFINITIONS = [
             items: { type: "string", enum: ["5481-504", "264-700", "264-418"] },
           },
           job_hours: { type: "integer", minimum: 1, maximum: 12 },
+          forecast: {
+            type: "string",
+            enum: ["live", "recorded"],
+            description: "live fetches the NWS forecast now. recorded uses the forecast the page replays. Use the page context's value.",
+          },
         },
       },
     },
@@ -184,6 +189,10 @@ async function checkTank(args: unknown, runtime: AgentToolRuntime): Promise<Agen
   if (!Number.isInteger(jobHours) || (jobHours as number) < 1 || (jobHours as number) > 12) {
     throw new TypeError("check_tank job_hours must be an integer from 1 through 12.");
   }
+  if (input.forecast !== undefined && input.forecast !== "live" && input.forecast !== "recorded") {
+    throw new TypeError("check_tank forecast must be live or recorded.");
+  }
+  const wantRecorded = input.forecast === "recorded";
 
   const engine = await import("@/engine");
   const planner = await import("@/lib/planner-data");
@@ -200,7 +209,12 @@ async function checkTank(args: unknown, runtime: AgentToolRuntime): Promise<Agen
   let source: SourceKind = "LIVE";
   let periods: import("@/engine").ForecastPeriod[];
   let fetchedAt: string;
+  if (wantRecorded && !planner.REPLAY_POINTS.has(field)) {
+    throw new RangeError(`No recorded forecast exists for ${field}.`);
+  }
   try {
+    // The page may be replaying a recorded forecast; the agent then checks the same one.
+    if (wantRecorded) throw new Error("recorded forecast requested");
     const live = await planner.fetchLivePeriods(point.forecastHourly);
     periods = live.periods;
     fetchedAt = live.fetchedAt;

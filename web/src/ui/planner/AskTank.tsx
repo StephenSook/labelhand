@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { runAgentLoop, type AgentRunResult, type AgentTraceEntry } from "@/lib/agent/loop";
+import { runAgentLoop, type AgentPageContext, type AgentRunResult, type AgentTraceEntry } from "@/lib/agent/loop";
 import type { AgentCheckSnapshot } from "@/lib/agent/tools";
 import { WorkingCard, type WorkingStep } from "@/ui";
 import { ShowOnLabel } from "@/ui/ShowOnLabel";
@@ -14,6 +14,7 @@ const EXAMPLES = [
 
 type AskTankProps = {
   initialQuestion?: string;
+  context?: AgentPageContext;
   onCheck: (snapshot: AgentCheckSnapshot) => void;
   onClause: (ruleId: string) => void;
   onWindow: (index: number) => void;
@@ -68,7 +69,7 @@ function TraceRow({ entry }: { entry: AgentTraceEntry }) {
   );
 }
 
-export function AskTank({ initialQuestion, onCheck, onClause, onWindow }: AskTankProps) {
+export function AskTank({ initialQuestion, context, onCheck, onClause, onWindow }: AskTankProps) {
   const [question, setQuestion] = useState(initialQuestion ?? "");
   const [startedAt, setStartedAt] = useState<number | null>(null);
   const [status, setStatus] = useState("Calling Nemotron");
@@ -83,7 +84,7 @@ export function AskTank({ initialQuestion, onCheck, onClause, onWindow }: AskTan
     setStatus("Calling Nemotron");
     setStartedAt(Date.now());
     try {
-      const completed = await runAgentLoop(trimmed, setStatus);
+      const completed = await runAgentLoop(trimmed, setStatus, context);
       setResult(completed);
       if (completed.latestCheck) onCheck(completed.latestCheck);
     } catch (caught) {
