@@ -11,12 +11,8 @@ const FEDERAL_REG = /^\d{1,6}-\d{1,5}$/;
 
 type SearchResult = { reg: string; product: string; alternateBrandNames: string[] };
 
-type Progress = {
-  product?: string;
-  accepted?: string;
-  kilobytes?: number;
-  cached?: boolean;
-  pages?: number;
+type ReadingProgress = {
+  attempt: number;
   pagesDone: number;
   kept: number;
   rejected: number;
@@ -24,9 +20,29 @@ type Progress = {
   raised?: number;
 };
 
-const EMPTY_PROGRESS: Progress = { pagesDone: 0, kept: 0, rejected: 0 };
+type Progress = {
+  product?: string;
+  accepted?: string;
+  kilobytes?: number;
+  cached?: boolean;
+  pages?: number;
+  readings: Record<number, ReadingProgress>;
+};
 
-function advance(progress: Progress, event: PipelineEvent): Progress {
+const READINGS = [1, 2, 3] as const;
+export const EMPTY_PROGRESS: Progress = { readings: {} };
+const EMPTY_READING: ReadingProgress = { attempt: 1, pagesDone: 0, kept: 0, rejected: 0 };
+
+// Each of the three readings streams its own events. A retry starts that reading's count over;
+// an event without a reading number is treated as reading 1.
+function readingOf(progress: Progress, reading: number | undefined, attempt: number | undefined): [number, ReadingProgress] {
+  const key = reading ?? 1;
+  const current = progress.readings[key] ?? EMPTY_READING;
+  const next = attempt !== undefined && attempt > current.attempt ? { ...EMPTY_READING, attempt } : current;
+  return [key, next];
+}
+
+export function advance(progress: Progress, event: PipelineEvent): Progress {
   switch (event.type) {
     case "listed":
       return { ...progress, product: event.product, accepted: event.accepted };
@@ -36,12 +52,19 @@ function advance(progress: Progress, event: PipelineEvent): Progress {
       return { ...progress, cached: true };
     case "extracted":
       return { ...progress, pages: event.pages };
-    case "page":
-      return { ...progress, pages: event.of, pagesDone: progress.pagesDone + 1, kept: progress.kept + event.accepted, rejected: progress.rejected + event.rejected };
-    case "typing":
-      return { ...progress, typing: { done: event.done, of: event.of } };
-    case "floor":
-      return { ...progress, raised: event.raised };
+    case "page": {
+      const [key, reading] = readingOf(progress, event.reading, event.attempt);
+      const updated = { ...reading, pagesDone: reading.pagesDone + 1, kept: reading.kept + event.accepted, rejected: reading.rejected + event.rejected };
+      return { ...progress, pages: event.of, readings: { ...progress.readings, [key]: updated } };
+    }
+    case "typing": {
+      const [key, reading] = readingOf(progress, event.reading, event.attempt);
+      return { ...progress, readings: { ...progress.readings, [key]: { ...reading, typing: { done: event.done, of: event.of } } } };
+    }
+    case "floor": {
+      const [key, reading] = readingOf(progress, event.reading, event.attempt);
+      return { ...progress, readings: { ...progress.readings, [key]: { ...reading, raised: event.raised } } };
+    }
     default:
       return progress;
   }
@@ -259,6 +282,7 @@ export function AnyLabel({ disabled, liveLabels, onAdd, onRemove, shippedRegs = 
                   EPA Reg. {label.reg}, accepted {label.label_accepted}. {label.accepted.length} rules kept, {label.rejected.length} rejected by the guards.
                   {label.complete ? "" : " Some pages or second readings failed, so this reading is incomplete."}
                 </span>
+                <span className="mt-1 block text-xs font-bold" data-reading-vote>{readingVote(label)}</span>
               </span>
               <button
                 type="button"
@@ -277,6 +301,16 @@ export function AnyLabel({ disabled, liveLabels, onAdd, onRemove, shippedRegs = 
   );
 }
 
+// "Read three times: 58, 70 and 54 rules. 99 kept after merging, 33 found in every reading."
+export function readingVote(label: CompiledLiveLabel): string {
+  const counts = [...(label.reading_records ?? [])].sort((a, b) => a.reading - b.reading).map((record) => record.accepted_rules);
+  if (counts.length < 2) return "Read once.";
+  const every = label.accepted.filter((rule) => rule.found_in_runs?.length === counts.length).length;
+  const listed = `${counts.slice(0, -1).join(", ")} and ${counts.at(-1)}`;
+  const times = counts.length === 3 ? "three" : String(counts.length);
+  return `Read ${times} times: ${listed} rules. ${label.accepted.length} kept after merging, ${every} found in every reading.`;
+}
+
 function CompileProgress({ reg, progress, onStop }: { reg: string; progress: Progress; onStop: () => void }) {
   const steps: Array<{ label: string; done: boolean }> = [
     { label: progress.product ? `Found on EPA PPLS: ${progress.product}${progress.accepted ? `, accepted ${progress.accepted}` : ""}` : `Looking up EPA Reg. No. ${reg}`, done: Boolean(progress.product) },
@@ -286,23 +320,22 @@ function CompileProgress({ reg, progress, onStop }: { reg: string; progress: Pro
   } else {
     steps.push({ label: progress.kilobytes ? `Downloaded the label PDF, ${progress.kilobytes.toLocaleString("en-US")} KB` : "Downloading the label PDF", done: Boolean(progress.kilobytes) });
     steps.push({
-      label: progress.pages
-        ? `Nemotron 3 Super read ${progress.pagesDone} of ${progress.pages} pages: ${progress.kept} rules kept, ${progress.rejected} rejected by the guards`
-        : "Extracting the page text",
-      done: Boolean(progress.pages) && progress.pagesDone === progress.pages,
+      label: progress.pages ? `Extracted ${progress.pages} pages of text` : "Extracting the page text",
+      done: Boolean(progress.pages),
     });
-    if (progress.typing) {
-      steps.push({ label: `Nemotron 3 Ultra typed ${progress.typing.done} of ${progress.typing.of} weather rules`, done: progress.typing.done === progress.typing.of });
-    }
-    if (progress.raised !== undefined) {
-      steps.push({ label: `EPA's mandatory-wording rule raised ${progress.raised} ${progress.raised === 1 ? "rule" : "rules"}`, done: true });
-    }
   }
-  const fraction = progress.pages ? progress.pagesDone / progress.pages : 0;
+  const pages = progress.pages ?? 0;
+  const readingFraction = (reading: ReadingProgress | undefined) => {
+    if (!reading || !pages) return 0;
+    const read = Math.min(reading.pagesDone / pages, 1);
+    const typed = reading.typing ? (reading.typing.of ? reading.typing.done / reading.typing.of : 1) : 0;
+    return read * 0.8 + typed * 0.2;
+  };
+  const fraction = progress.cached ? 1 : READINGS.reduce((sum, reading) => sum + readingFraction(progress.readings[reading]), 0) / READINGS.length;
 
   return (
     <div className="mt-3 rounded-2xl border-2 border-[#14213d] bg-[#fbf7ee] p-3" aria-live="polite" data-compile-progress>
-      <div className="h-3 overflow-hidden rounded-full border-2 border-[#14213d] bg-white" role="progressbar" aria-label="Pages read" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(fraction * 100)}>
+      <div className="h-3 overflow-hidden rounded-full border-2 border-[#14213d] bg-white" role="progressbar" aria-label="Label reading progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(fraction * 100)}>
         <div className="h-full bg-[#2f8f4e] transition-[width] duration-300 motion-reduce:transition-none" style={{ width: `${Math.round(fraction * 100)}%` }} />
       </div>
       <ol className="mt-3 grid gap-1 text-sm font-bold">
@@ -313,6 +346,36 @@ function CompileProgress({ reg, progress, onStop }: { reg: string; progress: Pro
           </li>
         ))}
       </ol>
+      {!progress.cached && pages > 0 ? (
+        <div className="mt-3" data-readings>
+          <p className="text-sm font-bold">
+            Nemotron 3 Super reads the label three times, independently. Every rule any reading finds is kept, and the readings vote on
+            whether it is a MUST or a MUST NOT, the same merge as the three scored labels.
+          </p>
+          <ul className="mt-2 grid gap-2">
+            {READINGS.map((number) => {
+              const reading = progress.readings[number];
+              const done = Boolean(reading?.typing && reading.typing.done === reading.typing.of);
+              const detail = !reading
+                ? "starting"
+                : reading.typing
+                  ? `${reading.pagesDone} of ${pages} pages, ${reading.kept} rules kept; Nemotron 3 Ultra typed ${reading.typing.done} of ${reading.typing.of} weather rules`
+                  : `${reading.pagesDone} of ${pages} pages, ${reading.kept} rules kept, ${reading.rejected} rejected by the guards`;
+              return (
+                <li key={number} data-reading={number} className="grid gap-1 text-sm font-bold">
+                  <span>
+                    <span aria-hidden="true">{done ? "✓ " : "… "}</span>
+                    Reading {number}{reading && reading.attempt > 1 ? " (retry)" : ""}: {detail}
+                  </span>
+                  <span className="h-2 overflow-hidden rounded-full border-2 border-[#14213d] bg-white" aria-hidden="true">
+                    <span className="block h-full bg-[#2f8f4e] transition-[width] duration-300 motion-reduce:transition-none" style={{ width: `${Math.round(readingFraction(reading) * 100)}%` }} />
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ) : null}
       <button
         type="button"
         onClick={onStop}

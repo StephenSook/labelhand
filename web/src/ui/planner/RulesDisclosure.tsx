@@ -26,8 +26,8 @@ export function RulesDisclosure({ groups, labels }: { groups: FilteredRules[]; l
             <h3 id={`rules-${safeId(group.product)}`} className="display text-2xl">{group.product}</h3>
             {groupLabel?.unscored ? (
               <p className="mt-2 rounded-xl border-2 border-[#14213d] bg-[#ffc53d] px-3 py-2 text-sm font-bold" data-unscored-group>
-                UNSCORED: read live from EPA by Nemotron, one reading, no gold set. Every rule below passed the same quote and number
-                guards as the scored labels; check the sentence on the label before relying on it.
+                UNSCORED: read live from EPA by Nemotron three times and merged like the scored labels, but no gold set checks it. Every
+                rule below passed the same quote and number guards as the scored labels; check the sentence on the label before relying on it.
               </p>
             ) : null}
 

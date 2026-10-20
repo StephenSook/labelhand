@@ -3,7 +3,7 @@ import path from "node:path";
 import { expect, test, type Page } from "@playwright/test";
 
 // Both fixtures are real responses recorded from this app's routes on 2026-10-19 (EPA PPLS search,
-// then a live Nemotron compile of Axial XL, EPA Reg. 100-1256). Serving them keeps CI off the
+// then a live three-reading Nemotron compile of Axial XL, EPA Reg. 100-1256). Serving them keeps CI off the
 // owner's Token Factory credit while the page runs its real stream reader and planner.
 const fixtures = path.join(process.cwd(), "tests/fixtures/live");
 
@@ -23,7 +23,8 @@ test("a searched EPA label is compiled into the tank and checked as UNSCORED", a
 
   const chip = page.locator("[data-live-label='100-1256']");
   await expect(chip).toContainText("UNSCORED");
-  await expect(chip).toContainText("56 rules kept, 1 rejected by the guards");
+  await expect(chip).toContainText("128 rules kept, 1 rejected by the guards");
+  await expect(chip.locator("[data-reading-vote]")).toHaveText("Read three times: 62, 72 and 80 rules. 128 kept after merging, 28 found in every reading.");
   await expect(page).toHaveURL(/live=100-1256/);
 
   // Reopen the link the page wrote, on the recorded Tift forecast, so the check never waits on NWS.
