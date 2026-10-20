@@ -1,0 +1,50 @@
+{
+  "displayFieldName": "event_name",
+  "fieldAliases": {
+    "pula_id": "pula_id",
+    "core_pula_id": "core_pula_id",
+    "polygon_pula_id": "polygon_pula_id",
+    "event_name": "event_name",
+    "effective_date": "effective_date"
+  },
+  "fields": [
+    {
+      "name": "pula_id",
+      "type": "esriFieldTypeInteger",
+      "alias": "pula_id"
+    },
+    {
+      "name": "core_pula_id",
+      "type": "esriFieldTypeInteger",
+      "alias": "core_pula_id"
+    },
+    {
+      "name": "polygon_pula_id",
+      "type": "esriFieldTypeInteger",
+      "alias": "polygon_pula_id"
+    },
+    {
+      "name": "event_name",
+      "type": "esriFieldTypeString",
+      "alias": "event_name",
+      "length": 200
+    },
+    {
+      "name": "effective_date",
+      "type": "esriFieldTypeDate",
+      "alias": "effective_date",
+      "length": 8
+    }
+  ],
+  "features": [
+    {
+      "attributes": {
+        "pula_id": 121,
+        "core_pula_id": 121,
+        "polygon_pula_id": 121,
+        "event_name": "Dicamba 2026",
+        "effective_date": 1770595200000
+      }
+    }
+  ]
+}

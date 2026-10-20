@@ -1,0 +1,62 @@
+{
+  "point-tift.json": {
+    "url": "https://blt.epa.gov/arcgis/rest/services/BLT/PesticideUsageLimitationAreas/MapServer/0/query?geometry=-83.6%2C31.4&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=pula_id%2Ccore_pula_id%2Cpolygon_pula_id%2Cevent_name%2Ceffective_date&returnGeometry=false&f=json",
+    "http_status": 200,
+    "fetched_utc": "2026-10-20T20:54:03.307Z",
+    "note": "Labelhand tift field point: no PULA contains it."
+  },
+  "point-ware-control.json": {
+    "url": "https://blt.epa.gov/arcgis/rest/services/BLT/PesticideUsageLimitationAreas/MapServer/0/query?geometry=-82.43219%2C31.31097&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=pula_id%2Ccore_pula_id%2Cpolygon_pula_id%2Cevent_name%2Ceffective_date&returnGeometry=false&f=json",
+    "http_status": 200,
+    "fetched_utc": "2026-10-20T20:54:03.399Z",
+    "note": "Control point in Ware County: inside PULAs 91, 96, 97 and 110."
+  },
+  "point-dooly-pula-121.json": {
+    "url": "https://blt.epa.gov/arcgis/rest/services/BLT/PesticideUsageLimitationAreas/MapServer/0/query?geometry=-83.73173%2C32.21361&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=pula_id%2Ccore_pula_id%2Cpolygon_pula_id%2Cevent_name%2Ceffective_date&returnGeometry=false&f=json",
+    "http_status": 200,
+    "fetched_utc": "2026-10-20T20:54:03.560Z",
+    "note": "A point inside PULA 121 (Dicamba 2026) in Dooly County."
+  },
+  "candidates-labelhand-tank-2026-11.json": {
+    "url": "https://blt.epa.gov/blt/api/pulas_public?where=%7B%22limitations%22%3A%7B%22product_registration_number%22%3A%7B%22in%22%3A%5Bnull%2C%22264-418%22%2C%22264-700%22%2C%225481-504%22%5D%7D%7D%2C%22effective_date%22%3A%7B%22%3C%22%3A%2212%2F1%2F2026%22%7D%7D&select=%7B%22pula_id%22%3A1%2C%22core_pula_id%22%3A1%2C%22effective_date%22%3A1%2C%22status%22%3A1%7D",
+    "http_status": 200,
+    "fetched_utc": "2026-10-20T20:54:03.775Z",
+    "note": "Folex 6 EC, Dropp SC and Prep for November 2026: no PULA lists them."
+  },
+  "candidates-stryax-2026-11.json": {
+    "url": "https://blt.epa.gov/blt/api/pulas_public?where=%7B%22limitations%22%3A%7B%22product_registration_number%22%3A%7B%22in%22%3A%5Bnull%2C%22264-1241%22%5D%7D%7D%2C%22effective_date%22%3A%7B%22%3C%22%3A%2212%2F1%2F2026%22%7D%7D&select=%7B%22pula_id%22%3A1%2C%22core_pula_id%22%3A1%2C%22effective_date%22%3A1%2C%22status%22%3A1%7D",
+    "http_status": 200,
+    "fetched_utc": "2026-10-20T20:54:03.873Z",
+    "note": "Control product STRYAX HERBICIDE for November 2026: PULAs 111, 121, 122 and 123."
+  },
+  "limitations-stryax-pula-121.json": {
+    "url": "https://blt.epa.gov/blt/api/limitations_public?where=%7B%22pula_id%22%3A%7B%22in%22%3A%5B121%5D%7D%2C%22product_registration_number%22%3A%7B%22in%22%3A%5Bnull%2C%22264-1241%22%5D%7D%7D&select=%7B%22limitation_id%22%3A1%2C%22pula_id%22%3A1%2C%22code%22%3A1%2C%22product_registration_number%22%3A1%2C%22limitation%22%3A1%7D",
+    "http_status": 200,
+    "fetched_utc": "2026-10-20T20:54:04.013Z",
+    "note": "STRYAX limitations inside PULA 121."
+  },
+  "point-error-unknown-field.json": {
+    "url": "https://blt.epa.gov/arcgis/rest/services/BLT/PesticideUsageLimitationAreas/MapServer/0/query?geometry=-83.6%2C31.4&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=pula_idX&returnGeometry=false&f=json",
+    "http_status": 200,
+    "fetched_utc": "2026-10-20T20:54:04.142Z",
+    "note": "The PULA map answers a query error with HTTP 200 and an error object."
+  },
+  "point-truncated-bad-geometry.json": {
+    "url": "https://blt.epa.gov/arcgis/rest/services/BLT/PesticideUsageLimitationAreas/MapServer/0/query?geometry=abc&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=pula_id&returnGeometry=false&f=json",
+    "http_status": 200,
+    "fetched_utc": "2026-10-20T20:54:04.262Z",
+    "note": "An unreadable geometry makes the PULA map return every PULA with exceededTransferLimit true. Kept: first 3 features."
+  },
+  "limitations-ignored-filter.json": {
+    "url": "https://blt.epa.gov/blt/api/limitations_public?where=%7B%22product_registration_numberX%22%3A%22264-1241%22%7D&select=%7B%22limitation_id%22%3A1%2C%22pula_id%22%3A1%2C%22code%22%3A1%2C%22product_registration_number%22%3A1%2C%22limitation%22%3A1%7D",
+    "http_status": 200,
+    "fetched_utc": "2026-10-20T20:54:04.414Z",
+    "note": "BLT ignores an unknown where field and returns every limitation. Kept: first 2 rows."
+  },
+  "limitations-invalid-where-400.json": {
+    "url": "https://blt.epa.gov/blt/api/limitations_public?where=%7Bbad",
+    "http_status": 400,
+    "fetched_utc": "2026-10-20T20:54:14.630Z",
+    "note": "BLT answers a where that is not JSON with HTTP 400."
+  }
+}

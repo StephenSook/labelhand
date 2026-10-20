@@ -1,0 +1,31 @@
+{
+  "displayFieldName": "event_name",
+  "fieldAliases": {
+    "pula_id": "pula_id"
+  },
+  "fields": [
+    {
+      "name": "pula_id",
+      "type": "esriFieldTypeInteger",
+      "alias": "pula_id"
+    }
+  ],
+  "features": [
+    {
+      "attributes": {
+        "pula_id": 71
+      }
+    },
+    {
+      "attributes": {
+        "pula_id": 71
+      }
+    },
+    {
+      "attributes": {
+        "pula_id": 71
+      }
+    }
+  ],
+  "exceededTransferLimit": true
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "pula_id": 122,
+    "core_pula_id": 122,
+    "effective_date": "2026-02-09T05:00:00.000Z",
+    "status": "effective"
+  },
+  {
+    "pula_id": 123,
+    "core_pula_id": 123,
+    "effective_date": "2026-02-09T05:00:00.000Z",
+    "status": "effective"
+  },
+  {
+    "pula_id": 111,
+    "core_pula_id": 111,
+    "effective_date": "2026-02-09T05:00:00.000Z",
+    "status": "effective"
+  },
+  {
+    "pula_id": 121,
+    "core_pula_id": 121,
+    "effective_date": "2026-02-09T05:00:00.000Z",
+    "status": "effective"
+  }
+]

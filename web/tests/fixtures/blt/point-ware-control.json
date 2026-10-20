@@ -1,0 +1,77 @@
+{
+  "displayFieldName": "event_name",
+  "fieldAliases": {
+    "pula_id": "pula_id",
+    "core_pula_id": "core_pula_id",
+    "polygon_pula_id": "polygon_pula_id",
+    "event_name": "event_name",
+    "effective_date": "effective_date"
+  },
+  "fields": [
+    {
+      "name": "pula_id",
+      "type": "esriFieldTypeInteger",
+      "alias": "pula_id"
+    },
+    {
+      "name": "core_pula_id",
+      "type": "esriFieldTypeInteger",
+      "alias": "core_pula_id"
+    },
+    {
+      "name": "polygon_pula_id",
+      "type": "esriFieldTypeInteger",
+      "alias": "polygon_pula_id"
+    },
+    {
+      "name": "event_name",
+      "type": "esriFieldTypeString",
+      "alias": "event_name",
+      "length": 200
+    },
+    {
+      "name": "effective_date",
+      "type": "esriFieldTypeDate",
+      "alias": "effective_date",
+      "length": 8
+    }
+  ],
+  "features": [
+    {
+      "attributes": {
+        "pula_id": 110,
+        "core_pula_id": 110,
+        "polygon_pula_id": 110,
+        "event_name": "NMFS Methomyl 2025",
+        "effective_date": 1754870400000
+      }
+    },
+    {
+      "attributes": {
+        "pula_id": 91,
+        "core_pula_id": 91,
+        "polygon_pula_id": 91,
+        "event_name": "NMFS BiOps 2024",
+        "effective_date": 1711670400000
+      }
+    },
+    {
+      "attributes": {
+        "pula_id": 97,
+        "core_pula_id": 97,
+        "polygon_pula_id": 97,
+        "event_name": "NMFS BiOps 2024",
+        "effective_date": 1711584000000
+      }
+    },
+    {
+      "attributes": {
+        "pula_id": 96,
+        "core_pula_id": 96,
+        "polygon_pula_id": 96,
+        "event_name": "NMFS BiOps 2024",
+        "effective_date": 1711584000000
+      }
+    }
+  ]
+}
