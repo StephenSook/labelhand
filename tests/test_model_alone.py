@@ -39,6 +39,46 @@ def test_prompt_contains_tagged_pages_states_and_forecast_without_compiled_rules
     assert data["rules"][0]["id"] not in prompt
 
 
+def test_prompt_and_schema_do_not_depend_on_model():
+    data = fixture()
+    periods = data["periods"][:2]
+    pages = {registration: {} for registration in model_alone.REGISTRATIONS}
+    for rule in data["rules"]:
+        page = pages[rule["reg"]].setdefault(rule["page"], [{"reading": "fixture-rules", "text": ""}])
+        page[0]["text"] += rule["quote"] + "\n"
+
+    prompt = model_alone.build_prompt(pages, periods)
+    bodies = [model_alone.request_body(prompt, model) for model in model_alone.PRICES]
+    for body, model in zip(bodies, model_alone.PRICES, strict=True):
+        assert body["model"] == model
+        assert body["messages"] == bodies[0]["messages"]
+        assert body["response_format"] == bodies[0]["response_format"]
+        assert body["temperature"] == 0
+        assert body["chat_template_kwargs"] == {"enable_thinking": False}
+
+
+def test_preregistration_records_selected_model_and_budget():
+    model = "nvidia/Nemotron-3-Ultra-550b-a55b"
+    receipt = model_alone.preregistration("2026-10-19T00:00:00+00:00", model, 2.5)
+
+    assert receipt["model_alone"]["model"] == model
+    assert receipt["budget"]["maximum_usd"] == 2.5
+
+
+def test_public_summary_records_selected_model_and_receipt_source():
+    result = {
+        "schema_version": 1,
+        "preregistration": {"model_alone": {"model": "nvidia/Nemotron-3_5-Lightning"}},
+        "run": {"finished_utc": "2026-10-19T00:00:00+00:00", "status": "complete"},
+        "summary": {"unsafe_go": [], "lost_window": [], "hours_compared": 1},
+    }
+
+    summary = model_alone.public_summary(result, "eval/results/lightning.json")
+
+    assert summary["model"] == "nvidia/Nemotron-3_5-Lightning"
+    assert summary["source"] == "eval/results/lightning.json"
+
+
 def test_sample_selection_picks_first_recording_after_seven_and_ignores_earlier_recording():
     data = fixture()
     original = dt.datetime.fromisoformat(data["forecast_fetched_utc"])

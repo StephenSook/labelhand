@@ -12,6 +12,7 @@ import copy
 import datetime as dt
 import hashlib
 import json
+import math
 import os
 import pathlib
 import sys
@@ -30,7 +31,7 @@ import checkback  # noqa: E402
 import windows  # noqa: E402
 from compile_label import BASE, PRICES, guard, norm  # noqa: E402
 
-MODEL = "nvidia/nemotron-3-super-120b-a12b"
+DEFAULT_MODEL = "nvidia/nemotron-3-super-120b-a12b"
 REGISTRATIONS = ("5481-504", "264-700", "264-418")
 SAMPLE_DATES = (dt.date(2026, 10, 6), dt.date(2026, 10, 10), dt.date(2026, 10, 14))
 LOCAL_ZONE_NAME = "America/New_York"
@@ -81,7 +82,7 @@ def utc_now() -> str:
     return dt.datetime.now(dt.UTC).isoformat(timespec="seconds")
 
 
-def preregistration(locked_utc: str) -> dict[str, Any]:
+def preregistration(locked_utc: str, model: str = DEFAULT_MODEL, budget_usd: float = BUDGET_USD) -> dict[str, Any]:
     """The design written to the receipt before the first model call."""
     return {
         "locked_before_first_model_call_utc": locked_utc,
@@ -99,7 +100,7 @@ def preregistration(locked_utc: str) -> dict[str, Any]:
         },
         "horizon_hours": HORIZON_HOURS,
         "model_alone": {
-            "model": MODEL,
+            "model": model,
             "temperature": 0,
             "response": "strict JSON schema",
             "response_schema_revision": 2,
@@ -139,7 +140,7 @@ def preregistration(locked_utc: str) -> dict[str, Any]:
             "response tokens, latency, and list-price cost per call",
         ],
         "budget": {
-            "maximum_usd": BUDGET_USD,
+            "maximum_usd": budget_usd,
             "policy": "stop with a partial receipt before the next call whose conservative maximum would exceed the budget",
             "retries": "at most two retries after the first failed attempt, with backoff; every attempt is recorded",
         },
@@ -280,9 +281,9 @@ RECORDED NWS FORECAST, FIRST {len(periods)} HOURS
 """
 
 
-def request_body(prompt: str) -> dict[str, Any]:
+def request_body(prompt: str, model: str = DEFAULT_MODEL) -> dict[str, Any]:
     return {
-        "model": MODEL,
+        "model": model,
         "temperature": 0,
         "max_tokens": MAX_TOKENS,
         "messages": [{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": prompt}],
@@ -298,7 +299,7 @@ def request_estimate(body: dict[str, Any]) -> dict[str, Any]:
     encoded = json.dumps(body, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
     heuristic_input = (len(encoded) + 3) // 4
     input_upper_bound = len(encoded)
-    input_price, output_price = PRICES[MODEL]
+    input_price, output_price = PRICES[body["model"]]
     maximum_cost = input_upper_bound / 1_000_000 * input_price + MAX_TOKENS / 1_000_000 * output_price
     return {
         "request_bytes": len(encoded),
@@ -546,10 +547,10 @@ def validate_usage(value: Any) -> dict[str, Any]:
     return value
 
 
-def cost_from_usage(usage: dict[str, Any]) -> float:
+def cost_from_usage(usage: dict[str, Any], model: str) -> float:
     prompt_tokens = usage["prompt_tokens"]
     completion_tokens = usage["completion_tokens"]
-    input_price, output_price = PRICES[MODEL]
+    input_price, output_price = PRICES[model]
     return prompt_tokens / 1_000_000 * input_price + completion_tokens / 1_000_000 * output_price
 
 
@@ -609,7 +610,7 @@ def model_attempt(body: dict[str, Any], key: str, attempt_number: int) -> tuple[
     try:
         usage = validate_usage(raw_usage)
         record["usage"] = usage
-        record["cost_usd"] = round(cost_from_usage(usage), 8)
+        record["cost_usd"] = round(cost_from_usage(usage, body["model"]), 8)
         choices = payload["choices"]
         if not isinstance(choices, list) or len(choices) != 1:
             raise ValueError("response must contain exactly one choice")
@@ -711,20 +712,20 @@ def summarize(result: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def public_summary(result: dict[str, Any]) -> dict[str, Any]:
+def public_summary(result: dict[str, Any], source: str) -> dict[str, Any]:
     summary = copy.deepcopy(result["summary"])
     unsafe_go = summary.pop("unsafe_go")
     summary.pop("lost_window")
     return {
         "schema_version": result["schema_version"],
         "generated_utc": result["run"].get("finished_utc"),
-        "model": MODEL,
+        "model": result["preregistration"]["model_alone"]["model"],
         "tank_registrations": list(REGISTRATIONS),
         "sample_dates_local": [day.isoformat() for day in SAMPLE_DATES],
         "status": result["run"]["status"],
         "pooled": summary,
         "unsafe_go_hours": unsafe_go,
-        "source": "eval/results/model-alone-2026-10-19.json",
+        "source": source,
     }
 
 
@@ -734,10 +735,15 @@ def persist(result: dict[str, Any], out: pathlib.Path, summary_out: pathlib.Path
     result["summary"] = summarize(result)
     write_json(out, result)
     if summary_out is not None:
-        write_json(summary_out, public_summary(result))
+        resolved_out = out.resolve()
+        try:
+            source = resolved_out.relative_to(ROOT.resolve()).as_posix()
+        except ValueError:
+            source = resolved_out.as_posix()
+        write_json(summary_out, public_summary(result, source))
 
 
-def dry_run(cases: list[dict[str, Any]], label_pages: dict[str, dict[int, list[dict[str, str]]]]) -> int:
+def dry_run(cases: list[dict[str, Any]], label_pages: dict[str, dict[int, list[dict[str, str]]]], model: str) -> int:
     totals = {"cases": len(cases), "missing": 0, "estimated_input_tokens": 0, "input_token_upper_bound": 0, "conservative_maximum_cost_usd": 0.0}
     for case in cases:
         issuance = case["issuance"]
@@ -747,7 +753,7 @@ def dry_run(cases: list[dict[str, Any]], label_pages: dict[str, dict[int, list[d
             continue
         periods = issuance["periods"][:HORIZON_HOURS]
         prompt = build_prompt(label_pages, periods)
-        estimate = request_estimate(request_body(prompt))
+        estimate = request_estimate(request_body(prompt, model))
         totals["estimated_input_tokens"] += estimate["estimated_input_tokens"]
         totals["input_token_upper_bound"] += estimate["input_token_upper_bound"]
         totals["conservative_maximum_cost_usd"] += estimate["conservative_maximum_cost_usd"]
@@ -769,9 +775,11 @@ def run_evaluation(
     recorded_stats: dict[str, Any],
     observation_stats: dict[str, Any],
     recorded_root: pathlib.Path,
+    model: str,
+    budget_usd: float,
 ) -> int:
     locked_utc = utc_now()
-    prereg = preregistration(locked_utc)
+    prereg = preregistration(locked_utc, model, budget_usd)
     prereg_hash = canonical_hash(prereg)
     result = {
         "schema_version": 1,
@@ -837,7 +845,7 @@ def run_evaluation(
 
         periods = issuance["periods"][:HORIZON_HOURS]
         prompt = build_prompt(label_pages, periods)
-        body = request_body(prompt)
+        body = request_body(prompt, model)
         estimate = request_estimate(body)
         case.update(
             {
@@ -855,8 +863,8 @@ def run_evaluation(
         parsed = None
         for attempt_number in range(1, MAX_ATTEMPTS + 1):
             projected = estimate["conservative_maximum_cost_usd"]
-            if budget_liability + projected > BUDGET_USD:
-                case.update({"status": "stopped_budget", "error": f"next call maximum would exceed USD {BUDGET_USD:.2f}"})
+            if budget_liability + projected > budget_usd:
+                case.update({"status": "stopped_budget", "error": f"next call maximum would exceed USD {budget_usd:.2f}"})
                 result["run"]["stop_reason"] = case["error"]
                 budget_stopped = True
                 persist(result, out, summary_out, prereg_hash)
@@ -950,6 +958,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--text-dir", required=True, type=pathlib.Path)
     parser.add_argument("--out", required=True, type=pathlib.Path)
     parser.add_argument("--summary-out", type=pathlib.Path)
+    parser.add_argument("--model", choices=tuple(PRICES), default=DEFAULT_MODEL)
+    parser.add_argument("--budget-usd", type=float, default=BUDGET_USD)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--cases", type=int)
     args = parser.parse_args(argv)
@@ -962,10 +972,12 @@ def main(argv: list[str] | None = None) -> int:
         raise SystemExit(f"expected 30 point-date cases, found {len(all_cases)}")
     if args.cases is not None and not 1 <= args.cases <= len(all_cases):
         parser.error(f"--cases must be from 1 through {len(all_cases)}")
+    if not math.isfinite(args.budget_usd) or args.budget_usd <= 0:
+        parser.error("--budget-usd must be a finite number greater than zero")
     cases = all_cases[: args.cases] if args.cases is not None else all_cases
     label_pages = load_label_pages(args.text_dir)
     if args.dry_run:
-        return dry_run(cases, label_pages)
+        return dry_run(cases, label_pages, args.model)
 
     observations_by_point, observation_stats = checkback.load_observations(args.recorded)
     point_cache = json.loads(windows.CACHE.read_text(encoding="utf-8"))
@@ -980,6 +992,8 @@ def main(argv: list[str] | None = None) -> int:
         recorded_stats=recorded_stats,
         observation_stats=observation_stats,
         recorded_root=args.recorded,
+        model=args.model,
+        budget_usd=args.budget_usd,
     )
 
 
