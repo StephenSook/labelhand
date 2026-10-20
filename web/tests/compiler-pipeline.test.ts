@@ -179,11 +179,14 @@ describe("live compiler pipeline", () => {
     expect(events[0]?.type).toBe("pdf");
     expect(events[1]?.type).toBe("extracted");
     expect(events.at(-1)?.type).toBe("done");
-    expect(events.filter(({ type }) => type === "page")).toEqual([
-      expect.objectContaining({ reading: 1, attempt: 1, n: 1, of: 1 }),
-    ]);
-    expect(events.filter(({ type }) => type === "typing")).toHaveLength(1);
-    expect(events.filter(({ type }) => type === "floor")).toHaveLength(1);
+    // Every reading streams its own progress, tagged, so the page can show all three advance.
+    const pages = events.filter(({ type }) => type === "page");
+    expect(pages).toHaveLength(3);
+    expect(pages).toEqual(expect.arrayContaining([1, 2, 3].map((reading) => (
+      expect.objectContaining({ reading, attempt: 1, n: 1, of: 1 })
+    ))));
+    expect(events.filter(({ type }) => type === "typing")).toHaveLength(3);
+    expect(events.filter(({ type }) => type === "floor")).toHaveLength(3);
 
     const wasm = await readFile(path.join(process.cwd(), "src/engine/pkg/labelhand_core_bg.wasm"));
     await initializeEngine(new Uint8Array(wasm).buffer);
@@ -213,9 +216,14 @@ describe("live compiler pipeline", () => {
     expect(compiled.reading_records.map(({ attempts }) => attempts).sort()).toEqual([1, 1, 2]);
     expect(compiled.request_ids).toHaveLength(6);
     expect(compiled.total_tokens).toBe(6_600);
-    expect(events.filter(({ type }) => type === "page")).toEqual([
+    // The failed first attempt never reached a page, so reading 1 reports only its retry.
+    const pages = events.filter(({ type }) => type === "page");
+    expect(pages).toHaveLength(3);
+    expect(pages).toEqual(expect.arrayContaining([
       expect.objectContaining({ reading: 1, attempt: 2, n: 1, of: 1 }),
-    ]);
+      expect.objectContaining({ reading: 2, attempt: 1, n: 1, of: 1 }),
+      expect.objectContaining({ reading: 3, attempt: 1, n: 1, of: 1 }),
+    ]));
   });
 
   test("fails closed with a named reading error after its retry", async () => {

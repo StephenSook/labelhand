@@ -520,8 +520,9 @@ async function compileReadingWithRetry(
 
   for (let attempt = 1; attempt <= 2; attempt += 1) {
     throwIfAborted(signal);
-    const attemptEvents: PipelineEvent[] = [];
     try {
+      // Every reading streams its own progress, tagged with its reading and attempt, so the page
+      // can show three readings advance side by side and restart a reading's count on a retry.
       const report = await compileReadingAttempt(
         input,
         pages,
@@ -534,17 +535,10 @@ async function compileReadingWithRetry(
           if (requestId) requestIds.push(requestId);
           onBilled(item, requestId);
         },
-        (event) => {
-          attemptEvents.push(event);
-        },
+        emit,
       );
       lastReport = report;
       if (report.complete) {
-        // The existing client counts legacy progress events. Publish one complete
-        // reading so three internal readings do not appear as three label passes.
-        if (reading === 1) {
-          for (const event of attemptEvents) await emit(event);
-        }
         const completeReport: ReadingReport = {
           ...report,
           tokens_in: usage.inputTokens,
