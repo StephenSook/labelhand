@@ -12,15 +12,22 @@ Labelhand compiles EPA pesticide labels into typed rules that retain the quoted 
 
 | Claim | Exact value | Source | Tag |
 |---|---|---|---|
-| Gold-set version | `"v0"` | `json:eval/gold_v0.json#version` | MEASURED |
-| Gold-set creation date | `"2026-10-05"` | `json:eval/gold_v0.json#created` | MEASURED |
-| Gold-set clause count | `46` | `json:eval/results/ship.json#overall.gold`; cross-check command: `uv run python -c "import json;print(sum(map(len,json.load(open('eval/gold_v0.json'))['labels'].values())))"`; output: `46` | MEASURED |
+| Gold set scoring the shipped tank | `"v1"` | `json:eval/gold_v1.json#version` | MEASURED |
+| Gold-set v1 creation date | `"2026-10-20"` | `json:eval/gold_v1.json#created` | MEASURED |
+| Gold-set v1 clause count | `64` | `json:eval/results/ship.json#overall.gold`; cross-check command: `uv run python -c "import json;print(sum(map(len,json.load(open('eval/gold_v1.json'))['labels'].values())))"`; output: `64` | MEASURED |
+| Gold-set v1 clauses per label | `{"5481-504":24,"228-653":27,"228-659":13}` | command: count `labels` entries in `eval/gold_v1.json`; output: `5481-504=24, 228-653=27, 228-659=13`; the 24 Folex clauses equal v0's (`tests/test_gold_record.py`) | MEASURED |
+| Gold-set v1 written before any compile of its new labels | `"The 228-653 and 228-659 clauses were written before any compiled output for those labels existed."` | `json:eval/gold_v1.json#annotator` (stated by the annotator; the order of work is not machine-checkable) | SOURCED |
+| Gold-set version, development tank | `"v0"` | `json:eval/gold_v0.json#version` | MEASURED |
+| Gold-set v0 creation date | `"2026-10-05"` | `json:eval/gold_v0.json#created` | MEASURED |
+| Gold-set v0 clause count | `46` | `json:eval/results/ship_gold_v0.json#overall.gold`; cross-check command: `uv run python -c "import json;print(sum(map(len,json.load(open('eval/gold_v0.json'))['labels'].values())))"`; output: `46` | MEASURED |
 | Gold-set review status | `"not yet reviewed by an outside expert; labelled as our own annotation until it is"` | `json:eval/gold_v0.json#review_status` | MEASURED |
 | Gold-set scope | `"clauses the spray-window planner uses: wind, temperature inversion, rain, air and night temperature, open-boll stage, buffers, release or nozzle height, droplet size, re-entry interval. Rate tables, first aid, storage, mixing order and aerial boom geometry are out of scope for v0."` | `json:eval/gold_v0.json#scope` | MEASURED |
 
 The metric object in each row uses these exact keys: `coverage_recall`, `typed_recall`, `value_exact`, `modality_acc`, `acting_precision`, and `acting_recall`. Acting rules are rules whose modality is `MUST` or `MUST_NOT`. The shipped score uses strict acting precision, so an acting prediction only matches an acting gold clause.
 
 ### Every committed score configuration
+
+These rows score the development tank (Folex 6 EC, Dropp SC, Prep) on gold v0, the labels the pipeline was built on. The shipped tank's rows follow.
 
 | Claim | Exact value | Source | Tag |
 |---|---|---|---|
@@ -43,12 +50,27 @@ The metric object in each row uses these exact keys: `coverage_recall`, `typed_r
 | p2 run three, modality floor | `{"coverage_recall":0.957,"typed_recall":0.957,"value_exact":0.941,"modality_acc":0.886,"acting_precision":1.0,"acting_recall":1.0}` | `json:eval/results/p2r3_union_typed_v3mf.json#overall` | MEASURED |
 | p2 run three, three typing votes | `{"coverage_recall":0.957,"typed_recall":0.957,"value_exact":0.941,"modality_acc":0.864,"acting_precision":0.909,"acting_recall":0.9}` | `json:eval/results/p2r3_union_typed_v3k3.json#overall` | MEASURED |
 | p2 run three, OCR and modality floor | `{"coverage_recall":1.0,"typed_recall":1.0,"value_exact":0.944,"modality_acc":0.891,"acting_precision":1.0,"acting_recall":1.0}` | `json:eval/results/p2r3_union_typed_v3_ocr_mf.json#overall` | MEASURED |
-| Shipped majority `.ship` merge | `{"coverage_recall":1.0,"typed_recall":1.0,"value_exact":0.944,"modality_acc":0.87,"acting_precision":1.0,"acting_recall":1.0}` | `json:eval/results/ship.json#overall` | MEASURED |
+| Development tank majority `.ship` merge | `{"coverage_recall":1.0,"typed_recall":1.0,"value_exact":0.944,"modality_acc":0.87,"acting_precision":1.0,"acting_recall":1.0}` | `json:eval/results/ship_gold_v0.json#overall` | MEASURED |
+
+### Shipped tank on gold v1
+
+Folex 6 EC, FreeFall SC (228-653) and Super Boll (228-659), compiled by the same pipeline three times. Dropp SC was replaced because EPA lists it as cancelled, and Prep because it has no Georgia registration record.
+
+| Claim | Exact value | Source | Tag |
+|---|---|---|---|
+| Gold v1 p2 run one | `{"coverage_recall":0.953,"typed_recall":0.875,"value_exact":0.907,"modality_acc":0.911,"acting_precision":0.917,"acting_recall":1.0}` | `json:eval/results/v1/p2_union_typed_v3_ocr_mf.json#overall` | MEASURED |
+| Gold v1 p2 run two | `{"coverage_recall":0.953,"typed_recall":0.891,"value_exact":1.0,"modality_acc":0.877,"acting_precision":0.857,"acting_recall":1.0}` | `json:eval/results/v1/p2r2_union_typed_v3_ocr_mf.json#overall` | MEASURED |
+| Gold v1 p2 run three | `{"coverage_recall":0.984,"typed_recall":0.891,"value_exact":0.955,"modality_acc":0.895,"acting_precision":0.917,"acting_recall":1.0}` | `json:eval/results/v1/p2r3_union_typed_v3_ocr_mf.json#overall` | MEASURED |
+| Shipped majority `.ship` merge | `{"coverage_recall":0.984,"typed_recall":0.906,"value_exact":0.889,"modality_acc":0.879,"acting_precision":0.846,"acting_recall":1.0}` | `json:eval/results/ship.json#overall` | MEASURED |
 | Shipped result suffix | `".ship"` | `json:eval/results/ship.json#suffix` | MEASURED |
+| Shipped acting rules and matches | `{"acting_rules":13,"acting_good":11,"gold_acting":10,"gold_acting_hit":10}` | `json:eval/results/ship.json#overall` | MEASURED |
+| Shipped acting rules the gold set marks advisory | `["228-653-p5-2","228-653-p8-15"]` | command: list `labels.*.acting_false_positives[].id` in `eval/results/ship.json`; output: `228-653-p5-2` (calm-wind sentence, MUST_NOT), `228-653-p8-15` (tribufos tank mix below 60 F, MUST) | MEASURED |
+| Rule skipped as tobacco-only | `{"id":"228-659-p8-12","why":"applies to tobacco, not cotton"}` | command: `windows.load_rules("228-659")[2]`; rule in `data/compiled/228-659.ship.json` with `applies_to` `tobacco (flue-cured only)`; filter at `engine/windows.py` (`other_crop`) and `core/src/lib.rs` (`OTHER_CROPS`) | MEASURED |
+| Shipped-tank compile cost per run, USD (FreeFall SC and Super Boll) | `{"p2":0.3385,"p2r2":0.3713,"p2r3":0.3642}` | command: sum `cost_usd` and `retype_cost_usd` in `data/compiled/228-65*.union.<run>.typed.v3.ocr.mf.json`; no OCR file, so no rescue typing | MEASURED |
 
 ### Run-to-run variance and Token Factory cost
 
-The variance rows use the three final p2 receipts with OCR and the modality floor. The cost is the sum of the two extraction passes, the Ultra typing pass, and OCR-rescue typing for all three labels. It does not include the Nebius AI Cloud GPU job cost.
+The variance and cost rows are the development tank. The variance rows use the three final p2 receipts with OCR and the modality floor. The cost is the sum of the two extraction passes, the Ultra typing pass, and OCR-rescue typing for all three labels. It does not include the Nebius AI Cloud GPU job cost.
 
 | Claim | Exact value | Source | Tag |
 |---|---|---|---|
@@ -56,9 +78,9 @@ The variance rows use the three final p2 receipts with OCR and the modality floo
 | Final p2 run two | `{"coverage_recall":1.0,"typed_recall":1.0,"value_exact":0.972,"modality_acc":0.891,"acting_precision":1.0,"acting_recall":1.0}` | `json:eval/results/p2r2_union_typed_v3_ocr_mf.json#overall` | MEASURED |
 | Final p2 run three | `{"coverage_recall":1.0,"typed_recall":1.0,"value_exact":0.944,"modality_acc":0.891,"acting_precision":1.0,"acting_recall":1.0}` | `json:eval/results/p2r3_union_typed_v3_ocr_mf.json#overall` | MEASURED |
 | Observed metric ranges | `{"coverage_recall":"1.000..1.000","typed_recall":"1.000..1.000","value_exact":"0.944..0.972","modality_acc":"0.848..0.891","acting_precision":"0.909..1.000","acting_recall":"1.000..1.000"}` | command: PowerShell read of the three final result files; output: `coverage_recall=1.000..1.000`, `typed_recall=1.000..1.000`, `value_exact=0.944..0.972`, `modality_acc=0.848..0.891`, `acting_precision=0.909..1.000`, `acting_recall=1.000..1.000` | MEASURED |
-| p2 run one Token Factory cost, USD | `{"extraction":0.2178,"typing":0.3095,"ocr_rescue_typing":0.0046,"total":0.5319}` | command: sum `cost_usd`, `retype_cost_usd`, and optional `ocr_rescue_cost_usd` in `data/compiled/*.union.p2.typed.v3.ocr.mf.json`; output: `p2=0.5319` | MEASURED |
-| p2 run two Token Factory cost, USD | `{"extraction":0.2238,"typing":0.3295,"ocr_rescue_typing":0.0064,"total":0.5597}` | command: same sum for `data/compiled/*.union.p2r2.typed.v3.ocr.mf.json`; output: `p2r2=0.5597` | MEASURED |
-| p2 run three Token Factory cost, USD | `{"extraction":0.2196,"typing":0.3218,"ocr_rescue_typing":0.0045,"total":0.5459}` | command: same sum for `data/compiled/*.union.p2r3.typed.v3.ocr.mf.json`; output: `p2r3=0.5459` | MEASURED |
+| p2 run one Token Factory cost, USD | `{"extraction":0.2178,"typing":0.3095,"ocr_rescue_typing":0.0046,"total":0.5319}` | command: sum `cost_usd`, `retype_cost_usd`, and optional `ocr_rescue_cost_usd` in `data/compiled/{5481-504,264-700,264-418}.union.p2.typed.v3.ocr.mf.json`; output: `p2=0.5319` | MEASURED |
+| p2 run two Token Factory cost, USD | `{"extraction":0.2238,"typing":0.3295,"ocr_rescue_typing":0.0064,"total":0.5597}` | command: same sum for `data/compiled/{5481-504,264-700,264-418}.union.p2r2.typed.v3.ocr.mf.json`; output: `p2r2=0.5597` | MEASURED |
+| p2 run three Token Factory cost, USD | `{"extraction":0.2196,"typing":0.3218,"ocr_rescue_typing":0.0045,"total":0.5459}` | command: same sum for `data/compiled/{5481-504,264-700,264-418}.union.p2r3.typed.v3.ocr.mf.json`; output: `p2r3=0.5459` | MEASURED |
 
 ### Live compiler three-reading cost caps
 
@@ -108,12 +130,14 @@ These counts were recomputed from the committed replay periods and `.ship` rules
 | Replay forecast fetch time | `"2026-10-05T17:07:01+00:00"` | `json:tests/fixtures/engine/tift.json#forecast_fetched_utc` | MEASURED |
 | Replay hours | `156` | `json:tests/fixtures/engine/tift.json#hours` | MEASURED |
 | Folex 6 EC | `{"PERMITTED":31,"FIELD_CHECK":54,"BLOCKED":71}` | command: filter fixture rules to registration `5481-504`, run `windows.evaluate`, count `state`; output: `PERMITTED=31,FIELD_CHECK=54,BLOCKED=71` | MEASURED |
-| Dropp SC and Prep | `{"PERMITTED":17,"FIELD_CHECK":63,"BLOCKED":76}` | command: filter fixture rules to registrations `264-700,264-418`, run `windows.evaluate`, count `state`; output: `PERMITTED=17,FIELD_CHECK=63,BLOCKED=76` | MEASURED |
-| Folex 6 EC, Dropp SC, and Prep | `{"PERMITTED":17,"FIELD_CHECK":63,"BLOCKED":76}` | command: run `windows.evaluate` with all fixture rules, count `state`; output: `PERMITTED=17,FIELD_CHECK=63,BLOCKED=76` | MEASURED |
+| FreeFall SC and Super Boll | `{"PERMITTED":17,"FIELD_CHECK":63,"BLOCKED":76}` | command: filter fixture rules to registrations `228-653,228-659`, run `windows.evaluate`, count `state`; output: `PERMITTED=17,FIELD_CHECK=63,BLOCKED=76` | MEASURED |
+| Folex 6 EC, FreeFall SC, and Super Boll | `{"PERMITTED":17,"FIELD_CHECK":63,"BLOCKED":76}` | command: run `windows.evaluate` with all fixture rules, count `state`; output: `PERMITTED=17,FIELD_CHECK=63,BLOCKED=76` | MEASURED |
+| Folex 6 EC and FreeFall SC (the what-if without Super Boll) | `{"PERMITTED":31,"windows_at_least_3_hours":5,"run_lengths":[6,6,11,5,3]}` | command: run `windows.evaluate` with fixture rules for `5481-504,228-653`, count `PERMITTED` and its runs; output: `31`, runs `6,6,11,5,3` | MEASURED |
+| Development tank on the same replay | `{"PERMITTED":17,"FIELD_CHECK":63,"BLOCKED":76}` | the fixture's `expected` before the tank change (git history of `tests/fixtures/engine/tift.json`) | MEASURED |
 
 ## Nemotron alone against the compiled rules
 
-`tools/model_alone.py` gives `nvidia/nemotron-3-super-120b-a12b` the full text of the three labels and a recorded 48-hour NWS forecast, with no compiled rules, and compares its hour states with the planner's on the same forecast. Response schema revision 2; revision 1 is kept in `eval/results/model-alone-2026-10-19.schema-v1.json`.
+These receipts used the development tank (Folex 6 EC, Dropp SC, Prep); each receipt records its own tank. `tools/model_alone.py` gives `nvidia/nemotron-3-super-120b-a12b` the full text of the three labels and a recorded 48-hour NWS forecast, with no compiled rules, and compares its hour states with the planner's on the same forecast. Response schema revision 2; revision 1 is kept in `eval/results/model-alone-2026-10-19.schema-v1.json`.
 
 | Claim | Exact value | Source | Tag |
 |---|---|---|---|
@@ -143,13 +167,15 @@ The season files are exported by `tools/season_export.py`. The check-back runs t
 |---|---|---|---|
 | Season recorded span | `{"first":"2026-10-05T01:19:36+00:00","last":"2026-10-19T18:07:01+00:00"}` | `json:web/public/data/season/index.json#recorded_span` | MEASURED |
 | Season issuances per point | `{"ben_hill":{"issuances":339},"berrien":{"issuances":339},"coffee":{"issuances":339},"colquitt":{"issuances":339},"cook":{"issuances":338},"dooly":{"issuances":339},"irwin":{"issuances":339},"mitchell":{"issuances":339},"tift":{"issuances":339},"worth":{"issuances":339}}` | `json:web/public/data/season/index.json#points` | MEASURED |
-| Check-back input files | `{"hourly_files":3389,"valid_hourly_files":3389,"observation_files":3389,"valid_observation_files":3389,"observations_outside_hour_tolerance":0}` | `json:web/public/data/checkback.json#input_counts` | MEASURED |
-| Check-back tank mix, Folex 6 EC, Dropp SC, and Prep | `{"hours_considered":3540,"evaluated_hours":2446,"permitted_a_day_ahead":566,"held":405,"broke":119,"skipped":{"no_obs":791,"no_issuance":303,"missing_measurement":42}}` | `json:web/public/data/checkback.json#tank_mix.pooled` | MEASURED |
-| Check-back Folex 6 EC alone | `{"permitted_a_day_ahead":731,"held":474,"broke":199,"skipped":{"missing_measurement":58}}` | `json:web/public/data/checkback.json#products.5481-504.pooled` | MEASURED |
-| Check-back Dropp SC alone | `{"permitted_a_day_ahead":731,"held":474,"broke":199,"skipped":{"missing_measurement":58}}` | `json:web/public/data/checkback.json#products.264-700.pooled` | MEASURED |
-| Check-back Prep alone | `{"permitted_a_day_ahead":634,"held":427,"broke":159,"skipped":{"missing_measurement":48}}` | `json:web/public/data/checkback.json#products.264-418.pooled` | MEASURED |
-| Every check-back break was wind | `{"tank_and_each_product_break_params":["wind_speed_mph"],"tank_observed_mph":"10.29..16.11","tank_wind_clauses":5}` | command: collect `param`, `observed_min`, `observed_max` over `pooled.breaks` for `tank_mix` and each product in `web/public/data/checkback.json`; output: `{'wind_speed_mph'}` for all four, min `10.289907`, max `16.105941`, 5 rule ids | MEASURED |
-| Tank-mix clauses a station cannot check | `5` | command: count unique `rule` in `tank_mix.not_checkable_clauses`; output: `5` (params `night_temperature_f`, `rain_free_hours`, `temperature_inversion`) | MEASURED |
+| Check-back recorded span | `{"first":"2026-10-05T01:19:36+00:00","last":"2026-10-20T22:07:02+00:00"}` | `json:web/public/data/checkback.json#recorded_span` | MEASURED |
+| Check-back input files | `{"hourly_files":3649,"valid_hourly_files":3649,"observation_files":3649,"valid_observation_files":3649,"observations_outside_hour_tolerance":0}` | `json:web/public/data/checkback.json#input_counts` | MEASURED |
+| Check-back tank mix, Folex 6 EC, FreeFall SC, and Super Boll | `{"hours_considered":3820,"evaluated_hours":2581,"permitted_a_day_ahead":401,"held":236,"broke":134,"skipped":{"no_obs":936,"no_issuance":303,"missing_measurement":31}}` | `json:web/public/data/checkback.json#tank_mix.pooled` | MEASURED |
+| Check-back Folex 6 EC alone | `{"permitted_a_day_ahead":834,"held":527,"broke":232,"skipped":{"missing_measurement":75}}` | `json:web/public/data/checkback.json#products.5481-504.pooled` | MEASURED |
+| Check-back FreeFall SC alone | `{"permitted_a_day_ahead":498,"held":283,"broke":174,"skipped":{"missing_measurement":41}}` | `json:web/public/data/checkback.json#products.228-653.pooled` | MEASURED |
+| Check-back Super Boll alone | `{"permitted_a_day_ahead":737,"held":480,"broke":192,"skipped":{"missing_measurement":65}}` | `json:web/public/data/checkback.json#products.228-659.pooled` | MEASURED |
+| Every check-back break was wind | `{"tank_and_each_product_break_params":["wind_speed_mph"],"tank_over_10_mph_hours":119,"tank_over_10_mph_observed":"10.29..16.11","tank_calm_hours":15,"tank_calm_rule":"228-653-p5-2"}` | command: collect `param`, `count`, `observed_min`, `observed_max` over `pooled.breaks` for `tank_mix` and each product in `web/public/data/checkback.json`; output: `{'wind_speed_mph'}` for all four; tank mix: 119 hours at `10.289907..16.105941` on five 10 mph clauses, 15 hours at `0.0` on `228-653-p5-2` | MEASURED |
+| Tank-mix clauses a station cannot check | `6` | command: count unique `rule` in `tank_mix.not_checkable_clauses`; output: `6` (params `night_temperature_f`, `rain_free_hours`, `temperature_inversion`) | MEASURED |
+| Development tank check-back, recordings to 2026-10-19 18:07 UTC | `{"permitted_a_day_ahead":566,"held":405,"broke":119}` | `json:eval/results/checkback-2026-10-19.json#tank_mix.pooled` | MEASURED |
 | Check-back recompute command | `"python tools/checkback.py --recorded data/nws_recorded"` | `tools/checkback.py`; `data/nws_recorded/` is gitignored at `.gitignore:16`, so the recorded inputs are not in the repo | SOURCED |
 | Recorder ran every hour of the span | `"NOT VERIFIED"` | The recorder ran on a desktop PC through Oct 19 and missed hours while it was off (Tift has no files from 08:07 UTC Oct 16 to 01:07 UTC Oct 17). The app shows recorded against expected issuances per point. | NOT VERIFIED |
 
@@ -158,9 +184,10 @@ The season files are exported by `tools/season_export.py`. The check-back runs t
 | Claim | Exact value | Source | Tag |
 |---|---|---|---|
 | Folex 6 EC accepted label | `{"accepted":"2026-03-04","url":"https://www3.epa.gov/pesticides/chem_search/ppls/005481-00504-20260304.pdf"}` | `data/labels/index.json`, keys `5481-504.accepted` and `5481-504.url`; [EPA PDF](https://www3.epa.gov/pesticides/chem_search/ppls/005481-00504-20260304.pdf) | SOURCED |
-| Dropp SC accepted label | `{"accepted":"2009-12-14","url":"https://www3.epa.gov/pesticides/chem_search/ppls/000264-00700-20091214.pdf"}` | `data/labels/index.json`, keys `264-700.accepted` and `264-700.url`; [EPA PDF](https://www3.epa.gov/pesticides/chem_search/ppls/000264-00700-20091214.pdf) | SOURCED |
-| Prep accepted label | `{"accepted":"2021-02-24","url":"https://www3.epa.gov/pesticides/chem_search/ppls/000264-00418-20210224.pdf"}` | `data/labels/index.json`, keys `264-418.accepted` and `264-418.url`; [EPA PDF](https://www3.epa.gov/pesticides/chem_search/ppls/000264-00418-20210224.pdf) | SOURCED |
-| EPA label index and download script | `"tools/ppls_fetch.py"` | PPLS page template at `tools/ppls_fetch.py:30`, PDF URL construction at `tools/ppls_fetch.py:56`, and PDF content check at `tools/ppls_fetch.py:69`; [EPA PPLS](https://ordspub.epa.gov/ords/pesticides/f?p=PPLS:1) | SOURCED |
+| FreeFall SC accepted label | `{"accepted":"2021-05-14","url":"https://www3.epa.gov/pesticides/chem_search/ppls/000228-00653-20210514.pdf"}` | `data/labels/index.json`, keys `228-653.accepted` and `228-653.url`; [EPA PDF](https://www3.epa.gov/pesticides/chem_search/ppls/000228-00653-20210514.pdf) | SOURCED |
+| Super Boll accepted label | `{"accepted":"2022-08-08","url":"https://www3.epa.gov/pesticides/chem_search/ppls/000228-00659-20220808.pdf"}` | `data/labels/index.json`, keys `228-659.accepted` and `228-659.url`; PPLS name `ETHEPHON E-AG 6 PLANT GROWTH REGULATOR`, alternate brand name Super Boll on the label; [EPA PDF](https://www3.epa.gov/pesticides/chem_search/ppls/000228-00659-20220808.pdf) | SOURCED |
+| Dropp SC registration status | `{"product_status":"Inactive","cancel_flag":"Yes","cancellationreason":"Company Request","product_status_date":"January 15, 2014"}` | [EPA PPLS record for 264-700](https://ordspub.epa.gov/ords/pesticides/cswu/ppls/264-700), read 2026-10-20; the label stays in `data/labels/index.json` as the development tank | SOURCED |
+| EPA label index and download script | `"tools/ppls_fetch.py"` | PPLS page template at `tools/ppls_fetch.py:30`, JSON API fallback at `tools/ppls_fetch.py:31`, PDF URL construction at `tools/ppls_fetch.py:56`, and PDF content check at `tools/ppls_fetch.py:100`; [EPA PPLS](https://ordspub.epa.gov/ords/pesticides/f?p=PPLS:1) | SOURCED |
 | Tift hourly forecast endpoint | `"https://api.weather.gov/gridpoints/TAE/106,131/forecast/hourly"` | `data/nws_points_cache.json`, key `tift.forecastHourly`; [NWS API documentation](https://www.weather.gov/documentation/services-web-api) | SOURCED |
 | Forecast and observation recorder | `"tools/nws_recorder.py"` | point resolution at `tools/nws_recorder.py:80-98`, hourly forecast fetch at `tools/nws_recorder.py:122`, and latest station observation fetch at `tools/nws_recorder.py:141`; [NWS API documentation](https://www.weather.gov/documentation/services-web-api) | SOURCED |
 
@@ -170,7 +197,7 @@ The season files are exported by `tools/season_export.py`. The check-back runs t
 |---|---|---|---|
 | Label extraction model | `"nvidia/nemotron-3-super-120b-a12b"` | `json:data/compiled/5481-504.p2.json#model`; caller at `compiler/compile_label.py:35,226-242` | MEASURED |
 | Rule typing model | `"nvidia/Nemotron-3-Ultra-550b-a55b"` | `json:data/compiled/5481-504.union.p2.typed.v3.ocr.mf.json#retype_model`; caller at `compiler/retype.py:34,95-113` | MEASURED |
-| OCR model | `"nvidia/NVIDIA-Nemotron-Parse-2.0"` | `json:data/compiled/264-700.union.p2.typed.v3.ocr.mf.json#ocr_model`; caller at `tools/ocr_parse.py:34,48,55,72` | MEASURED |
+| OCR model (used on the development tank's scanned Dropp SC label) | `"nvidia/NVIDIA-Nemotron-Parse-2.0"` | `json:data/compiled/264-700.union.p2.typed.v3.ocr.mf.json#ocr_model`; caller at `tools/ocr_parse.py:34,48,55,72` | MEASURED |
 | Browser agent model | `"nvidia/Nemotron-3_5-Lightning"` | `web/src/app/api/agent/route.ts:8,159-176`; static audit command output: `const MODEL = "nvidia/Nemotron-3_5-Lightning"` | MEASURED |
 | Token Factory base URL | `"https://api.tokenfactory.nebius.com/v1"` | `compiler/compile_label.py:34,235`; the web agent uses `https://api.tokenfactory.nebius.com/v1/chat/completions` at `web/src/app/api/agent/route.ts:9,159` | MEASURED |
 | OCR Serverless Job target | `"gpu-l40s-a"` | `tools/ocr_job/submit.sh:9-21`, specifically line 13; job command runs Parse at `tools/ocr_job/run.sh:31-32` | MEASURED |
@@ -244,7 +271,7 @@ The required CI workflow jobs are `python`, `rust`, and `web` at `.github/workfl
 | Not drift: README `.ship` precision | `"README.md:71 gives 0.923 (12/13) for the acting-wins .ship merge, a different merge from the shipped majority .ship row, which scores 1.0 (12/12)."` | `README.md:71` and `README.md:67`; command: read `eval/results/ship.json` keys `overall.acting_precision`, `overall.acting_good`, and `overall.acting_rules`; output: `1.0`, `12`, `12` | MEASURED |
 | Fixed: README every-run statement | `"README.md:125 said acting precision and recall are 1.0 on every run, but final p2 run one acting precision is 0.909. The sentence now says acting recall is 1.0 on every run and single runs reach 0.909 to 1.0 on acting precision."` | `README.md:125`; command: read `eval/results/p2_union_typed_v3_ocr_mf.json` key `overall.acting_precision`; output: `0.909` | MEASURED |
 | README rounded cost hides run variance | `"README.md:73 says $0.53 per run. Exact committed Token Factory totals are $0.5319, $0.5597, and $0.5459."` | `README.md:73`; cost commands and outputs in the run-cost table above | MEASURED |
-| Rule ids repeat after merging readings | `{"264-418":{"rules":175,"ids_repeated":39},"264-700":{"rules":90,"ids_repeated":22},"5481-504":{"rules":140,"ids_repeated":37}}` | command: count `id` values that occur more than once in `accepted` of each `web/public/data/compiled/*.ship.json`, 2026-10-20. Ids are numbered per reading, so the merge keeps two clauses under one id. Four repeats are between planner-used rules (for example `5481-504-p9-2` is both a wind and an inversion advisory). Every hour citation carries its own quote, so the planner and the clause cards show the right sentence; `get_clause` now returns every clause under a shared id and the hour card shows one sentence once. The ids themselves were not renumbered, to keep the Python, Rust and browser parity fixtures unchanged. | MEASURED |
+| Rule ids repeat after merging readings | `{"228-653":{"rules":148,"ids_repeated":32},"228-659":{"rules":131,"ids_repeated":36},"5481-504":{"rules":140,"ids_repeated":37}}` | command: count `id` values that occur more than once in `accepted` of each `web/public/data/compiled/*.ship.json`, 2026-10-20. Ids are numbered per reading, so the merge keeps two clauses under one id. Four repeats are between planner-used rules (for example `5481-504-p9-2` is both a wind and an inversion advisory). Every hour citation carries its own quote, so the planner and the clause cards show the right sentence; `get_clause` now returns every clause under a shared id and the hour card shows one sentence once. The ids themselves were not renumbered, to keep the Python, Rust and browser parity fixtures unchanged. | MEASURED |
 
 ## Do not claim
 

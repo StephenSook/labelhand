@@ -62,24 +62,27 @@ Folex 6 EC wants nights above 60°F, so from late October the live forecast bloc
 
 | Tank | Forecast-permitted a day ahead and checked | Label limits held | Broke |
 |---|---|---|---|
-| Folex 6 EC + Dropp SC + Prep | 524 | **405** | 119 |
-| Folex 6 EC alone | 673 | 474 | 199 |
-| Dropp SC alone | 673 | 474 | 199 |
-| Prep alone | 586 | 427 | 159 |
+| Folex 6 EC + FreeFall SC + Super Boll | 370 | **236** | 134 |
+| Folex 6 EC alone | 759 | 527 | 232 |
+| FreeFall SC alone | 457 | 283 | 174 |
+| Super Boll alone | 672 | 480 | 192 |
 
-- Every break was wind, in the tank mix and for each product alone. In the tank mix the station reported 10.3 to 16.1 mph against the 10 mph limit in five wind clauses. No temperature or rain limit broke.
-- The tank-mix forecast permitted 566 hours a day ahead; 42 of them had no observed wind, so they are left out rather than counted as held.
-- 2,446 of the 3,540 point-hours in the span were evaluated. The rest had no station observation recorded (791) or no forecast issued about 24 hours earlier that covered the hour (303).
-- Five tank-mix clauses cannot be checked by a station (temperature inversions and rain after application, for example) and are listed as such, never counted as held.
+- Every break was wind. In the tank mix, 119 hours had station wind of 10.3 to 16.1 mph against the 10 mph limit, and 15 hours had a calm station (0 mph) against FreeFall SC's "less than 3 mph" sentence. No temperature or rain limit broke.
+- That FreeFall sentence ("Drift potential increases at wind speeds of less than 3 mph") is advice on the label, and our gold set marks it advisory. All three compile runs typed it MUST NOT, so the planner treats a calm forecast hour as a field check. It costs permitted hours (the tank mix had 566 a day ahead with the development tank, 401 now) and it is one of two acting rules on the shipped labels that the gold set disagrees with (see *Accuracy*).
+- The tank-mix forecast permitted 401 hours a day ahead; 31 of them had no observed wind, so they are left out rather than counted as held.
+- 2,581 of the 3,820 point-hours in the span (Oct 5 to Oct 20) were evaluated. The rest had no station observation recorded (936) or no forecast issued about 24 hours earlier that covered the hour (303).
+- Six tank-mix clauses cannot be checked by a station (temperature inversions and rain after application, for example) and are listed as such, never counted as held.
 - Stations: KABY, KACJ, KDQH, KMGR and KVAD, matched to points in [`web/public/data/checkback.json`](web/public/data/checkback.json).
 
-Recompute: `python tools/checkback.py --recorded data/nws_recorded`. The recorded files are large and stay out of git; the result JSON and [`eval/results/checkback-2026-10-19.json`](eval/results/checkback-2026-10-19.json) are committed.
+Recompute: `python tools/checkback.py --recorded data/nws_recorded`. The recorded files are large and stay out of git; the result JSON and [`eval/results/checkback-2026-10-20.json`](eval/results/checkback-2026-10-20.json) are committed. The development tank's run, [`eval/results/checkback-2026-10-19.json`](eval/results/checkback-2026-10-19.json), held in 405 of 524 tank-mix hours; the same 119 wind hours broke there.
 
-**Every case, misses included.** The app's `/proof` page lists each of the 119 broken hours (field, station wind, and a link that replays the forecast that said go) and each of the 46 gold-set clauses with the rule Labelhand compiled for it, differences first. `python tools/proof_export.py` rebuilds its data from committed files, and a test fails if the committed copy is stale.
+**Every case, misses included.** The app's `/proof` page lists each of the 134 broken hours (field, station wind, and a link that replays the forecast that said go) and each of the 64 gold-set clauses with the rule Labelhand compiled for it, differences first. `python tools/proof_export.py` rebuilds its data from committed files, and a test fails if the committed copy is stale.
 
 ## Measured so far
 
-Three real Georgia cotton defoliation labels: Folex 6 EC (EPA Reg. 5481-504, accepted 2026-03-04), Dropp SC (264-700) and Prep (264-418), 32 pages in total.
+Three real Georgia cotton defoliation labels: Folex 6 EC (EPA Reg. 5481-504, accepted 2026-03-04), FreeFall SC (228-653, thidiazuron, accepted 2021-05-14) and Super Boll (228-659, ethephon, label name Ethephon E-AG 6, accepted 2022-08-08), 32 pages in total. The FreeFall SC label names the other two as examples of its tank-mix partners.
+
+**Why these three.** Labelhand was built and tuned on Folex 6 EC, Dropp SC (264-700) and Prep (264-418). On 2026-10-20 EPA PPLS showed Dropp SC as Inactive, cancelled at the company's request on January 15, 2014, and Prep has no Georgia registration record. Both were replaced by active Nufarm registrations for the same jobs, and a new gold set was written for them from the label text before any compiled output for them existed. The app now refuses to compile any label whose EPA registration is inactive or cancelled.
 
 ### Any EPA label, read three times
 
@@ -102,7 +105,21 @@ The 13 added Georgia row-crop products were Dual Magnum, Liberty 280 SL, Envoke,
 
 Recompute after setting `NEBIUS_API_KEY`: `cd web && pnpm photo-eval`. The script checks `GET /v1/models` before preparing images and stops if the exact vision model is unavailable. Poppler and ImageMagick are required locally.
 
-**Accuracy against a gold set.** [`eval/gold_v0.json`](eval/gold_v0.json) holds 46 clauses the planner relies on (wind, inversion, rain, temperature, open-boll stage, buffers, release height, droplets, re-entry), annotated from the label text and checked against it by `eval/verify_gold.py`. It is our own annotation until an outside reviewer checks it. `eval/score.py` scores every configuration; each row below changed one thing and was kept or reverted on the numbers.
+**Accuracy on the shipped tank.** [`eval/gold_v1.json`](eval/gold_v1.json) holds 64 clauses: the 24 Folex clauses unchanged from v0, 27 FreeFall SC and 13 Super Boll. All 64 are found verbatim on their listed pages by `eval/verify_gold.py`. The FreeFall and Super Boll labels went through the same pipeline, unchanged, three times:
+
+| Gold v1 | Coverage | Typed recall | Value exact | Modality | Acting precision | Acting recall |
+|---|---|---|---|---|---|---|
+| p2 run 1 | 0.953 | 0.875 | 0.907 | 0.911 | 0.917 (11/12) | 1.000 (10/10) |
+| p2 run 2 | 0.953 | 0.891 | 1.000 | 0.877 | 0.857 (12/14) | 1.000 (10/10) |
+| p2 run 3 | 0.984 | 0.891 | 0.955 | 0.895 | 0.917 (11/12) | 1.000 (10/10) |
+| **Shipped majority `.ship` merge** | **0.984** | 0.906 | 0.889 | 0.879 | **0.846 (11/13)** | **1.000 (10/10)** |
+
+- Acting recall stays 1.0: every MUST or MUST NOT weather limit in the gold set is enforced by the planner.
+- The two acting rules the gold set disagrees with are both FreeFall SC sentences typed MUST or MUST NOT where the label gives advice: the calm-wind sentence above, and a tank-mix suggestion for nights below 60°F. Both make the planner stricter, never looser. We did not change the prompts after seeing these results.
+- **Fixed in code instead: crop scope.** Super Boll is labeled for cotton and tobacco, and all three runs typed its tobacco-only "only apply if temperatures are below 65°F" as a MUST. The compiler had recorded it as applying to tobacco. The planner now skips a rule whose `applies_to` names tobacco and not cotton, lists it as skipped with that reason, and does the same in the Rust core. It is kept to that one crop because skipping a rule relaxes the plan. The scorer counts acting rules the same way; rescored, the development tank's numbers below do not change.
+- Results: [`eval/results/ship.json`](eval/results/ship.json) and [`eval/results/v1/`](eval/results/v1). The development tank's ship result is [`eval/results/ship_gold_v0.json`](eval/results/ship_gold_v0.json).
+
+**How the pipeline was built, on the development tank.** [`eval/gold_v0.json`](eval/gold_v0.json) holds 46 clauses the planner relies on (wind, inversion, rain, temperature, open-boll stage, buffers, release height, droplets, re-entry), annotated from the label text and checked against it by `eval/verify_gold.py`. It is our own annotation until an outside reviewer checks it. `eval/score.py` scores every configuration; each row below changed one thing and was kept or reverted on the numbers.
 
 | Configuration | Coverage | Typed recall | Value exact | Modality | Acting precision | Acting recall |
 |---|---|---|---|---|---|---|
@@ -112,17 +129,17 @@ Recompute after setting `NEBIUS_API_KEY`: `cd web && pnpm photo-eval`. The scrip
 | + typing v2 (stricter definitions) | 0.891 | 0.848 | 0.897 | 0.872 | 1.000 | **0.800** |
 | + typing v3 (types the constraint the first reading named) | 0.891 | 0.891 | 0.935 | **0.902** | **1.000** | **1.000** |
 | + unit restore in code, extraction prompt p2 (one rule per constraint or alternative) | **0.957** | **0.957** | **0.941** | 0.841 | **0.909 (10/11)** | **1.000** |
-| **Shipped majority `.ship` merge of three p2 + typing v3 + OCR + modality-floor runs** | **1.000** | **1.000** | 0.944 | 0.870 | **1.000 (12/12)** | **1.000 (10/10)** |
+| **Majority `.ship` merge of three p2 + typing v3 + OCR + modality-floor runs** | **1.000** | **1.000** | 0.944 | 0.870 | **1.000 (12/12)** | **1.000 (10/10)** |
 
 *Acting* rules are the ones the planner can turn into BLOCKED or FIELD CHECK. Acting recall is the safety number: a missed wind or rain limit would mark a forbidden hour as permitted. Typing v2 raised precision but dropped a wind limit hidden in a sentence that also set a boom height, so v3 replaced it.
 
 **Scorer correction, 2026-10-05.** Acting precision now requires an acting rule to match a gold clause whose modality is also MUST or MUST_NOT. Previously, Folex rule `5481-504-p10-5` was counted as correct because its temperature parameter and quote matched gold clause F-TEMP-60, even though gold marks that clause ADVISORY. In the numbers shown here, Super moved from 0.824 to 0.588, raw union from 0.800 to 0.458, p2 run 1 and its modality-floor and OCR variants from 1.000 to 0.909 (10/11), and the acting-wins `.ship` merge from 1.000 (13/13) to 0.923 (12/13). Planner precision is unchanged.
 
-The planner ships the majority `.ship` row. Each duplicate clause gets one modality vote per run; two matching votes win, a clause found in only one run keeps that modality, and a three-way split keeps the first acting modality. The fixed decision rule selected this merge because coverage recall, strict acting precision, and acting recall are all 1.0. Every source modality and vote count stays in the compiled rule. [`eval/results/ship.json`](eval/results/ship.json) is the committed score receipt. The p2 pipeline's Token Factory cost on three labels was $0.53 per run (Super pass $0.033, Ultra pass $0.18, typing $0.31).
+The planner ships the majority `.ship` row. Each duplicate clause gets one modality vote per run; two matching votes win, a clause found in only one run keeps that modality, and a three-way split keeps the first acting modality. The fixed decision rule selected this merge because coverage recall, strict acting precision, and acting recall are all 1.0. Every source modality and vote count stays in the compiled rule. [`eval/results/ship_gold_v0.json`](eval/results/ship_gold_v0.json) is the committed score receipt. The p2 pipeline's Token Factory cost on three labels was $0.53 per run (Super pass $0.033, Ultra pass $0.18, typing $0.31).
 
 ### Why compile the labels? Nemotron alone on the same forecasts
 
-The obvious alternative is to hand a big model the labels and the forecast and ask for the spray hours. `tools/model_alone.py` measures that on real recorded data. For each of the ten points, it takes the first NWS forecast recorded after 7 AM Eastern on Oct 6, Oct 10 and Oct 14 (30 cases, 1,440 forecast hours). It gives `nvidia/nemotron-3-super-120b-a12b` the full page text of all three labels, the 48-hour forecast and the app's three state definitions, and asks for every hour's state with the label sentence it relied on (temperature 0, strict JSON schema, no compiled rules in the prompt). The compiled planner runs on the same forecasts. The design was written into the receipt before the first call.
+The obvious alternative is to hand a big model the labels and the forecast and ask for the spray hours. `tools/model_alone.py` measures that on real recorded data. For each of the ten points, it takes the first NWS forecast recorded after 7 AM Eastern on Oct 6, Oct 10 and Oct 14 (30 cases, 1,440 forecast hours). It gives `nvidia/nemotron-3-super-120b-a12b` the full page text of all three labels, the 48-hour forecast and the app's three state definitions, and asks for every hour's state with the label sentence it relied on (temperature 0, strict JSON schema, no compiled rules in the prompt). The compiled planner runs on the same forecasts. The design was written into the receipt before the first call. These runs used the development tank (Folex 6 EC, Dropp SC, Prep); each receipt records its own tank.
 
 | | Nemotron alone | Compiled rules |
 |---|---|---|
@@ -153,15 +170,15 @@ The first schema left the hours array open, and all 10 of its calls came back wi
 
 The Folex clause &quot;When minimum night temperature is below 60°F use FOLEX 6 EC alone&quot; controls what may be in the tank. It is not a general temperature limit. The Python reference kernel and Rust port now recognize a MUST or MUST_NOT temperature clause matching `\buse\b[^.]*\balone\b`. When the temperature condition holds, a mixed tank is BLOCKED with the other products named; the named product by itself satisfies the clause. When the condition does not hold, the clause does not change the verdict.
 
-The committed Tift replay has 156 hours and a recorded night minimum of 61°F, so this condition never holds there. The earlier `.union.typed.v3` rules and the majority `.ship` set therefore produce the same measured totals:
+The committed Tift replay has 156 hours and a recorded night minimum of 61°F, so this condition never holds there:
 
-| Tift tank | `.union.typed.v3` | Majority `.ship` |
-|---|---|---|
-| Folex + Dropp + Prep | 17 permitted, 63 field check, 76 blocked | 17 permitted, 63 field check, 76 blocked |
-| Folex alone | 31 permitted, 54 field check, 71 blocked | 31 permitted, 54 field check, 71 blocked |
-| Dropp + Prep | 17 permitted, 63 field check, 76 blocked | 17 permitted, 63 field check, 76 blocked |
+| Tift tank, majority `.ship` | Planner states |
+|---|---|
+| Folex + FreeFall SC + Super Boll | 17 permitted, 63 field check, 76 blocked |
+| Folex alone | 31 permitted, 54 field check, 71 blocked |
+| FreeFall SC + Super Boll | 17 permitted, 63 field check, 76 blocked |
 
-The cold-condition unit case uses a 56°F night low. It blocks Folex in a mixed tank, permits the same hour when Folex is the only product, and does nothing for a warm night. The results view also exposes real in-browser what-ifs: on the Tift replay, removing Prep produces 31 forecast-permitted hours in five windows of 6, 6, 11, 5 and 3 hours.
+The development tank gave the same three totals on this replay. The cold-condition unit case uses a 56°F night low. It blocks Folex in a mixed tank, permits the same hour when Folex is the only product, and does nothing for a warm night. The results view also exposes real in-browser what-ifs: on the Tift replay, removing Super Boll produces 31 forecast-permitted hours in five windows of 6, 6, 11, 5 and 3 hours.
 
 **Run-to-run variance.** One run is one draw, so the p2 pipeline was run three times with the same prompts at temperature 0:
 
@@ -199,7 +216,7 @@ What the guards caught, in a real run:
 - The Folex label sets two restricted-entry intervals: **7 days** at rates at or below 0.75 lb ai/A and **10 days** above that rate. The model spliced the sentence with "..." into a single 10-day rule and dropped the rate condition. Rejected, because a spliced quote is not what the label says.
 - The model converted 3 feet to 36 inches and one-half mile to 2,640 feet. Conversions belong in code, so `restore_units` now maps such a value back to the number and unit in the quote when it can reproduce the conversion exactly, and records what it undid. Anything it cannot reproduce is still rejected by the number guard.
 
-Known limits we are working on, with details in [`SPIKE-01-label-compile.md`](SPIKE-01-label-compile.md): the gold set is 46 clauses on three labels and is our own annotation; one font in the 2026 Folex PDF has no Unicode map for the "1/2" glyph; passes vary between runs (tables above), which is why two extraction passes are unioned; and value exact and modality accuracy are below 1.0, which matters less for the planner because acting recall is 1.0 on every run and the shipped majority merge scores 1.0 on acting precision (12/12). Single runs reach 0.909 to 1.0 on acting precision (tables above).
+Known limits we are working on, with details in [`SPIKE-01-label-compile.md`](SPIKE-01-label-compile.md): the gold set is 64 clauses on the three shipped labels (46 on the development tank) and is our own annotation; one font in the 2026 Folex PDF has no Unicode map for the "1/2" glyph; passes vary between runs (tables above), which is why two extraction passes are unioned; and value exact and modality accuracy are below 1.0, which matters less for the planner because acting recall is 1.0 on every run. The shipped merge scores 0.846 (11/13) on acting precision on the shipped tank and 1.0 (12/12) on the development tank (tables above).
 
 All four NVIDIA Nemotron models on Token Factory (3.5 Lightning, 3 Nano 30B, 3 Super 120B, 3 Ultra 550B) passed our capability probe for strict JSON schema output and tool calling, with time to first token between 0.44 and 0.78 s.
 
@@ -211,8 +228,8 @@ Requires Python 3.12 and [uv](https://docs.astral.sh/uv/).
 uv venv --python 3.12
 uv pip install -r pyproject.toml --extra dev
 cp .env.example .env                                      # add NEBIUS_API_KEY from tokenfactory.nebius.com
-python tools/ppls_fetch.py 5481-504 264-700 264-418      # downloads the labels from EPA
-python compiler/compile_label.py 5481-504 264-700 264-418
+python tools/ppls_fetch.py 5481-504 228-653 228-659      # downloads the labels from EPA
+python compiler/compile_label.py 5481-504 228-653 228-659
 python tools/nws_recorder.py                              # records the current forecast
 python engine/windows.py --point tift --hours 48
 ```
@@ -245,7 +262,7 @@ The former section required these elements exactly:
 
 Former 7 CFR 110.3(c) stated: "The information required in this section shall be recorded within 14 days following the pesticide application."
 
-The generated PDF includes those former checklist fields plus blank actual start and end times and wind measured at the boom. Users must follow current state and other applicable recordkeeping requirements. A pypdf reading of all 32 pages in the three accepted PDFs found no `RESTRICTED USE PESTICIDE` phrase in Folex 6 EC, Dropp SC, or Prep.
+The generated PDF includes those former checklist fields plus blank actual start and end times and wind measured at the boom. Users must follow current state and other applicable recordkeeping requirements. A pypdf reading of all 32 pages in the three accepted PDFs found no `RESTRICTED USE PESTICIDE` phrase in Folex 6 EC, FreeFall SC, or Super Boll.
 
 ## License
 Apache-2.0. Not legal or agronomic advice: the label is the law, and the applicator decides.
