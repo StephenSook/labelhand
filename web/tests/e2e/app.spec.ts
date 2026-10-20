@@ -59,6 +59,26 @@ test("a field, product, and job-length deep link reproduces its state", async ({
   }
 });
 
+test("unticking a product re-checks the tank on the forecast already shown", async ({ page }) => {
+  const card = page.locator("#next-window");
+  const tank = page.getByLabel(/^Tank products:/);
+
+  // What a fresh load of the two-product tank shows on the same recorded forecast.
+  await page.goto("/app?field=tift&products=264-700,264-418&hours=3&replay=tift");
+  await expect(page.locator("[data-hour-cell]")).toHaveCount(156);
+  const expectedCard = (await card.textContent()) ?? "";
+  expect(expectedCard).toContain("Tank: Dropp SC, Prep");
+
+  await openReplay(page);
+  await expect(tank).toHaveAttribute("aria-label", /5481-504/);
+  await page.getByRole("checkbox", { name: /5481-504/ }).uncheck();
+
+  await expect(tank).not.toHaveAttribute("aria-label", /5481-504/);
+  await expect(card).toHaveText(expectedCard);
+  await expect(page.getByText("RECORDED", { exact: true })).toBeVisible();
+  await expect(page).toHaveURL(/products=264-700%2C264-418.*replay=tift/);
+});
+
 test("the home hero runs a live or recorded planner check with a source time", async ({ page }) => {
   await page.goto("/");
   const card = page.locator("[data-live-hero]");

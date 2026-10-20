@@ -40,6 +40,9 @@ type PlannerCheckInput = {
   source: PlannerSource;
   suppliedReplay?: ReplayForecast;
   fallbackToReplay?: boolean;
+  // A forecast already checked on this page. When the tank changes, the planner re-runs on it
+  // instead of fetching again, so the result keeps the same source, time and offline state.
+  suppliedForecast?: Pick<PlannerCheckResult, "source" | "fetchedAt" | "periods" | "liveFailure" | "offlineCopy">;
   onProgress?: (completedStep: 1 | 2 | 3, durationMs: number) => void;
 };
 
@@ -51,6 +54,7 @@ export async function runPlannerCheck({
   source,
   suppliedReplay,
   fallbackToReplay = false,
+  suppliedForecast,
   onProgress,
 }: PlannerCheckInput): Promise<PlannerCheckResult> {
   const point = points[pointKey];
@@ -67,7 +71,13 @@ export async function runPlannerCheck({
   let resolvedSource = source;
   let liveFailure: string | undefined;
   let offlineCopy = false;
-  if (source === "RECORDED") {
+  if (suppliedForecast) {
+    periods = suppliedForecast.periods;
+    fetchedAt = suppliedForecast.fetchedAt;
+    resolvedSource = suppliedForecast.source;
+    liveFailure = suppliedForecast.liveFailure;
+    offlineCopy = suppliedForecast.offlineCopy ?? false;
+  } else if (source === "RECORDED") {
     const replay = suppliedReplay ?? await fetchReplay(pointKey);
     periods = replay.periods;
     fetchedAt = replay.forecast_fetched_utc;

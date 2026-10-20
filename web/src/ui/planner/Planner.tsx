@@ -146,6 +146,8 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
   const autoRan = useRef(false);
   const initialHourApplied = useRef(false);
   const deepLinkScrolled = useRef(false);
+  // Numbers each planner run so a slower, older run can never replace a newer result.
+  const plannerRun = useRef(0);
 
   useEffect(() => {
     let current = true;
@@ -219,6 +221,7 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
       return;
     }
 
+    const run = ++plannerRun.current;
     const startedAt = Date.now();
     const measured: Array<string | undefined> = [];
     setFailure(null);
@@ -238,11 +241,12 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
         fallbackToReplay,
         onProgress: (completedStep, durationMs) => {
           measured[completedStep - 1] = duration(durationMs);
-          if (completedStep < 3) {
+          if (completedStep < 3 && run === plannerRun.current) {
             setWorking({ startedAt, currentStep: completedStep, steps: workingSteps(completedStep, measured) });
           }
         },
       });
+      if (run !== plannerRun.current) return;
       // A season issuance is linked by issued=, not by the three-point replay= fallback.
       setActiveReplay(checked.source === "RECORDED" && !seasonIssued ? pointKey : undefined);
       setReplayIssued(seasonIssued);
@@ -254,20 +258,53 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
       }
       setResult(checked);
     } catch (error) {
+      if (run !== plannerRun.current) return;
       const message = errorText(error);
       setWorking(null);
       if (source === "LIVE" && REPLAY_POINTS.has(pointKey)) {
         try {
           const replay = await fetchReplay(pointKey);
-          setFailure({ message, pointKey, replay });
+          if (run === plannerRun.current) setFailure({ message, pointKey, replay });
         } catch {
-          setFailure({ message, pointKey });
+          if (run === plannerRun.current) setFailure({ message, pointKey });
         }
       } else {
         setFailure({ message, pointKey });
       }
     }
   }, [initialHour, labels, liveLabels, points, tankRegistrations]);
+
+  // Ticking or unticking a product re-runs the planner on the forecast already on screen, so the
+  // Next window card, the timeline and the call card always describe the products that are ticked.
+  const tankKey = [...tankRegistrations].sort().join(",");
+  useEffect(() => {
+    if (!result || !points || working || tankRegistrations.length === 0) return;
+    if ([...result.registrations].sort().join(",") === tankKey) return;
+    const shown = result;
+    const run = ++plannerRun.current;
+    runPlannerCheck({
+      pointKey: shown.pointKey,
+      registrations: tankRegistrations,
+      liveLabels: Object.fromEntries(liveLabels.map((label) => [label.reg, label])),
+      points,
+      source: shown.source,
+      suppliedForecast: shown,
+    })
+      .then((checked) => {
+        if (run !== plannerRun.current) return;
+        // The forecast did not change, so the link keeps naming the recorded one it came from.
+        setActiveReplay(checked.source === "RECORDED" && !replayIssued ? checked.pointKey : undefined);
+        setSelectedHour(null);
+        setResult(checked);
+      })
+      .catch((error: unknown) => {
+        if (run !== plannerRun.current) return;
+        setResult(null);
+        setFailure({ message: errorText(error), pointKey: shown.pointKey });
+      });
+    // tankKey names the ticked products; the other inputs are read when it changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [result, tankKey, working]);
 
   useEffect(() => {
     if (!points || !labels || !configReady || !liveReady || autoRan.current) return;
