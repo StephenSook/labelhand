@@ -269,6 +269,8 @@ test("the constraint panel runs an in-memory what-if through the planner", async
   const panel = page.getByRole("region", { name: "Why so few windows?" });
   await expect(panel).toBeVisible();
   await expect(panel.getByRole("list", { name: "Top limiting clauses" }).getByRole("listitem")).toHaveCount(3);
+  // The season strip loads its recorded days in the background; let it finish so only the what-if is watched.
+  await expect(page.locator("[data-season-coverage]")).toBeVisible({ timeout: 30_000 });
   const dataRequests: string[] = [];
   page.on("request", (request) => {
     if (new URL(request.url()).pathname.startsWith("/data/")) dataRequests.push(request.url());
