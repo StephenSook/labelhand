@@ -44,7 +44,12 @@ const data = proof as unknown as Proof;
 type MatrixRow = { PERMITTED: number; BLOCKED: number; FIELD_CHECK: number };
 type ModelAlone = {
   model: string;
+  status?: string;
+  models?: ModelAlone[];
   pooled: {
+    planned_cases?: number;
+    failed_cases?: number;
+    not_attempted_cases?: number;
     successful_cases: number;
     hours_compared: number;
     agreement_matrix_model_x_planner: { PERMITTED: MatrixRow; BLOCKED: MatrixRow; FIELD_CHECK: MatrixRow };
@@ -61,6 +66,20 @@ type ModelAlone = {
   }>;
 };
 const alone = modelAlone as unknown as ModelAlone;
+const aloneModels = alone.models ?? [alone];
+
+function goHours(row: ModelAlone): { model: number; planner: number; unsafe: number } {
+  const m = row.pooled.agreement_matrix_model_x_planner;
+  const sum = (r: MatrixRow) => r.PERMITTED + r.BLOCKED + r.FIELD_CHECK;
+  return { model: sum(m.PERMITTED), planner: m.PERMITTED.PERMITTED + m.BLOCKED.PERMITTED + m.FIELD_CHECK.PERMITTED, unsafe: m.PERMITTED.BLOCKED };
+}
+
+function modelName(id: string): string {
+  if (/ultra/i.test(id)) return "Nemotron 3 Ultra";
+  if (/lightning/i.test(id)) return "Nemotron 3.5 Lightning";
+  if (/super/i.test(id)) return "Nemotron 3 Super";
+  return id;
+}
 const ACTING = new Set(["MUST", "MUST_NOT"]);
 const TANK = "5481-504,264-700,264-418";
 
@@ -261,7 +280,7 @@ export default function ProofPage() {
           </details>
         </SectionCard>
 
-        <SectionCard className="proof-card" id="model-alone">
+        <SectionCard className="proof-card min-w-0" id="model-alone">
           <h2 className="display proof-heading">Nemotron alone on the same forecasts</h2>
           <p className="proof-text">
             Why compile the labels at all? <code>{alone.model}</code> got the full text of all three labels and a recorded 48-hour NWS forecast,
@@ -296,6 +315,58 @@ export default function ProofPage() {
             </div>
           </dl>
 
+          <h3 className="proof-subheading">Every Nemotron model on Token Factory, alone, on the same cases</h3>
+          <div className="mt-3 min-w-0 max-w-full overflow-x-auto" tabIndex={0} role="region" aria-label="Nemotron models alone, scrollable table">
+            <table className="w-full min-w-[42rem] border-collapse text-left text-sm" data-model-alone-table>
+              <caption className="sr-only">Each Nemotron model alone against the compiled planner on the same recorded forecasts</caption>
+              <thead>
+                <tr className="border-b-2 border-[#14213d]">
+                  <th scope="col" className="py-2 pr-3">Model alone</th>
+                  <th scope="col" className="py-2 pr-3">Cases read</th>
+                  <th scope="col" className="py-2 pr-3">Go hours (planner on the same cases)</th>
+                  <th scope="col" className="py-2 pr-3">Go where the labels block</th>
+                  <th scope="col" className="py-2 pr-3">Cited sentences on the cited page</th>
+                  <th scope="col" className="py-2 pr-3">Go hours held / broke at the station</th>
+                  <th scope="col" className="py-2">Token Factory cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                {aloneModels.map((row) => {
+                  const go = goHours(row);
+                  const quotes = row.pooled.quote_check;
+                  const seen = row.pooled.against_observations.model_permitted;
+                  const planned = row.pooled.planned_cases ?? row.pooled.successful_cases;
+                  return (
+                    <tr key={row.model} className="border-b border-[#14213d]/25 align-top" data-model-row={row.model}>
+                      <th scope="row" className="py-2 pr-3 font-black">
+                        {modelName(row.model)}
+                        <span className="block text-xs font-semibold"><code>{row.model}</code></span>
+                      </th>
+                      <td className="py-2 pr-3">
+                        {row.pooled.successful_cases} of {planned}
+                        {row.pooled.successful_cases < planned ? (
+                          <span className="block text-xs font-semibold">
+                            {row.pooled.failed_cases ?? 0} failed or stopped at the cap, {row.pooled.not_attempted_cases ?? 0} not attempted
+                          </span>
+                        ) : null}
+                      </td>
+                      <td className="py-2 pr-3">{go.model} ({go.planner})</td>
+                      <td className="py-2 pr-3">{go.unsafe}</td>
+                      <td className="py-2 pr-3">{quotes.matched.toLocaleString("en-US")} of {quotes.total.toLocaleString("en-US")} ({Math.round((quotes.matched / quotes.total) * 100)}%)</td>
+                      <td className="py-2 pr-3">{seen.held} / {seen.broke}</td>
+                      <td className="py-2">${row.pooled.model_calls.cost_usd.toFixed(2)}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <p className="proof-text">
+            Same prompt, same schema and the same 30 preregistered cases for every model. Ultra and Lightning stopped at a $2.50 spend cap before
+            finishing, and every failed or unattempted case stays in its count. No model alone did the planner&apos;s job: Super said go on hours the
+            labels block, Ultra said go on no hour at all, and Lightning cited sentences that are not on the page it named.
+          </p>
+
           <h3 className="proof-subheading">The hours Nemotron alone said go and the labels block</h3>
           <ul className="proof-diffs">
             {alone.unsafe_go_hours.map((hour) => (
@@ -318,7 +389,7 @@ export default function ProofPage() {
             ))}
           </ul>
           <p className="proof-text proof-caveat">
-            One model, one prompt, one run at temperature 0. Neither side is the ground truth: station wind also broke many of the planner&apos;s go hours,
+            One prompt and one run per model at temperature 0. Neither side is the ground truth: station wind also broke many of the planner&apos;s go hours,
             because the forecast itself was wrong. Full detail per hour:{" "}
             <a className="text-link" href="https://github.com/StephenSook/labelhand/blob/main/eval/results/model-alone-2026-10-19.json">eval/results/model-alone-2026-10-19.json</a>.
           </p>
