@@ -81,6 +81,17 @@ Recompute: `python tools/checkback.py --recorded data/nws_recorded`. The recorde
 
 Three real Georgia cotton defoliation labels: Folex 6 EC (EPA Reg. 5481-504, accepted 2026-03-04), Dropp SC (264-700) and Prep (264-418), 32 pages in total.
 
+### Any EPA label, read three times
+
+Any other product can be put in the tank by name, registration number or a photo of the jug. The app finds the newest accepted label on EPA PPLS and Nemotron 3 Super reads it **three times, independently and at the same time**, with Nemotron 3 Ultra typing each reading's weather rules. The three readings are merged exactly like the three scored labels (`compiler/merge_runs.py`, ported to TypeScript with a byte-for-byte parity test): every rule any reading found is kept, and the readings vote on whether it is a MUST, a MUST NOT or advisory. The page shows the three readings advance side by side and, on the finished label, how many rules each found and how many all three agreed on. These labels are marked UNSCORED because no gold set checks them.
+
+| Axial XL (EPA Reg. 100-1256) | Rules per reading | Kept after merging | Found by all three | Cost | Wall time |
+|---|---|---|---|---|---|
+| Measured run ([receipt](eval/results/live-3run-2026-10-19.json)) | 58, 70, 54 | 99 | 33 | $0.072 | 17.1 s |
+| Second run, recorded as the test fixture | 62, 72, 80 | 128 | 28 | $0.077 | not timed |
+
+The merged count moves by a third between two runs of the same label, which is the reason to read three times rather than once, and also why a live label is never treated as checked. Spend stays inside the old ceiling: a request reserves three readings, and the shared caps are 13 three-reading compiles a day and 133 in total, the same 39 and 399 readings as before.
+
 ### Photo reading
 
 `POST /api/labels/photo` reads an EPA registration number and product name with `nvidia/Nemotron-3.5-Super-VL`, then verifies both against EPA PPLS before returning a verdict. It never compiles automatically. The route accepts JPEG or PNG bytes, rejects inputs over 4 MB, checks image signatures instead of trusting headers, keeps the image in memory only, and can be disabled with `LIVE_PHOTO=off`.
