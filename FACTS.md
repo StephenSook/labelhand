@@ -192,8 +192,7 @@ A label not in the shipped tank is read live: the browser streams `/api/labels/c
 | Claim | Exact value | Source | Tag |
 |---|---|---|---|
 | Readings per live compile | `3` | `web/src/lib/live-limits.ts:9` (`LIVE_COMPILE_READINGS`) | MEASURED |
-| Shared live compile caps | `{"per_day":13,"lifetime":133}` | `web/src/lib/live-ledger.ts:17-18` (`SHARED_DAILY_COLD_COMPILES`, `SHARED_LIFETIME_COLD_COMPILES`) | MEASURED |
-| Recorded live compile, AXIAL XL (EPA 100-1256) | `{"rules_per_reading":[62,72,80],"merged_rules":128,"found_in_all_three":28,"found_in_two":26,"found_in_one":74,"pages":20,"latency_ms":19743,"cost_usd":0.0768177}` | `web/tests/fixtures/live/axial-xl-100-1256.ndjson`, final `done` event: `reading_records[].accepted_rules`, `accepted` length, `found_in_runs` length per accepted rule, `pages`, `latency_ms`, `cost_usd` | MEASURED |
+| Second recorded live compile of AXIAL XL (EPA 100-1256), kept as the streaming test fixture | `{"rules_per_reading":[62,72,80],"merged_rules":128,"found_in_all_three":28,"found_in_two":26,"found_in_one":74,"pages":20,"latency_ms":19743,"cost_usd":0.0768177}` | `web/tests/fixtures/live/axial-xl-100-1256.ndjson`, final `done` event: `reading_records[].accepted_rules`, `accepted` length, `found_in_runs` length per accepted rule, `pages`, `latency_ms`, `cost_usd` | MEASURED |
 | Map counties drawn | `43` | command: count `counties` in `web/public/data/map/south-georgia.json`, 2026-10-20 | MEASURED |
 | Map boundary source | `"us-atlas counties-10m (US Census cartographic boundaries 1:10,000,000)"` | `json:web/public/data/map/south-georgia.json#source` | MEASURED |
 | Map points with a recorded forecast | `["ben_hill","berrien","coffee","colquitt","cook","dooly","irwin","mitchell","tift","worth"]` | command: sorted keys of `points` in `web/public/data/season/index.json`, 2026-10-20 | MEASURED |
@@ -247,4 +246,4 @@ The required CI workflow jobs are `python`, `rust`, and `web` at `.github/workfl
 | Nebius AI Cloud GPU cost for OCR | `"NOT VERIFIED"` | Check needed: read the billed job cost for the retained OCR job. The cost rows above cover Token Factory only. | NOT VERIFIED |
 | An alert call has reached a real subscriber | `"NOT VERIFIED"` | The phone check and call code ship (rows above), but no subscriber had confirmed a number by 2026-10-20. Check needed: an `alerts/log/` entry with a Twilio call SID after a confirmed subscription. | NOT VERIFIED |
 | A native mobile app is shipped | `"NOT VERIFIED"` | The web app installs from the browser as a web app with an offline forecast copy; there is no App Store or Play Store build. | NOT VERIFIED |
-| A live compile returns the same rules every run | `"DO NOT CLAIM"` | Each live compile reads the label three times at temperature 0 and the merged count still varies; only the AXIAL XL run above is committed as a receipt. | NOT VERIFIED |
+| A live compile returns the same rules every run | `"DO NOT CLAIM"` | Two committed live compiles of the same AXIAL XL label merged 99 and 128 rules (rows above), at temperature 0 with three readings each. | NOT VERIFIED |
