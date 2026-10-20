@@ -4,24 +4,33 @@ import { useEffect, useState } from "react";
 
 type InstallEvent = Event & { prompt: () => Promise<void>; userChoice: Promise<{ outcome: "accepted" | "dismissed" }> };
 
-// Registers the service worker in production builds and hands it the URLs this page already
-// loaded, so the first visit is enough for the app to open with no signal.
+// Registers the service worker in production builds and hands it the URLs this page loads, so the
+// first visit is enough for the app to open with no signal. Scripts, the planner's WebAssembly and
+// data can still be loading after the worker is ready but before it controls the page, so every
+// later resource is handed over as it finishes, not only the ones loaded so far.
 export function ServiceWorker() {
   useEffect(() => {
     if (process.env.NODE_ENV !== "production" || !("serviceWorker" in navigator)) return;
+    let observer: PerformanceObserver | undefined;
+    let stopped = false;
     navigator.serviceWorker
       .register("/sw.js")
       .then(() => navigator.serviceWorker.ready)
       .then((registration) => {
-        const urls = performance
-          .getEntriesByType("resource")
-          .map((entry) => entry.name)
-          .concat(window.location.href);
-        registration.active?.postMessage({ type: "warm", urls });
+        if (stopped) return;
+        const warm = (urls: string[]) => registration.active?.postMessage({ type: "warm", urls });
+        warm([window.location.href]);
+        // `buffered` replays every resource loaded so far, then each new one as it finishes.
+        observer = new PerformanceObserver((list) => warm(list.getEntries().map((entry) => entry.name)));
+        observer.observe({ type: "resource", buffered: true });
       })
       .catch(() => {
         // Without a service worker the site still works online; it just cannot open offline.
       });
+    return () => {
+      stopped = true;
+      observer?.disconnect();
+    };
   }, []);
   return null;
 }

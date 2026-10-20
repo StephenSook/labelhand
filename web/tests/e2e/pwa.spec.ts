@@ -39,6 +39,23 @@ test("with no signal the planner opens and checks the last saved forecast, label
   await expect
     .poll(() => page.evaluate(async () => (await (await caches.open("labelhand-forecasts")).keys()).length), { timeout: 30_000 })
     .toBe(1);
+  // Every same-origin file this visit loaded is stored, including the ones that finished after the
+  // worker was ready, or the offline open below would be missing a script or the planner.
+  await expect
+    .poll(
+      () =>
+        page.evaluate(async () => {
+          const loaded = performance
+            .getEntriesByType("resource")
+            .map((entry) => new URL(entry.name))
+            .filter((url) => url.origin === location.origin && !url.pathname.startsWith("/api/") && !url.searchParams.has("_rsc"));
+          const missing: string[] = [];
+          for (const url of loaded) if (!(await caches.match(url.href))) missing.push(url.pathname);
+          return missing;
+        }),
+      { timeout: 30_000 },
+    )
+    .toEqual([]);
 
   await context.unroute("https://api.weather.gov/**");
   await context.setOffline(true);

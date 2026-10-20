@@ -114,8 +114,9 @@ function rememberForecast(event) {
   event.waitUntil(saveForecast(new Request(parsed.href), response));
 }
 
-// The page that registered this worker loaded its scripts and data before the worker controlled it,
-// so it sends their URLs once and the worker stores them for the first offline visit.
+// The page loads scripts and data before this worker controls it, so it sends their URLs as they
+// finish and the worker stores them for the first offline visit. Router payloads (`_rsc`) are left
+// to the network: stored without their request headers they would answer with the wrong body.
 self.addEventListener("message", (event) => {
   if (event.data?.type === "forecast") {
     rememberForecast(event);
@@ -127,7 +128,7 @@ self.addEventListener("message", (event) => {
       event.data.urls.map(async (href) => {
         try {
           const url = new URL(href);
-          if (url.origin !== self.location.origin || url.pathname.startsWith("/api/")) return;
+          if (url.origin !== self.location.origin || url.pathname.startsWith("/api/") || url.searchParams.has("_rsc")) return;
           const cache = await caches.open(SHELL);
           if (!(await cache.match(url.href))) await cache.add(url.href);
         } catch {
