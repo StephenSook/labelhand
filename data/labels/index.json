@@ -34,5 +34,27 @@
   "sha256": "0416a94124e908f51623869612cb1f180a850488de04773fb86f3e1b63372770",
   "versions_listed": 15,
   "fetched_utc": "2026-10-05T01:59:54+00:00"
+ },
+ "228-653": {
+  "reg": "228-653",
+  "product": "FREEFALL SC COTTON DEFOLIANT",
+  "accepted": "2021-05-14",
+  "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00653-20210514.pdf",
+  "file": "data/labels/000228-00653-20210514.pdf",
+  "bytes": 518541,
+  "sha256": "28f688690b11f21b1d2d30517ef95b52b148d74bf6a50b292a63388f86b747c2",
+  "versions_listed": 8,
+  "fetched_utc": "2026-10-20T21:41:07+00:00"
+ },
+ "228-659": {
+  "reg": "228-659",
+  "product": "ETHEPHON E-AG 6 PLANT GROWTH REGULATOR",
+  "accepted": "2022-08-08",
+  "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00659-20220808.pdf",
+  "file": "data/labels/000228-00659-20220808.pdf",
+  "bytes": 332927,
+  "sha256": "52aca62bf5e83141ea410c2cf13ca4140e3bc8d5f7bbb93d93de839f0cc673bb",
+  "versions_listed": 4,
+  "fetched_utc": "2026-10-20T21:41:53+00:00"
  }
 }
