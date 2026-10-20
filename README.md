@@ -15,7 +15,7 @@ Labelhand reads the full EPA label of every product in the tank and turns each r
 | **BLOCKED** | At least one rule is violated. The hour shows which product, which page and the exact clause. |
 | **FIELD CHECK** | The forecast cannot decide (temperature inversions, borderline rain chances). The applicator checks on site. |
 
-It never says a spray is legal. The applicator stays in charge. It checks the labels' weather limits only: Endangered Species Protection Bulletins are not checked, so the next-window card links EPA's [Bulletins Live! Two](https://blt.epa.gov/blt/public) and prints the field's latitude and longitude for its Location Search.
+It never says a spray is legal. The applicator stays in charge. It checks the labels' weather limits, and the next-window card asks EPA's [Bulletins Live! Two](https://blt.epa.gov/blt/public) live which endangered species limits it lists for the tank at that field in that month (informational, not a Bulletin); when that check cannot answer, the card falls back to the link and prints the field's latitude and longitude for its Location Search.
 
 > Built for the **Nebius x NVIDIA Global AI Hackathon** (Best Apps & Agents). Running today: the label compiler, planner kernel, web app, source-label viewer, browser-generated application record, season replay, forecast check-back, any EPA label read live (found by search or by a photo of the jug), a map of all ten fields, and a phone call when a window opens for a subscribed field and tank. On Oct 20 it called the builder's own phone twice from production; no applicator has subscribed yet.
 
