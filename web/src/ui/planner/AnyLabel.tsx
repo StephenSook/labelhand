@@ -25,6 +25,7 @@ type Progress = {
   accepted?: string;
   kilobytes?: number;
   cached?: boolean;
+  statusUnchecked?: boolean;
   pages?: number;
   readings: Record<number, ReadingProgress>;
 };
@@ -49,7 +50,7 @@ export function advance(progress: Progress, event: PipelineEvent): Progress {
     case "pdf":
       return { ...progress, kilobytes: Math.round(event.bytes / 1024), accepted: event.accepted };
     case "cached":
-      return { ...progress, cached: true };
+      return { ...progress, cached: true, statusUnchecked: event.statusUnchecked === true };
     case "extracted":
       return { ...progress, pages: event.pages };
     case "page": {
@@ -170,6 +171,9 @@ export function AnyLabel({ disabled, liveLabels, onAdd, onRemove, shippedRegs = 
       onAdd(compiled);
       setResults(null);
       setQuery("");
+      if (progress.statusUnchecked) {
+        setMessage(`EPA's label system did not answer, so Labelhand could not recheck that EPA Reg. No. ${reg} is still active. Its rules come from the label read on ${compiled.compiled_utc.slice(0, 10)}.`);
+      }
     } catch (error) {
       setMessage(errorMessage(error));
     } finally {

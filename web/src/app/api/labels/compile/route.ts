@@ -193,7 +193,9 @@ export async function POST(request: NextRequest) {
                   fileName: registrationIndex.fileName,
                   accepted: registrationIndex.accepted,
                 });
-                await send({ type: "cached", compiled: cached });
+                // EPA did not answer, so assertActiveRegistration could not run. The stored compile is still
+                // served (PPLS drops connections often), and the event says the status was not rechecked.
+                await send({ type: "cached", compiled: cached, statusUnchecked: true });
                 return;
               }
             }

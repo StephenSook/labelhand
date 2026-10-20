@@ -212,6 +212,7 @@ describe("label compile route", () => {
     });
     expect(result).toEqual(cached);
     expect(events.map(({ type }) => type)).toEqual(["listed", "cached"]);
+    expect(events[1]).not.toHaveProperty("statusUnchecked");
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(compileMock).not.toHaveBeenCalled();
   });
@@ -257,6 +258,8 @@ describe("label compile route", () => {
     });
     expect(result).toEqual(cached);
     expect(events.map(({ type }) => type)).toEqual(["listed", "cached"]);
+    // The status check could not run, and the event says so.
+    expect(events[1]).toMatchObject({ type: "cached", statusUnchecked: true });
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(compileMock).not.toHaveBeenCalled();
   });
