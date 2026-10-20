@@ -146,11 +146,13 @@ export function stateIcon(state: PlannerState): string {
   return "×";
 }
 
+// Every recorded field is in Georgia, and the windows read in Eastern time, so the forecast's own
+// timestamp does too.
 export function formatForecastTime(value: string): string {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
   return new Intl.DateTimeFormat("en-US", {
-    timeZone: "UTC",
+    timeZone: "America/New_York",
     month: "short",
     day: "numeric",
     year: "numeric",
