@@ -31,15 +31,14 @@ test("with no signal the planner opens and checks the last saved forecast, label
     route.fulfill({ status: 200, contentType: "application/geo+json", headers: { "access-control-allow-origin": "*" }, body: JSON.stringify({ properties: { periods } }) }),
   );
 
+  // One first visit, no reload: the forecast lands before the worker controls the page, and the
+  // page must still hand it over for the next visit.
   await page.goto("/app?field=tift&products=5481-504,264-700,264-418&hours=3");
-  await page.evaluate(async () => {
-    await navigator.serviceWorker.ready;
-  });
-  // Reload under the worker's control so it stores this page's forecast and assets.
-  await page.reload();
   await expect(page.locator("[data-forecast-source]")).toHaveAttribute("data-forecast-source", "LIVE", { timeout: 30_000 });
-  expect(await page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true);
   await expect(page.locator("[data-offline-copy]")).toHaveCount(0);
+  await expect
+    .poll(() => page.evaluate(async () => (await (await caches.open("labelhand-forecasts")).keys()).length), { timeout: 30_000 })
+    .toBe(1);
 
   await context.unroute("https://api.weather.gov/**");
   await context.setOffline(true);

@@ -98,20 +98,35 @@ self.addEventListener("fetch", (event) => {
   event.respondWith(networkFirst(request));
 });
 
-// The page that registered this worker loaded its scripts, data and forecasts before the worker
-// controlled it, so it sends their URLs once and the worker stores them for the first offline visit.
+// The page sends the forecast it fetched, so a forecast that arrived before this worker controlled
+// the page is still kept, and kept without a second request to NWS.
+function rememberForecast(event) {
+  const { url, body } = event.data;
+  if (typeof url !== "string" || typeof body !== "string") return;
+  let parsed;
+  try {
+    parsed = new URL(url);
+  } catch {
+    return;
+  }
+  if (!isForecast(parsed)) return;
+  const response = new Response(body, { status: 200, headers: { "content-type": "application/geo+json" } });
+  event.waitUntil(saveForecast(new Request(parsed.href), response));
+}
+
+// The page that registered this worker loaded its scripts and data before the worker controlled it,
+// so it sends their URLs once and the worker stores them for the first offline visit.
 self.addEventListener("message", (event) => {
+  if (event.data?.type === "forecast") {
+    rememberForecast(event);
+    return;
+  }
   if (event.data?.type !== "warm" || !Array.isArray(event.data.urls)) return;
   event.waitUntil(
     Promise.all(
       event.data.urls.map(async (href) => {
         try {
           const url = new URL(href);
-          if (isForecast(url)) {
-            const response = await fetch(url.href, { mode: "cors" });
-            if (response.ok) await saveForecast(new Request(url.href), response);
-            return;
-          }
           if (url.origin !== self.location.origin || url.pathname.startsWith("/api/")) return;
           const cache = await caches.open(SHELL);
           if (!(await cache.match(url.href))) await cache.add(url.href);

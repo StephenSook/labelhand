@@ -186,7 +186,8 @@ export async function fetchLivePeriods(url: string): Promise<{
   if (!response.ok) {
     throw new Error(`${url} returned HTTP ${response.status} ${response.statusText}`.trim());
   }
-  const payload = (await response.json()) as { properties?: { periods?: ForecastPeriod[] } };
+  const body = await response.text();
+  const payload = JSON.parse(body) as { properties?: { periods?: ForecastPeriod[] } };
   const periods = payload.properties?.periods;
   if (!Array.isArray(periods) || periods.length === 0) {
     throw new Error(`${url} returned no properties.periods forecast array`);
@@ -195,7 +196,20 @@ export async function fetchLivePeriods(url: string): Promise<{
   if (savedAt !== null) {
     return { periods, fetchedAt: Number.isNaN(Date.parse(savedAt)) ? new Date(0).toISOString() : savedAt, offlineCopy: true };
   }
+  rememberForecast(url, body);
   return { periods, fetchedAt: new Date().toISOString(), offlineCopy: false };
+}
+
+// On a first visit the forecast usually arrives before the service worker controls the page, so it
+// never passes through the worker. Hand the worker the bytes this page already has; it keeps them for
+// the next visit with no signal, without asking NWS a second time.
+function rememberForecast(url: string, body: string): void {
+  if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) return;
+  void navigator.serviceWorker.ready
+    .then((registration) => registration.active?.postMessage({ type: "forecast", url, body }))
+    .catch(() => {
+      // Without a worker the planner still works online; it just has no copy to open offline.
+    });
 }
 
 export async function fetchReplay(point: string): Promise<ReplayForecast> {
