@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { AgentCheckSnapshot } from "@/lib/agent/tools";
-import { runPlannerCheck, type PlannerCheckResult, type PlannerSource } from "@/lib/run-planner";
+import { labelsCoverResult, runPlannerCheck, type PlannerCheckResult, type PlannerSource } from "@/lib/run-planner";
 import { forecastPermittedWindows } from "@/lib/windows";
 import { requestLiveCompile } from "@/lib/compiler/client";
 import type { CompiledLiveLabel } from "@/lib/compiler/pipeline";
@@ -658,7 +658,7 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
         )}
       </section>
 
-      {result && tankLabels && (
+      {result && tankLabels && labelsCoverResult(result, tankLabels) && (
         <Results
           result={result}
           labels={tankLabels}

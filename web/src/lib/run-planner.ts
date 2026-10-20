@@ -132,6 +132,16 @@ export async function runPlannerCheck({
   };
 }
 
+// A result can outlive a live label the visitor just removed, until the tank re-check replaces it.
+// Results render only while every product in them still has its label, so the page never asks
+// for label metadata that is gone.
+export function labelsCoverResult(
+  result: Pick<PlannerCheckResult, "registrations">,
+  labels: Record<string, unknown> | null,
+): boolean {
+  return labels !== null && result.registrations.every((reg) => labels[reg] !== undefined);
+}
+
 function isShippedRegistration(reg: string): boolean {
   return (PRODUCT_REGISTRATIONS as readonly string[]).includes(reg);
 }

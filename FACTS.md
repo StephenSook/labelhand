@@ -226,7 +226,7 @@ The required CI workflow jobs are `python`, `rust`, and `web` at `.github/workfl
 | Rust WASM build | `"release build passed"` | command: `wasm-pack build core --target web --release -- --features wasm`; output: `Your wasm pkg is ready to publish at core\\pkg` | MEASURED |
 | Web typecheck | `"passed"` | command from `web/`: `pnpm typecheck`; output: `Types generated successfully`; `tsc --noEmit` exit: `0` | MEASURED |
 | Web lint | `"passed"` | command from `web/`: `pnpm lint`; exit: `0` | MEASURED |
-| Web unit tests | `"354 passed in 39 files"` | command from `web/`: `pnpm test` with commits `a24cb0e` and `787d92d`, 2026-10-20; output: `Test Files 39 passed`, `Tests 354 passed` | MEASURED |
+| Web unit tests | `"357 passed in 40 files"` | command from `web/`: `pnpm test` with the live-label render guard, 2026-10-20; output: `Test Files 40 passed`, `Tests 357 passed` | MEASURED |
 | Web production build | `"passed; 17 of 17 static pages generated"` | command from `web/`: `pnpm build`, 2026-10-20; output: `Generating static pages using 7 workers (17/17)` | MEASURED |
 | Web end-to-end tests | `"37 passed"` | command from `web/`: `pnpm e2e` against `pnpm start` on `787d92d`, 2026-10-20; output: `37 passed (1.4m)` | MEASURED |
 | Browser data freshness | `"passed with no diff"` | commands: rebuild WASM, `pnpm sync-engine`, then `git diff --exit-code -- web/public/data`; all exits: `0` | MEASURED |
