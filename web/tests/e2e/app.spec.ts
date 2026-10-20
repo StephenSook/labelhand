@@ -99,11 +99,12 @@ test("the next-window card shows each Bulletins Live! Two answer without calling
   // Answers the checker returns for recorded EPA responses (pinned in tests/blt.test.ts).
   const noLimits = JSON.parse(await readFile(path.join(fixtures, "answer-tift-tank-2026-11.json"), "utf8"));
   const stryax = JSON.parse(await readFile(path.join(fixtures, "answer-dooly-stryax-2026-11.json"), "utf8"));
-  // The real STRYAX limitation in PULA 121, credited to Dropp SC in this test only so the card has a
-  // tank product to list it under. Bulletins Live! Two lists no limitation for Dropp SC.
+  // The real STRYAX limitation in PULA 121, credited to FreeFall SC in this test only so the card has a
+  // tank product to list it under. Bulletins Live! Two lists no limitation for this tank at Tift
+  // (live /api/bulletins, October and November 2026, checked 2026-10-20).
   const limits = {
     ...stryax,
-    limitations: (stryax.limitations as Array<Record<string, unknown>>).map((limitation) => ({ ...limitation, reg: "264-700" })),
+    limitations: (stryax.limitations as Array<Record<string, unknown>>).map((limitation) => ({ ...limitation, reg: "228-653" })),
   };
   const unavailable = { status: "unavailable", reason: "BLT pulas_public returned HTTP 500." };
 
@@ -130,7 +131,7 @@ test("the next-window card shows each Bulletins Live! Two answer without calling
   const first = asked[0];
   expect(first.searchParams.get("lat")).toBe("31.4");
   expect(first.searchParams.get("lon")).toBe("-83.6");
-  expect(first.searchParams.get("regs")).toBe("5481-504,264-700,264-418");
+  expect(first.searchParams.get("regs")).toBe("5481-504,228-653,228-659");
   const month = first.searchParams.get("month") ?? "";
   const current = monthIndex(easternMonth(new Date()));
   expect(monthIndex(month)).not.toBeNull();
@@ -153,11 +154,11 @@ test("the next-window card shows each Bulletins Live! Two answer without calling
   reply = { status: 200, body: limits };
   await page.getByRole("checkbox", { name: /5481-504/ }).uncheck();
   await expect(bulletin).toHaveAttribute("data-bulletin-status", "limits");
-  expect(asked.at(-1)?.searchParams.get("regs")).toBe("264-700,264-418");
-  const dropp = bulletin.locator('[data-bulletin-reg="264-700"]');
-  await expect(dropp).toContainText("Dropp SC, EPA Reg. 264-700");
-  await expect(dropp.locator("[data-bulletin-limitation]")).toHaveCount(1);
-  await expect(dropp.locator("[data-bulletin-limitation]")).toContainText("DC125, PULA 121: This crop use is located within a PULA.");
+  expect(asked.at(-1)?.searchParams.get("regs")).toBe("228-653,228-659");
+  const freefall = bulletin.locator('[data-bulletin-reg="228-653"]');
+  await expect(freefall).toContainText("FreeFall SC, EPA Reg. 228-653");
+  await expect(freefall.locator("[data-bulletin-limitation]")).toHaveCount(1);
+  await expect(freefall.locator("[data-bulletin-limitation]")).toContainText("DC125, PULA 121: This crop use is located within a PULA.");
   await expect(bulletin).toContainText(`lists endangered species limits for these products at this field in ${monthLabel}. Informational, not a Bulletin.`);
   await expect(bulletin).toContainText("Search 31.4, -83.6 in Bulletins Live! Two. Get the official bulletin there before you spray.");
   await expect(bulletin.getByRole("link", { name: "Bulletins Live! Two" })).toHaveAttribute("target", "_blank");
@@ -165,14 +166,14 @@ test("the next-window card shows each Bulletins Live! Two answer without calling
 
   // Unavailable: the manual pointer comes back.
   reply = { status: 502, body: unavailable };
-  await page.getByRole("checkbox", { name: /264-418/ }).uncheck();
+  await page.getByRole("checkbox", { name: /228-659/ }).uncheck();
   await expect(bulletin).toHaveAttribute("data-bulletin-status", "unavailable");
-  expect(asked.at(-1)?.searchParams.get("regs")).toBe("264-700");
+  expect(asked.at(-1)?.searchParams.get("regs")).toBe("228-653");
   await expect(bulletin).toContainText("Endangered species limits are not checked here. In EPA's Bulletins Live! Two, search 31.4, -83.6");
 
-  // Yellow card (no window fits a 12-hour job), limits found.
+  // Yellow card (no window fits a 12-hour job: FreeFall SC alone peaks at 11 hours on this replay), limits found.
   reply = { status: 200, body: limits };
-  await page.goto("/app?field=tift&products=264-700&hours=12&replay=tift");
+  await page.goto("/app?field=tift&products=228-653&hours=12&replay=tift");
   await expect(page.locator("[data-hour-cell]")).toHaveCount(156);
   await expect(card).toContainText("No forecast-permitted window fits this 12-hour job");
   await expect(bulletin).toHaveAttribute("data-bulletin-status", "limits");

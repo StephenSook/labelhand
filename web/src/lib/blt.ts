@@ -100,7 +100,7 @@ function coordinate(raw: string, name: string, limit: number): number {
 }
 
 function normalizeReg(reg: string): string {
-  if (!BULLETIN_REG_PATTERN.test(reg)) throw new BltInputError(`${reg || "An empty value"} is not a federal EPA Reg. No. such as 264-700.`);
+  if (!BULLETIN_REG_PATTERN.test(reg)) throw new BltInputError(`${reg || "An empty value"} is not a federal EPA Reg. No. such as 228-653.`);
   return canonicalRegistration(reg);
 }
 

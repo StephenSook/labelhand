@@ -7,7 +7,7 @@ export const maxDuration = 30;
 
 const NO_STORE = { "cache-control": "no-store" };
 
-// GET /api/bulletins?lat=31.4&lon=-83.6&regs=264-700,264-418&month=2026-11
+// GET /api/bulletins?lat=31.4&lon=-83.6&regs=228-653,228-659&month=2026-11
 export async function GET(request: NextRequest) {
   // LABELHAND_BLT_LIVE=off keeps a server from calling EPA (the end-to-end test server sets it).
   if (process.env.LABELHAND_BLT_LIVE === "off") {
