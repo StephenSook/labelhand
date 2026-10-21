@@ -248,3 +248,13 @@ def test_response_validation_rejects_extra_root_keys_and_boolean_indices():
         pass
     else:
         raise AssertionError("Boolean hour indices must be rejected")
+
+
+def test_committed_shipped_tank_summary_matches_its_receipt():
+    source = "eval/results/model-alone-shipped-2026-10-20.json"
+    receipt = json.loads((ROOT / source).read_text(encoding="utf-8"))
+    assert receipt["preregistration"]["tank"]["registrations"] == list(model_alone.REGISTRATIONS)
+    assert receipt["preregistration"]["model_alone"]["model"] == model_alone.DEFAULT_MODEL
+    assert receipt["run"]["status"] == "complete"
+    actual = json.loads((ROOT / "web/public/data/model-alone-shipped.json").read_text(encoding="utf-8"))
+    assert actual == model_alone.public_summary(receipt, source)

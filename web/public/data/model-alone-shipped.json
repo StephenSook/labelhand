@@ -1,0 +1,82 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-21T00:09:47+00:00",
+ "model": "nvidia/nemotron-3-super-120b-a12b",
+ "tank_registrations": [
+  "5481-504",
+  "228-653",
+  "228-659"
+ ],
+ "sample_dates_local": [
+  "2026-10-06",
+  "2026-10-10",
+  "2026-10-14"
+ ],
+ "status": "complete",
+ "pooled": {
+  "planned_cases": 30,
+  "selected_cases": 30,
+  "successful_cases": 30,
+  "failed_cases": 0,
+  "missing_issuance_cases": 0,
+  "not_attempted_cases": 0,
+  "hours_compared": 1440,
+  "agreement_matrix_model_x_planner": {
+   "PERMITTED": {
+    "PERMITTED": 5,
+    "BLOCKED": 0,
+    "FIELD_CHECK": 0
+   },
+   "BLOCKED": {
+    "PERMITTED": 6,
+    "BLOCKED": 44,
+    "FIELD_CHECK": 18
+   },
+   "FIELD_CHECK": {
+    "PERMITTED": 194,
+    "BLOCKED": 219,
+    "FIELD_CHECK": 954
+   }
+  },
+  "unsafe_go_count": 0,
+  "lost_window_count": 6,
+  "quote_check": {
+   "matched": 1344,
+   "total": 1440,
+   "fraction": 0.933333
+  },
+  "against_observations": {
+   "model_permitted": {
+    "permitted_hours": 5,
+    "with_observation": 5,
+    "no_observation": 0,
+    "held": 4,
+    "broke": 0,
+    "skipped_missing_measurement": 1,
+    "not_checkable": 0
+   },
+   "planner_permitted": {
+    "permitted_hours": 205,
+    "with_observation": 167,
+    "no_observation": 38,
+    "held": 66,
+    "broke": 89,
+    "skipped_missing_measurement": 12,
+    "not_checkable": 0
+   }
+  },
+  "model_calls": {
+   "attempts": 30,
+   "prompt_tokens": 991994,
+   "completion_tokens": 163182,
+   "total_tokens": 1155176,
+   "latency_ms": 1208276,
+   "cost_usd": 0.444462,
+   "reported_cost_usd": 0.444462,
+   "unknown_cost_attempts": 0,
+   "budget_accounted_cost_usd": 0.444462
+  }
+ },
+ "unsafe_go_hours": [],
+ "source": "eval/results/model-alone-shipped-2026-10-20.json"
+}
