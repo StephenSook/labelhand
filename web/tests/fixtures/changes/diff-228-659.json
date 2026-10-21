@@ -1,0 +1,750 @@
+{
+ "recorded_utc": "2026-10-21T14:59:34.484Z",
+ "reg": "228-659",
+ "from": {
+  "fileName": "000228-00659-20200131.pdf",
+  "accepted": "2020-01-31",
+  "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00659-20200131.pdf",
+  "sha256": "658d932bd8db72e0ca5595c76ecf42b2654a889c5758ff98dc4b28cc0806b06f",
+  "pages": 10
+ },
+ "to": {
+  "fileName": "000228-00659-20220808.pdf",
+  "accepted": "2022-08-08",
+  "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00659-20220808.pdf",
+  "sha256": "52aca62bf5e83141ea410c2cf13ca4140e3bc8d5f7bbb93d93de839f0cc673bb",
+  "pages": 10
+ },
+ "diff": {
+  "changes": [
+   {
+    "kind": "changed",
+    "before": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "UNITED STATES ENVIRONMENTAL PROTECTION AGENCY WASHINGTON, DC 20460 Reg Review Label Acceptable v.20151230 OFFICE OF CHEMICAL SAFETY AND POLLUTION PREVENTION January 31, 2020 Danielle A.",
+     "marks": [
+      [
+       67,
+       105
+      ],
+      [
+       157,
+       173
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "UNITED STATES ENVIRONMENTAL PROTECTION AGENCY WASHINGTON, DC 20460 Reg Review Label Acceptable v.20151230 OFFICE OF CHEMICAL SAFETY AND POLLUTION PREVENTION January 31, 2020 Danielle A.",
+       "marked": true
+      }
+     ]
+    },
+    "after": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "UNITED STATES ENVIRONMENTAL PROTECTION AGENCY WASHINGTON, DC 20460 OFFICE OF CHEMICAL SAFETY AND POLLUTION PREVENTION Notification ABN or Label Acceptable v.20220527 August 8, 2022 Danielle A.",
+     "marks": [
+      [
+       118,
+       180
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "UNITED STATES ENVIRONMENTAL PROTECTION AGENCY WASHINGTON, DC 20460 OFFICE OF CHEMICAL SAFETY AND POLLUTION PREVENTION Notification ABN or Label Acceptable v.20220527 August 8, 2022 Danielle A.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "changed",
+    "before": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "Larochelle Regulatory Manager Nufarm Americas Inc 4020 Aerial Center Parkway Suite 101 Morrisville, NC, 27560 Subject: Registration Review Label Mitigation for Ethephon Product Name: Ethephon E-AG 6 Plant Growth Regulator EPA Registration Number: 228-659 Application Date: 27 Apr 2018 Decision Number: 554501 Dear Danielle A. Larochelle: The Agency, in accordance with the Federal Insecticide, Fungicide and Rodenticide Act (FIFRA), as amended, has completed reviewing all of the information submitted with your application to support the Registration Review of the above referenced product in connection with the Ethephon Interim Decision, and has concluded that your submission is acceptable.",
+     "marks": [
+      [
+       50,
+       109
+      ],
+      [
+       119,
+       138
+      ],
+      [
+       145,
+       168
+      ],
+      [
+       273,
+       284
+      ],
+      [
+       302,
+       308
+      ],
+      [
+       314,
+       325
+      ],
+      [
+       353,
+       472
+      ],
+      [
+       476,
+       506
+      ],
+      [
+       524,
+       538
+      ],
+      [
+       552,
+       561
+      ],
+      [
+       591,
+       609
+      ],
+      [
+       614,
+       640
+      ],
+      [
+       645,
+       658
+      ],
+      [
+       664,
+       694
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "Larochelle Regulatory Manager Nufarm Americas Inc 4020 Aerial Center Parkway Suite 101 Morrisville, NC, 27560 Subject: Registration Review Label Mitigation for Ethephon Product Name: Ethephon E-AG 6 Plant Growth Regulator EPA Registration Number: 228-659 Application Date: 27 Apr 2018 Decision Number: 554501",
+       "marked": true
+      },
+      {
+       "page": 1,
+       "text": "Dear Danielle A.",
+       "marked": true
+      },
+      {
+       "page": 1,
+       "text": "Larochelle: The Agency, in accordance with the Federal Insecticide, Fungicide and Rodenticide Act (FIFRA), as amended, has completed reviewing all of the information submitted with your application to support the Registration Review of the above referenced product in connection with the Ethephon Interim Decision, and has concluded that your submission is acceptable.",
+       "marked": true
+      }
+     ]
+    },
+    "after": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "Larochelle Sr. Regulatory Manager Nufarm Americas Inc. 11901 S. Austin Avenue Alsip, IL 60803 Subject: Notification per PRN 98-10 – Update Referral Statement in the KOOROC Box on Page 1 of the Label Product Name: ETHEPHON E-AG 6 PLANT GROWTH REGULATOR EPA Registration Number: 228-659 Application Date: July 07, 2022 Decision Number: 586117 Dear Ms. Larochelle: The Agency is in receipt of your Application for Pesticide Notification under Pesticide Registration Notice (PRN) 98-10 for the above referenced product. The Registration Division (RD) has conducted a review of this request for its applicability under PRN 98-10 and finds that the action requested falls within the scope of PRN 98-10.",
+     "marks": [
+      [
+       11,
+       14
+      ],
+      [
+       55,
+       93
+      ],
+      [
+       103,
+       129
+      ],
+      [
+       132,
+       192
+      ],
+      [
+       303,
+       316
+      ],
+      [
+       334,
+       340
+      ],
+      [
+       346,
+       349
+      ],
+      [
+       373,
+       375
+      ],
+      [
+       379,
+       386
+      ],
+      [
+       407,
+       449
+      ],
+      [
+       463,
+       485
+      ],
+      [
+       520,
+       623
+      ],
+      [
+       628,
+       633
+      ],
+      [
+       639,
+       696
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "Larochelle Sr.",
+       "marked": true
+      },
+      {
+       "page": 1,
+       "text": "Regulatory Manager Nufarm Americas Inc. 11901 S.",
+       "marked": true
+      },
+      {
+       "page": 1,
+       "text": "Austin Avenue Alsip, IL 60803 Subject: Notification per PRN 98-10 – Update Referral Statement in the KOOROC Box on Page 1 of the Label Product Name: ETHEPHON E-AG 6 PLANT GROWTH REGULATOR EPA Registration Number: 228-659 Application Date: July 07, 2022",
+       "marked": true
+      },
+      {
+       "page": 1,
+       "text": "Decision Number: 586117 Dear Ms. Larochelle: The Agency is in receipt of your Application for Pesticide Notification under Pesticide Registration Notice (PRN) 98-10 for the above referenced product.",
+       "marked": true
+      },
+      {
+       "page": 1,
+       "text": "The Registration Division (RD) has conducted a review of this request for its applicability under PRN 98-10 and finds that the action requested falls within the scope of PRN 98-10.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "changed",
+    "before": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "The label referred to above, submitted in connection with registration under FIFRA, as amended, is acceptable.",
+     "marks": [
+      [
+       10,
+       28
+      ],
+      [
+       42,
+       110
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "The label referred to above, submitted in connection with registration under FIFRA, as amended, is acceptable.",
+       "marked": true
+      }
+     ]
+    },
+    "after": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "The label submitted with the application has been stamped “NOTIFICATION” and placed in our records.",
+     "marks": [
+      [
+       20,
+       83
+      ],
+      [
+       87,
+       99
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "The label submitted with the application has been stamped “NOTIFICATION” and placed in our records.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "changed",
+    "before": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "Should you wish to add/retain a reference to the company’s website on your label, then please be aware that the website becomes labeling under the Federal Insecticide Fungicide and Rodenticide Act and is subject to review by the Agency.",
+     "marks": [],
+     "parts": [
+      {
+       "page": 1,
+       "text": "Should you wish to add/retain a reference to the company’s website on your label, then please be aware that the website becomes labeling under the Federal Insecticide Fungicide and Rodenticide Act and is subject to review by the Agency.",
+       "marked": false
+      }
+     ]
+    },
+    "after": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "Should you wish to add/retain a reference to the company’s website on your label, then please be aware that the website becomes labeling under the Federal Insecticide, Fungicide, and Rodenticide Act (FIFRA) and is subject to review by the Agency.",
+     "marks": [
+      [
+       199,
+       206
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "Should you wish to add/retain a reference to the company’s website on your label, then please be aware that the website becomes labeling under the Federal Insecticide, Fungicide, and Rodenticide Act (FIFRA) and is subject to review by the Agency.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "changed",
+    "before": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "40 CFR 156.10(a)(5) list examples of statements EPA may consider false or misleading.",
+     "marks": [
+      [
+       20,
+       24
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "40 CFR 156.10(a)(5) list examples of statements EPA may consider false or misleading.",
+       "marked": true
+      }
+     ]
+    },
+    "after": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "40 CFR 156.10(a)(5) lists examples of statements EPA may consider false or misleading.",
+     "marks": [
+      [
+       20,
+       25
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "40 CFR 156.10(a)(5) lists examples of statements EPA may consider false or misleading.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "removed",
+    "before": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "A copy of your label stamped “Accepted” is enclosed.",
+     "marks": [
+      [
+       0,
+       52
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "A copy of your label stamped “Accepted” is enclosed.",
+       "marked": true
+      }
+     ]
+    },
+    "after": null,
+    "conditions": []
+   },
+   {
+    "kind": "removed",
+    "before": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "Products shipped after 12 months from the date of this amendment must bear the new revised label.",
+     "marks": [
+      [
+       0,
+       97
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "Products shipped after 12 months from the date of this amendment must bear the new revised label.",
+       "marked": true
+      }
+     ]
+    },
+    "after": null,
+    "conditions": []
+   },
+   {
+    "kind": "removed",
+    "before": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "Your release for shipment of the product bearing the amended label constitutes acceptance of these conditions.",
+     "marks": [
+      [
+       0,
+       110
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "Your release for shipment of the product bearing the amended label constitutes acceptance of these conditions.",
+       "marked": true
+      }
+     ]
+    },
+    "after": null,
+    "conditions": []
+   },
+   {
+    "kind": "changed",
+    "before": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "If these conditions are not complied with, the registration will be subject to cancellation in accordance with FIFRA section 6.",
+     "marks": [
+      [
+       3,
+       127
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "If these conditions are not complied with, the registration will be subject to cancellation in accordance with FIFRA section 6.",
+       "marked": true
+      }
+     ]
+    },
+    "after": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "If you have any questions, please contact Ernest Kraka at (202)-566-2811 or at kraka.ernest@epa.gov.",
+     "marks": [
+      [
+       3,
+       100
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "If you have any questions, please contact Ernest Kraka at (202)-566-2811 or at kraka.ernest@epa.gov.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "changed",
+    "before": {
+     "page": 2,
+     "pages": [
+      2,
+      3
+     ],
+     "text": "No. 228-659 Decision No. 554501 If you have any questions about this letter, please contact Srijana Shrestha by phone at 703-305- 6471, or via email at Shrestha.srijana@epa.gov. Sincerely, Linda Arrington, Branch Chief Risk Management and Implementation Branch 4 Pesticide Re-Evaluation Division Office of Pesticide Programs Enclosure 000228-00659.20180427.Reg Review Label Ethephon E-AG 6 Plant Growth Regulator [Alternate brand name: Super Boll® Plant Regulator] FOR USE ON COTTON AND TOBACCO NOT FOR USE IN RESIDENTIAL AREAS ACTIVE INGREDIENT: Ethephon: (2-Chloroethyl) phosphonic acid*.",
+     "marks": [
+      [
+       25,
+       177
+      ],
+      [
+       189,
+       286
+      ],
+      [
+       335,
+       373
+      ]
+     ],
+     "parts": [
+      {
+       "page": 2,
+       "text": "No. 228-659 Decision No. 554501 If you have any questions about this letter, please contact Srijana Shrestha by phone at 703-305- 6471, or via email at Shrestha.srijana@epa.gov.",
+       "marked": true
+      },
+      {
+       "page": 2,
+       "text": "Sincerely, Linda Arrington, Branch Chief Risk Management and Implementation Branch 4 Pesticide Re-Evaluation Division Office of Pesticide Programs Enclosure",
+       "marked": true
+      },
+      {
+       "page": 3,
+       "text": "000228-00659.20180427.Reg Review Label Ethephon E-AG 6 Plant Growth Regulator [Alternate brand name: Super Boll® Plant Regulator] FOR USE ON COTTON AND TOBACCO NOT FOR USE IN RESIDENTIAL AREAS ACTIVE INGREDIENT: Ethephon: (2-Chloroethyl) phosphonic acid*.",
+       "marked": true
+      }
+     ]
+    },
+    "after": {
+     "page": 2,
+     "pages": [
+      2,
+      3
+     ],
+     "text": "No. 228-659 Decision No. 586117 Sincerely, Kable Bo Davis Senior Regulatory Specialist Registration Division (7505P) Office of Pesticide Programs Enclosure y 000228-00659.20220707.Label_Ref Stmt_Notif Ethephon E-AG 6 Plant Growth Regulator [Alternate brand name: Super Boll® Plant Regulator] FOR USE ON COTTON AND TOBACCO NOT FOR USE IN RESIDENTIAL AREAS ACTIVE INGREDIENT: Ethephon: (2-Chloroethyl) phosphonic acid*.",
+     "marks": [
+      [
+       25,
+       31
+      ],
+      [
+       43,
+       99
+      ],
+      [
+       109,
+       116
+      ],
+      [
+       156,
+       200
+      ]
+     ],
+     "parts": [
+      {
+       "page": 2,
+       "text": "No. 228-659 Decision No. 586117 Sincerely, Kable Bo Davis Senior Regulatory Specialist Registration Division (7505P) Office of Pesticide Programs Enclosure y",
+       "marked": true
+      },
+      {
+       "page": 3,
+       "text": "000228-00659.20220707.Label_Ref Stmt_Notif Ethephon E-AG 6 Plant Growth Regulator [Alternate brand name: Super Boll® Plant Regulator] FOR USE ON COTTON AND TOBACCO NOT FOR USE IN RESIDENTIAL AREAS ACTIVE INGREDIENT: Ethephon: (2-Chloroethyl) phosphonic acid*.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "changed",
+    "before": {
+     "page": 3,
+     "pages": [
+      3
+     ],
+     "text": "See inside booklet for [FIRST AID and] PRECAUTIONARY STATEMENTS For Chemical Spill, Leak, Fire, or Exposure, Call CHEMTREC (800) 424-9300 For Medical Emergencies Only, Call (877) 325-1840 FIRST AID IF IN EYES x Hold eye open and rinse slowly and gently with water for 15 to 20 minutes.",
+     "marks": [],
+     "parts": [
+      {
+       "page": 3,
+       "text": "See inside booklet for [FIRST AID and] PRECAUTIONARY STATEMENTS For Chemical Spill, Leak, Fire, or Exposure, Call CHEMTREC (800) 424-9300 For Medical Emergencies Only, Call (877) 325-1840 FIRST AID IF IN EYES x Hold eye open and rinse slowly and gently with water for 15 to 20 minutes.",
+       "marked": false
+      }
+     ]
+    },
+    "after": {
+     "page": 3,
+     "pages": [
+      3
+     ],
+     "text": "See inside booklet for [FIRST AID and] [complete] PRECAUTIONARY STATEMENTS [and DIRECTIONS FOR USE] For Chemical Spill, Leak, Fire, or Exposure, Call CHEMTREC (800) 424-9300 For Medical Emergencies Only, Call (877) 325-1840 FIRST AID IF IN EYES x Hold eye open and rinse slowly and gently with water for 15 to 20 minutes.",
+     "marks": [
+      [
+       39,
+       49
+      ],
+      [
+       75,
+       99
+      ]
+     ],
+     "parts": [
+      {
+       "page": 3,
+       "text": "See inside booklet for [FIRST AID and] [complete] PRECAUTIONARY STATEMENTS [and DIRECTIONS FOR USE] For Chemical Spill, Leak, Fire, or Exposure, Call CHEMTREC (800) 424-9300 For Medical Emergencies Only, Call (877) 325-1840 FIRST AID IF IN EYES x Hold eye open and rinse slowly and gently with water for 15 to 20 minutes.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "removed",
+    "before": {
+     "page": 3,
+     "pages": [
+      3
+     ],
+     "text": "Jan 31, 2020 228-659",
+     "marks": [
+      [
+       0,
+       20
+      ]
+     ],
+     "parts": [
+      {
+       "page": 3,
+       "text": "Jan 31, 2020 228-659",
+       "marked": true
+      }
+     ]
+    },
+    "after": null,
+    "conditions": []
+   },
+   {
+    "kind": "changed",
+    "before": {
+     "page": 10,
+     "pages": [
+      10
+     ],
+     "text": "8 If you do not agree with or do not accept any of the directions for use, the warranty disclaimers, or limitations on liability, do not use the product, and return it unopened to the Seller, and the purchase price will be refunded.",
+     "marks": [
+      [
+       116,
+       118
+      ]
+     ],
+     "parts": [
+      {
+       "page": 10,
+       "text": "8 If you do not agree with or do not accept any of the directions for use, the warranty disclaimers, or limitations on liability, do not use the product, and return it unopened to the Seller, and the purchase price will be refunded.",
+       "marked": true
+      }
+     ]
+    },
+    "after": {
+     "page": 10,
+     "pages": [
+      10
+     ],
+     "text": "8 If you do not agree with or do not accept any of the directions for use, the warranty disclaimers, or limitations of liability, do not use the product, and return it unopened to the Seller, and the purchase price will be refunded.",
+     "marks": [
+      [
+       116,
+       118
+      ]
+     ],
+     "parts": [
+      {
+       "page": 10,
+       "text": "8 If you do not agree with or do not accept any of the directions for use, the warranty disclaimers, or limitations of liability, do not use the product, and return it unopened to the Seller, and the purchase price will be refunded.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "changed",
+    "before": {
+     "page": 10,
+     "pages": [
+      10
+     ],
+     "text": "(RV042718) Super Boll is a registered trademark of Nufarm Americas Inc. All other trademarks are the property of their respective owners.",
+     "marks": [
+      [
+       0,
+       10
+      ]
+     ],
+     "parts": [
+      {
+       "page": 10,
+       "text": "(RV042718) Super Boll is a registered trademark of Nufarm Americas Inc. All other trademarks are the property of their respective owners.",
+       "marked": true
+      }
+     ]
+    },
+    "after": {
+     "page": 10,
+     "pages": [
+      10
+     ],
+     "text": "(RV070722) Super Boll is a registered trademark of Nufarm Americas Inc. All other trademarks are the property of their respective owners.",
+     "marks": [
+      [
+       0,
+       10
+      ]
+     ],
+     "parts": [
+      {
+       "page": 10,
+       "text": "(RV070722) Super Boll is a registered trademark of Nufarm Americas Inc. All other trademarks are the property of their respective owners.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   }
+  ],
+  "sentences": {
+   "from": 292,
+   "to": 290
+  },
+  "moved": 0,
+  "formatting": 2,
+  "blankPages": {
+   "from": [],
+   "to": []
+  },
+  "unreadable": null
+ }
+}

@@ -1,0 +1,29 @@
+{
+ "reg": "228-659",
+ "product": "ETHEPHON E-AG 6 PLANT GROWTH REGULATOR",
+ "status": "Active",
+ "cancelled": false,
+ "versions": [
+  {
+   "fileName": "000228-00659-20220808.pdf",
+   "accepted": "2022-08-08",
+   "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00659-20220808.pdf"
+  },
+  {
+   "fileName": "000228-00659-20200131.pdf",
+   "accepted": "2020-01-31",
+   "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00659-20200131.pdf"
+  },
+  {
+   "fileName": "000228-00659-20170720.pdf",
+   "accepted": "2017-07-20",
+   "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00659-20170720.pdf"
+  },
+  {
+   "fileName": "000228-00659-20100507.pdf",
+   "accepted": "2010-05-07",
+   "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00659-20100507.pdf"
+  }
+ ],
+ "fetchedAt": "2026-10-21T14:59:29.696Z"
+}
