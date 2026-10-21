@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import labelIndex from "../../../../../public/data/labels/index.json";
 
 import { getCachedLiveLabel, getRegistrationCacheIndex } from "@/lib/live-cache";
-import { assertFederalReg, pplsPdfUrl } from "@/lib/ppls";
+import { assertFederalReg, parsePplsFileName, pplsPdfUrl } from "@/lib/ppls";
 
 export const runtime = "nodejs";
 export const maxDuration = 25;
@@ -16,7 +16,7 @@ type LabelRecord = (typeof labelIndex)[number];
 interface LabelSource {
   url: string;
   sha256: string;
-  digestSource: "committed label index" | "live cache record";
+  digestSource: "committed label index" | "live cache record" | "label comparison";
 }
 
 function plain(message: string, status: number) {
@@ -28,6 +28,18 @@ function plain(message: string, status: number) {
 
 function findLabel(reg: string): LabelRecord | undefined {
   return labelIndex.find((label) => label.reg === reg);
+}
+
+// Any accepted version of this registration, by its PPLS file name, held to the SHA-256 the label comparison
+// read: the page shown is the same PDF whose text was compared.
+function requestedVersion(reg: string, file: string, sha256: string): LabelSource | { error: string } {
+  try {
+    parsePplsFileName(file, assertFederalReg(reg));
+  } catch {
+    return { error: `${file} is not an EPA PPLS label file of registration ${reg}.` };
+  }
+  if (!/^[a-f0-9]{64}$/.test(sha256)) return { error: "A label version needs the SHA-256 of the PDF that was compared." };
+  return { url: pplsPdfUrl(file), sha256, digestSource: "label comparison" };
 }
 
 async function findLiveLabel(reg: string, signal: AbortSignal): Promise<LabelSource | null> {
@@ -62,8 +74,13 @@ export async function GET(
   context: { params: Promise<{ reg: string }> },
 ) {
   const { reg } = await context.params;
-  const committed = findLabel(reg);
-  const label: LabelSource | null = committed
+  const query = new URL(request.url).searchParams;
+  const version = query.has("file") ? requestedVersion(reg, query.get("file") ?? "", query.get("sha256") ?? "") : null;
+  if (version && "error" in version) return plain(version.error, 400);
+  const committed = version ? undefined : findLabel(reg);
+  const label: LabelSource | null = version
+    ? version
+    : committed
     ? {
         url: committed.url,
         sha256: committed.sha256,

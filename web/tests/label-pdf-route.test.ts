@@ -150,6 +150,33 @@ describe("live label PDF route", () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
+  test("serves an earlier accepted version only as the exact PDF the label comparison read", async () => {
+    const bytes = pdfBytes(7);
+    const file = "000228-00653-20210127.pdf";
+    const fetchMock = vi.fn<typeof fetch>().mockImplementation(async () => new Response(responseBody(bytes), { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+    const url = (query: string) => new Request(`http://localhost/api/label-pdf/228-653?${query}`);
+
+    const served = await GET(url(`file=${file}&sha256=${digest(bytes)}`), context("228-653"));
+    expect(served.status).toBe(200);
+    expect(new Uint8Array(await served.arrayBuffer())).toEqual(bytes);
+    expect(fetchMock).toHaveBeenCalledWith(`https://www3.epa.gov/pesticides/chem_search/ppls/${file}`, expect.anything());
+    expect(getRegistrationMock).not.toHaveBeenCalled();
+
+    const otherBytes = await GET(url(`file=${file}&sha256=${"0".repeat(64)}`), context("228-653"));
+    expect(otherBytes.status).toBe(502);
+    await expect(otherBytes.text()).resolves.toContain("label comparison");
+
+    fetchMock.mockClear();
+    const otherRegistration = await GET(url(`file=000228-00659-20200131.pdf&sha256=${digest(bytes)}`), context("228-653"));
+    expect(otherRegistration.status).toBe(400);
+    const noDigest = await GET(url(`file=${file}`), context("228-653"));
+    expect(noDigest.status).toBe(400);
+    const notPpls = await GET(url(`file=..%2F..%2Fsecret.pdf&sha256=${digest(bytes)}`), context("228-653"));
+    expect(notPpls.status).toBe(400);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
   test("returns 404 when no complete cached live label exists", async () => {
     const bytes = pdfBytes();
     const sha256 = digest(bytes);
