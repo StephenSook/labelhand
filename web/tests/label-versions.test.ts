@@ -126,4 +126,19 @@ describe("comparing two label versions", () => {
     expect(response.headers.get("cache-control")).toBe("no-store");
     expect((await response.json() as { error: string }).error).toBe("The EPA label PDF for 228-653 could not be reached.");
   });
+
+  test("the diff route stops one address after 60 comparisons in ten minutes, before any EPA fetch", async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockRejectedValue(new TypeError("fetch failed"));
+    vi.stubGlobal("fetch", fetchMock);
+    const ask = () => diffRoute(new NextRequest(`http://localhost/api/labels/diff?reg=228-653&from=${OLDER}&to=${NEWER}`, {
+      headers: { "x-forwarded-for": "198.51.100.71" },
+    }));
+    for (let i = 0; i < 60; i += 1) expect((await ask()).status).toBe(502);
+    const callsBefore = fetchMock.mock.calls.length;
+    const limited = await ask();
+    expect(limited.status).toBe(429);
+    expect(Number(limited.headers.get("retry-after"))).toBeGreaterThan(0);
+    expect(limited.headers.get("cache-control")).toBe("no-store");
+    expect(fetchMock.mock.calls.length).toBe(callsBefore);
+  });
 });

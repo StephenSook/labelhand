@@ -3,7 +3,8 @@ import { NextResponse } from "next/server";
 import labelIndex from "../../../../../public/data/labels/index.json";
 
 import { getCachedLiveLabel, getRegistrationCacheIndex } from "@/lib/live-cache";
-import { assertFederalReg, parsePplsFileName, pplsPdfUrl } from "@/lib/ppls";
+import { assertCacheHitAllowed, LiveLimitError } from "@/lib/live-limits";
+import { assertFederalReg, MAX_PDF_BYTES, parsePplsFileName, pplsPdfUrl } from "@/lib/ppls";
 
 export const runtime = "nodejs";
 export const maxDuration = 25;
@@ -24,6 +25,12 @@ function plain(message: string, status: number) {
     status,
     headers: { "content-type": "text/plain; charset=utf-8" },
   });
+}
+
+function clientIp(request: Request): string {
+  return request.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
+    || request.headers.get("x-real-ip")
+    || "unknown";
 }
 
 function findLabel(reg: string): LabelRecord | undefined {
@@ -77,6 +84,17 @@ export async function GET(
   const query = new URL(request.url).searchParams;
   const version = query.has("file") ? requestedVersion(reg, query.get("file") ?? "", query.get("sha256") ?? "") : null;
   if (version && "error" in version) return plain(version.error, 400);
+  if (version) {
+    // A named version can be any accepted PDF of the registration, so it shares the per-address label request limit.
+    try {
+      assertCacheHitAllowed(clientIp(request));
+    } catch (error) {
+      if (!(error instanceof LiveLimitError)) throw error;
+      const limited = plain(error.message, error.status);
+      limited.headers.set("retry-after", String(error.retryAfterSeconds ?? 60));
+      return limited;
+    }
+  }
   const committed = version ? undefined : findLabel(reg);
   const label: LabelSource | null = version
     ? version
@@ -110,7 +128,14 @@ export async function GET(
     return plain(`The EPA label fetch for ${reg} returned HTTP ${upstream.status}.`, 502);
   }
 
+  const declaredLength = Number(upstream.headers.get("content-length"));
+  if (Number.isFinite(declaredLength) && declaredLength > MAX_PDF_BYTES) {
+    return plain(`The EPA label PDF for ${reg} exceeds the ${MAX_PDF_BYTES} byte limit.`, 502);
+  }
   const bytes = new Uint8Array(await upstream.arrayBuffer());
+  if (bytes.byteLength > MAX_PDF_BYTES) {
+    return plain(`The EPA label PDF for ${reg} exceeds the ${MAX_PDF_BYTES} byte limit.`, 502);
+  }
   const signature = new TextDecoder("ascii").decode(bytes.subarray(0, 5));
   if (signature !== "%PDF-") {
     return plain(`The EPA response for ${reg} was not a PDF. The %PDF- signature was missing.`, 502);

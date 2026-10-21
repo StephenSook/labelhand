@@ -177,6 +177,44 @@ describe("live label PDF route", () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
+  test("limits named versions per address and leaves the shipped label path alone", async () => {
+    const bytes = pdfBytes(9);
+    const file = "000228-00653-20210127.pdf";
+    const fetchMock = vi.fn<typeof fetch>().mockImplementation(async () => new Response(responseBody(bytes), { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+    const named = () => GET(new Request(`http://localhost/api/label-pdf/228-653?file=${file}&sha256=${digest(bytes)}`, {
+      headers: { "x-forwarded-for": "198.51.100.72" },
+    }), context("228-653"));
+    for (let i = 0; i < 60; i += 1) expect((await named()).status).toBe(200);
+    fetchMock.mockClear();
+    const limited = await named();
+    expect(limited.status).toBe(429);
+    expect(Number(limited.headers.get("retry-after"))).toBeGreaterThan(0);
+    expect(fetchMock).not.toHaveBeenCalled();
+
+    const shipped = await GET(new Request("http://localhost/api/label-pdf/228-653", {
+      headers: { "x-forwarded-for": "198.51.100.72" },
+    }), context("228-653"));
+    expect(shipped.status).not.toBe(429);
+  });
+
+  test("refuses a PDF over the size limit, by its declared length and by its body", async () => {
+    const file = "000228-00653-20210127.pdf";
+    const url = `http://localhost/api/label-pdf/228-653?file=${file}&sha256=${"a".repeat(64)}`;
+    const declared = new Response(responseBody(pdfBytes()), { status: 200, headers: { "content-length": String(16 * 1024 * 1024) } });
+    vi.stubGlobal("fetch", vi.fn<typeof fetch>().mockResolvedValue(declared));
+    const byHeader = await GET(new Request(url, { headers: { "x-forwarded-for": "198.51.100.73" } }), context("228-653"));
+    expect(byHeader.status).toBe(502);
+    await expect(byHeader.text()).resolves.toContain("byte limit");
+
+    const big = new Uint8Array(15 * 1024 * 1024 + 1);
+    big.set(new TextEncoder().encode("%PDF-1.7\n"));
+    vi.stubGlobal("fetch", vi.fn<typeof fetch>().mockResolvedValue(new Response(responseBody(big), { status: 200 })));
+    const byBody = await GET(new Request(url, { headers: { "x-forwarded-for": "198.51.100.73" } }), context("228-653"));
+    expect(byBody.status).toBe(502);
+    await expect(byBody.text()).resolves.toContain("byte limit");
+  });
+
   test("returns 404 when no complete cached live label exists", async () => {
     const bytes = pdfBytes();
     const sha256 = digest(bytes);
