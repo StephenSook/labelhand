@@ -186,6 +186,14 @@ function DiffResult({ reg, title, result }: { reg: string; title: string; result
       </p>
     );
   }
+  if (diff.tooLong) {
+    return (
+      <p className="changes-alert" role="status" data-too-long>
+        These two labels are too long and too different to compare sentence by sentence here ({diff.sentences.from} and {diff.sentences.to} sentences),
+        so no change is listed. Pick two versions closer in date.
+      </p>
+    );
+  }
   const blankNote = (pages: number[], date: string) =>
     pages.length ? `Page${pages.length === 1 ? "" : "s"} ${listText(pages)} of the ${date} PDF ${pages.length === 1 ? "has" : "have"} no text layer, so anything printed only there shows up as ${date === fromDate ? "added" : "removed"}.` : "";
   const notes = [blankNote(diff.blankPages.from, fromDate), blankNote(diff.blankPages.to, toDate)].filter(Boolean);

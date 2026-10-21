@@ -1,5 +1,5 @@
 {
- "recorded_utc": "2026-10-21T14:59:34.484Z",
+ "recorded_utc": "2026-10-21T15:19:15.246Z",
  "reg": "228-659",
  "from": {
   "fileName": "000228-00659-20200131.pdf",
@@ -745,6 +745,7 @@
    "from": [],
    "to": []
   },
-  "unreadable": null
+  "unreadable": null,
+  "tooLong": false
  }
 }
