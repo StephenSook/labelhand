@@ -184,10 +184,21 @@ def shipped_run_cost(reg: str) -> float:
 
 
 def compile_previous(
-    reg: str, out_dir: pathlib.Path, index: pathlib.Path, spent: float, budget: float, estimate: float, step: Callable[[str, list[str]], None] = run_step
+    reg: str,
+    out_dir: pathlib.Path,
+    index: pathlib.Path,
+    spent: float,
+    budget: float,
+    estimate: float,
+    step: Callable[[str, list[str]], None] = run_step,
+    runs: list[dict] | None = None,
 ) -> list[dict]:
-    """Run the shipped pipeline on the earlier version of one label. Returns each run's cost."""
-    runs: list[dict] = []
+    """Run the shipped pipeline on the earlier version of one label. Returns each run's cost.
+
+    Each finished run is appended to `runs` as it completes, so a caller still knows what was spent when a later run
+    stops on the budget or fails.
+    """
+    runs = [] if runs is None else runs
     with sandbox(out_dir, index):
         plan = steps(reg)
         per_run = (len(plan) - 1) // len(RUNS)
@@ -232,56 +243,65 @@ def main() -> int:
         "labels": {},
     }
     spent = 0.0
-    for reg in a.regs:
-        shipped = shipped_index[reg]
-        _, versions = ppls_fetch.list_versions(reg)
-        version = previous_version(versions, shipped["accepted"])
-        entry = {"reg": reg, "shipped_accepted": shipped["accepted"], "shipped_sha256": shipped["sha256"], "versions_listed": len(versions)}
-        if version is None:
-            receipt["labels"][reg] = {**entry, "compiled": False, "why": "PPLS lists no earlier accepted label for this registration."}
-            print(f"{reg}: no earlier version")
-            continue
-        path, body = download(version)
-        pages = [p.extract_text() or "" for p in PdfReader(path).pages]
-        record = {
-            "reg": reg,
-            "product": shipped["product"],
-            "shortName": shipped.get("shortName", shipped["product"]),
-            "accepted": version["accepted"],
-            "url": version["url"],
-            "file": str(path.relative_to(ROOT)).replace("\\", "/"),
-            "bytes": len(body),
-            "sha256": hashlib.sha256(body).hexdigest(),
-            "pages": len(pages),
-            "versions_listed": len(versions),
-            "fetched_utc": dt.datetime.now(dt.UTC).isoformat(timespec="seconds"),
-            "shipped_accepted": shipped["accepted"],
-            "shipped_sha256": shipped["sha256"],
-        }
-        index[reg] = record
-        index_path.write_text(json.dumps(index, indent=1, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
-        entry = {**entry, "accepted": record["accepted"], "url": record["url"], "sha256": record["sha256"], "pages": record["pages"]}
-        why = readable_text(pages)
-        if why:
-            receipt["labels"][reg] = {**entry, "compiled": False, "why": why, "page_characters": [len(p.strip()) for p in pages]}
-            print(f"{reg} {record['accepted']}: not compiled. {why}")
-            continue
-        try:
-            runs = compile_previous(reg, OUT, index_path, spent, a.budget, shipped_run_cost(reg))
-        except BudgetStop as stop:
-            receipt["labels"][reg] = {**entry, "compiled": False, "why": f"Stopped by the budget: {stop}"}
-            print(f"STOP {stop}")
-            break
-        cost = round(sum(r["total_usd"] for r in runs), 4)
-        spent += cost
-        merged = json.loads((OUT / f"{reg}.ship.json").read_text(encoding="utf-8"))
-        receipt["labels"][reg] = {**entry, "compiled": True, "runs": runs, "cost_usd": cost, "merged_rules": len(merged["accepted"])}
-        print(f"{reg} {record['accepted']}: compiled, {len(merged['accepted'])} merged rules, ${cost} (total ${spent:.4f})")
-        time.sleep(3)  # be polite to EPA between labels
-    receipt["total_cost_usd"] = round(spent, 4)
-    out = RESULTS / f"previous-compile-{dt.date.today().isoformat()}.json"
-    out.write_text(json.dumps(receipt, indent=1, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
-    print(f"wrote {out.relative_to(ROOT)}; Token Factory spend ${spent:.4f}")
+    try:
+        for reg in a.regs:
+            shipped = shipped_index[reg]
+            _, versions = ppls_fetch.list_versions(reg)
+            version = previous_version(versions, shipped["accepted"])
+            entry = {"reg": reg, "shipped_accepted": shipped["accepted"], "shipped_sha256": shipped["sha256"], "versions_listed": len(versions)}
+            if version is None:
+                receipt["labels"][reg] = {**entry, "compiled": False, "why": "PPLS lists no earlier accepted label for this registration."}
+                print(f"{reg}: no earlier version")
+                continue
+            path, body = download(version)
+            pages = [p.extract_text() or "" for p in PdfReader(path).pages]
+            record = {
+                "reg": reg,
+                "product": shipped["product"],
+                "shortName": shipped.get("shortName", shipped["product"]),
+                "accepted": version["accepted"],
+                "url": version["url"],
+                "file": str(path.relative_to(ROOT)).replace("\\", "/"),
+                "bytes": len(body),
+                "sha256": hashlib.sha256(body).hexdigest(),
+                "pages": len(pages),
+                "versions_listed": len(versions),
+                "fetched_utc": dt.datetime.now(dt.UTC).isoformat(timespec="seconds"),
+                "shipped_accepted": shipped["accepted"],
+                "shipped_sha256": shipped["sha256"],
+            }
+            index[reg] = record
+            index_path.write_text(json.dumps(index, indent=1, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
+            entry = {**entry, "accepted": record["accepted"], "url": record["url"], "sha256": record["sha256"], "pages": record["pages"]}
+            why = readable_text(pages)
+            if why:
+                receipt["labels"][reg] = {**entry, "compiled": False, "why": why, "page_characters": [len(p.strip()) for p in pages]}
+                print(f"{reg} {record['accepted']}: not compiled. {why}")
+                continue
+            runs: list[dict] = []
+            try:
+                compile_previous(reg, OUT, index_path, spent, a.budget, shipped_run_cost(reg), runs=runs)
+            except BaseException as stop:
+                # Runs that finished before the stop were paid for; they stay in the receipt and the total.
+                spent += sum(r["total_usd"] for r in runs)
+                why = f"Stopped by the budget: {stop}" if isinstance(stop, BudgetStop) else f"Failed: {type(stop).__name__}: {stop}"
+                receipt["labels"][reg] = {**entry, "compiled": False, "why": why, "runs": runs}
+                print(f"STOP {why}")
+                if isinstance(stop, BudgetStop):
+                    break
+                raise
+            cost = round(sum(r["total_usd"] for r in runs), 4)
+            spent += cost
+            merged = json.loads((OUT / f"{reg}.ship.json").read_text(encoding="utf-8"))
+            receipt["labels"][reg] = {**entry, "compiled": True, "runs": runs, "cost_usd": cost, "merged_rules": len(merged["accepted"])}
+            print(f"{reg} {record['accepted']}: compiled, {len(merged['accepted'])} merged rules, ${cost} (total ${spent:.4f})")
+            time.sleep(3)  # be polite to EPA between labels
+    finally:
+        # Written even when a step fails, so Token Factory spend is never left unrecorded.
+        receipt["total_cost_usd"] = round(spent, 4)
+        out = RESULTS / f"previous-compile-{dt.date.today().isoformat()}.json"
+        out.write_text(json.dumps(receipt, indent=1, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
+        print(f"wrote {out.relative_to(ROOT)}; Token Factory spend ${spent:.4f}")
     return 0
 
 

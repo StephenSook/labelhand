@@ -114,8 +114,11 @@ def test_compile_runs_every_step_in_the_sandbox_and_sums_each_runs_cost(tmp_path
 
 def test_budget_stops_before_a_run_that_could_pass_it(tmp_path):
     calls: list = []
+    runs: list = []
     with pytest.raises(previous_compile.BudgetStop, match="run .p2r2"):
-        previous_compile.compile_previous("228-653", tmp_path, tmp_path / "index.json", 3.5, 4.0, 0.2, step=_fake_step(tmp_path, calls))
+        previous_compile.compile_previous("228-653", tmp_path, tmp_path / "index.json", 3.5, 4.0, 0.2, step=_fake_step(tmp_path, calls), runs=runs)
+    # The run that finished before the stop was paid for, so the caller still sees it.
+    assert [r["run"] for r in runs] == [".p2"]
     # The first run fit ($3.5 + $0.2 estimate); after it cost $0.3, a second $0.3 run would pass $4.
     assert [argv[-1] for name, argv in calls if name == "compile_label"] == [".p2", ".p2"]
     assert not any(name == "merge_runs" for name, _ in calls)

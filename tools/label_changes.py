@@ -277,7 +277,11 @@ def build() -> dict[str, Any]:
             found = check["quotes"].get(item["key"])
             if found is None:
                 raise SystemExit(f"{reg}: no text check for one sentence; run python tools/label_changes.py --text-check")
-            # Only a sentence that one label prints and the other does not is a change on the label.
+            if not found["in_shipped"] and not found["in_previous"]:
+                # Every accepted quote passed the guard on its own label, so this means the check itself is broken.
+                raise SystemExit(f"{reg}: a compiled sentence is in neither label's text: {item['key'][:60]}")
+            # A sentence in one label's text layer and not the other's. Usually a change on the label, but a text layer
+            # can drop words printed on the page, which is why the page says to open both pages.
             item["label_changed"] = found["in_shipped"] != found["in_previous"]
         for item in diff["changed"]:
             # Both compiles quote this sentence, and each quote passed the guard on its own label, so both labels print
