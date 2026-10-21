@@ -277,7 +277,7 @@ The required CI workflow jobs are `python`, `rust`, and `web` at `.github/workfl
 |---|---|---|---|
 | Python lint | `"passed"` | command: `uv run --active --no-sync ruff check .`; output: `All checks passed!` | MEASURED |
 | Python format | `"50 files already formatted"` | command: `uv run ruff format --check .`, 2026-10-21; output: `50 files already formatted` | MEASURED |
-| Python tests | `"149 passed"` | command: `pytest -q` in the project venv, 2026-10-21; output: `149 passed in 4.57s` | MEASURED |
+| Python tests | `"149 passed"` | command: `pytest -q` in the project venv, 2026-10-21; output: `149 passed in 4.76s` | MEASURED |
 | Tracked-text em-dash gate | `"53 files scanned, 0 hits"` | the `.github/workflows/ci.yml:30-34` command in Git Bash, 2026-10-21; output: `files=53`, grep matched no file | MEASURED |
 | Rust format | `"passed"` | command: `cargo fmt --check`; exit: `0` | MEASURED |
 | Rust lint | `"passed"` | command: `cargo clippy --all-targets --all-features -- -D warnings`; exit: `0` | MEASURED |
@@ -285,9 +285,9 @@ The required CI workflow jobs are `python`, `rust`, and `web` at `.github/workfl
 | Rust WASM build | `"release build passed"` | command: `wasm-pack build core --target web --release -- --features wasm`; output: `Your wasm pkg is ready to publish at core\\pkg` | MEASURED |
 | Web typecheck | `"passed"` | command from `web/`: `pnpm typecheck`; output: `Types generated successfully`; `tsc --noEmit` exit: `0` | MEASURED |
 | Web lint | `"passed"` | command from `web/`: `pnpm lint`; exit: `0` | MEASURED |
-| Web unit tests | `"479 passed in 49 files"` | command from `web/`: `pnpm test`, 2026-10-21; output: `Test Files 49 passed`, `Tests 479 passed` | MEASURED |
+| Web unit tests | `"481 passed in 49 files"` | command from `web/`: `pnpm test`, 2026-10-21; output: `Test Files 49 passed`, `Tests 481 passed` | MEASURED |
 | Web production build | `"passed; 19 of 19 static pages generated"` | command from `web/`: `pnpm build`, 2026-10-21; output: `Generating static pages using 7 workers (19/19)` | MEASURED |
-| Web end-to-end tests | `"48 passed"` | command from `web/`: `pnpm e2e` against `pnpm start`, 2026-10-21; output: `48 passed (1.7m)` | MEASURED |
+| Web end-to-end tests | `"48 passed"` | command from `web/`: `pnpm e2e` against `pnpm start`, 2026-10-21; output: `48 passed (1.8m)` | MEASURED |
 | Browser data freshness | `"passed with no diff"` | commands: rebuild WASM, `pnpm sync-engine`, then `git diff --exit-code -- web/public/data`; all exits: `0` | MEASURED |
 
 ## Drift found
