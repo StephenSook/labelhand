@@ -110,8 +110,8 @@ export function RuleChanges({ reg, entry, data }: { reg: string; entry: LabelCha
                   {FORECAST_NAMES[name] ?? name}
                   <span className="proof-row-product">NWS forecast fetched {formatForecastTime(data.forecasts[name].forecast_fetched_utc)}</span>
                 </th>
-                <td>{hoursText(hours.tank)}</td>
-                <td>{hoursText(hours.alone)}</td>
+                <td><span className="changes-cell-label">Full tank: </span>{hoursText(hours.tank)}</td>
+                <td><span className="changes-cell-label">{entry.shortName} alone: </span>{hoursText(hours.alone)}</td>
               </tr>
             ))}
           </tbody>

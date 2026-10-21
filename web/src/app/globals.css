@@ -590,8 +590,11 @@ a {
 .changes-details-lede { margin: 0 1.2rem; }
 .changes-table-wrap { margin-top: 1rem; max-width: 64rem; padding: 0; }
 .changes-buttons { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.9rem; }
+/* The hours table drops its header row on a phone, so each cell names its column there. */
+.changes-cell-label { display: none; font-weight: 850; }
 
 @media (max-width: 720px) {
+  .changes-cell-label { display: inline; }
   .proof-tally, .proof-compare { grid-template-columns: minmax(0, 1fr); }
   .proof-table thead { display: none; }
   .proof-table tr { border-top: 1px solid var(--paper-deep); display: grid; gap: 0.2rem; padding: 0.6rem 0; }
