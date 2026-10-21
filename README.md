@@ -171,6 +171,8 @@ The first schema left the hours array open, and all 10 of its calls came back wi
 
 The Folex clause &quot;When minimum night temperature is below 60°F use FOLEX 6 EC alone&quot; controls what may be in the tank. It is not a general temperature limit. The Python reference kernel and Rust port now recognize a MUST or MUST_NOT temperature clause matching `\buse\b[^.]*\balone\b`. When the temperature condition holds, a mixed tank is BLOCKED with the other products named; the named product by itself satisfies the clause. When the condition does not hold, the clause does not change the verdict.
 
+A clause about a particular tank mix applies only to a tank that has that partner. Folex prints the sentence above under "FOLEX 6 EC + thidiazuron", and the same label recommends Folex with ethephon, so Folex plus Super Boll is not held to it. FreeFall's tribufos clause below 60°F works the same way. The kernel reads the partner from a rule's `applies_to` or its quote (tribufos, thidiazuron, ethephon, or a product name that carries one, such as Folex or Super Boll), skips the rule when no product in the tank carries that ingredient, and skips nothing if any product's ingredient is unknown. On the cold Tift forecast recorded Oct 19, the full tank stays blocked every hour, while Folex plus Super Boll and FreeFall plus Super Boll each get 46 forecast-permitted hours instead of none (`tests/fixtures/engine/tift-cold-*.json`).
+
 The committed Tift replay has 156 hours and a recorded night minimum of 61°F, so this condition never holds there:
 
 | Tift tank, majority `.ship` | Planner states |

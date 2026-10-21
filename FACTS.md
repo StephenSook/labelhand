@@ -66,6 +66,8 @@ Folex 6 EC, FreeFall SC (228-653) and Super Boll (228-659), compiled by the same
 | Shipped acting rules and matches | `{"acting_rules":13,"acting_good":11,"gold_acting":10,"gold_acting_hit":10}` | `json:eval/results/ship.json#overall` | MEASURED |
 | Shipped acting rules the gold set marks advisory | `["228-653-p5-2","228-653-p8-15"]` | command: list `labels.*.acting_false_positives[].id` in `eval/results/ship.json`; output: `228-653-p5-2` (calm-wind sentence, MUST_NOT), `228-653-p8-15` (tribufos tank mix below 60 F, MUST) | MEASURED |
 | Rule skipped as tobacco-only | `{"id":"228-659-p8-12","why":"applies to tobacco, not cotton"}` | command: `windows.load_rules("228-659")[2]`; rule in `data/compiled/228-659.ship.json` with `applies_to` `tobacco (flue-cured only)`; filter at `engine/windows.py` (`other_crop`) and `core/src/lib.rs` (`OTHER_CROPS`) | MEASURED |
+| Tank-mix rules that drop out of a tank without their partner | `{"5481-504-p10-10":"thidiazuron","228-653-p8-15":"tribufos","228-653-p8-13":"ethephon","228-653-p8-17":"tribufos","228-653-p8-21":"tribufos"}` | command: `windows.tank_mix_partners(r)` over `windows.load_rules(reg)[1]` for the three shipped labels; filter at `engine/windows.py` (`partner_missing`) and `core/src/lib.rs` (`partner_missing`); both copies of `5481-504-p10-10` name thidiazuron | MEASURED |
+| Cold Tift forecast, forecast-permitted hours by tank | `{"full_tank":0,"folex_super_boll":46,"freefall_super_boll":46}` | command: count hours with `state` `PERMITTED` in `expected` of `tests/fixtures/engine/tift-cold-full-tank.json`, `tift-cold-folex-superboll.json` and `tift-cold-freefall-superboll.json` (last Tift issuance recorded 2026-10-19, 156 hours); before the scoping both two-product tanks had 0 | MEASURED |
 | Shipped-tank compile cost per run, USD (FreeFall SC and Super Boll) | `{"p2":0.3385,"p2r2":0.3713,"p2r3":0.3642}` | command: sum `cost_usd` and `retype_cost_usd` in `data/compiled/228-65*.union.<run>.typed.v3.ocr.mf.json`; no OCR file, so no rescue typing | MEASURED |
 
 ### Run-to-run variance and Token Factory cost
@@ -257,11 +259,11 @@ The required CI workflow jobs are `python`, `rust`, and `web` at `.github/workfl
 |---|---|---|---|
 | Python lint | `"passed"` | command: `uv run --active --no-sync ruff check .`; output: `All checks passed!` | MEASURED |
 | Python format | `"46 files already formatted"` | command: `uv run ruff format --check .`, 2026-10-20; output: `46 files already formatted` | MEASURED |
-| Python tests | `"113 passed"` | command: `uv run pytest -q`, 2026-10-20; output: `113 passed in 3.77s` | MEASURED |
+| Python tests | `"132 passed"` | command: `uv run pytest -q`, 2026-10-21; output: `132 passed in 3.25s` | MEASURED |
 | Tracked-text em-dash gate | `"49 files scanned, 0 hits"` | the `.github/workflows/ci.yml:30-34` command in Git Bash, 2026-10-20; output: `files=49 hits=0` | MEASURED |
 | Rust format | `"passed"` | command: `cargo fmt --check`; exit: `0` | MEASURED |
 | Rust lint | `"passed"` | command: `cargo clippy --all-targets --all-features -- -D warnings`; exit: `0` | MEASURED |
-| Rust tests | `"5 passed: 3 unit and 2 parity"` | command: `cargo test`; output: `3 passed`, `2 passed`, and `0` doc tests | MEASURED |
+| Rust tests | `"8 passed: 6 unit and 2 parity"` | command: `cargo test`, 2026-10-21; output: `6 passed`, `2 passed`, and `0` doc tests | MEASURED |
 | Rust WASM build | `"release build passed"` | command: `wasm-pack build core --target web --release -- --features wasm`; output: `Your wasm pkg is ready to publish at core\\pkg` | MEASURED |
 | Web typecheck | `"passed"` | command from `web/`: `pnpm typecheck`; output: `Types generated successfully`; `tsc --noEmit` exit: `0` | MEASURED |
 | Web lint | `"passed"` | command from `web/`: `pnpm lint`; exit: `0` | MEASURED |
