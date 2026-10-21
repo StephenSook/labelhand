@@ -143,6 +143,40 @@ def test_warm_night_does_not_apply_an_alone_clause_to_a_mixed_tank():
     assert out["blocked"] == [] and out["checks"] == []
 
 
+# Folex 6 EC page 10 prints this sentence under "FOLEX 6 EC + thidiazuron" (the shipped quote keeps the extraction's
+# split "t hidiazuron"); the same label recommends Folex + ethephon.
+FOLEX_PAGE_10 = "Use the high rate of t hidiazuron when environmental conditions favor heavy regrowth. When minimum night temperature is below 60F use FOLEX 6 EC alone."
+THIDIAZURON_ALONE = {**r("night_temperature_f", "lt", 60, "MUST", FOLEX_PAGE_10, "t-14"), "product": "FOLEX 6 EC", "reg": "5481-504"}
+COLD = [hour(NOON, 72, True), hour("2026-10-08T02:00:00-04:00", 56, False)]
+
+
+def test_an_alone_clause_about_the_thidiazuron_mix_does_not_bind_folex_with_ethephon():
+    ethephon = {**WIND, "product": "Super Boll", "reg": "228-659"}
+    out = windows.evaluate([THIDIAZURON_ALONE, ethephon], COLD, LAT, LON, 1)[0]
+    assert out["state"] == "PERMITTED" and out["blocked"] == []
+
+
+def test_the_same_alone_clause_still_blocks_folex_with_thidiazuron():
+    thidiazuron = {**WIND, "product": "FreeFall SC", "reg": "228-653"}
+    out = windows.evaluate([THIDIAZURON_ALONE, thidiazuron], COLD, LAT, LON, 1)[0]
+    assert out["state"] == "BLOCKED" and [b["rule"] for b in out["blocked"]] == ["t-14"]
+
+
+def test_an_unknown_product_in_the_tank_keeps_every_tank_mix_rule():
+    unknown = {**WIND, "product": "A compiled label Labelhand does not ship", "reg": "999-99"}
+    out = windows.evaluate([THIDIAZURON_ALONE, unknown], COLD, LAT, LON, 1)[0]
+    assert out["state"] == "BLOCKED"  # fails closed: the unknown product might be a thidiazuron
+
+
+def test_a_tank_mix_partner_is_read_from_applies_to_or_the_quote_never_the_rules_own_product():
+    tribufos = {**r("night_temperature_f", "lt", 60, "MUST", "Use this product in a tank mix with a product containing tribufos (such as FOLEX 6 EC).", "t-15"), "reg": "228-653"}
+    assert windows.tank_mix_partners(tribufos) == {"tribufos"}
+    ethephon = {**tribufos, "quote": "Low nighttime temperatures may cause reduced defoliation.", "applies_to": "cotton (FreeFall SC + ethephon)"}
+    assert windows.tank_mix_partners(ethephon) == {"ethephon"}
+    own = {**tribufos, "quote": "Do not exceed 9.6 fl oz/A of FreeFall SC per year.", "applies_to": "FreeFall SC Cotton Defoliant"}
+    assert windows.tank_mix_partners(own) == set()
+
+
 def test_a_topic_the_kernel_has_no_logic_for_is_never_silent():
     rh = r("relative_humidity_pct", "lt", 40, "MUST_NOT", "Do not apply when relative humidity is below 40%.", "t-13")
     verdict = windows.gate(rh, 0, [hour(NOON, 75, True)], 5.0, 50.0, {rh["product"]})

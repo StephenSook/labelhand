@@ -11,6 +11,7 @@ struct Fixture {
     lon: f64,
     hours: usize,
     rules_suffix: String,
+    tank: Vec<String>,
     rules: Vec<Rule>,
     periods: Vec<Period>,
     expected: Vec<Value>,
@@ -93,10 +94,19 @@ fn evaluate_matches_every_frozen_fixture_per_hour() {
 #[test]
 fn load_rules_matches_the_fixture_rule_order_and_fields() {
     let root = repo_root();
-    let regs = ["5481-504", "228-653", "228-659"];
     let fields = [
-        "id", "page", "product", "reg", "param", "op", "value", "value2", "unit", "modality",
+        "id",
+        "page",
+        "product",
+        "reg",
+        "param",
+        "op",
+        "value",
+        "value2",
+        "unit",
+        "modality",
         "quote",
+        "applies_to",
     ];
     for fixture_path in fixture_paths() {
         let fixture = read_fixture(&fixture_path);
@@ -105,7 +115,7 @@ fn load_rules_matches_the_fixture_rule_order_and_fields() {
             .expect("fixture has a file name")
             .to_string_lossy();
         let mut actual_rules = Vec::new();
-        for reg in regs {
+        for reg in fixture.tank.iter().map(String::as_str) {
             let path = root.join(format!("data/compiled/{reg}{}.json", fixture.rules_suffix));
             let text = fs::read_to_string(&path)
                 .unwrap_or_else(|error| panic!("could not read {}: {error}", path.display()));

@@ -18,6 +18,26 @@ pub const TOPIC: [(&str, &[&str]); 6] = [
 // Labelhand plans cotton. A rule whose applies_to names one of these crops and not cotton is skipped,
 // mirroring OTHER_CROPS in engine/windows.py. Kept narrow: skipping a rule relaxes the plan.
 pub const OTHER_CROPS: [&str; 1] = ["tobacco"];
+// Active ingredient of every label Labelhand ships or has shipped, from each label's ingredient statement.
+// Mirrors ACTIVE_INGREDIENT in engine/windows.py.
+pub const ACTIVE_INGREDIENT: [(&str, &str); 5] = [
+    ("5481-504", "tribufos"),
+    ("228-653", "thidiazuron"),
+    ("228-659", "ethephon"),
+    ("264-700", "thidiazuron"),
+    ("264-418", "ethephon"),
+];
+// The names these labels use for a tank-mix partner, by active ingredient. A rule whose applies_to names a
+// partner is about that tank mix. Mirrors PARTNER_NAMES in engine/windows.py.
+pub const PARTNER_NAMES: [(&str, &str); 7] = [
+    ("tribufos", "tribufos"),
+    ("folex", "tribufos"),
+    ("thidiazuron", "thidiazuron"),
+    ("dropp", "thidiazuron"),
+    ("freefall", "thidiazuron"),
+    ("ethephon", "ethephon"),
+    ("super boll", "ethephon"),
+];
 pub const RAIN_EXPECTED_POP: f64 = 50.0;
 pub const RAIN_UNSURE_POP: f64 = 20.0;
 pub const ADVISORY_HOURS: usize = 24;
@@ -200,6 +220,74 @@ pub fn load_rules(compiled: &CompiledLabel, reg: &str) -> LoadRulesResult {
         product: compiled.product.clone(),
         used,
         skipped,
+    }
+}
+
+fn active_ingredient(reg: Option<&str>) -> Option<&'static str> {
+    let reg = reg?;
+    ACTIVE_INGREDIENT
+        .iter()
+        .find_map(|(candidate, ingredient)| (*candidate == reg).then_some(*ingredient))
+}
+
+fn letters(text: &str) -> String {
+    text.chars().filter(|c| !c.is_whitespace()).collect()
+}
+
+/// Active ingredients of the tank-mix partners a rule names in its applies_to or its quote, other than the rule's
+/// own product's. Label text extraction sometimes splits a word ("t hidiazuron" on Folex page 10), so a name may
+/// carry one stray space between any two letters, as in engine/windows.py.
+pub fn tank_mix_partners(rule: &Rule) -> HashSet<&'static str> {
+    static PARTNER: OnceLock<Regex> = OnceLock::new();
+    let partner = PARTNER.get_or_init(|| {
+        let names = PARTNER_NAMES
+            .iter()
+            .map(|(name, _)| {
+                letters(name)
+                    .chars()
+                    .map(String::from)
+                    .collect::<Vec<_>>()
+                    .join(r"\s?")
+            })
+            .collect::<Vec<_>>()
+            .join("|");
+        Regex::new(&format!(r"\b({names})\b")).expect("valid tank-mix partner regex")
+    });
+    let applies = rule
+        .extra
+        .get("applies_to")
+        .and_then(Value::as_str)
+        .unwrap_or("");
+    let text = format!("{applies}\n{}", rule.quote).to_lowercase();
+    let own = active_ingredient(rule.reg.as_deref());
+    partner
+        .find_iter(&text)
+        .filter_map(|found| {
+            let found = letters(found.as_str());
+            PARTNER_NAMES
+                .iter()
+                .find_map(|(name, ingredient)| (letters(name) == found).then_some(*ingredient))
+        })
+        .filter(|ingredient| Some(*ingredient) != own)
+        .collect()
+}
+
+/// The active ingredients in the tank, or None when any product's ingredient is unknown (a compiled label
+/// Labelhand does not ship): then no rule can be ruled out as being about a different tank mix.
+pub fn tank_ingredients(rules: &[Rule]) -> Option<HashSet<&'static str>> {
+    rules
+        .iter()
+        .map(|rule| active_ingredient(rule.reg.as_deref()))
+        .collect()
+}
+
+/// Whether a rule is scoped to a tank mix whose partner is not in this tank, so it does not apply here.
+/// Fails closed: an unknown ingredient in the tank keeps every rule.
+pub fn partner_missing(rule: &Rule, ingredients: Option<&HashSet<&'static str>>) -> bool {
+    let partners = tank_mix_partners(rule);
+    match ingredients {
+        Some(ingredients) => !partners.is_empty() && partners.is_disjoint(ingredients),
+        None => false,
     }
 }
 
@@ -681,6 +769,12 @@ pub fn evaluate(
                 .ok_or_else(|| CoreError::new(format!("rule {} has no product", rule.id)))
         })
         .collect::<Result<HashSet<_>, _>>()?;
+    // A rule scoped to a tank mix whose partner is not in the tank does not apply (partner_missing).
+    let ingredients = tank_ingredients(rules);
+    let rules = rules
+        .iter()
+        .filter(|rule| !partner_missing(rule, ingredients.as_ref()))
+        .collect::<Vec<_>>();
     let mut output = Vec::new();
     for (i, period) in periods.iter().take(hours).enumerate() {
         let time = DateTime::parse_from_rfc3339(&period.start_time).map_err(|error| {
@@ -692,7 +786,7 @@ pub fn evaluate(
         let mut checks = Vec::new();
         let mut advisories = Vec::new();
 
-        for rule in rules {
+        for &rule in &rules {
             if rule.modality == "ADVISORY" {
                 if let Some(why) = advisory(rule, i, periods, wind) {
                     advisories.push(citation(rule, why)?);
@@ -770,11 +864,11 @@ pub fn filter_rules_json(
 mod tests {
     use std::collections::HashSet;
 
-    use serde_json::json;
+    use serde_json::{Value, json};
 
     use super::{
-        CompiledLabel, GateState, Period, Rule, SkippedRule, gate, load_rules, mph, py_fixed_zero,
-        py_general,
+        CompiledLabel, GateState, Period, Rule, SkippedRule, evaluate, gate, load_rules, mph,
+        py_fixed_zero, py_general, tank_mix_partners,
     };
 
     #[test]
@@ -864,5 +958,88 @@ mod tests {
         );
         assert_eq!(gate(&rule, 0, &cold, 5.0, 50.0, &alone), None);
         assert_eq!(gate(&rule, 0, &warm, 5.0, 50.0, &mixed), None);
+    }
+
+    fn rule_from(value: Value) -> Rule {
+        serde_json::from_value(value).expect("test rule parses")
+    }
+
+    fn wind_rule(product: &str, reg: &str) -> Rule {
+        rule_from(json!({
+            "id": "t-1", "page": 1, "product": product, "reg": reg, "param": "wind_speed_mph",
+            "op": "gt", "value": 10, "value2": null, "unit": "mph", "modality": "MUST_NOT",
+            "quote": "Do not apply when wind speeds exceed 10 miles per hour."
+        }))
+    }
+
+    // Folex 6 EC page 10 prints this sentence under "FOLEX 6 EC + thidiazuron" (the shipped quote keeps the
+    // extraction's split "t hidiazuron"); the same label recommends Folex + ethephon.
+    fn thidiazuron_alone() -> Rule {
+        rule_from(json!({
+            "id": "t-14", "page": 1, "product": "FOLEX 6 EC", "reg": "5481-504",
+            "param": "night_temperature_f", "op": "lt", "value": 60, "value2": null, "unit": "F",
+            "modality": "MUST",
+            "quote": "Use the high rate of t hidiazuron when environmental conditions favor heavy regrowth. When minimum night temperature is below 60F use FOLEX 6 EC alone."
+        }))
+    }
+
+    fn cold_periods() -> Vec<Period> {
+        serde_json::from_value(json!([
+            {"startTime": "2026-10-07T13:00:00-04:00", "isDaytime": true, "temperature": 72, "windSpeed": "5 mph"},
+            {"startTime": "2026-10-08T02:00:00-04:00", "isDaytime": false, "temperature": 56, "windSpeed": "5 mph"}
+        ]))
+        .expect("cold periods parse")
+    }
+
+    #[test]
+    fn an_alone_clause_about_the_thidiazuron_mix_binds_only_a_tank_with_thidiazuron() {
+        let lat = 31.40;
+        let lon = -83.60;
+        let with_ethephon = [thidiazuron_alone(), wind_rule("Super Boll", "228-659")];
+        let out = evaluate(&with_ethephon, &cold_periods(), lat, lon, 1).expect("evaluates");
+        assert_eq!(out[0].state, "PERMITTED");
+        assert!(out[0].blocked.is_empty());
+
+        let with_thidiazuron = [thidiazuron_alone(), wind_rule("FreeFall SC", "228-653")];
+        let out = evaluate(&with_thidiazuron, &cold_periods(), lat, lon, 1).expect("evaluates");
+        assert_eq!(out[0].state, "BLOCKED");
+        assert_eq!(
+            out[0]
+                .blocked
+                .iter()
+                .map(|cite| cite.rule.as_str())
+                .collect::<Vec<_>>(),
+            ["t-14"]
+        );
+
+        // Fails closed: an unknown product might be a thidiazuron.
+        let with_unknown = [thidiazuron_alone(), wind_rule("Unknown label", "999-99")];
+        let out = evaluate(&with_unknown, &cold_periods(), lat, lon, 1).expect("evaluates");
+        assert_eq!(out[0].state, "BLOCKED");
+    }
+
+    #[test]
+    fn a_tank_mix_partner_is_read_from_applies_to_or_the_quote_never_the_rules_own_product() {
+        let tribufos = rule_from(json!({
+            "id": "t-15", "page": 1, "product": "FreeFall SC", "reg": "228-653",
+            "param": "night_temperature_f", "op": "lt", "value": 60, "value2": null, "unit": "F",
+            "modality": "MUST",
+            "quote": "Use this product in a tank mix with a product containing tribufos (such as FOLEX 6 EC)."
+        }));
+        assert_eq!(tank_mix_partners(&tribufos), HashSet::from(["tribufos"]));
+        let mut ethephon = tribufos.clone();
+        ethephon.quote = "Low nighttime temperatures may cause reduced defoliation.".to_owned();
+        ethephon.extra.insert(
+            "applies_to".to_owned(),
+            json!("cotton (FreeFall SC + ethephon)"),
+        );
+        assert_eq!(tank_mix_partners(&ethephon), HashSet::from(["ethephon"]));
+        let mut own = ethephon.clone();
+        own.quote = "Do not exceed 9.6 fl oz/A of FreeFall SC per year.".to_owned();
+        own.extra.insert(
+            "applies_to".to_owned(),
+            json!("FreeFall SC Cotton Defoliant"),
+        );
+        assert!(tank_mix_partners(&own).is_empty());
     }
 }

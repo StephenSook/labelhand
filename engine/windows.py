@@ -65,6 +65,57 @@ def other_crop(rule: dict) -> str | None:
     return crop if crop and "cotton" not in applies else None
 
 
+# Active ingredient of every label Labelhand ships or has shipped, from each label's ingredient statement
+# (Folex 6 EC is S,S,S-tributyl phosphorotrithioate, which FreeFall's label calls tribufos).
+ACTIVE_INGREDIENT = {
+    "5481-504": "tribufos",  # Folex 6 EC
+    "228-653": "thidiazuron",  # FreeFall SC
+    "228-659": "ethephon",  # Super Boll (Ethephon E-AG 6)
+    "264-700": "thidiazuron",  # Dropp SC
+    "264-418": "ethephon",  # Prep
+}
+# The names these labels use for a tank-mix partner, by active ingredient. A rule whose applies_to names a partner is
+# about that tank mix: Folex's "When minimum night temperature is below 60 F use FOLEX 6 EC alone" applies to
+# "FOLEX 6 EC + thidiazuron", not to Folex with ethephon, which the same label recommends.
+PARTNER_NAMES = {
+    "tribufos": "tribufos",
+    "folex": "tribufos",
+    "thidiazuron": "thidiazuron",
+    "dropp": "thidiazuron",
+    "freefall": "thidiazuron",
+    "ethephon": "ethephon",
+    "super boll": "ethephon",
+}
+# Label text extraction sometimes splits a word ("t hidiazuron" on Folex page 10), so a name may carry one stray
+# space between any two letters.
+PARTNER = re.compile(r"\b(" + "|".join(r"\s?".join(n.replace(" ", "")) for n in PARTNER_NAMES) + r")\b")
+PARTNER_BY_LETTERS = {n.replace(" ", ""): ingredient for n, ingredient in PARTNER_NAMES.items()}
+
+
+def tank_mix_partners(rule: dict) -> set[str]:
+    """Active ingredients of the tank-mix partners a rule names in its applies_to or its quote, other than the rule's
+    own product's."""
+    text = f"{rule.get('applies_to') or ''}\n{rule['quote']}".lower()
+    found = {PARTNER_BY_LETTERS[re.sub(r"\s", "", m)] for m in PARTNER.findall(text)}
+    return found - {ACTIVE_INGREDIENT.get(rule.get("reg"))}
+
+
+def tank_ingredients(rules: list[dict]) -> set[str] | None:
+    """The active ingredients in the tank, or None when any product's ingredient is unknown (a compiled label
+    Labelhand does not ship): then no rule can be ruled out as being about a different tank mix."""
+    found = {ACTIVE_INGREDIENT.get(r.get("reg")) for r in rules}
+    return None if None in found else found
+
+
+def partner_missing(rule: dict, ingredients: set[str] | None) -> bool:
+    """Whether a rule is scoped to a tank mix whose partner is not in this tank, so it does not apply here.
+
+    Fails closed: an unknown ingredient in the tank keeps every rule.
+    """
+    partners = tank_mix_partners(rule)
+    return bool(partners) and ingredients is not None and not partners & ingredients
+
+
 # Shipped configuration: majority modality vote across three p2 + typing v3 + OCR + PR 2000-5 floor runs.
 # Gold v0 (eval/results/ship.json): coverage recall 1.0, typed recall 1.0, value exact 0.944, modality 0.87,
 # planner precision 0.635, strict acting precision 1.0 (12/12), and acting recall 1.0 (10/10).
@@ -283,9 +334,11 @@ def evaluate(rules: list[dict], periods: list[dict], lat: float, lon: float, hou
 
     The tank is the set of distinct products across the rules passed to evaluate. Rules from all three labels
     contribute to that set regardless of modality, so an advisory rule still establishes that its product is in
-    the tank.
+    the tank. A rule scoped to a tank mix whose partner is not in the tank (partner_missing) does not apply.
     """
     tank_products = {r["product"] for r in rules}
+    ingredients = tank_ingredients(rules)
+    rules = [r for r in rules if not partner_missing(r, ingredients)]
     out = []
     for i, p in enumerate(periods[:hours]):
         t = dt.datetime.fromisoformat(p["startTime"])
