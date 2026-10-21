@@ -3,6 +3,7 @@ import Link from "next/link";
 import { pointName } from "@/lib/planner-data";
 import { Chip, Nav, SectionCard } from "@/ui";
 import modelAlone from "../../../public/data/model-alone.json";
+import modelAloneShipped from "../../../public/data/model-alone-shipped.json";
 import proof from "../../../public/data/proof.json";
 
 export const metadata: Metadata = { title: "Proof: every graded case, misses included" };
@@ -65,8 +66,11 @@ type ModelAlone = {
     planner_rules: Array<{ rule_id: string; product: string; page: number; why: string }>;
   }>;
 };
+// The three-model comparison ran on the first tank (Folex 6 EC, Dropp SC, Prep). The same Super run was
+// repeated on the tank Labelhand ships, and that run leads the section.
 const alone = modelAlone as unknown as ModelAlone;
 const aloneModels = alone.models ?? [alone];
+const shipped = modelAloneShipped as unknown as ModelAlone;
 
 function goHours(row: ModelAlone): { model: number; planner: number; unsafe: number } {
   const m = row.pooled.agreement_matrix_model_x_planner;
@@ -165,10 +169,12 @@ export default function ProofPage() {
   const brokenRules = Object.entries(rules);
   const windOnly = brokenRules.length > 0 && brokenRules.every(([, rule]) => rule.param === "wind_speed_mph");
   const regs = ["5481-504", "228-653", "228-659"].filter((reg) => reg in data.products);
-  const matrix = alone.pooled.agreement_matrix_model_x_planner;
+  const matrix = shipped.pooled.agreement_matrix_model_x_planner;
   const modelGo = matrix.PERMITTED.PERMITTED + matrix.PERMITTED.BLOCKED + matrix.PERMITTED.FIELD_CHECK;
   const plannerGo = matrix.PERMITTED.PERMITTED + matrix.BLOCKED.PERMITTED + matrix.FIELD_CHECK.PERMITTED;
-  const calls = alone.pooled.model_calls;
+  const calls = shipped.pooled.model_calls;
+  const quotesMissed = shipped.pooled.quote_check.total - shipped.pooled.quote_check.matched;
+  const firstTankUnsafe = alone.pooled.agreement_matrix_model_x_planner.PERMITTED.BLOCKED;
 
   return (
     <>
@@ -190,9 +196,10 @@ export default function ProofPage() {
               </span>
             </a>
             <a className="proof-tally-item" href="#model-alone">
-              <span className="display proof-tally-number">{matrix.PERMITTED.BLOCKED}</span>
+              <span className="display proof-tally-number">{modelGo} of {plannerGo}</span>
               <span>
-                hours where Nemotron, handed the same three labels and forecast with no compiled rules, said go and the labels block the hour.
+                go hours from Nemotron alone, handed the same three labels and forecasts with no compiled rules, against the compiled planner&apos;s.
+                {" "}On the first tank it said go on {firstTankUnsafe} hours the labels block.
               </span>
             </a>
             <a className="proof-tally-item" href="#forecast-misses">
@@ -283,10 +290,10 @@ export default function ProofPage() {
         <SectionCard className="proof-card min-w-0" id="model-alone">
           <h2 className="display proof-heading">Nemotron alone on the same forecasts</h2>
           <p className="proof-text">
-            Why compile the labels at all? <code>{alone.model}</code> got the full text of all three labels and a recorded 48-hour NWS forecast,
-            with no compiled rules, and was asked for every hour&apos;s state and the label sentence behind it. {alone.pooled.successful_cases} recorded
-            forecasts from ten Georgia points, {alone.pooled.hours_compared.toLocaleString("en-US")} hours, compared with the planner on the same
-            forecasts. The design was written into the receipt before the first call.
+            Why compile the labels at all? <code>{shipped.model}</code> got the full text of the three shipped labels (Folex 6 EC, FreeFall SC and
+            Super Boll) and a recorded 48-hour NWS forecast, with no compiled rules, and was asked for every hour&apos;s state and the label sentence
+            behind it. {shipped.pooled.successful_cases} recorded forecasts from ten Georgia points, {shipped.pooled.hours_compared.toLocaleString("en-US")}{" "}
+            hours, compared with the planner on the same forecasts. The design was written into the receipt before the first call.
           </p>
           <dl className="proof-compare proof-alone">
             <div>
@@ -299,15 +306,15 @@ export default function ProofPage() {
             </div>
             <div>
               <dt>Said go where the forecast cannot decide</dt>
-              <dd>{matrix.PERMITTED.FIELD_CHECK} (in this run, all were possible temperature inversion hours)</dd>
+              <dd>{matrix.PERMITTED.FIELD_CHECK}</dd>
             </div>
             <div>
               <dt>Cited sentences found on the cited page</dt>
-              <dd>{alone.pooled.quote_check.matched.toLocaleString("en-US")} of {alone.pooled.quote_check.total.toLocaleString("en-US")}</dd>
+              <dd>{shipped.pooled.quote_check.matched.toLocaleString("en-US")} of {shipped.pooled.quote_check.total.toLocaleString("en-US")}</dd>
             </div>
             <div>
               <dt>Go hours checked against the station, held and broke</dt>
-              <dd>Nemotron alone {alone.pooled.against_observations.model_permitted.held} and {alone.pooled.against_observations.model_permitted.broke}; compiled rules {alone.pooled.against_observations.planner_permitted.held} and {alone.pooled.against_observations.planner_permitted.broke}</dd>
+              <dd>Nemotron alone {shipped.pooled.against_observations.model_permitted.held} and {shipped.pooled.against_observations.model_permitted.broke}; compiled rules {shipped.pooled.against_observations.planner_permitted.held} and {shipped.pooled.against_observations.planner_permitted.broke}</dd>
             </div>
             <div>
               <dt>Cost and time per field check</dt>
@@ -315,7 +322,14 @@ export default function ProofPage() {
             </div>
           </dl>
 
-          <h3 className="proof-subheading">Every Nemotron model on Token Factory, alone, on the same cases</h3>
+          <p className="proof-text" data-model-alone-shipped>
+            On the shipped labels Nemotron alone said go on {modelGo} hours, none of them blocked, and called{" "}
+            {matrix.FIELD_CHECK.PERMITTED} of the planner&apos;s {plannerGo} forecast-permitted hours a field check. {quotesMissed} of its cited
+            sentences are not on the page it named. Safe here, but it leaves the applicator with almost no hours and no sentence they can trust
+            without checking.
+          </p>
+
+          <h3 className="proof-subheading">On the first tank (Folex 6 EC, Dropp SC, Prep): every Nemotron model on Token Factory, alone, on the same cases</h3>
           <div className="mt-3 min-w-0 max-w-full overflow-x-auto" tabIndex={0} role="region" aria-label="Nemotron models alone, scrollable table">
             <table className="w-full min-w-[42rem] border-collapse text-left text-sm" data-model-alone-table>
               <caption className="sr-only">Each Nemotron model alone against the compiled planner on the same recorded forecasts</caption>
@@ -363,11 +377,12 @@ export default function ProofPage() {
           </div>
           <p className="proof-text">
             Same prompt, same schema and the same 30 preregistered cases for every model. Ultra and Lightning stopped at a $2.50 spend cap before
-            finishing, and every failed or unattempted case stays in its count. No model alone did the planner&apos;s job: Super said go on hours the
-            labels block, Ultra said go on no hour at all, and Lightning cited sentences that are not on the page it named.
+            finishing, and every failed or unattempted case stays in its count. No model alone did the planner&apos;s job on that tank: Super said go on
+            hours the labels block, Ultra said go on no hour at all, and Lightning cited sentences that are not on the page it named. Dropp SC was
+            later found cancelled at EPA, so the shipped tank replaced it and Prep.
           </p>
 
-          <h3 className="proof-subheading">The hours Nemotron alone said go and the labels block</h3>
+          <h3 className="proof-subheading">The hours Nemotron alone said go and the labels block, on the first tank</h3>
           <ul className="proof-diffs">
             {alone.unsafe_go_hours.map((hour) => (
               <li className="proof-diff" key={`${hour.point}-${hour.time}`} data-unsafe-hour>
@@ -391,7 +406,10 @@ export default function ProofPage() {
           <p className="proof-text proof-caveat">
             One prompt and one run per model at temperature 0. Neither side is the ground truth: station wind also broke many of the planner&apos;s go hours,
             because the forecast itself was wrong. Full detail per hour:{" "}
-            <a className="text-link" href="https://github.com/StephenSook/labelhand/blob/main/eval/results/model-alone-2026-10-19.json">eval/results/model-alone-2026-10-19.json</a>.
+            <a className="text-link" href="https://github.com/StephenSook/labelhand/blob/main/eval/results/model-alone-shipped-2026-10-20.json">eval/results/model-alone-shipped-2026-10-20.json</a>{" "}
+            (shipped tank) and{" "}
+            <a className="text-link" href="https://github.com/StephenSook/labelhand/blob/main/eval/results/model-alone-2026-10-19.json">eval/results/model-alone-2026-10-19.json</a>{" "}
+            (first tank).
           </p>
         </SectionCard>
 

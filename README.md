@@ -149,6 +149,7 @@ The obvious alternative is to hand a big model the labels and the forecast and a
 | Go hours checked against the station: held / broke | 51 / 17 | 197 / 89 |
 | Cost and time per field check | $0.018 and about 46 s (Token Factory) | no model call; WebAssembly in the browser |
 
+- **On the shipped tank** the same Super run, same 30 cases, said go on 5 of 1,440 hours, none of them blocked, and called 194 of the planner's 205 forecast-permitted hours a field check; 96 of its 1,440 cited sentences are not on the page it named ([receipt](eval/results/model-alone-shipped-2026-10-20.json), $0.44). Safe on these labels, but it leaves almost no hours and citations that need checking. The rows below are the first tank.
 - **The 3 unsafe hours** are Worth on Oct 11, 1 to 3 PM. The forecast said 15 mph; the labels' limit is 10 mph; the model wrote "wind ≤10 mph" and said go.
 - **The 73 hours** are all hours where the planner's sun-angle rule flags a possible temperature inversion, which every label in the tank forbids. The model reasoned "no temperature inversion reported", treating a forecast that cannot see inversions as one that rules them out.
 - **It also cites well and finds few windows.** All 1,440 cited sentences are verbatim on the cited page. It marked 314 of the planner's forecast-permitted hours as field check.
