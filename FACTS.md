@@ -199,9 +199,10 @@ The `/changes/<reg>` page compares accepted label versions. The earlier version 
 | Token Factory spend on the earlier versions | `1.1384` | `json:eval/results/previous-compile-2026-10-21.json#total_cost_usd` | MEASURED |
 | FreeFall SC rules, shipped against earlier | `{"shipped_count":148,"previous_count":166,"unchanged":88}` | `json:web/public/data/changes.json#labels.228-653.rules` | MEASURED |
 | Super Boll rules, shipped against earlier | `{"shipped_count":131,"previous_count":147,"unchanged":79}` | `json:web/public/data/changes.json#labels.228-659.rules` | MEASURED |
-| Rule differences, label changed against compiles differ | `{"228-653":{"label_changed":5,"compiles_differ":100},"228-659":{"label_changed":0,"compiles_differ":85}}` | command: count `added`, `removed` and `changed` entries of `labels.<reg>.rules` in `web/public/data/changes.json` by `label_changed`; output: `228-653 5 100`, `228-659 0 85` | MEASURED |
+| Rule differences, sentence in one text layer only against in both | `{"228-653":{"one_text_layer":5,"both_text_layers":100},"228-659":{"one_text_layer":0,"both_text_layers":85}}` | command: count `added`, `removed` and `changed` entries of `labels.<reg>.rules` in `web/public/data/changes.json` by `label_changed`; output: `228-653 5 100`, `228-659 0 85` | MEASURED |
+| The 5 FreeFall SC one-text-layer differences, checked by eye | `{"real_wording_change":2,"words_printed_but_missing_from_the_2021-01-27_text_layer":3}` | manual check, 2026-10-21, in the app's PDF dialog on the preview: page 10 of the 2021-01-27 PDF prints "reminder" where the 2021-05-14 label has "remainder" (one rule added, one removed); page 8 prints "(COC's) or" and page 9 prints "It is the pesticide user's responsibility to ensure that all products", both absent from that PDF's text layer (pypdf and pdf.js) | MEASURED |
 | FreeFall SC planner hours that change state, cold Tift forecast | `{"hours":156,"changed":0}` | `json:web/public/data/changes.json#labels.228-653.hours.tift-cold.tank` | MEASURED |
-| Planner hours that change state, every forecast, tank and alone | `{"228-653":"0 of 1248","228-659":"0 of 1248"}` | command: sum `changed` and `hours` over `labels.<reg>.hours.*.tank` and `.alone` in `web/public/data/changes.json`; output: `0 1248` for each | MEASURED |
+| Planner hours that change state, four forecasts | `{"228-653":{"tank":"0 of 624","alone":"0 of 624"},"228-659":{"tank":"0 of 624","alone":"0 of 624"}}` | command: sum `changed` and `hours` over `labels.<reg>.hours.*.tank` and over `.alone` in `web/public/data/changes.json`; output: `0 624` for each | MEASURED |
 | Text changes between each shipped label and the version before it | `{"228-653":{"changes":42,"spray_conditions":1,"formatting_blocks":9,"blank_pages_earlier":[1,2]},"228-659":{"changes":14,"spray_conditions":0},"5481-504":{"unreadable":"from"}}` | command from `web/`: `pnpm exec tsx scripts/record-changes-fixtures.ts`, 2026-10-21, against live EPA; output files `web/tests/fixtures/changes/diff-*.json` | MEASURED |
 
 ## Data sources and fetch scripts
@@ -276,7 +277,7 @@ The required CI workflow jobs are `python`, `rust`, and `web` at `.github/workfl
 |---|---|---|---|
 | Python lint | `"passed"` | command: `uv run --active --no-sync ruff check .`; output: `All checks passed!` | MEASURED |
 | Python format | `"50 files already formatted"` | command: `uv run ruff format --check .`, 2026-10-21; output: `50 files already formatted` | MEASURED |
-| Python tests | `"149 passed"` | command: `pytest -q` in the project venv, 2026-10-21; output: `149 passed in 4.18s` | MEASURED |
+| Python tests | `"149 passed"` | command: `pytest -q` in the project venv, 2026-10-21; output: `149 passed in 4.57s` | MEASURED |
 | Tracked-text em-dash gate | `"53 files scanned, 0 hits"` | the `.github/workflows/ci.yml:30-34` command in Git Bash, 2026-10-21; output: `files=53`, grep matched no file | MEASURED |
 | Rust format | `"passed"` | command: `cargo fmt --check`; exit: `0` | MEASURED |
 | Rust lint | `"passed"` | command: `cargo clippy --all-targets --all-features -- -D warnings`; exit: `0` | MEASURED |
@@ -284,9 +285,9 @@ The required CI workflow jobs are `python`, `rust`, and `web` at `.github/workfl
 | Rust WASM build | `"release build passed"` | command: `wasm-pack build core --target web --release -- --features wasm`; output: `Your wasm pkg is ready to publish at core\\pkg` | MEASURED |
 | Web typecheck | `"passed"` | command from `web/`: `pnpm typecheck`; output: `Types generated successfully`; `tsc --noEmit` exit: `0` | MEASURED |
 | Web lint | `"passed"` | command from `web/`: `pnpm lint`; exit: `0` | MEASURED |
-| Web unit tests | `"477 passed in 49 files"` | command from `web/`: `pnpm test`, 2026-10-21; output: `Test Files 49 passed`, `Tests 477 passed` | MEASURED |
+| Web unit tests | `"479 passed in 49 files"` | command from `web/`: `pnpm test`, 2026-10-21; output: `Test Files 49 passed`, `Tests 479 passed` | MEASURED |
 | Web production build | `"passed; 19 of 19 static pages generated"` | command from `web/`: `pnpm build`, 2026-10-21; output: `Generating static pages using 7 workers (19/19)` | MEASURED |
-| Web end-to-end tests | `"48 passed"` | command from `web/`: `pnpm e2e` against `pnpm start`, 2026-10-21; output: `48 passed (1.6m)` | MEASURED |
+| Web end-to-end tests | `"48 passed"` | command from `web/`: `pnpm e2e` against `pnpm start`, 2026-10-21; output: `48 passed (1.7m)` | MEASURED |
 | Browser data freshness | `"passed with no diff"` | commands: rebuild WASM, `pnpm sync-engine`, then `git diff --exit-code -- web/public/data`; all exits: `0` | MEASURED |
 
 ## Drift found

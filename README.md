@@ -84,14 +84,15 @@ EPA keeps every label version it has accepted. The `/changes/<reg>` page (linked
 
 For the three shipped labels, `tools/previous_compile.py` compiled the version before each one once, with the shipped pipeline unchanged (same prompts and models, three readings, majority merge), and `tools/label_changes.py` compares the two rule sets and runs the planner on the four committed forecasts with each, for the full tank and for the product alone.
 
-| Label | Version before | Compiled | Text changes, of them spray conditions | Rule differences: label changed / compiles differ | Planner hours that change state |
+| Label | Version before | Compiled | Text changes, of them in spray-condition sentences | Rule differences: sentence in one text layer only / in both | Planner hours that change state: full tank, product alone |
 |---|---|---|---|---|---|
-| FreeFall SC (228-653), 2021-05-14 | 2021-01-27 | yes, $0.62 | 42, 1 | 5 / 100 | 0 of 1,248 |
-| Super Boll (228-659), 2022-08-08 | 2020-01-31 | yes, $0.52 | 14, 0 | 0 / 85 | 0 of 1,248 |
+| FreeFall SC (228-653), 2021-05-14 | 2021-01-27 | yes, $0.62 | 42, 1 | 5 / 100 | 0 of 624, 0 of 624 |
+| Super Boll (228-659), 2022-08-08 | 2020-01-31 | yes, $0.52 | 14, 0 | 0 / 85 | 0 of 624, 0 of 624 |
 | Folex 6 EC (5481-504), 2026-03-04 | 2025-02-27 | no: a scan, no text layer on any of its 11 pages | cannot be compared | none | none |
 
-- FreeFall's May 2021 notification adds "Not registered for use in California" to the post-harvest stalk destruction directions, drops a supplemental label page that expired February 1, 2024, and fixes "reminder" to "remainder". The one change in a spray-condition sentence adds "(COC's) or" to the crop oil sentence that names nighttime temperatures. Super Boll's 2022 notification changes EPA's letter, a referral statement and punctuation.
-- Two compiles of one label differ more than these labels did: 100 of FreeFall's 105 rule differences are on sentences both versions print the same way. The page lists those apart, as compile differences, never as label changes; a sentence counts as changed only when one PDF prints it and the other does not ([text check](eval/results/label-changes-text-2026-10-21.json)).
+- FreeFall's May 2021 notification adds "Not registered for use in California" to the post-harvest stalk destruction directions, drops a supplemental label page that expired February 1, 2024, and fixes "reminder" to "remainder". Super Boll's 2022 notification changes EPA's letter, a referral statement and punctuation.
+- The one FreeFall change listed under spray conditions is not a label change. Checked by eye on 2026-10-21 in the app's own PDF dialog: page 8 of the January 2021 PDF prints "(COC's) or" in the crop oil sentence, and its text layer leaves those words out. The same PDF's text layer drops "It is the pesticide user's responsibility to ensure that all products" on page 9. The page therefore says that a text layer can miss printed words and that each change should be checked on the page it links to.
+- Two compiles of one label differ more than these labels did: 100 of FreeFall's 105 rule differences are on sentences both text layers have word for word, and the page lists them apart, as compile differences. The other 5 rest on a sentence one text layer has and the other lacks ([text check](eval/results/label-changes-text-2026-10-21.json)); by eye, 2 of them are the "reminder" fix and 3 are the dropped words above.
 - On the cold Tift forecast, every hour also cites one FreeFall clause only the January 2021 compile acts on ("when overnight temperatures are expected to be below 60°F on the day of application and for three consecutive days after application"), but other clauses already block or flag those hours, so no state changes.
 - Receipts: [`eval/results/previous-compile-2026-10-21.json`](eval/results/previous-compile-2026-10-21.json) (Token Factory spend $1.14) and [`web/public/data/changes.json`](web/public/data/changes.json); the text-change counts are from the comparison recorded on 2026-10-21 in `web/tests/fixtures/changes/`. A test fails if the committed changes data is stale.
 

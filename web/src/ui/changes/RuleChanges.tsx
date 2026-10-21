@@ -53,8 +53,9 @@ export function RuleChanges({ reg, entry, data }: { reg: string; entry: LabelCha
   const labelChanged = sortRuleEntries(all.filter((item) => item.label_changed));
   const compileOnly = sortRuleEntries(all.filter((item) => !item.label_changed));
   const forecasts = Object.entries(entry.hours);
-  const totalMoved = forecasts.reduce((sum, [, hours]) => sum + hours.tank.changed + hours.alone.changed, 0);
-  const totalHours = forecasts.reduce((sum, [, hours]) => sum + hours.tank.hours + hours.alone.hours, 0);
+  const tankMoved = forecasts.reduce((sum, [, hours]) => sum + hours.tank.changed, 0);
+  const aloneMoved = forecasts.reduce((sum, [, hours]) => sum + hours.alone.changed, 0);
+  const forecastHours = forecasts.reduce((sum, [, hours]) => sum + hours.tank.hours, 0);
   const citingNotes = forecasts.flatMap(([name, hours]) =>
     (["tank", "alone"] as const).flatMap((tank) =>
       [
@@ -74,17 +75,20 @@ export function RuleChanges({ reg, entry, data }: { reg: string; entry: LabelCha
       </p>
 
       <div className="proof-tally">
-        <div className="proof-tally-item" data-hours-moved={totalMoved}>
-          <span className="display proof-tally-number">{totalMoved} of {totalHours.toLocaleString("en-US")}</span>
-          <span>planner hours change state when the earlier label&apos;s rules replace these, over {forecasts.length} committed forecasts, for the full tank and for {entry.shortName} alone.</span>
+        <div className="proof-tally-item" data-hours-moved={tankMoved + aloneMoved}>
+          <span className="display proof-tally-number">{tankMoved} of {forecastHours}</span>
+          <span>
+            forecast hours change state for the full tank when the earlier label&apos;s rules replace these, over {forecasts.length} committed forecasts.
+            For {entry.shortName} alone, {aloneMoved}.
+          </span>
         </div>
         <div className="proof-tally-item" data-label-changed={labelChanged.length}>
           <span className="display proof-tally-number">{labelChanged.length}</span>
-          <span>rule differences come from a sentence one label prints and the other does not.</span>
+          <span>rule differences rest on a sentence one PDF&apos;s text layer has and the other&apos;s lacks. Open both pages: a text layer can drop printed words.</span>
         </div>
         <div className="proof-tally-item" data-compile-only={compileOnly.length}>
           <span className="display proof-tally-number">{compileOnly.length}</span>
-          <span>rule differences are on sentences both labels print the same way: the two compiles read them differently. {rules.unchanged} rules match exactly.</span>
+          <span>rule differences are on sentences both PDFs&apos; text layers have word for word: the two compiles read them differently. {rules.unchanged} rules match exactly.</span>
         </div>
       </div>
 
@@ -121,14 +125,20 @@ export function RuleChanges({ reg, entry, data }: { reg: string; entry: LabelCha
         </p>
       ))}
 
-      <h3 className="proof-subheading">Sentences the label changed</h3>
+      <h3 className="proof-subheading">Sentences in only one PDF&apos;s text</h3>
+      {labelChanged.length ? (
+        <p className="proof-text">
+          Each rule below quotes a sentence that one PDF&apos;s text layer has and the other&apos;s does not. That is usually a change on the label, but a
+          text layer can drop words that are printed on the page, so open both pages before relying on one of these.
+        </p>
+      ) : null}
       {labelChanged.length ? (
         <ul className="proof-diffs" data-label-changed-rules>
           {labelChanged.map((item) => <RuleCard key={`${item.key}-${(item.shipped ?? item.previous)?.param}`} reg={reg} entry={entry} item={item} />)}
         </ul>
       ) : (
         <p className="proof-text" data-no-label-changed-rules>
-          None. Every rule difference between the two compiles is on a sentence both labels print the same way.
+          None. Every rule difference between the two compiles is on a sentence both PDFs&apos; text layers have word for word.
         </p>
       )}
 
@@ -136,7 +146,7 @@ export function RuleChanges({ reg, entry, data }: { reg: string; entry: LabelCha
         <summary>Same sentence, read differently by the two compiles ({compileOnly.length})</summary>
         <p className="proof-text changes-details-lede">
           Each compile reads every page three times and keeps every rule a reading found, so two compiles of the same text differ. These are those
-          differences, rules the planner acts on first. None of them is a change on the label.
+          differences, rules the planner acts on first. None of them comes from a change in the text.
         </p>
         <ul className="proof-diffs changes-other">
           {compileOnly.map((item) => <RuleCard key={`${item.key}-${(item.shipped ?? item.previous)?.param}`} reg={reg} entry={entry} item={item} />)}
