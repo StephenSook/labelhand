@@ -11,6 +11,9 @@ export type LabelSource = {
   page: number;
   quote: string;
   quoteCheck?: string;
+  // An accepted version other than the one Labelhand plans with: its PPLS file name and the SHA-256 of the PDF
+  // whose text was compared, so the page shown is that exact PDF.
+  version?: { file: string; sha256: string };
 };
 
 type LoadState =
@@ -18,10 +21,17 @@ type LoadState =
   | { kind: "ready"; highlighted: boolean }
   | { kind: "error"; message: string };
 
-export function ShowOnLabel({ source, className = "", id }: {
+function pdfRoute(source: LabelSource): string {
+  const base = `/api/label-pdf/${encodeURIComponent(source.reg)}`;
+  if (!source.version) return base;
+  return `${base}?${new URLSearchParams({ file: source.version.file, sha256: source.version.sha256 })}`;
+}
+
+export function ShowOnLabel({ source, className = "", id, label }: {
   source: LabelSource;
   className?: string;
   id?: string;
+  label?: string;
 }) {
   const titleId = useId();
   const descriptionId = useId();
@@ -52,7 +62,7 @@ export function ShowOnLabel({ source, className = "", id }: {
     let cancelled = false;
 
     async function renderPage() {
-      const response = await fetch(`/api/label-pdf/${encodeURIComponent(source.reg)}`);
+      const response = await fetch(pdfRoute(source));
       if (!response.ok) {
         const message = (await response.text()).trim();
         throw new Error(message || `The label PDF route returned HTTP ${response.status}.`);
@@ -137,7 +147,7 @@ export function ShowOnLabel({ source, className = "", id }: {
         }}
         className={`inline-flex min-h-11 items-center rounded-full border-2 border-[#14213d] bg-[#ffc53d] px-4 py-2 text-sm font-extrabold underline decoration-2 underline-offset-4 outline-offset-2 hover:bg-[#ffd873] focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#14213d] ${className}`}
       >
-        Show on the label, page {source.page}
+        {label ?? `Show on the label, page ${source.page}`}
       </button>
 
       <dialog
@@ -200,7 +210,7 @@ export function ShowOnLabel({ source, className = "", id }: {
             </div>
           </div>
 
-          <footer className="border-t-[3px] border-[#14213d] bg-white p-4 sm:px-6">
+          <footer className="flex flex-wrap gap-3 border-t-[3px] border-[#14213d] bg-white p-4 sm:px-6">
             <a
               href={`${source.url}#page=${encodeURIComponent(String(source.page))}`}
               target="_blank"
@@ -209,6 +219,15 @@ export function ShowOnLabel({ source, className = "", id }: {
             >
               Open the EPA PDF
             </a>
+            {source.version ? null : (
+              <a
+                href={`/changes/${encodeURIComponent(source.reg)}`}
+                data-changes-link
+                className="inline-flex min-h-11 items-center rounded-full border-2 border-[#14213d] bg-white px-4 py-2 text-sm font-extrabold underline decoration-2 underline-offset-4 outline-offset-2 hover:bg-[#9fd3f2]/35 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#14213d]"
+              >
+                What changed since the last label
+              </a>
+            )}
           </footer>
         </div>
       </dialog>
