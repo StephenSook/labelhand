@@ -297,11 +297,14 @@ def main() -> int:
             print(f"{reg} {record['accepted']}: compiled, {len(merged['accepted'])} merged rules, ${cost} (total ${spent:.4f})")
             time.sleep(3)  # be polite to EPA between labels
     finally:
-        # Written even when a step fails, so Token Factory spend is never left unrecorded.
-        receipt["total_cost_usd"] = round(spent, 4)
-        out = RESULTS / f"previous-compile-{dt.date.today().isoformat()}.json"
-        out.write_text(json.dumps(receipt, indent=1, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
-        print(f"wrote {out.relative_to(ROOT)}; Token Factory spend ${spent:.4f}")
+        # Written even when a step fails, so the spend of every finished run is recorded. A run that fails partway is
+        # not counted (its passes' own files still carry their cost). Nothing is written when no label was reached,
+        # so a mistyped registration does not replace an earlier receipt with an empty one.
+        if receipt["labels"]:
+            receipt["total_cost_usd"] = round(spent, 4)
+            out = RESULTS / f"previous-compile-{dt.date.today().isoformat()}.json"
+            out.write_text(json.dumps(receipt, indent=1, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
+            print(f"wrote {out.relative_to(ROOT)}; Token Factory spend ${spent:.4f}")
     return 0
 
 
