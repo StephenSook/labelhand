@@ -1,4 +1,4 @@
-import type { FilteredRules, LabelIndex } from "@/lib/planner-data";
+import { labelTitle, type FilteredRules, type LabelIndex } from "@/lib/planner-data";
 import { ShowOnLabel } from "@/ui/ShowOnLabel";
 
 export function RulesDisclosure({ groups, labels }: { groups: FilteredRules[]; labels: LabelIndex }) {
@@ -23,7 +23,7 @@ export function RulesDisclosure({ groups, labels }: { groups: FilteredRules[]; l
           const groupLabel = Object.values(labels).find((label) => label.product === group.product);
           return (
           <section key={group.product} className="not-last:mb-8" aria-labelledby={`rules-${safeId(group.product)}`}>
-            <h3 id={`rules-${safeId(group.product)}`} className="display text-2xl">{group.product}</h3>
+            <h3 id={`rules-${safeId(group.product)}`} className="display text-2xl">{groupLabel ? labelTitle(groupLabel) : group.product}</h3>
             {groupLabel?.unscored ? (
               <p className="mt-2 rounded-xl border-2 border-[#14213d] bg-[#ffc53d] px-3 py-2 text-sm font-bold" data-unscored-group>
                 UNSCORED: read live from EPA by Nemotron three times and merged like the scored labels, but no gold set checks it. Every
@@ -56,7 +56,7 @@ export function RulesDisclosure({ groups, labels }: { groups: FilteredRules[]; l
                         className="mt-4"
                         source={{
                           reg: label.reg,
-                          product: label.product,
+                          product: labelTitle(label),
                           accepted: label.accepted,
                           url: label.url,
                           page,

@@ -4,6 +4,8 @@ import type { SprayRecordInput } from "@/lib/spray-record";
 import { collapseRepeatedClauses } from "@/lib/citations";
 import {
   displayState,
+  labelTitle,
+  productTitle,
   type Citation,
   type LabelIndex,
   type PlannerHour,
@@ -39,7 +41,7 @@ function labelSource(citation: Citation, labels: LabelIndex, rules: PlannerRule[
     const label = labels[rule.reg];
     return {
       reg: rule.reg,
-      product: label.product,
+      product: labelTitle(label),
       accepted: label.accepted,
       url: label.url,
       page,
@@ -48,7 +50,7 @@ function labelSource(citation: Citation, labels: LabelIndex, rules: PlannerRule[
     };
   }
   const label = Object.values(labels).find((candidate) => candidate.product === citation.product);
-  return label ? { ...label, page, quote: citation.quote } : null;
+  return label ? { ...label, product: labelTitle(label), page, quote: citation.quote } : null;
 }
 
 export function HourDetail({ hour, labels, usedRules, sprayRecord }: HourDetailProps) {
@@ -143,7 +145,7 @@ function CitationSection({ title, empty, citations, kind, labels, usedRules }: {
                 }`}
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <p className="font-black">{citation.product}</p>
+                  <p className="font-black">{productTitle(labels, citation.product)}</p>
                   <span className="rounded-full border-2 border-[#14213d] bg-white px-2.5 py-1 text-xs font-extrabold">Page {String(citation.page)}</span>
                 </div>
                 <p className="mt-3 text-xs font-extrabold uppercase tracking-[0.11em] text-[#14213d]/65">Exact label quote</p>

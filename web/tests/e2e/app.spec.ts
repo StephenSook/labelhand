@@ -229,6 +229,15 @@ test("the recorded planner exposes every hour and its source quote", async ({ pa
   await expect(quoteCard).toBeVisible();
   await expect(quoteCard).toContainText("Exact label quote");
   await expect(quoteCard).toContainText(/Page \d+/);
+
+  // Every card names a product the way the tank does. Super Boll's label is titled for its
+  // active ingredient, so its cards carry both names.
+  const titles = await page.locator("#hour-detail [data-quote-card] p.font-black").allTextContents();
+  expect(titles.length).toBeGreaterThan(0);
+  for (const title of titles) {
+    expect(["Folex 6 EC", "FreeFall SC", "Super Boll (ETHEPHON E-AG 6 PLANT GROWTH REGULATOR)"]).toContain(title);
+  }
+  expect(titles).toContain("Super Boll (ETHEPHON E-AG 6 PLANT GROWTH REGULATOR)");
 });
 
 test("the label dialog reports a proxy failure and returns focus", async ({ page }) => {

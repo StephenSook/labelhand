@@ -9,6 +9,7 @@ import type {
   PlannerHour,
   PlannerRule,
 } from "@/lib/planner-data";
+import { labelTitle } from "@/lib/planner-data";
 import {
   forecastPermittedWindows,
   isTankCompositionRule,
@@ -158,7 +159,7 @@ export function WhyFewWindows({ hours, ruleGroups, periods, lat, lon, jobHours, 
             {label && Number.isInteger(page) && page > 0 ? (
               <ShowOnLabel
                 className="mt-4"
-                source={{ reg: label.reg, product: label.product, accepted: label.accepted, url: label.url, page, quote: clause.quote, quoteCheck: rule?.quote_check }}
+                source={{ reg: label.reg, product: labelTitle(label), accepted: label.accepted, url: label.url, page, quote: clause.quote, quoteCheck: rule?.quote_check }}
               />
             ) : null}
           </li>

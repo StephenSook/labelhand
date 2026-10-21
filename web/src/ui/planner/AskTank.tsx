@@ -4,6 +4,7 @@ import { useState } from "react";
 import { runAgentLoop, type AgentPageContext, type AgentRunResult, type AgentTraceEntry } from "@/lib/agent/loop";
 import { windowLabel, type AgentCheckSnapshot } from "@/lib/agent/tools";
 import { WorkingCard, type WorkingStep } from "@/ui";
+import { labelTitle } from "@/lib/planner-data";
 import { ShowOnLabel } from "@/ui/ShowOnLabel";
 
 const EXAMPLES = [
@@ -200,7 +201,7 @@ export function AskTank({ initialQuestion, context, onCheck, onClause, onWindow 
                     <span key={ruleId} className="inline-flex flex-wrap items-center gap-2 rounded-2xl border-2 border-[#14213d] bg-white p-2">
                       <button type="button" onClick={() => onClause(ruleId)} className="min-h-11 rounded-full px-3 py-2 font-extrabold underline decoration-2 underline-offset-4">{ruleId}</button>
                       {rule && label && Number.isInteger(page) && page > 0 ? (
-                        <ShowOnLabel source={{ reg: label.reg, product: label.product, accepted: label.accepted, url: label.url, page, quote: rule.quote, quoteCheck: rule.quote_check }} />
+                        <ShowOnLabel source={{ reg: label.reg, product: labelTitle(label), accepted: label.accepted, url: label.url, page, quote: rule.quote, quoteCheck: rule.quote_check }} />
                       ) : null}
                     </span>
                   );

@@ -75,6 +75,24 @@ export function orderedPointEntries(points: ForecastPoints): Array<[string, Fore
   });
 }
 
+function plainName(name: string): string {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+// The name the tank uses, with EPA's own label name in brackets when it is a different name.
+// Super Boll's accepted label is titled "ETHEPHON E-AG 6 PLANT GROWTH REGULATOR"; Folex 6 EC and
+// FreeFall SC are their label names already, so they stay short.
+export function labelTitle(label: Pick<LabelRecord, "product" | "shortName">): string {
+  const short = label.shortName || label.product;
+  return plainName(label.product).startsWith(plainName(short)) ? short : `${short} (${label.product})`;
+}
+
+// The same title for a citation or rule group, which carries only the label's product name.
+export function productTitle(labels: LabelIndex | null | undefined, product: string): string {
+  const label = labels ? Object.values(labels).find((candidate) => candidate.product === product) : undefined;
+  return label ? labelTitle(label) : product;
+}
+
 export function displayState(state: PlannerState): "FORECAST-PERMITTED" | "FIELD CHECK" | "BLOCKED" {
   if (state === "PERMITTED") return "FORECAST-PERMITTED";
   if (state === "FIELD_CHECK") return "FIELD CHECK";
