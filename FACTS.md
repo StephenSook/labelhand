@@ -187,6 +187,23 @@ The season files are exported by `tools/season_export.py`. The check-back runs t
 | Check-back recompute command | `"python tools/checkback.py --recorded data/nws_recorded"` | `tools/checkback.py`; `data/nws_recorded/` is gitignored at `.gitignore:16`, so the recorded inputs are not in the repo | SOURCED |
 | Recorder ran every hour of the span | `"NOT VERIFIED"` | The recorder ran on a desktop PC through Oct 19 and missed hours while it was off (Tift has no files from 08:07 UTC Oct 16 to 01:07 UTC Oct 17). The app shows recorded against expected issuances per point. | NOT VERIFIED |
 
+## Label time machine
+
+The `/changes/<reg>` page compares accepted label versions. The earlier version of each shipped label was compiled once by `tools/previous_compile.py` with the shipped pipeline unchanged; `tools/label_changes.py` compares the rules and runs the planner on the four committed forecasts in `tests/fixtures/engine/` (tift, worth, colquitt, tift-cold-full-tank).
+
+| Claim | Exact value | Source | Tag |
+|---|---|---|---|
+| Folex 6 EC version before the shipped one | `{"accepted":"2025-02-27","compiled":false,"pages":11,"why":"11 of 11 pages have no readable text layer; the PDF is a scan."}` | `json:eval/results/previous-compile-2026-10-21.json#labels.5481-504` | MEASURED |
+| FreeFall SC version before the shipped one | `{"accepted":"2021-01-27","compiled":true,"cost_usd":0.6154,"merged_rules":166}` | `json:eval/results/previous-compile-2026-10-21.json#labels.228-653` | MEASURED |
+| Super Boll version before the shipped one | `{"accepted":"2020-01-31","compiled":true,"cost_usd":0.523,"merged_rules":147}` | `json:eval/results/previous-compile-2026-10-21.json#labels.228-659` | MEASURED |
+| Token Factory spend on the earlier versions | `1.1384` | `json:eval/results/previous-compile-2026-10-21.json#total_cost_usd` | MEASURED |
+| FreeFall SC rules, shipped against earlier | `{"shipped_count":148,"previous_count":166,"unchanged":88}` | `json:web/public/data/changes.json#labels.228-653.rules` | MEASURED |
+| Super Boll rules, shipped against earlier | `{"shipped_count":131,"previous_count":147,"unchanged":79}` | `json:web/public/data/changes.json#labels.228-659.rules` | MEASURED |
+| Rule differences, label changed against compiles differ | `{"228-653":{"label_changed":5,"compiles_differ":100},"228-659":{"label_changed":0,"compiles_differ":85}}` | command: count `added`, `removed` and `changed` entries of `labels.<reg>.rules` in `web/public/data/changes.json` by `label_changed`; output: `228-653 5 100`, `228-659 0 85` | MEASURED |
+| FreeFall SC planner hours that change state, cold Tift forecast | `{"hours":156,"changed":0}` | `json:web/public/data/changes.json#labels.228-653.hours.tift-cold.tank` | MEASURED |
+| Planner hours that change state, every forecast, tank and alone | `{"228-653":"0 of 1248","228-659":"0 of 1248"}` | command: sum `changed` and `hours` over `labels.<reg>.hours.*.tank` and `.alone` in `web/public/data/changes.json`; output: `0 1248` for each | MEASURED |
+| Text changes between each shipped label and the version before it | `{"228-653":{"changes":42,"spray_conditions":1,"formatting_blocks":9,"blank_pages_earlier":[1,2]},"228-659":{"changes":14,"spray_conditions":0},"5481-504":{"unreadable":"from"}}` | command from `web/`: `pnpm exec tsx scripts/record-changes-fixtures.ts`, 2026-10-21, against live EPA; output files `web/tests/fixtures/changes/diff-*.json` | MEASURED |
+
 ## Data sources and fetch scripts
 
 | Claim | Exact value | Source | Tag |
@@ -215,8 +232,8 @@ The season files are exported by `tools/season_export.py`. The check-back runs t
 
 | Claim | Exact value | Source | Tag |
 |---|---|---|---|
-| App routes | `["/","/app","/judge","/map","/proof"]` | command: enumerate `page.tsx` below `web/src/app` on main d64b10b, 2026-10-20 | MEASURED |
-| API routes | `["/api/agent","/api/alerts/confirm","/api/alerts/run","/api/alerts/start","/api/alerts/voice/stop","/api/alerts/voice/why","/api/label-pdf/[reg]","/api/labels/compile","/api/labels/photo","/api/labels/search","/api/season/[...path]"]` | command: enumerate `route.ts` below `web/src/app` on main d64b10b, 2026-10-20 | MEASURED |
+| App routes | `["/","/app","/changes/[reg]","/judge","/map","/proof"]` | command: enumerate `page.tsx` below `web/src/app` on branch label-time-machine, 2026-10-21 | MEASURED |
+| API routes | `["/api/agent","/api/alerts/confirm","/api/alerts/run","/api/alerts/start","/api/alerts/voice/stop","/api/alerts/voice/why","/api/label-pdf/[reg]","/api/labels/compile","/api/labels/diff","/api/labels/photo","/api/labels/search","/api/labels/versions/[reg]","/api/season/[...path]"]` | command: enumerate `route.ts` below `web/src/app` on branch label-time-machine, 2026-10-21 | MEASURED |
 | Agent per-IP limit | `{"requests":20,"window_minutes":10,"scope":"best effort per Node instance"}` | `web/src/app/api/agent/route.ts:14-15,33-36,88-102`; local static audit output: `RATE_LIMIT_COUNT=20`, `RATE_LIMIT_WINDOW_MS=600000` | MEASURED |
 | Agent daily token budget | `{"tokens":2000000,"reset":"UTC date","scope":"best effort per Node instance"}` | `web/src/app/api/agent/route.ts:16,33-36,105-110,141,199-205`; local static audit output: `DAILY_TOKEN_BUDGET=2000000` | MEASURED |
 | Agent tool order | `"check_tank first; then final_answer at once for a when or window question; otherwise one get_clause round, then final_answer"` | `web/src/lib/agent/tool-choice.ts:17-23` | MEASURED |
@@ -258,18 +275,18 @@ The required CI workflow jobs are `python`, `rust`, and `web` at `.github/workfl
 | Claim | Exact value | Source | Tag |
 |---|---|---|---|
 | Python lint | `"passed"` | command: `uv run --active --no-sync ruff check .`; output: `All checks passed!` | MEASURED |
-| Python format | `"46 files already formatted"` | command: `uv run ruff format --check .`, 2026-10-20; output: `46 files already formatted` | MEASURED |
-| Python tests | `"132 passed"` | command: `uv run pytest -q`, 2026-10-21; output: `132 passed in 3.25s` | MEASURED |
-| Tracked-text em-dash gate | `"49 files scanned, 0 hits"` | the `.github/workflows/ci.yml:30-34` command in Git Bash, 2026-10-20; output: `files=49 hits=0` | MEASURED |
+| Python format | `"50 files already formatted"` | command: `uv run ruff format --check .`, 2026-10-21; output: `50 files already formatted` | MEASURED |
+| Python tests | `"149 passed"` | command: `pytest -q` in the project venv, 2026-10-21; output: `149 passed in 4.18s` | MEASURED |
+| Tracked-text em-dash gate | `"53 files scanned, 0 hits"` | the `.github/workflows/ci.yml:30-34` command in Git Bash, 2026-10-21; output: `files=53`, grep matched no file | MEASURED |
 | Rust format | `"passed"` | command: `cargo fmt --check`; exit: `0` | MEASURED |
 | Rust lint | `"passed"` | command: `cargo clippy --all-targets --all-features -- -D warnings`; exit: `0` | MEASURED |
 | Rust tests | `"8 passed: 6 unit and 2 parity"` | command: `cargo test`, 2026-10-21; output: `6 passed`, `2 passed`, and `0` doc tests | MEASURED |
 | Rust WASM build | `"release build passed"` | command: `wasm-pack build core --target web --release -- --features wasm`; output: `Your wasm pkg is ready to publish at core\\pkg` | MEASURED |
 | Web typecheck | `"passed"` | command from `web/`: `pnpm typecheck`; output: `Types generated successfully`; `tsc --noEmit` exit: `0` | MEASURED |
 | Web lint | `"passed"` | command from `web/`: `pnpm lint`; exit: `0` | MEASURED |
-| Web unit tests | `"429 passed in 42 files"` | command from `web/`: `pnpm test` with the live Bulletins Live! Two check, 2026-10-20; output: `Test Files 42 passed`, `Tests 429 passed` | MEASURED |
-| Web production build | `"passed; 18 of 18 static pages generated"` | command from `web/`: `pnpm build` with the live Bulletins Live! Two check, 2026-10-20; output: `Generating static pages using 7 workers (18/18)` | MEASURED |
-| Web end-to-end tests | `"39 passed"` | command from `web/`: `pnpm e2e` against `pnpm start` with the live Bulletins Live! Two check, 2026-10-20; output: `39 passed (1.3m)` | MEASURED |
+| Web unit tests | `"477 passed in 49 files"` | command from `web/`: `pnpm test`, 2026-10-21; output: `Test Files 49 passed`, `Tests 477 passed` | MEASURED |
+| Web production build | `"passed; 19 of 19 static pages generated"` | command from `web/`: `pnpm build`, 2026-10-21; output: `Generating static pages using 7 workers (19/19)` | MEASURED |
+| Web end-to-end tests | `"48 passed"` | command from `web/`: `pnpm e2e` against `pnpm start`, 2026-10-21; output: `48 passed (1.6m)` | MEASURED |
 | Browser data freshness | `"passed with no diff"` | commands: rebuild WASM, `pnpm sync-engine`, then `git diff --exit-code -- web/public/data`; all exits: `0` | MEASURED |
 
 ## Drift found
