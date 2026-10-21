@@ -8,4 +8,10 @@ describe("Next server configuration", () => {
       "./node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs",
     );
   });
+
+  test("traces the pdfjs Node worker used by the label version comparison", () => {
+    expect(nextConfig.outputFileTracingIncludes?.["/api/labels/diff"]).toContain(
+      "./node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs",
+    );
+  });
 });
