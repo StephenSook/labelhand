@@ -98,6 +98,14 @@ describe("label text diff", () => {
     const diff = diffLabelText(["", "  \n ", WIND], [letter, title, WIND]);
     expect(diff.blankPages).toEqual({ from: [1, 2], to: [] });
     expect(diff.changes.map((change) => change.kind)).toEqual(["added", "added"]);
+    expect(diff.unreadable).toBeNull();
+  });
+
+  test("a version with no text layer on any page is unreadable, not a label where every sentence was added", () => {
+    // Folex 6 EC accepted 2025-02-27 is a printed-to-PDF image: 11 pages, no text.
+    const diff = diffLabelText(Array.from({ length: 11 }, () => ""), [WIND, "Do not apply during temperature inversions."]);
+    expect(diff).toMatchObject({ changes: [], unreadable: "from", sentences: { from: 0, to: 2 } });
+    expect(diffLabelText([WIND], ["", ""]).unreadable).toBe("to");
   });
 });
 

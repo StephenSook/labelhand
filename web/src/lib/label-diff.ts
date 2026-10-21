@@ -153,6 +153,8 @@ export type ChangeSide = {
   text: string;
   // Character ranges of `text` whose words are not in the other version.
   marks: Array<[number, number]>;
+  // The sentences `text` joins, each with its page, so a sentence can be found on its own page of the PDF.
+  parts: Array<{ page: number; text: string; marked: boolean }>;
 };
 
 export type TextChange = {
@@ -171,6 +173,9 @@ export type LabelTextDiff = {
   formatting: number;
   // Pages with no readable text layer (under 50 characters), usually scanned pages.
   blankPages: { from: number[]; to: number[] };
+  // A version with no text layer on any page (a scan) cannot be compared: listing every sentence of the other one
+  // as added or removed would claim a change nobody made.
+  unreadable: "from" | "to" | null;
 };
 
 type WordRef = { sentence: number; word: number };
@@ -196,12 +201,18 @@ function side(list: Sentence[], ids: number[], marks: Map<number, Set<number>>):
     }
   }
   const pages = [...new Set(ids.map((id) => list[id].page))];
-  return { page: pages[0], pages, text, marks: ranges };
+  const parts = ids.map((id) => ({ page: list[id].page, text: list[id].text, marked: (marks.get(id)?.size ?? 0) > 0 }));
+  return { page: pages[0], pages, text, marks: ranges, parts };
 }
 
 export function diffLabelText(fromPages: readonly string[], toPages: readonly string[]): LabelTextDiff {
+  const blank = { from: blankPages(fromPages), to: blankPages(toPages) };
+  const unreadable = blank.from.length === fromPages.length ? "from" : blank.to.length === toPages.length ? "to" : null;
   const before = sentences(fromPages);
   const after = sentences(toPages);
+  if (unreadable) {
+    return { changes: [], sentences: { from: before.length, to: after.length }, moved: 0, formatting: 0, blankPages: blank, unreadable };
+  }
   const top = align(before.map((s) => s.key), after.map((s) => s.key));
   const changes: TextChange[] = [];
   let formatting = 0;
@@ -336,6 +347,7 @@ export function diffLabelText(fromPages: readonly string[], toPages: readonly st
     sentences: { from: before.length, to: after.length },
     moved: movedIndexes.size / 2,
     formatting,
-    blankPages: { from: blankPages(fromPages), to: blankPages(toPages) },
+    blankPages: blank,
+    unreadable: null,
   };
 }

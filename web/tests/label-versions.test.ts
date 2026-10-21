@@ -94,8 +94,9 @@ describe("label versions from EPA PPLS", () => {
 
 describe("comparing two label versions", () => {
   test("reads both PDFs, compares their text and reports each PDF's SHA-256 and page count", async () => {
-    const older = await labelPdf(["Do not apply when wind speeds exceed 10 mph.", "Store in a cool, dry place."]);
-    const newer = await labelPdf(["Do not apply when wind speeds exceed 15 mph.", "Store in a cool, dry place."]);
+    const store = "Store in a cool, dry place away from seed, feed and fertilizer.";
+    const older = await labelPdf(["Do not apply when wind speeds exceed 10 mph at the application site.", store]);
+    const newer = await labelPdf(["Do not apply when wind speeds exceed 15 mph at the application site.", store]);
     const fetchMock = vi.fn<typeof fetch>().mockImplementation(async (input) => pdfResponse(String(input).endsWith(OLDER) ? older : newer));
 
     const result = await diffLabelVersions("228-653", OLDER, NEWER, fetchMock);
