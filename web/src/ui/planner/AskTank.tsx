@@ -5,6 +5,7 @@ import { runAgentLoop, type AgentPageContext, type AgentRunResult, type AgentTra
 import { windowLabel, type AgentCheckSnapshot } from "@/lib/agent/tools";
 import { WorkingCard, type WorkingStep } from "@/ui";
 import { labelTitle } from "@/lib/planner-data";
+import { plainRanges } from "@/lib/plain-ranges";
 import { ShowOnLabel } from "@/ui/ShowOnLabel";
 
 const EXAMPLES = [
@@ -168,7 +169,7 @@ export function AskTank({ initialQuestion, context, onCheck, onClause, onWindow 
           </div>
           {result.answer ? (
             <>
-              <p className="mt-4 text-lg font-bold leading-relaxed">{result.answer.summary}</p>
+              <p className="mt-4 text-lg font-bold leading-relaxed">{plainRanges(result.answer.summary)}</p>
               {result.guard.notes?.filter((note) => note.startsWith("Removed")).map((note) => (
                 <p key={note} data-answer-edit className="mt-2 text-sm">{note}</p>
               ))}
