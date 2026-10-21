@@ -127,6 +127,22 @@ describe("label text diff", () => {
     ]);
   });
 
+  test("a change that crosses a sentence boundary shows both sentences on both sides", () => {
+    const intro = "Read the entire label before using this product.";
+    const diff = diffLabelText([`${intro} Apply it now. Wait for rain here.`], [`${intro} Apply it. Please wait for rain here.`]);
+    const texts = (side: ChangeSide | null) => side?.parts.map((part) => part.text);
+    expect(diff.changes.map((change) => [texts(change.before), texts(change.after)])).toEqual([
+      [["Apply it now.", "Wait for rain here."], ["Apply it.", "Please wait for rain here."]],
+    ]);
+  });
+
+  test("a block of sentences too big to align word by word lists nothing rather than every sentence removed and added", () => {
+    const section = (word: string) =>
+      Array.from({ length: 200 }, (_, i) => `Sentence number ${i} of this section tells you to apply ${word} only on dry calm days.`).join(" ");
+    const diff = diffLabelText([section("alpha")], [section("beta")]);
+    expect(diff).toMatchObject({ tooLong: true, changes: [], moved: 0 });
+  });
+
   test("two labels too long and too different to align list nothing instead of a wall of moves", () => {
     const words = (n: number, tag: string) => Array.from({ length: n }, (_, i) => `Sentence ${tag} number ${i} about wind.`);
     const diff = diffLabelText([words(3100, "alpha").join(" ")], [words(3100, "beta").join(" ")]);

@@ -99,8 +99,10 @@ export function sentences(pages: readonly string[]): Sentence[] {
 
 type Op = { kind: "equal"; a: number; b: number } | { kind: "delete"; a: number } | { kind: "insert"; b: number };
 
-// The cells an alignment needs once the shared start and end are set aside.
+// The most cells an alignment may use once the shared start and end are set aside: sentences of the two labels, and
+// words of one block of sentences that did not align.
 export const SENTENCE_CAP = 9_000_000;
+export const WORD_CAP = 4_000_000;
 
 function middle(a: readonly string[], b: readonly string[]): { start: number; endA: number; endB: number; cells: number } {
   let start = 0;
@@ -223,10 +225,18 @@ export function diffLabelText(fromPages: readonly string[], toPages: readonly st
   const after = sentences(toPages);
   const beforeKeys = before.map((s) => s.key);
   const afterKeys = after.map((s) => s.key);
-  const tooLong = !unreadable && middle(beforeKeys, afterKeys).cells > SENTENCE_CAP;
-  if (unreadable || tooLong) {
-    return { changes: [], sentences: { from: before.length, to: after.length }, moved: 0, formatting: 0, blankPages: blank, unreadable, tooLong };
-  }
+  // The answer when nothing is listed: a scan, or labels too long and too different to align.
+  const unlisted: LabelTextDiff = {
+    changes: [],
+    sentences: { from: before.length, to: after.length },
+    moved: 0,
+    formatting: 0,
+    blankPages: blank,
+    unreadable,
+    tooLong: false,
+  };
+  if (unreadable) return unlisted;
+  if (middle(beforeKeys, afterKeys).cells > SENTENCE_CAP) return { ...unlisted, tooLong: true };
   const top = align(beforeKeys, afterKeys);
   const changes: TextChange[] = [];
   let formatting = 0;
@@ -255,7 +265,11 @@ export function diffLabelText(fromPages: readonly string[], toPages: readonly st
       continue;
     }
 
-    const words = align(oldKeys, newKeys, 4_000_000);
+    // A block too big to align word by word would come back as every sentence removed and added; refuse instead.
+    if (middle(oldKeys, newKeys).cells > WORD_CAP) {
+      return { ...unlisted, tooLong: true };
+    }
+    const words = align(oldKeys, newKeys, WORD_CAP);
     // The sentences on the other side that each sentence shares an aligned word with.
     const oldPartners = new Map<number, Set<number>>();
     const newPartners = new Map<number, Set<number>>();
@@ -299,12 +313,15 @@ export function diffLabelText(fromPages: readonly string[], toPages: readonly st
       const partDeleted = deleted.filter((i) => !wholeOld.has(oldWords[i].sentence));
       const partInserted = inserted.filter((j) => !wholeNew.has(newWords[j].sentence));
       if (!partDeleted.length && !partInserted.length) continue;
-      // Words added to or taken from a sentence that is still there show that sentence on the other side too: the
-      // sentence its unchanged words align with, or, if none do, the one around the nearest unchanged word.
+      // Words added to or taken from a sentence that is still there show that sentence on the other side too: each
+      // changed sentence brings the sentences its unchanged words align with, or, if none do, the one around the
+      // nearest unchanged word.
       const a = new Set(partDeleted.map((i) => oldWords[i].sentence));
       const b = new Set(partInserted.map((j) => newWords[j].sentence));
-      if (a.size === 0) for (const j of b) newPartners.get(j)?.forEach((i) => a.add(i));
-      if (b.size === 0) for (const i of a) oldPartners.get(i)?.forEach((j) => b.add(j));
+      const fromB = [...b].flatMap((j) => [...(newPartners.get(j) ?? [])]);
+      const fromA = [...a].flatMap((i) => [...(oldPartners.get(i) ?? [])]);
+      fromB.forEach((i) => a.add(i));
+      fromA.forEach((j) => b.add(j));
       const anchor = lastEqual ?? words[w];
       if (a.size === 0 && anchor?.kind === "equal") a.add(oldWords[anchor.a].sentence);
       if (b.size === 0 && anchor?.kind === "equal") b.add(newWords[anchor.b].sentence);
