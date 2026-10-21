@@ -1,0 +1,497 @@
+{
+ "normalization": "compiler/compile_label.py norm() then squash(), over the pypdf text of all pages",
+ "labels": {
+  "228-653": {
+   "shipped_sha256": "28f688690b11f21b1d2d30517ef95b52b148d74bf6a50b292a63388f86b747c2",
+   "previous_sha256": "c1501442b2125fc629bee2480202de815af547379791cfa47893a27e227d136e",
+   "quotes": {
+    "005lbaiacre16floza80acres": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "0125lbaiacre40floza32acres": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "01lbaiacre32floza40acres": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "02lbaiacre64floza20acres": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "1addonehalftheamountofwaterrequiredtothespraytank": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "1addonehalftheamountofwaterrequiredtothespraytank2beginagitationandaddthisproduct3fillthespraytankwiththeremainderofthewater4maintainagitationthroughoutapplication": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "addonehalftheamountofwaterrequiredtothespraytank": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "applyfreefallsccottondefoliantatarateof32floza01lbaiawithaherbicideproductregisteredforcottonstalkdestruction": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "applyfreefallsccottondefoliantatratesof1664floza00502lbaiausethehigherrateswhenexcessiveregrowthisexpected": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "applyfreefallsccottondefoliantatratesof1664floza00502lbaiausethehigherrateswhenexcessiveregrowthisexpectedorwhentemperaturesarebetween6065f": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "certifiedcottonseedproducersshouldconsultseedcompaniestodeterminethebollandseedmaturityrequirementsfortheirvarieties": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "citrusareasintheriograndevalleyoftexasdonotmakeaerialapplicationsofthisproductwhencitrusareinflushburstofnewgrowthasinspringtimewithin5milesdownwindofthepointofapplication": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "consultthelabeloftheotherdefoliantpriortouseandobserveallproductlabeldirections": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "donotallowthespraytankmixturetostandovernight": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "donotmakegroundapplicationsofthisproductwhencitrusareinflushwithin12miledownwindoftheapplicationpoint": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "donotmakemorethantwopreharvestapplications": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "donotmakemorethantwopreharvestapplicationsortwopostharvestapplicationsoratotalofthreeapplicationsperyear": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "driftpotentialishighduringatemperatureinversion": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "everyapplicatorneedstobefamiliarwithlocalwindpatternsandhowtheyaffectspraydrift": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "forbestresultswait2to6weeksafterfinalharvestandapplyattheinitiationofvisibleregrowth": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "forcutoutandmaturecottonundernormalweatherpatternsusethisproductat16to32floza005to01lbaia": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "freefallsccottondefoliantplustribufosnotforuseincameronhidalgostarrandwillacycountiesofthestateoftexas": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "higherpressurereducesdropletsizeanddoesnotimprovecanopypenetration": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "howeveritistheresponsibilityoftheapplicatortoverifythattheshieldsarepreventingdriftandnotinterferingwithuniformdepositionoftheproduct": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "ifsprayapplicationequipmentisnotthoroughlycleanedresiduesofthisproductwillremainandbereleasedduringsubsequentapplicationsandleadtocropdamage": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "improveddefoliationandregrowthsuppressionhasbeenshownwhencropoilconcentratescocsorpenetratingoilsapprovedforuseonagriculturalcropsaremixedwiththisproductandappliedwhennighttimetemperaturesarelow6065forwhentreatingdroughtstressedcotton": {
+     "in_shipped": true,
+     "in_previous": false
+    },
+    "improveddefoliationandregrowthsuppressionhasbeenshownwhencropoilconcentratespenetratingoilsapprovedforuseonagriculturalcropsaremixedwiththisproductandappliedwhennighttimetemperaturesarelow6065forwhentreatingdroughtstressedcotton": {
+     "in_shipped": false,
+     "in_previous": true
+    },
+    "increaseratesofthisproductabove32floza01lbaiatodefoliateandcontrolregrowthduringperiodsofrankgrowthhighfertilizerconditionsextremeweatherconditionssuchasextendedperiodsofrainandorlowtemperatures6065fandonfullseasoncottonvarieties": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "itisthepesticideusersresponsibilitytoensurethatallproductsincludedinthetankmixareregisteredfortheintendeduse": {
+     "in_shipped": true,
+     "in_previous": false
+    },
+    "longerboomsincreasedriftpotentialthereforeashorterboomlengthisrecommended": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "maintainagitationandaddtheremainderofthewater": {
+     "in_shipped": true,
+     "in_previous": false
+    },
+    "maintainagitationandaddthereminderofthewater": {
+     "in_shipped": false,
+     "in_previous": true
+    },
+    "notetheapplicationoftankmixesoforganophosphatedefoliantsplusthisproductatthehighestuseratesmaycausedesiccationduringperiodsofhightemperatures": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "notforuseincameronhidalgostarrandwillacycountiesofthestateoftexas": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "nozzleswithhigherratedflowsproducelargervolumes": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "nozzletypeuseanozzletypethatisdesignedfortheintendedapplicationwithmostnozzletypesnarrowersprayanglesproducelargerdropletsconsiderusinglowdriftnozzles": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "oratotalofthreeapplicationsperyear": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "orientingnozzlessothatthesprayisemittedbackwardsparalleltotheairstreamwithproducelargerdropletsthanotherorientations": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "ortwopostharvestapplications": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "othesprayboommustbemountedontheaircraftsoastominimizedriftcausedbywingtiporrotorbladevorticestheboomlengthmustnotexceed75ofthewingspanor90oftherotorbladediameter": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "pilotsmustuseanenclosedcockpitthatmeetstherequirementslistedinthewpsforagriculturalpesticides40cfr170607e": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "prepareonlytheamountofspraysolutionneededforasingledayofapplication": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "residuescanberemovedusingacommercialtankcleaneraslongasthesprayequipmentiscleanedwhiletheresidueisstillfreshandmoist": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "residuesforminthesprayequipmentoftankmixesofthisproductplusorganophosphatestheresiduescanberemovedusingacommercialtankcleaneraslongasthesprayequipmentiscleanedwhiletheresidueisstillfreshandmoist": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "rotationalcroprestrictionsdonotreplantthefollowingcropsunlesstheminimumspecifiedplantbackintervalhaselapsedafterthelastapplicationofthisproductrotationcropplantbackintervalsmallgrainssorghumcornorrootcropsexceptcarrotsonionsorsugarbeetstwo2weeks": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "settingtheboomatthelowestreferencedheightifspecifiedwhichprovidesuniformcoveragereducestheexposureofdropletstoevaporationandwindforgroundequipmenttheboomshouldremainlevelwiththecropandhaveminimalbounce": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "shieldingtheboomorindividualnozzlescanreducetheeffectsofwindhoweveritistheresponsibilityoftheapplicatortoverifythattheshieldsarepreventingdriftandnotinterferingwithuniformdepositionoftheproduct": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "shouldthespraysolutionbeallowedtodryintheapplicationequipmenttheresidueswillbemoredifficulttoremoveusethecommercialtankcleanerdilutedwithwatertocompletelyfilltheequipmentandletitstandfor7days": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "shouldthespraysolutionbeallowedtodryintheapplicationequipmenttheresidueswillbemoredifficulttoremoveusethecommercialtankcleanerdilutedwithwatertocompletelyfilltheequipmentandletitstandfor7daysthencompletelyflushandrinseallequipmentwithwater": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "singleapplicationrate40floza0125lbaia": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "solidstreamnozzlessuchasdiscandcorewithswirlplateremovedorientedstraightbackproducelargerdropletsthanothernozzletypes": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "temperatureinversionsarecharacterizedbyincreasingtemperaturewithaltitudeandarecommononnightswithlimitedcloudcoverandlighttonowind": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "the16floz005lbairateismosteffectivewhenusedinatankmixwithothercottondefoliatingproducts": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "theapplicationoftankmixesoforganophosphatedefoliantsplusthisproductatthehighestuseratesmaycausedesiccationduringperiodsofhightemperatures": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "theresiduescanberemovedusingacommercialtankcleaneraslongasthesprayequipmentiscleanedwhiletheresidueisstillfreshandmoist": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "theybegintoformasthesunsetsandoftencontinueintothemorning": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "toachieveanapplicationrateofusethisamountofproductattheindicatedrateonegallonofproductwilltreat005lbaiacre16floza80acres01lbaiacre32floza40acres0125lbaiacre40floza32acres02lbaiacre64floza20acres": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "toimprovedefoliationandregrowthsuppressionunderlessthanidealconditionssuchaswhenovernighttemperaturesareexpectedtobebelow60fonthedayofapplicationandforthreeconsecutivedaysafterapplication": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "twoapplicationsnotexceedingatotalof96floza03lbaiaperyearmaybenecessarytodefoliaterankcotton": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "useanozzletypethatisdesignedfortheintendedapplicationwithmostnozzletypesnarrowersprayanglesproducelargerdroplets": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "usehighflowratenozzlestoapplythehighestpracticalsprayvolume": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "usethecommercialtankcleanerdilutedwithwatertocompletelyfilltheequipmentandletitstandfor7daysthencompletelyflushandrinseallequipmentwithwater": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "usethehigherrateswhenconditionsarenotideal": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "usethehigherrateswhenexcessiveregrowthisexpectedorwhentemperaturesarebetween6065f": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "usethelowerratesoftribufoswhennighttimetemperaturesareexpectedtobe65foraboveusethehigherrateswhenconditionsarenotideal": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "usethelowerspraypressuresrecommendedforthenozzle": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "usetheminimumnumberofnozzleswiththehighestflowratethatprovideuniformcoverage": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "usethisproductinatankmixwithaproductcontainingtribufossuchasfolex6ecregno5481504toimprovedefoliationandregrowthsuppressionunderlessthanidealconditionssuchaswhenovernighttemperaturesareexpectedtobebelow60fonthedayofapplicationandforthreeconsecutivedaysafterapplication": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "usethisproductplusthelowerratesofaproductcontainingethephonsuchassuperbollregno228659toenhancedefoliationwithoutprovidingbollopeningactivity": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "whenapplyingaeriallyodonotreleasesprayataheightgreaterthan10ftabovethecropcanopyunlessagreaterapplicationheightisnecessaryforpilotsafety": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "whenovernighttemperaturesareexpectedtobebelow60fonthedayofapplicationandforthreeconsecutivedaysafterapplication": {
+     "in_shipped": true,
+     "in_previous": true
+    }
+   }
+  },
+  "228-659": {
+   "shipped_sha256": "52aca62bf5e83141ea410c2cf13ca4140e3bc8d5f7bbb93d93de839f0cc673bb",
+   "previous_sha256": "658d932bd8db72e0ca5595c76ecf42b2654a889c5758ff98dc4b28cc0806b06f",
+   "quotes": {
+    "5galainazandca": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "adjustnozzlesfollownozzlemanufacturersrecommendationsforsettingupnozzles": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "adjustnozzlesfollownozzlemanufacturersrecommendationsforsettingupnozzlesgenerallytoreducefinedropletsnozzlesshouldbeorientedparallelwiththeairflowinflight": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "anursetankisrecommendedtohelppreventspills": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "applicatorsandotherhandlersmustwearxcoverallsoverlongsleevedshirtandlongpants": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "applicatorsandotherhandlersmustwearxcoverallsoverlongsleevedshirtandlongpantsxwaterproofglovesxchemicalresistantfootwearplussocksxprotectiveeyewear": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "applicatorsandotherhandlersmustwearxcoverallsoverlongsleevedshirtandlongpantsxwaterproofglovesxchemicalresistantfootwearplussocksxprotectiveeyewearxchemicalresistantheadgearforoverheadexposurexchemicalresistantapronwhencleaningequipmentmixingorloading": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "applyoverthetopsprayasafinemistusingthreenozzlesonenozzletipoverthecenteroftheplantandoneoneachsidesoallleavesarethoroughlycoveredsimilartotheapplicationpatternofsystemicsuckercontrolagentsuseaspraypressureof40to60psi": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "atthepointof75driedstatetheleavescanbetreatedusingnormalproceduresforcuring": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "bestqualitytobaccoisobtainedwhenthecuringprocessiscloselymonitoredduringlateleafcoloringandearlyleafdryingstages": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "byairapplyinaminimumsprayvolumeof2gala": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "coolbutabove65for": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "coolbutabove65forrankcotton": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "donotapplythisproductinawaythatwillcontactworkersorotherpersonseitherdirectlyorthroughdrift": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "donotharvestthegraincropsforfoodorfeed": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "dryand75to80f": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "ethephoneag6plantgrowthregulatortreatedleavescurefastersocuretreatedanduntreatedleavesinseparatebarns": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "fillthespraytank12to34fullofwateragitatethewaterandcontinueagitationthroughoutmixingandsprayingoperations": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "followmanufacturersinstructionsforcleaningmaintainingppe": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "followmanufacturersinstructionsforcleaningmaintainingppeifnosuchinstructionsforwashablesexistusedetergentandhotwater": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "harvestedgreenleaveswillneedtobecoloredforafewhours": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "harvestedyellowleaveswillrequireadjustmentoftemperatureandventilationsothetobaccodriesasquicklyaspossiblewithoutscalding": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "ifamajorstormisexpecteddelayapplicationofthisproduct": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "ifnosuchinstructionsforwashablesexistusedetergentandhotwater": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "increasingthesprayvolumesothatlargerdropletsareproducedwillreducespraydriftusethehighestpracticalsprayvolumefortheapplication": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "itisrecommendedthatanapplicationofadefoliantbemadebeforeanethephoneag6plantgrowthregulatorapplicationtofacilitatebollandfoliagecoveragebythisproduct": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "keepandwashppeseparatelyfromotherlaundry": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "makeapplication4to7daysbeforetheethephoneag6plantgrowthregulatorbollopeningapplication": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "pperequiredforearlyentrytotreatedareasthatispermittedundertheworkerprotectionstandardandthatinvolvescontactwithanythingthathasbeentreatedsuchasplantssoilorwaterisxcoverallsoverlongsleevedshirtandlongpants": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "removeandwashcontaminatedclothingbeforereuse": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "rotationcroprestrictionsdonotplantbackanothercropwithin30daysafterapplicationifsmallgrainsareplantedearlierthan1monthafteranethephoneag6plantgrowthregulatorapplicationorareplantedbetweenthecottonplantrowswhichweretreatedwiththisproductthesecropscanonlybeusedascovercropsdonotharvestthegraincropsforfoodorfeed": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "selectthetypeofequipmentgroundorairandsprayvolumeswhichwillensurethoroughcoverageofbollsandfoliage": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "spraynozzleuseaspraynozzlethatisdesignedfortheintendedapplication": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "spraynozzleuseaspraynozzlethatisdesignedfortheintendedapplicationconsiderusingnozzlesdesignedtoreducedrift": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "thisapplicationhelpsdefoliatethetopofthecropandpreservesthebottomofthecropmayleadtoearlierharvest": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "typicalgrowingconditionswillrequirethelowerratesspecifiedinthetablebelowifthehigherratesareusedonlyapplyiftemperaturesarebelow65ºfonthedayofapplication": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "useonlytherecommendedadditiveswithethephoneag6plantgrowthregulatorwhicharementionedonthislabel": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "usethehighestpracticalsprayvolumefortheapplication": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "usethisproductonlyinaccordancewithitslabelingandwiththeworkerprotectionstandard40cfrpart170": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "volumeincreasingthesprayvolumesothatlargerdropletsareproducedwillreducespraydriftusethehighestpracticalsprayvolumefortheapplication": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "volumeincreasingthesprayvolumesothatlargerdropletsareproducedwillreducespraydriftusethehighestpracticalsprayvolumefortheapplicationlfagreatersprayvolumeisneededconsiderusinganozzlewithahigherflowrate": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "washhandsthoroughlywithsoapandwaterafterhandlingandbeforeeatingdrinkingchewinggumorusingtobacco": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "wearprotectiveeyewearsuchasgogglesfaceshieldorsafetyglasses": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "whenhandlersuseclosedsystemsenclosedcabsoraircraftinamannerthatmeetstherequirementslistedintheworkerprotectionstandardwpsforagriculturalpesticides40cfr170240d46thehandlerpperequirementsmaybereducedormodifiedasspecifiedinthewps": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "xchemicalresistantapronwhencleaningequipmentmixingorloading": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "xchemicalresistantheadgearforoverheadexposure": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "xdonotapplythisproductifrainisexpectedwithin6hoursasproductperformancemaybereduced": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "xremoveclothingppeimmediatelyifpesticidegetsinsidethenwashthoroughlyandputoncleanclothing": {
+     "in_shipped": true,
+     "in_previous": true
+    },
+    "xremoveppeimmediatelyafterhandlingthisproductassoonaspossiblewashthoroughlyandchangeintocleanclothing": {
+     "in_shipped": true,
+     "in_previous": true
+    }
+   }
+  }
+ }
+}
