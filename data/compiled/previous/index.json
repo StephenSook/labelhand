@@ -1,0 +1,47 @@
+{
+ "5481-504": {
+  "reg": "5481-504",
+  "product": "FOLEX® 6 EC",
+  "shortName": "Folex 6 EC",
+  "accepted": "2025-02-27",
+  "url": "https://www3.epa.gov/pesticides/chem_search/ppls/005481-00504-20250227.pdf",
+  "file": "data/labels/005481-00504-20250227.pdf",
+  "bytes": 7968039,
+  "sha256": "c5cba21ced09c6f123f7caaaddfa7159260a7241e9e57ac84190377f2b3eb781",
+  "pages": 11,
+  "versions_listed": 5,
+  "fetched_utc": "2026-10-21T14:38:22+00:00",
+  "shipped_accepted": "2026-03-04",
+  "shipped_sha256": "184a62d6439c0aa76356fc8d0edad2bd23825de0e6865c7bc5663993e6f0fe2a"
+ },
+ "228-653": {
+  "reg": "228-653",
+  "product": "FREEFALL SC COTTON DEFOLIANT",
+  "shortName": "FreeFall SC",
+  "accepted": "2021-01-27",
+  "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00653-20210127.pdf",
+  "file": "data/labels/000228-00653-20210127.pdf",
+  "bytes": 953785,
+  "sha256": "c1501442b2125fc629bee2480202de815af547379791cfa47893a27e227d136e",
+  "pages": 13,
+  "versions_listed": 8,
+  "fetched_utc": "2026-10-21T14:38:37+00:00",
+  "shipped_accepted": "2021-05-14",
+  "shipped_sha256": "28f688690b11f21b1d2d30517ef95b52b148d74bf6a50b292a63388f86b747c2"
+ },
+ "228-659": {
+  "reg": "228-659",
+  "product": "ETHEPHON E-AG 6 PLANT GROWTH REGULATOR",
+  "shortName": "Super Boll",
+  "accepted": "2020-01-31",
+  "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00659-20200131.pdf",
+  "file": "data/labels/000228-00659-20200131.pdf",
+  "bytes": 359644,
+  "sha256": "658d932bd8db72e0ca5595c76ecf42b2654a889c5758ff98dc4b28cc0806b06f",
+  "pages": 10,
+  "versions_listed": 4,
+  "fetched_utc": "2026-10-21T14:43:38+00:00",
+  "shipped_accepted": "2022-08-08",
+  "shipped_sha256": "52aca62bf5e83141ea410c2cf13ca4140e3bc8d5f7bbb93d93de839f0cc673bb"
+ }
+}
