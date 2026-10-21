@@ -107,6 +107,31 @@ describe("label text diff", () => {
     expect(diff).toMatchObject({ changes: [], unreadable: "from", sentences: { from: 0, to: 2 } });
     expect(diffLabelText([WIND], ["", ""]).unreadable).toBe("to");
   });
+
+  test("words taken from the start of a sentence show that same sentence on the other side, not its neighbour", () => {
+    // From a review: the rain sentence lost its first word, and the change before it ends with an unchanged word.
+    const intro = "Read the entire label before using this product.";
+    const diff = diffLabelText([`${intro} Mix very well. Please wait for rain here.`], [`${intro} Mix well. Wait for rain here.`]);
+    // Two changes, each beside its own sentence; the rain one comes first.
+    const texts = (side: ChangeSide | null) => side?.parts.map((part) => part.text);
+    expect(diff.changes.map((change) => [texts(change.before), texts(change.after)])).toEqual([
+      [["Please wait for rain here."], ["Wait for rain here."]],
+      [["Mix very well."], ["Mix well."]],
+    ]);
+    expect(diff.changes.map((change) => marked(change.before))).toEqual([["Please"], ["very"]]);
+    // The mirror: words added at the start of a sentence.
+    const added = diffLabelText([`${intro} Mix well. Wait for rain here.`], [`${intro} Mix very well. Please wait for rain here.`]).changes;
+    expect(added.map((change) => [texts(change.before), texts(change.after)])).toEqual([
+      [["Wait for rain here."], ["Please wait for rain here."]],
+      [["Mix well."], ["Mix very well."]],
+    ]);
+  });
+
+  test("two labels too long and too different to align list nothing instead of a wall of moves", () => {
+    const words = (n: number, tag: string) => Array.from({ length: n }, (_, i) => `Sentence ${tag} number ${i} about wind.`);
+    const diff = diffLabelText([words(3100, "alpha").join(" ")], [words(3100, "beta").join(" ")]);
+    expect(diff).toMatchObject({ tooLong: true, changes: [], moved: 0, unreadable: null });
+  });
 });
 
 describe("spray conditions", () => {

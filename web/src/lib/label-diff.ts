@@ -99,9 +99,10 @@ export function sentences(pages: readonly string[]): Sentence[] {
 
 type Op = { kind: "equal"; a: number; b: number } | { kind: "delete"; a: number } | { kind: "insert"; b: number };
 
-// Longest common subsequence alignment of two key lists. Inputs above `cap` cells are not aligned at all, which
-// reports the whole block as removed and added rather than guessing.
-export function align(a: readonly string[], b: readonly string[], cap = 9_000_000): Op[] {
+// The cells an alignment needs once the shared start and end are set aside.
+export const SENTENCE_CAP = 9_000_000;
+
+function middle(a: readonly string[], b: readonly string[]): { start: number; endA: number; endB: number; cells: number } {
   let start = 0;
   while (start < a.length && start < b.length && a[start] === b[start]) start += 1;
   let endA = a.length;
@@ -110,6 +111,13 @@ export function align(a: readonly string[], b: readonly string[], cap = 9_000_00
     endA -= 1;
     endB -= 1;
   }
+  return { start, endA, endB, cells: (endA - start) * (endB - start) };
+}
+
+// Longest common subsequence alignment of two key lists. Inputs above `cap` cells are not aligned at all, which
+// reports the whole block as removed and added rather than guessing.
+export function align(a: readonly string[], b: readonly string[], cap = SENTENCE_CAP): Op[] {
+  const { start, endA, endB } = middle(a, b);
   const ops: Op[] = [];
   for (let i = 0; i < start; i += 1) ops.push({ kind: "equal", a: i, b: i });
   const n = endA - start;
@@ -176,6 +184,9 @@ export type LabelTextDiff = {
   // A version with no text layer on any page (a scan) cannot be compared: listing every sentence of the other one
   // as added or removed would claim a change nobody made.
   unreadable: "from" | "to" | null;
+  // Two versions too long and too different to align within the server's memory: nothing is listed rather than
+  // every sentence reported as removed, added or moved.
+  tooLong: boolean;
 };
 
 type WordRef = { sentence: number; word: number };
@@ -210,10 +221,13 @@ export function diffLabelText(fromPages: readonly string[], toPages: readonly st
   const unreadable = blank.from.length === fromPages.length ? "from" : blank.to.length === toPages.length ? "to" : null;
   const before = sentences(fromPages);
   const after = sentences(toPages);
-  if (unreadable) {
-    return { changes: [], sentences: { from: before.length, to: after.length }, moved: 0, formatting: 0, blankPages: blank, unreadable };
+  const beforeKeys = before.map((s) => s.key);
+  const afterKeys = after.map((s) => s.key);
+  const tooLong = !unreadable && middle(beforeKeys, afterKeys).cells > SENTENCE_CAP;
+  if (unreadable || tooLong) {
+    return { changes: [], sentences: { from: before.length, to: after.length }, moved: 0, formatting: 0, blankPages: blank, unreadable, tooLong };
   }
-  const top = align(before.map((s) => s.key), after.map((s) => s.key));
+  const top = align(beforeKeys, afterKeys);
   const changes: TextChange[] = [];
   let formatting = 0;
 
@@ -242,6 +256,16 @@ export function diffLabelText(fromPages: readonly string[], toPages: readonly st
     }
 
     const words = align(oldKeys, newKeys, 4_000_000);
+    // The sentences on the other side that each sentence shares an aligned word with.
+    const oldPartners = new Map<number, Set<number>>();
+    const newPartners = new Map<number, Set<number>>();
+    for (const op of words) {
+      if (op.kind !== "equal") continue;
+      const i = oldWords[op.a].sentence;
+      const j = newWords[op.b].sentence;
+      oldPartners.set(i, (oldPartners.get(i) ?? new Set<number>()).add(j));
+      newPartners.set(j, (newPartners.get(j) ?? new Set<number>()).add(i));
+    }
     type Item = { a: Set<number>; b: Set<number>; deleted: number[]; inserted: number[] };
     const items: Item[] = [];
     let lastEqual: Op | undefined;
@@ -275,10 +299,13 @@ export function diffLabelText(fromPages: readonly string[], toPages: readonly st
       const partDeleted = deleted.filter((i) => !wholeOld.has(oldWords[i].sentence));
       const partInserted = inserted.filter((j) => !wholeNew.has(newWords[j].sentence));
       if (!partDeleted.length && !partInserted.length) continue;
-      // Words added to or taken from a sentence that is still there show that sentence on the other side too.
-      const anchor = lastEqual ?? words[w];
+      // Words added to or taken from a sentence that is still there show that sentence on the other side too: the
+      // sentence its unchanged words align with, or, if none do, the one around the nearest unchanged word.
       const a = new Set(partDeleted.map((i) => oldWords[i].sentence));
       const b = new Set(partInserted.map((j) => newWords[j].sentence));
+      if (a.size === 0) for (const j of b) newPartners.get(j)?.forEach((i) => a.add(i));
+      if (b.size === 0) for (const i of a) oldPartners.get(i)?.forEach((j) => b.add(j));
+      const anchor = lastEqual ?? words[w];
       if (a.size === 0 && anchor?.kind === "equal") a.add(oldWords[anchor.a].sentence);
       if (b.size === 0 && anchor?.kind === "equal") b.add(newWords[anchor.b].sentence);
       items.push({ a, b, deleted: partDeleted, inserted: partInserted });
@@ -349,5 +376,6 @@ export function diffLabelText(fromPages: readonly string[], toPages: readonly st
     formatting,
     blankPages: blank,
     unreadable: null,
+    tooLong: false,
   };
 }
