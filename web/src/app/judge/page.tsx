@@ -74,6 +74,16 @@ const steps: JudgeStep[] = [
     action: "Go to Show on the label",
   },
   {
+    title: "See what changed on a label since the last version",
+    body: (
+      <p>
+        EPA keeps every accepted label; this compares FreeFall SC&apos;s two 2021 labels sentence by sentence, spray conditions first, then the rules each compiled to and the planner hours they move.
+      </p>
+    ),
+    href: "/changes/228-653",
+    action: "Open the label time machine",
+  },
+  {
     title: "Ask the tank and read its trace",
     body: (
       <p>
