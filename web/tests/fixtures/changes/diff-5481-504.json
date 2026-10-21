@@ -1,0 +1,45 @@
+{
+ "recorded_utc": "2026-10-21T15:19:24.232Z",
+ "reg": "5481-504",
+ "from": {
+  "fileName": "005481-00504-20250227.pdf",
+  "accepted": "2025-02-27",
+  "url": "https://www3.epa.gov/pesticides/chem_search/ppls/005481-00504-20250227.pdf",
+  "sha256": "c5cba21ced09c6f123f7caaaddfa7159260a7241e9e57ac84190377f2b3eb781",
+  "pages": 11
+ },
+ "to": {
+  "fileName": "005481-00504-20260304.pdf",
+  "accepted": "2026-03-04",
+  "url": "https://www3.epa.gov/pesticides/chem_search/ppls/005481-00504-20260304.pdf",
+  "sha256": "184a62d6439c0aa76356fc8d0edad2bd23825de0e6865c7bc5663993e6f0fe2a",
+  "pages": 11
+ },
+ "diff": {
+  "changes": [],
+  "sentences": {
+   "from": 0,
+   "to": 356
+  },
+  "moved": 0,
+  "formatting": 0,
+  "blankPages": {
+   "from": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ],
+   "to": []
+  },
+  "unreadable": "from",
+  "tooLong": false
+ }
+}

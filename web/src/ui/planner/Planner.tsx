@@ -555,23 +555,31 @@ export function Planner({ initialField, initialProducts, initialHours, initialRe
                   const label = labels?.[reg];
                   const checked = selectedRegs.has(reg);
                   return (
-                    <label
-                      key={reg}
-                      title={label ? `${label.product}, EPA Reg. ${reg}` : undefined}
-                      className={`flex min-h-20 cursor-pointer items-center gap-3 rounded-2xl border-2 border-[#14213d] px-3 py-3 font-bold outline-offset-2 has-[:focus-visible]:outline has-[:focus-visible]:outline-[3px] has-[:focus-visible]:outline-[#2f8f4e] ${checked ? "bg-[#216a38] text-white" : "bg-white"}`}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={() => toggleProduct(reg)}
-                        aria-label={label ? `${label.shortName}, ${label.product}, EPA Reg. ${reg}` : `EPA Reg. ${reg}`}
-                        className="size-6 shrink-0 accent-[#ffc53d]"
-                      />
-                      <span>
-                        <span className="block leading-tight">{label?.shortName ?? reg}</span>
-                        <span className="mt-1 block text-xs">EPA Reg. {reg}</span>
-                      </span>
-                    </label>
+                    <div key={reg} className="grid content-start gap-1">
+                      <label
+                        title={label ? `${label.product}, EPA Reg. ${reg}` : undefined}
+                        className={`flex min-h-20 cursor-pointer items-center gap-3 rounded-2xl border-2 border-[#14213d] px-3 py-3 font-bold outline-offset-2 has-[:focus-visible]:outline has-[:focus-visible]:outline-[3px] has-[:focus-visible]:outline-[#2f8f4e] ${checked ? "bg-[#216a38] text-white" : "bg-white"}`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={() => toggleProduct(reg)}
+                          aria-label={label ? `${label.shortName}, ${label.product}, EPA Reg. ${reg}` : `EPA Reg. ${reg}`}
+                          className="size-6 shrink-0 accent-[#ffc53d]"
+                        />
+                        <span>
+                          <span className="block leading-tight">{label?.shortName ?? reg}</span>
+                          <span className="mt-1 block text-xs">EPA Reg. {reg}</span>
+                        </span>
+                      </label>
+                      <a
+                        href={`/changes/${reg}`}
+                        data-changes-link={reg}
+                        className="inline-flex min-h-11 items-center px-1 text-sm font-extrabold underline decoration-2 underline-offset-4 outline-offset-2 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#2f8f4e]"
+                      >
+                        What changed on {label?.shortName ?? `EPA Reg. ${reg}`}
+                      </a>
+                    </div>
                   );
                 })}
               </div>

@@ -1,0 +1,111 @@
+{
+ "created_utc": "2026-10-21T14:38:06+00:00",
+ "pipeline": "three runs of p2 Super + Ultra extraction, union, Ultra typing v3, two readings, modality floor, majority merge",
+ "budget_usd": 4.0,
+ "labels": {
+  "5481-504": {
+   "reg": "5481-504",
+   "shipped_accepted": "2026-03-04",
+   "shipped_sha256": "184a62d6439c0aa76356fc8d0edad2bd23825de0e6865c7bc5663993e6f0fe2a",
+   "versions_listed": 5,
+   "accepted": "2025-02-27",
+   "url": "https://www3.epa.gov/pesticides/chem_search/ppls/005481-00504-20250227.pdf",
+   "sha256": "c5cba21ced09c6f123f7caaaddfa7159260a7241e9e57ac84190377f2b3eb781",
+   "pages": 11,
+   "compiled": false,
+   "why": "11 of 11 pages have no readable text layer; the PDF is a scan.",
+   "page_characters": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  "228-653": {
+   "reg": "228-653",
+   "shipped_accepted": "2021-05-14",
+   "shipped_sha256": "28f688690b11f21b1d2d30517ef95b52b148d74bf6a50b292a63388f86b747c2",
+   "versions_listed": 8,
+   "accepted": "2021-01-27",
+   "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00653-20210127.pdf",
+   "sha256": "c1501442b2125fc629bee2480202de815af547379791cfa47893a27e227d136e",
+   "pages": 13,
+   "compiled": true,
+   "runs": [
+    {
+     "run": ".p2",
+     "super_usd": 0.0121,
+     "ultra_usd": 0.0677,
+     "typing_usd": 0.1366,
+     "ocr_rescue_usd": 0.0,
+     "total_usd": 0.2164
+    },
+    {
+     "run": ".p2r2",
+     "super_usd": 0.0115,
+     "ultra_usd": 0.0636,
+     "typing_usd": 0.1207,
+     "ocr_rescue_usd": 0.0,
+     "total_usd": 0.1958
+    },
+    {
+     "run": ".p2r3",
+     "super_usd": 0.0126,
+     "ultra_usd": 0.0644,
+     "typing_usd": 0.1262,
+     "ocr_rescue_usd": 0.0,
+     "total_usd": 0.2032
+    }
+   ],
+   "cost_usd": 0.6154,
+   "merged_rules": 166
+  },
+  "228-659": {
+   "reg": "228-659",
+   "shipped_accepted": "2022-08-08",
+   "shipped_sha256": "52aca62bf5e83141ea410c2cf13ca4140e3bc8d5f7bbb93d93de839f0cc673bb",
+   "versions_listed": 4,
+   "accepted": "2020-01-31",
+   "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00659-20200131.pdf",
+   "sha256": "658d932bd8db72e0ca5595c76ecf42b2654a889c5758ff98dc4b28cc0806b06f",
+   "pages": 10,
+   "compiled": true,
+   "runs": [
+    {
+     "run": ".p2",
+     "super_usd": 0.0111,
+     "ultra_usd": 0.0547,
+     "typing_usd": 0.1085,
+     "ocr_rescue_usd": 0.0,
+     "total_usd": 0.1743
+    },
+    {
+     "run": ".p2r2",
+     "super_usd": 0.0094,
+     "ultra_usd": 0.0575,
+     "typing_usd": 0.1193,
+     "ocr_rescue_usd": 0.0,
+     "total_usd": 0.1862
+    },
+    {
+     "run": ".p2r3",
+     "super_usd": 0.0084,
+     "ultra_usd": 0.0543,
+     "typing_usd": 0.0998,
+     "ocr_rescue_usd": 0.0,
+     "total_usd": 0.1625
+    }
+   ],
+   "cost_usd": 0.523,
+   "merged_rules": 147
+  }
+ },
+ "total_cost_usd": 1.1384
+}

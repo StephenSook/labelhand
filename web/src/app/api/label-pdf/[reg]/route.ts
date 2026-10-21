@@ -3,7 +3,8 @@ import { NextResponse } from "next/server";
 import labelIndex from "../../../../../public/data/labels/index.json";
 
 import { getCachedLiveLabel, getRegistrationCacheIndex } from "@/lib/live-cache";
-import { assertFederalReg, pplsPdfUrl } from "@/lib/ppls";
+import { assertCacheHitAllowed, LiveLimitError } from "@/lib/live-limits";
+import { assertFederalReg, MAX_PDF_BYTES, parsePplsFileName, pplsPdfUrl } from "@/lib/ppls";
 
 export const runtime = "nodejs";
 export const maxDuration = 25;
@@ -16,7 +17,7 @@ type LabelRecord = (typeof labelIndex)[number];
 interface LabelSource {
   url: string;
   sha256: string;
-  digestSource: "committed label index" | "live cache record";
+  digestSource: "committed label index" | "live cache record" | "label comparison";
 }
 
 function plain(message: string, status: number) {
@@ -26,8 +27,26 @@ function plain(message: string, status: number) {
   });
 }
 
+function clientIp(request: Request): string {
+  return request.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
+    || request.headers.get("x-real-ip")
+    || "unknown";
+}
+
 function findLabel(reg: string): LabelRecord | undefined {
   return labelIndex.find((label) => label.reg === reg);
+}
+
+// Any accepted version of this registration, by its PPLS file name, held to the SHA-256 the label comparison
+// read: the page shown is the same PDF whose text was compared.
+function requestedVersion(reg: string, file: string, sha256: string): LabelSource | { error: string } {
+  try {
+    parsePplsFileName(file, assertFederalReg(reg));
+  } catch {
+    return { error: `${file} is not an EPA PPLS label file of registration ${reg}.` };
+  }
+  if (!/^[a-f0-9]{64}$/.test(sha256)) return { error: "A label version needs the SHA-256 of the PDF that was compared." };
+  return { url: pplsPdfUrl(file), sha256, digestSource: "label comparison" };
 }
 
 async function findLiveLabel(reg: string, signal: AbortSignal): Promise<LabelSource | null> {
@@ -62,8 +81,24 @@ export async function GET(
   context: { params: Promise<{ reg: string }> },
 ) {
   const { reg } = await context.params;
-  const committed = findLabel(reg);
-  const label: LabelSource | null = committed
+  const query = new URL(request.url).searchParams;
+  const version = query.has("file") ? requestedVersion(reg, query.get("file") ?? "", query.get("sha256") ?? "") : null;
+  if (version && "error" in version) return plain(version.error, 400);
+  if (version) {
+    // A named version can be any accepted PDF of the registration, so it shares the per-address label request limit.
+    try {
+      assertCacheHitAllowed(clientIp(request));
+    } catch (error) {
+      if (!(error instanceof LiveLimitError)) throw error;
+      const limited = plain(error.message, error.status);
+      limited.headers.set("retry-after", String(error.retryAfterSeconds ?? 60));
+      return limited;
+    }
+  }
+  const committed = version ? undefined : findLabel(reg);
+  const label: LabelSource | null = version
+    ? version
+    : committed
     ? {
         url: committed.url,
         sha256: committed.sha256,
@@ -93,7 +128,14 @@ export async function GET(
     return plain(`The EPA label fetch for ${reg} returned HTTP ${upstream.status}.`, 502);
   }
 
+  const declaredLength = Number(upstream.headers.get("content-length"));
+  if (Number.isFinite(declaredLength) && declaredLength > MAX_PDF_BYTES) {
+    return plain(`The EPA label PDF for ${reg} exceeds the ${MAX_PDF_BYTES} byte limit.`, 502);
+  }
   const bytes = new Uint8Array(await upstream.arrayBuffer());
+  if (bytes.byteLength > MAX_PDF_BYTES) {
+    return plain(`The EPA label PDF for ${reg} exceeds the ${MAX_PDF_BYTES} byte limit.`, 502);
+  }
   const signature = new TextDecoder("ascii").decode(bytes.subarray(0, 5));
   if (signature !== "%PDF-") {
     return plain(`The EPA response for ${reg} was not a PDF. The %PDF- signature was missing.`, 502);

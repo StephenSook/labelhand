@@ -1,0 +1,64 @@
+{
+  "items": [
+    {
+      "eparegno": "228-653",
+      "productname": "FREEFALL SC COTTON DEFOLIANT",
+      "product_status": "Active",
+      "product_status_date": "April 13, 2007",
+      "cancel_flag": "No",
+      "cancellationreason": null,
+      "altbrandnames": [
+        {
+          "altbrandname": "TDZ E-AG 4SC COTTON DEFOLIANT"
+        }
+      ],
+      "pdffiles": [
+        {
+          "epa_reg_num": "228-653",
+          "pdffile": "000228-00653-20210514.pdf",
+          "pdffile_accepted_date": "May 14, 2021"
+        },
+        {
+          "epa_reg_num": "228-653",
+          "pdffile": "000228-00653-20210127.pdf",
+          "pdffile_accepted_date": "January 27, 2021"
+        },
+        {
+          "epa_reg_num": "228-653",
+          "pdffile": "000228-00653-20190823.pdf",
+          "pdffile_accepted_date": "August 23, 2019"
+        },
+        {
+          "epa_reg_num": "228-653",
+          "pdffile": "000228-00653-20160422.pdf",
+          "pdffile_accepted_date": "April 22, 2016"
+        },
+        {
+          "epa_reg_num": "228-653",
+          "pdffile": "000228-00653-20120702.pdf",
+          "pdffile_accepted_date": "July 2, 2012"
+        },
+        {
+          "epa_reg_num": "228-653",
+          "pdffile": "000228-00653-20101019.pdf",
+          "pdffile_accepted_date": "October 19, 2010"
+        },
+        {
+          "epa_reg_num": "228-653",
+          "pdffile": "000228-00653-20091214.pdf",
+          "pdffile_accepted_date": "December 14, 2009"
+        },
+        {
+          "epa_reg_num": "228-653",
+          "pdffile": "000228-00653-20090820.pdf",
+          "pdffile_accepted_date": "August 20, 2009"
+        },
+        {
+          "epa_reg_num": "79676-53",
+          "pdffile": "079676-00053-20070413.pdf",
+          "pdffile_accepted_date": "April 13, 2007"
+        }
+      ]
+    }
+  ]
+}

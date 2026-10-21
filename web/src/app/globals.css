@@ -566,7 +566,35 @@ a {
 .proof-source { color: var(--ink-soft); font-size: 0.9rem; font-weight: 600; line-height: 1.55; margin: 1.6rem 0 0; max-width: 48rem; }
 .proof-source code { overflow-wrap: anywhere; }
 
+/* Label time machine (/changes/<reg>) */
+.changes-title { overflow-wrap: anywhere; }
+.changes-lede-small { font-size: 1rem; }
+.changes-block + .changes-block { border-top: 3px dashed var(--paper-deep); margin-top: 2.6rem; padding-top: 2.2rem; }
+.changes-alert { background: var(--blocked-soft); border: 2px solid var(--blocked); border-radius: var(--radius-card); font-weight: 750; line-height: 1.55; margin: 1rem 0 0; max-width: 52rem; padding: 0.9rem 1.1rem; }
+.changes-note { background: var(--sun-soft); border-radius: 0.8rem; font-size: 0.95rem; font-weight: 650; line-height: 1.5; margin: 0.9rem 0 0; max-width: 52rem; padding: 0.6rem 0.8rem; }
+.changes-versions { display: grid; gap: 0.5rem; list-style: none; margin: 1.1rem 0 0; max-width: 52rem; padding: 0; }
+.changes-versions li { align-items: center; background: var(--white); border: 2px solid var(--ink); border-radius: 1rem; display: flex; flex-wrap: wrap; gap: 0.3rem 0.9rem; padding: 0.55rem 0.9rem; }
+.changes-versions li .text-link { font-size: 0.85rem; margin-top: 0; overflow-wrap: anywhere; }
+.changes-version-picked { box-shadow: 4px 4px 0 var(--ink); outline: 3px solid var(--sun); }
+.changes-version-date { font-weight: 850; min-width: 10.5rem; }
+.changes-pickers { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.3rem; }
+.changes-pickers label { display: grid; font-weight: 850; gap: 0.35rem; min-width: min(16rem, 100%); }
+.changes-pickers select { background: var(--white); border: 2px solid var(--ink); border-radius: 1rem; font-weight: 800; min-height: 3rem; padding: 0.4rem 0.8rem; }
+.changes-pickers select:focus-visible { outline: 3px solid var(--field); outline-offset: 2px; }
+.changes-sides { display: grid; gap: 1rem 1.4rem; grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr)); margin-top: 0.4rem; }
+.changes-side { min-width: 0; }
+.changes-side-head { color: var(--ink-soft); font-size: 0.85rem; font-weight: 800; margin: 0.8rem 0 0; }
+.changes-quote { overflow-wrap: anywhere; }
+.changes-quote mark { background: var(--sun); border-radius: 0.2rem; box-decoration-break: clone; color: var(--ink); padding: 0 0.15rem; }
+.changes-other { margin: 0.4rem 1.2rem 1.2rem; max-width: none; }
+.changes-details-lede { margin: 0 1.2rem; }
+.changes-table-wrap { margin-top: 1rem; max-width: 64rem; padding: 0; }
+.changes-buttons { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.9rem; }
+/* The hours table drops its header row on a phone, so each cell names its column there. */
+.changes-cell-label { display: none; font-weight: 850; }
+
 @media (max-width: 720px) {
+  .changes-cell-label { display: inline; }
   .proof-tally, .proof-compare { grid-template-columns: minmax(0, 1fr); }
   .proof-table thead { display: none; }
   .proof-table tr { border-top: 1px solid var(--paper-deep); display: grid; gap: 0.2rem; padding: 0.6rem 0; }

@@ -1,0 +1,1302 @@
+{
+ "recorded_utc": "2026-10-21T15:19:09.491Z",
+ "reg": "228-653",
+ "from": {
+  "fileName": "000228-00653-20210127.pdf",
+  "accepted": "2021-01-27",
+  "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00653-20210127.pdf",
+  "sha256": "c1501442b2125fc629bee2480202de815af547379791cfa47893a27e227d136e",
+  "pages": 13
+ },
+ "to": {
+  "fileName": "000228-00653-20210514.pdf",
+  "accepted": "2021-05-14",
+  "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00653-20210514.pdf",
+  "sha256": "28f688690b11f21b1d2d30517ef95b52b148d74bf6a50b292a63388f86b747c2",
+  "pages": 11
+ },
+ "diff": {
+  "changes": [
+   {
+    "kind": "changed",
+    "before": {
+     "page": 8,
+     "pages": [
+      8
+     ],
+     "text": "USE OF CROP OIL/ADJUVANTS Improved defoliation and regrowth suppression has been shown when crop oil concentrates penetrating oils approved for use on agricultural crops are mixed with this product and applied when nighttime temperatures are low (60°-65°F) or when treating drought-stressed cotton.",
+     "marks": [],
+     "parts": [
+      {
+       "page": 8,
+       "text": "USE OF CROP OIL/ADJUVANTS Improved defoliation and regrowth suppression has been shown when crop oil concentrates penetrating oils approved for use on agricultural crops are mixed with this product and applied when nighttime temperatures are low (60°-65°F) or when treating drought-stressed cotton.",
+       "marked": false
+      }
+     ]
+    },
+    "after": {
+     "page": 7,
+     "pages": [
+      7
+     ],
+     "text": "USE OF CROP OIL/ADJUVANTS Improved defoliation and regrowth suppression has been shown when crop oil concentrates (COC’s) or penetrating oils approved for use on agricultural crops are mixed with this product and applied when nighttime temperatures are low (60°-65°F) or when treating drought-stressed cotton.",
+     "marks": [
+      [
+       114,
+       124
+      ]
+     ],
+     "parts": [
+      {
+       "page": 7,
+       "text": "USE OF CROP OIL/ADJUVANTS Improved defoliation and regrowth suppression has been shown when crop oil concentrates (COC’s) or penetrating oils approved for use on agricultural crops are mixed with this product and applied when nighttime temperatures are low (60°-65°F) or when treating drought-stressed cotton.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": [
+     "temperature"
+    ]
+   },
+   {
+    "kind": "added",
+    "before": null,
+    "after": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "UNITED STATES ENVIRONMENTAL PROTECTION AGENCY WASHINGTON, DC 20460 Notification Label Acceptable v.20150904 OFFICE OF CHEMICAL SAFETY AND POLLUTION PREVENTION May 14, 2021 Danielle Larochelle Regulatory Manager Nufarm Americas, Inc. 11901 S.",
+     "marks": [
+      [
+       0,
+       241
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "UNITED STATES ENVIRONMENTAL PROTECTION AGENCY WASHINGTON, DC 20460 Notification Label Acceptable v.20150904 OFFICE OF CHEMICAL SAFETY AND POLLUTION PREVENTION May 14, 2021 Danielle Larochelle Regulatory Manager Nufarm Americas, Inc. 11901 S.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "added",
+    "before": null,
+    "after": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "Austin Avenue Alsip, IL 60803 Subject: Notification per PRN 98-10 – Add “Not registered for use in California” under Control of Undesirable Cotton Following Harvest use directions Product Name: Freefall SC Cotton Defoliant EPA Registration Number: 228-653 Application Date: April 8, 2021",
+     "marks": [
+      [
+       0,
+       65
+      ],
+      [
+       68,
+       287
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "Austin Avenue Alsip, IL 60803 Subject: Notification per PRN 98-10 – Add “Not registered for use in California” under Control of Undesirable Cotton Following Harvest use directions Product Name: Freefall SC Cotton Defoliant EPA Registration Number: 228-653 Application Date: April 8, 2021",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "added",
+    "before": null,
+    "after": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "Decision Number: 573380 Dear Ms. Larochelle: The Agency is in receipt of your Application for Pesticide Notification under Pesticide Registration Notice (PRN) 98-10 for the above referenced product.",
+     "marks": [
+      [
+       0,
+       198
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "Decision Number: 573380 Dear Ms. Larochelle: The Agency is in receipt of your Application for Pesticide Notification under Pesticide Registration Notice (PRN) 98-10 for the above referenced product.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "added",
+    "before": null,
+    "after": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "The Registration Division (RD) has conducted a review of this request for its applicability under PRN 98-10 and finds that the action requested falls within the scope of PRN 98-10.",
+     "marks": [
+      [
+       0,
+       180
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "The Registration Division (RD) has conducted a review of this request for its applicability under PRN 98-10 and finds that the action requested falls within the scope of PRN 98-10.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "added",
+    "before": null,
+    "after": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "The label submitted with the application has been stamped “Notification” and will be placed in our records.",
+     "marks": [
+      [
+       0,
+       107
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "The label submitted with the application has been stamped “Notification” and will be placed in our records.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "added",
+    "before": null,
+    "after": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "Should you wish to add/retain a reference to the company’s website on your label, then please be aware that the website becomes labeling under the Federal Insecticide, Fungicide, and Rodenticide Act (FIFRA) and is subject to review by the Agency.",
+     "marks": [
+      [
+       0,
+       246
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "Should you wish to add/retain a reference to the company’s website on your label, then please be aware that the website becomes labeling under the Federal Insecticide, Fungicide, and Rodenticide Act (FIFRA) and is subject to review by the Agency.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "added",
+    "before": null,
+    "after": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "If the website is false or misleading, the product would be misbranded and unlawful to sell or distribute under FIFRA section 12(a)(1)(E).",
+     "marks": [
+      [
+       0,
+       138
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "If the website is false or misleading, the product would be misbranded and unlawful to sell or distribute under FIFRA section 12(a)(1)(E).",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "added",
+    "before": null,
+    "after": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "40 CFR 156.10(a)(5) list examples of statements EPA may consider false or misleading.",
+     "marks": [
+      [
+       0,
+       85
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "40 CFR 156.10(a)(5) list examples of statements EPA may consider false or misleading.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "added",
+    "before": null,
+    "after": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "In addition, regardless of whether a website is referenced on your product’s label, claims made on the website may not substantially differ from those claims approved through the registration process.",
+     "marks": [
+      [
+       0,
+       200
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "In addition, regardless of whether a website is referenced on your product’s label, claims made on the website may not substantially differ from those claims approved through the registration process.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "added",
+    "before": null,
+    "after": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "Therefore, should the Agency find or if it is brought to our attention that a website contains false or misleading statements or claims substantially differing from the EPA approved registration, the website will be referred to the EPA’s Office of",
+     "marks": [
+      [
+       0,
+       247
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "Therefore, should the Agency find or if it is brought to our attention that a website contains false or misleading statements or claims substantially differing from the EPA approved registration, the website will be referred to the EPA’s Office of",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "added",
+    "before": null,
+    "after": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "Enforcement and Compliance.",
+     "marks": [
+      [
+       0,
+       27
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "Enforcement and Compliance.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "added",
+    "before": null,
+    "after": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "If you have any questions, you may contact Jamie Harrington by email at harrington.jamie@epa.gov.",
+     "marks": [
+      [
+       0,
+       97
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "If you have any questions, you may contact Jamie Harrington by email at harrington.jamie@epa.gov.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "added",
+    "before": null,
+    "after": {
+     "page": 1,
+     "pages": [
+      1
+     ],
+     "text": "Sincerely, Mindy Ondish Product Manager 23 Herbicide Branch Registration Division (7505P) Office of Pesticide Programs",
+     "marks": [
+      [
+       0,
+       118
+      ]
+     ],
+     "parts": [
+      {
+       "page": 1,
+       "text": "Sincerely, Mindy Ondish Product Manager 23 Herbicide Branch Registration Division (7505P) Office of Pesticide Programs",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "changed",
+    "before": {
+     "page": 3,
+     "pages": [
+      3
+     ],
+     "text": "000228-00653.20210126.Cotton Stalk Destruct FreeFall® SC Cotton Defoliant For Agricultural Use Only Percent by Weight ACTIVE INGREDIENT: Thidiazuron (N-phenyl- -1,2,3-thiadiazol-5-ylurea)* ...................................................................",
+     "marks": [
+      [
+       0,
+       43
+      ],
+      [
+       149,
+       188
+      ]
+     ],
+     "parts": [
+      {
+       "page": 3,
+       "text": "000228-00653.20210126.Cotton Stalk Destruct FreeFall® SC Cotton Defoliant For Agricultural Use Only Percent by Weight ACTIVE INGREDIENT: Thidiazuron (N-phenyl- -1,2,3-thiadiazol-5-ylurea)* ...................................................................",
+       "marked": true
+      }
+     ]
+    },
+    "after": {
+     "page": 2,
+     "pages": [
+      2
+     ],
+     "text": "000228-00653.20210408.Cotton PH_Notif FreeFall® SC Cotton Defoliant For Agricultural Use Only Percent by Weight ACTIVE INGREDIENT: Thidiazuron (N-phenyl-N’-1,2,3-thiadiazol-5-ylurea)* ...................................................................",
+     "marks": [
+      [
+       0,
+       37
+      ],
+      [
+       143,
+       183
+      ]
+     ],
+     "parts": [
+      {
+       "page": 2,
+       "text": "000228-00653.20210408.Cotton PH_Notif FreeFall® SC Cotton Defoliant For Agricultural Use Only Percent by Weight ACTIVE INGREDIENT: Thidiazuron (N-phenyl-N’-1,2,3-thiadiazol-5-ylurea)* ...................................................................",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "changed",
+    "before": {
+     "page": 3,
+     "pages": [
+      3
+     ],
+     "text": "NET CONTENTS: ____GALLONS (___Liters)",
+     "marks": [],
+     "parts": [
+      {
+       "page": 3,
+       "text": "NET CONTENTS: ____GALLONS (___Liters)",
+       "marked": false
+      }
+     ]
+    },
+    "after": {
+     "page": 2,
+     "pages": [
+      2
+     ],
+     "text": "NET CONTENTS: ____GALLONS (___Liters) [Designation as “NONREFILLABLE” or “REFILLABLE” for containers > 5 GAL]228-65305/14/2021",
+     "marks": [
+      [
+       38,
+       100
+      ],
+      [
+       103,
+       126
+      ]
+     ],
+     "parts": [
+      {
+       "page": 2,
+       "text": "NET CONTENTS: ____GALLONS (___Liters) [Designation as “NONREFILLABLE” or “REFILLABLE” for containers > 5 GAL]228-65305/14/2021",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "changed",
+    "before": {
+     "page": 4,
+     "pages": [
+      4
+     ],
+     "text": "Follow exist, use detergent and hot water.",
+     "marks": [],
+     "parts": [
+      {
+       "page": 4,
+       "text": "Follow exist, use detergent and hot water.",
+       "marked": false
+      }
+     ]
+    },
+    "after": {
+     "page": 3,
+     "pages": [
+      3
+     ],
+     "text": "Follow manufacturer’s instructions for cleaning/maintaining PPE. If no such instructions for washables exist, use detergent and hot water.",
+     "marks": [
+      [
+       7,
+       102
+      ]
+     ],
+     "parts": [
+      {
+       "page": 3,
+       "text": "Follow manufacturer’s instructions for cleaning/maintaining PPE.",
+       "marked": true
+      },
+      {
+       "page": 3,
+       "text": "If no such instructions for washables exist, use detergent and hot water.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "changed",
+    "before": {
+     "page": 4,
+     "pages": [
+      4
+     ],
+     "text": "Sound erosion control practices will reduce",
+     "marks": [],
+     "parts": [
+      {
+       "page": 4,
+       "text": "Sound erosion control practices will reduce",
+       "marked": false
+      }
+     ]
+    },
+    "after": {
+     "page": 3,
+     "pages": [
+      3
+     ],
+     "text": "Sound erosion control practices will reduce this product’s contribution to surface water contamination.",
+     "marks": [
+      [
+       44,
+       103
+      ]
+     ],
+     "parts": [
+      {
+       "page": 3,
+       "text": "Sound erosion control practices will reduce this product’s contribution to surface water contamination.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "changed",
+    "before": {
+     "page": 9,
+     "pages": [
+      9
+     ],
+     "text": "TANK MIXES included in the tank mix are registered for the intended use.",
+     "marks": [],
+     "parts": [
+      {
+       "page": 9,
+       "text": "TANK MIXES included in the tank mix are registered for the intended use.",
+       "marked": false
+      }
+     ]
+    },
+    "after": {
+     "page": 8,
+     "pages": [
+      8
+     ],
+     "text": "TANK MIXES It is the pesticide user’s responsibility to ensure that all products included in the tank mix are registered for the intended use.",
+     "marks": [
+      [
+       11,
+       80
+      ]
+     ],
+     "parts": [
+      {
+       "page": 8,
+       "text": "TANK MIXES It is the pesticide user’s responsibility to ensure that all products included in the tank mix are registered for the intended use.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "changed",
+    "before": {
+     "page": 10,
+     "pages": [
+      10
+     ],
+     "text": "Maintain agitation and add the reminder of the water.",
+     "marks": [
+      [
+       31,
+       39
+      ]
+     ],
+     "parts": [
+      {
+       "page": 10,
+       "text": "Maintain agitation and add the reminder of the water.",
+       "marked": true
+      }
+     ]
+    },
+    "after": {
+     "page": 9,
+     "pages": [
+      9
+     ],
+     "text": "Maintain agitation and add the remainder of the water.",
+     "marks": [
+      [
+       31,
+       40
+      ]
+     ],
+     "parts": [
+      {
+       "page": 9,
+       "text": "Maintain agitation and add the remainder of the water.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "changed",
+    "before": {
+     "page": 10,
+     "pages": [
+      10
+     ],
+     "text": "CONTROL OF UNDESIRABLE COTTON FOLLOWING HARVEST Tank Mix with a Herbicide Product Apply FreeFall SC Cotton Defoliant at a rate of 3.2 fl oz/A (0.1 lb a.i./A) with a herbicide product registered for cotton stalk destruction.",
+     "marks": [],
+     "parts": [
+      {
+       "page": 10,
+       "text": "CONTROL OF UNDESIRABLE COTTON FOLLOWING HARVEST Tank Mix with a Herbicide Product Apply FreeFall SC Cotton Defoliant at a rate of 3.2 fl oz/A (0.1 lb a.i./A) with a herbicide product registered for cotton stalk destruction.",
+       "marked": false
+      }
+     ]
+    },
+    "after": {
+     "page": 9,
+     "pages": [
+      9
+     ],
+     "text": "CONTROL OF UNDESIRABLE COTTON FOLLOWING HARVEST * *Not registered for use in California Tank Mix with a Herbicide Product Apply FreeFall SC Cotton Defoliant at a rate of 3.2 fl oz/A (0.1 lb a.i./A) with a herbicide product registered for",
+     "marks": [
+      [
+       50,
+       87
+      ]
+     ],
+     "parts": [
+      {
+       "page": 9,
+       "text": "CONTROL OF UNDESIRABLE COTTON FOLLOWING HARVEST * *Not registered for use in California Tank Mix with a Herbicide Product Apply FreeFall SC Cotton Defoliant at a rate of 3.2 fl oz/A (0.1 lb a.i./A) with a herbicide product registered for",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "changed",
+    "before": {
+     "page": 11,
+     "pages": [
+      11
+     ],
+     "text": "CONTAINER HANDLING: [Note to Reviewer: The following statement will be included on all Final Printed Labels bearing multiple Container Handling statements This product is available in multiple containers.",
+     "marks": [],
+     "parts": [
+      {
+       "page": 11,
+       "text": "CONTAINER HANDLING: [Note to Reviewer: The following statement will be included on all Final Printed Labels bearing multiple Container Handling statements This product is available in multiple containers.",
+       "marked": false
+      }
+     ]
+    },
+    "after": {
+     "page": 10,
+     "pages": [
+      10
+     ],
+     "text": "CONTAINER HANDLING: [Note to Reviewer: The following statement will be included on all Final Printed Labels bearing multiple Container Handling statements] “NOTE: This product is available in multiple containers.",
+     "marks": [
+      [
+       156,
+       162
+      ]
+     ],
+     "parts": [
+      {
+       "page": 10,
+       "text": "CONTAINER HANDLING: [Note to Reviewer: The following statement will be included on all Final Printed Labels bearing multiple Container Handling statements] “NOTE: This product is available in multiple containers.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "changed",
+    "before": {
+     "page": 11,
+     "pages": [
+      11
+     ],
+     "text": "Refer to the Net [Nonrefillable Containers 5 Gallons or Less] Nonrefillable container.",
+     "marks": [],
+     "parts": [
+      {
+       "page": 11,
+       "text": "Refer to the Net [Nonrefillable Containers 5 Gallons or Less] Nonrefillable container.",
+       "marked": false
+      }
+     ]
+    },
+    "after": {
+     "page": 10,
+     "pages": [
+      10
+     ],
+     "text": "Refer to the Net Contents section of this product's labeling for the applicable “Nonrefillable” or “Refillable” designation. Follow the container handling instructions below that apply to your container type/size.” [Nonrefillable Containers 5 Gallons or Less] Nonrefillable container.",
+     "marks": [
+      [
+       17,
+       214
+      ]
+     ],
+     "parts": [
+      {
+       "page": 10,
+       "text": "Refer to the Net Contents section of this product's labeling for the applicable “Nonrefillable” or “Refillable” designation.",
+       "marked": true
+      },
+      {
+       "page": 10,
+       "text": "Follow the container handling instructions below that apply to your container type/size.” [Nonrefillable Containers 5 Gallons or Less] Nonrefillable container.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "changed",
+    "before": {
+     "page": 12,
+     "pages": [
+      12
+     ],
+     "text": "TO THE EXTENT CONSISTENT WITH MANUFACTURER OR SELLER AND (2) MANUFACTURER AND SELLER MAKE NO WARRANTIES, GUARANTEES, OR REPRESENTATIONS OF ANY KIND TO BUYER OR USER, EITHER EXPRESS OR IMPLIED, OR BY USAGE OF TRADE, STATUTORY OR OTHERWISE, WITH REGARD TO THE PRODUCT",
+     "marks": [],
+     "parts": [
+      {
+       "page": 12,
+       "text": "TO THE EXTENT CONSISTENT WITH MANUFACTURER OR SELLER AND (2) MANUFACTURER AND SELLER MAKE NO WARRANTIES, GUARANTEES, OR REPRESENTATIONS OF ANY KIND TO BUYER OR USER, EITHER EXPRESS OR IMPLIED, OR BY USAGE OF TRADE, STATUTORY OR OTHERWISE, WITH REGARD TO THE PRODUCT",
+       "marked": false
+      }
+     ]
+    },
+    "after": {
+     "page": 11,
+     "pages": [
+      11
+     ],
+     "text": "TO THE EXTENT CONSISTENT WITH APPLICABLE LAW, (1) THE GOODS DELIVERED TO YOU ARE FURNISHED “AS IS” BY MANUFACTURER OR SELLER AND (2) MANUFACTURER AND SELLER MAKE NO WARRANTIES, GUARANTEES, OR REPRESENTATIONS OF ANY KIND TO BUYER OR USER, EITHER EXPRESS OR",
+     "marks": [
+      [
+       30,
+       101
+      ]
+     ],
+     "parts": [
+      {
+       "page": 11,
+       "text": "TO THE EXTENT CONSISTENT WITH APPLICABLE LAW, (1) THE GOODS DELIVERED TO YOU ARE FURNISHED “AS IS” BY MANUFACTURER OR SELLER AND (2) MANUFACTURER AND SELLER MAKE NO WARRANTIES, GUARANTEES, OR REPRESENTATIONS OF ANY KIND TO BUYER OR USER, EITHER EXPRESS OR",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "changed",
+    "before": {
+     "page": 12,
+     "pages": [
+      12
+     ],
+     "text": "(RV012621) FreeFall and Super Boll are trademarks of Nufarm Americas Inc. All other trademarks that appear on this label which are not owned by Nufarm Americas Inc. or its subsidiaries are the property of their respective owners.",
+     "marks": [
+      [
+       0,
+       10
+      ]
+     ],
+     "parts": [
+      {
+       "page": 12,
+       "text": "(RV012621) FreeFall and Super Boll are trademarks of Nufarm Americas Inc. All other trademarks that appear on this label which are not owned by Nufarm Americas Inc. or its subsidiaries are the property of their respective owners.",
+       "marked": true
+      }
+     ]
+    },
+    "after": {
+     "page": 11,
+     "pages": [
+      11
+     ],
+     "text": "(RV040821) FreeFall and Super Boll are trademarks of Nufarm Americas Inc. All other trademarks that appear on this label which are not owned by Nufarm Americas Inc. or its subsidiaries are the property of their respective owners.",
+     "marks": [
+      [
+       0,
+       10
+      ]
+     ],
+     "parts": [
+      {
+       "page": 11,
+       "text": "(RV040821) FreeFall and Super Boll are trademarks of Nufarm Americas Inc. All other trademarks that appear on this label which are not owned by Nufarm Americas Inc. or its subsidiaries are the property of their respective owners.",
+       "marked": true
+      }
+     ]
+    },
+    "conditions": []
+   },
+   {
+    "kind": "removed",
+    "before": {
+     "page": 13,
+     "pages": [
+      13
+     ],
+     "text": "Page 1 of 1 Supplemental Label FreeFall® SC Cotton Defoliant EPA Reg.",
+     "marks": [
+      [
+       0,
+       69
+      ]
+     ],
+     "parts": [
+      {
+       "page": 13,
+       "text": "Page 1 of 1 Supplemental Label FreeFall® SC Cotton Defoliant EPA Reg.",
+       "marked": true
+      }
+     ]
+    },
+    "after": null,
+    "conditions": []
+   },
+   {
+    "kind": "removed",
+    "before": {
+     "page": 13,
+     "pages": [
+      13
+     ],
+     "text": "No. 228-653 This supplemental label expires on February 1, 2024, and must not be used or distributed after this date SUPPLEMENTAL LABEL TO ADD DIRECTIONS FOR USE IT IS A VIOLATION OF FEDERAL LAW TO USE THIS PRODUCT IN A MANNER INCONSISTENT WITH ITS LABELING.",
+     "marks": [
+      [
+       0,
+       258
+      ]
+     ],
+     "parts": [
+      {
+       "page": 13,
+       "text": "No. 228-653 This supplemental label expires on February 1, 2024, and must not be used or distributed after this date SUPPLEMENTAL LABEL TO ADD DIRECTIONS FOR USE IT IS A VIOLATION OF FEDERAL LAW TO USE THIS PRODUCT IN A MANNER INCONSISTENT WITH ITS LABELING.",
+       "marked": true
+      }
+     ]
+    },
+    "after": null,
+    "conditions": []
+   },
+   {
+    "kind": "removed",
+    "before": {
+     "page": 13,
+     "pages": [
+      13
+     ],
+     "text": "THIS LABELING MUST BE IN THE POSSESSION OF THE USER AT THE TIME OF APPLICATION.",
+     "marks": [
+      [
+       0,
+       79
+      ]
+     ],
+     "parts": [
+      {
+       "page": 13,
+       "text": "THIS LABELING MUST BE IN THE POSSESSION OF THE USER AT THE TIME OF APPLICATION.",
+       "marked": true
+      }
+     ]
+    },
+    "after": null,
+    "conditions": []
+   },
+   {
+    "kind": "removed",
+    "before": {
+     "page": 13,
+     "pages": [
+      13
+     ],
+     "text": "READ THE LABEL AFFIXED TO THE CONTAINER FOR FREEFALL® SC COTTON DEFOLIANT BEFORE APPLYING.",
+     "marks": [
+      [
+       0,
+       90
+      ]
+     ],
+     "parts": [
+      {
+       "page": 13,
+       "text": "READ THE LABEL AFFIXED TO THE CONTAINER FOR FREEFALL® SC COTTON DEFOLIANT BEFORE APPLYING.",
+       "marked": true
+      }
+     ]
+    },
+    "after": null,
+    "conditions": []
+   },
+   {
+    "kind": "removed",
+    "before": {
+     "page": 13,
+     "pages": [
+      13
+     ],
+     "text": "CAREFULLY FOLLOW ALL PRECAUTIONS, LIMITATIONS, AND APPLICABLE USE DIRECTIONS.",
+     "marks": [
+      [
+       0,
+       77
+      ]
+     ],
+     "parts": [
+      {
+       "page": 13,
+       "text": "CAREFULLY FOLLOW ALL PRECAUTIONS, LIMITATIONS, AND APPLICABLE USE DIRECTIONS.",
+       "marked": true
+      }
+     ]
+    },
+    "after": null,
+    "conditions": []
+   },
+   {
+    "kind": "removed",
+    "before": {
+     "page": 13,
+     "pages": [
+      13
+     ],
+     "text": "KEEP OUT OF REACH OF CHILDREN CAUTION / PRECAUCIÓN Si usted no entiende la etiqueta, busque a alguien para que se la explique a usted en detalle.",
+     "marks": [
+      [
+       0,
+       37
+      ],
+      [
+       40,
+       145
+      ]
+     ],
+     "parts": [
+      {
+       "page": 13,
+       "text": "KEEP OUT OF REACH OF CHILDREN CAUTION / PRECAUCIÓN Si usted no entiende la etiqueta, busque a alguien para que se la explique a usted en detalle.",
+       "marked": true
+      }
+     ]
+    },
+    "after": null,
+    "conditions": []
+   },
+   {
+    "kind": "removed",
+    "before": {
+     "page": 13,
+     "pages": [
+      13
+     ],
+     "text": "(If you do not understand the label, find someone to explain it to you in detail.)",
+     "marks": [
+      [
+       0,
+       82
+      ]
+     ],
+     "parts": [
+      {
+       "page": 13,
+       "text": "(If you do not understand the label, find someone to explain it to you in detail.)",
+       "marked": true
+      }
+     ]
+    },
+    "after": null,
+    "conditions": []
+   },
+   {
+    "kind": "removed",
+    "before": {
+     "page": 13,
+     "pages": [
+      13
+     ],
+     "text": "CONTROL OF UNDESIRABLE COTTON FOLLOWING HARVEST Tank Mix with a Herbicide Product Apply FreeFall SC Cotton Defoliant at a rate of 3.2 fl oz/A (0.1 lb a.i./A) with a herbicide product registered for cotton stalk destruction.",
+     "marks": [
+      [
+       0,
+       223
+      ]
+     ],
+     "parts": [
+      {
+       "page": 13,
+       "text": "CONTROL OF UNDESIRABLE COTTON FOLLOWING HARVEST Tank Mix with a Herbicide Product Apply FreeFall SC Cotton Defoliant at a rate of 3.2 fl oz/A (0.1 lb a.i./A) with a herbicide product registered for cotton stalk destruction.",
+       "marked": true
+      }
+     ]
+    },
+    "after": null,
+    "conditions": []
+   },
+   {
+    "kind": "removed",
+    "before": {
+     "page": 13,
+     "pages": [
+      13
+     ],
+     "text": "For best results, wait 2 to 6 weeks after final harvest and apply at the initiation of visible regrowth.",
+     "marks": [
+      [
+       0,
+       104
+      ]
+     ],
+     "parts": [
+      {
+       "page": 13,
+       "text": "For best results, wait 2 to 6 weeks after final harvest and apply at the initiation of visible regrowth.",
+       "marked": true
+      }
+     ]
+    },
+    "after": null,
+    "conditions": []
+   },
+   {
+    "kind": "removed",
+    "before": {
+     "page": 13,
+     "pages": [
+      13
+     ],
+     "text": "Improved regrowth suppression has been shown when crop oil concentrate at 1% v/v is mixed with this product.",
+     "marks": [
+      [
+       0,
+       108
+      ]
+     ],
+     "parts": [
+      {
+       "page": 13,
+       "text": "Improved regrowth suppression has been shown when crop oil concentrate at 1% v/v is mixed with this product.",
+       "marked": true
+      }
+     ]
+    },
+    "after": null,
+    "conditions": []
+   },
+   {
+    "kind": "removed",
+    "before": {
+     "page": 13,
+     "pages": [
+      13
+     ],
+     "text": "Restrictions Do not exceed the maximum single application rate of 3.2 fl oz/A (0.1 lb a.i./A).",
+     "marks": [
+      [
+       0,
+       94
+      ]
+     ],
+     "parts": [
+      {
+       "page": 13,
+       "text": "Restrictions Do not exceed the maximum single application rate of 3.2 fl oz/A (0.1 lb a.i./A).",
+       "marked": true
+      }
+     ]
+    },
+    "after": null,
+    "conditions": []
+   },
+   {
+    "kind": "removed",
+    "before": {
+     "page": 13,
+     "pages": [
+      13
+     ],
+     "text": "Do not make more than two pre-harvest applications, or two post-harvest applications, or a total of three applications per year.",
+     "marks": [
+      [
+       0,
+       128
+      ]
+     ],
+     "parts": [
+      {
+       "page": 13,
+       "text": "Do not make more than two pre-harvest applications, or two post-harvest applications, or a total of three applications per year.",
+       "marked": true
+      }
+     ]
+    },
+    "after": null,
+    "conditions": []
+   },
+   {
+    "kind": "removed",
+    "before": {
+     "page": 13,
+     "pages": [
+      13
+     ],
+     "text": "Do not exceed the total maximum application rate of 9.6 fl oz/A (0.3 lb a.i./A) per year from all pre-harvest and post-harvest applications.",
+     "marks": [
+      [
+       0,
+       140
+      ]
+     ],
+     "parts": [
+      {
+       "page": 13,
+       "text": "Do not exceed the total maximum application rate of 9.6 fl oz/A (0.3 lb a.i./A) per year from all pre-harvest and post-harvest applications.",
+       "marked": true
+      }
+     ]
+    },
+    "after": null,
+    "conditions": []
+   },
+   {
+    "kind": "removed",
+    "before": {
+     "page": 13,
+     "pages": [
+      13
+     ],
+     "text": "NOTICE Read the \"WARRANTY DISCLAIMER in the label booklet for this product before using this product.",
+     "marks": [
+      [
+       0,
+       101
+      ]
+     ],
+     "parts": [
+      {
+       "page": 13,
+       "text": "NOTICE Read the \"WARRANTY DISCLAIMER in the label booklet for this product before using this product.",
+       "marked": true
+      }
+     ]
+    },
+    "after": null,
+    "conditions": []
+   },
+   {
+    "kind": "removed",
+    "before": {
+     "page": 13,
+     "pages": [
+      13
+     ],
+     "text": "Those terms apply to this supplemental labeling and if those terms are not acceptable, return the product unopened at once.",
+     "marks": [
+      [
+       0,
+       123
+      ]
+     ],
+     "parts": [
+      {
+       "page": 13,
+       "text": "Those terms apply to this supplemental labeling and if those terms are not acceptable, return the product unopened at once.",
+       "marked": true
+      }
+     ]
+    },
+    "after": null,
+    "conditions": []
+   },
+   {
+    "kind": "removed",
+    "before": {
+     "page": 13,
+     "pages": [
+      13
+     ],
+     "text": "MANUFACTURED FOR NUFARM AMERICAS INC. 11901 S.",
+     "marks": [
+      [
+       0,
+       46
+      ]
+     ],
+     "parts": [
+      {
+       "page": 13,
+       "text": "MANUFACTURED FOR NUFARM AMERICAS INC. 11901 S.",
+       "marked": true
+      }
+     ]
+    },
+    "after": null,
+    "conditions": []
+   },
+   {
+    "kind": "removed",
+    "before": {
+     "page": 13,
+     "pages": [
+      13
+     ],
+     "text": "Austin Ave, Alsip, IL 60803 (RV012621)",
+     "marks": [
+      [
+       0,
+       38
+      ]
+     ],
+     "parts": [
+      {
+       "page": 13,
+       "text": "Austin Ave, Alsip, IL 60803 (RV012621)",
+       "marked": true
+      }
+     ]
+    },
+    "after": null,
+    "conditions": []
+   }
+  ],
+  "sentences": {
+   "from": 306,
+   "to": 318
+  },
+  "moved": 0,
+  "formatting": 9,
+  "blankPages": {
+   "from": [
+    1,
+    2
+   ],
+   "to": []
+  },
+  "unreadable": null,
+  "tooLong": false
+ }
+}

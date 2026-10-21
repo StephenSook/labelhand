@@ -1,0 +1,49 @@
+{
+ "reg": "228-653",
+ "product": "FREEFALL SC COTTON DEFOLIANT",
+ "status": "Active",
+ "cancelled": false,
+ "versions": [
+  {
+   "fileName": "000228-00653-20210514.pdf",
+   "accepted": "2021-05-14",
+   "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00653-20210514.pdf"
+  },
+  {
+   "fileName": "000228-00653-20210127.pdf",
+   "accepted": "2021-01-27",
+   "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00653-20210127.pdf"
+  },
+  {
+   "fileName": "000228-00653-20190823.pdf",
+   "accepted": "2019-08-23",
+   "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00653-20190823.pdf"
+  },
+  {
+   "fileName": "000228-00653-20160422.pdf",
+   "accepted": "2016-04-22",
+   "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00653-20160422.pdf"
+  },
+  {
+   "fileName": "000228-00653-20120702.pdf",
+   "accepted": "2012-07-02",
+   "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00653-20120702.pdf"
+  },
+  {
+   "fileName": "000228-00653-20101019.pdf",
+   "accepted": "2010-10-19",
+   "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00653-20101019.pdf"
+  },
+  {
+   "fileName": "000228-00653-20091214.pdf",
+   "accepted": "2009-12-14",
+   "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00653-20091214.pdf"
+  },
+  {
+   "fileName": "000228-00653-20090820.pdf",
+   "accepted": "2009-08-20",
+   "url": "https://www3.epa.gov/pesticides/chem_search/ppls/000228-00653-20090820.pdf"
+  }
+ ],
+ "fetchedAt": "2026-10-21T15:19:00.681Z"
+}

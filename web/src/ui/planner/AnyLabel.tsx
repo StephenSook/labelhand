@@ -291,6 +291,13 @@ export function AnyLabel({ disabled, liveLabels, onAdd, onRemove, shippedRegs = 
                   </span>
                 ) : null}
                 <span className="mt-1 block text-xs font-bold" data-reading-vote>{readingVote(label)}</span>
+                <a
+                  href={`/changes/${label.reg}`}
+                  data-changes-link={label.reg}
+                  className="mt-1 inline-flex min-h-10 items-center text-sm font-black underline decoration-2 underline-offset-4 outline-offset-2 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#ffc53d]"
+                >
+                  What changed since the last label
+                </a>
               </span>
               <button
                 type="button"
