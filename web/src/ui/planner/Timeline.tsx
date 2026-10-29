@@ -69,21 +69,38 @@ const hourColumn = new Intl.DateTimeFormat("en-US", {
   hourCycle: "h23",
 });
 
+const HOUR_MS = 3_600_000;
+
+// The UTC instant of Eastern midnight that starts the day with this "YYYY-MM-DD" key. Eastern
+// midnight is 04:00 or 05:00 UTC, and clocks never change at midnight, so exactly one matches.
+function easternMidnight(key: string): number {
+  const [year, month, day] = key.split("-").map(Number);
+  for (const offset of [4, 5]) {
+    const instant = Date.UTC(year, month - 1, day) + offset * HOUR_MS;
+    if (dayKey.format(instant) === key && localHour(new Date(instant).toISOString()) === 0) return instant;
+  }
+  throw new RangeError(`No Eastern midnight found for ${key}.`);
+}
+
+// Columns come from the Eastern civil day, not from the forecast hours present: a day has 23,
+// 24 or 25 columns, and each hour sits at its elapsed hours since that day's midnight, so a
+// forecast that starts or ends partway through a clock-change day still lines up.
 export function groupByDay(hours: PlannerHour[]): DayGroup[] {
   const groups: DayGroup[] = [];
+  const starts = new Map<string, number>();
   hours.forEach((hour, index) => {
     const date = new Date(hour.start);
     const key = dayKey.format(date);
-    const current = groups.at(-1);
+    let current = groups.at(-1);
     if (!current || current.key !== key) {
-      const column = localHour(hour.start);
-      groups.push({ key, label: dayLabel.format(date), hours: [{ hour, index, column }], columns: Math.max(24, column + 1) });
-    } else {
-      const first = current.hours[0];
-      const column = first.column + Math.round((date.getTime() - new Date(first.hour.start).getTime()) / 3_600_000);
-      current.hours.push({ hour, index, column });
-      current.columns = Math.max(current.columns, column + 1);
+      const midnight = easternMidnight(key);
+      const nextMidnight = easternMidnight(dayKey.format(midnight + 30 * HOUR_MS));
+      starts.set(key, midnight);
+      current = { key, label: dayLabel.format(date), hours: [], columns: Math.round((nextMidnight - midnight) / HOUR_MS) };
+      groups.push(current);
     }
+    const column = Math.floor((date.getTime() - starts.get(key)!) / HOUR_MS);
+    current.hours.push({ hour, index, column });
   });
   return groups;
 }
