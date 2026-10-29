@@ -13,7 +13,34 @@ permissions:
   contents: read
 
 jobs:
+  # The recorder costs Nebius AI Cloud time on every run, and only judges need it (judging runs
+  # 2026-12-01 17:00Z to 2026-12-15 20:00Z), so it launches a job only from an hour before judging
+  # opens until judging closes. A job is a few minutes long, so one launched just before the close
+  # ends minutes after it. Outside the window the run skips cleanly instead of failing.
+  gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    outputs:
+      run: ${{ steps.window.outputs.run }}
+    steps:
+      - id: window
+        shell: bash
+        env:
+          RECORDER_START_UTC: "2026-12-01T16:00:00Z"
+          RECORDER_STOP_UTC: "2026-12-15T20:00:00Z"
+        run: |
+          set -euo pipefail
+          now=$(date -u +%s)
+          if (( now >= $(date -u -d "$RECORDER_START_UTC" +%s) && now < $(date -u -d "$RECORDER_STOP_UTC" +%s) )); then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Outside the recording window $RECORDER_START_UTC to $RECORDER_STOP_UTC; no Nebius job launched."
+          fi
+
   record:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
