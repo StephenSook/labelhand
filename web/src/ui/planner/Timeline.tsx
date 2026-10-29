@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, type CSSProperties } from "react";
 import {
   displayState,
   stateIcon,
@@ -14,12 +14,16 @@ type TimelineProps = {
   onSelect: (index: number) => void;
 };
 
-type HourEntry = { hour: PlannerHour; index: number };
+// column is the hour's place in its Eastern day (0 = midnight). It counts elapsed hours from the
+// day's first forecast hour, so the 25-hour day when clocks fall back gets two 1 AM columns
+// instead of placing both in one column, which made the grid wrap into a second row.
+type HourEntry = { hour: PlannerHour; index: number; column: number };
 
 type DayGroup = {
   key: string;
   label: string;
   hours: HourEntry[];
+  columns: number;
 };
 
 type DayRun = {
@@ -65,16 +69,20 @@ const hourColumn = new Intl.DateTimeFormat("en-US", {
   hourCycle: "h23",
 });
 
-function groupByDay(hours: PlannerHour[]): DayGroup[] {
+export function groupByDay(hours: PlannerHour[]): DayGroup[] {
   const groups: DayGroup[] = [];
   hours.forEach((hour, index) => {
     const date = new Date(hour.start);
     const key = dayKey.format(date);
     const current = groups.at(-1);
     if (!current || current.key !== key) {
-      groups.push({ key, label: dayLabel.format(date), hours: [{ hour, index }] });
+      const column = localHour(hour.start);
+      groups.push({ key, label: dayLabel.format(date), hours: [{ hour, index, column }], columns: Math.max(24, column + 1) });
     } else {
-      current.hours.push({ hour, index });
+      const first = current.hours[0];
+      const column = first.column + Math.round((date.getTime() - new Date(first.hour.start).getTime()) / 3_600_000);
+      current.hours.push({ hour, index, column });
+      current.columns = Math.max(current.columns, column + 1);
     }
   });
   return groups;
@@ -205,6 +213,8 @@ export function Timeline({ hours, products, selectedIndex, onSelect }: TimelineP
               key={group.key}
               data-day={group.key}
               data-day-hours={group.hours.length}
+              data-day-columns={group.columns}
+              style={{ "--day-columns": group.columns } as CSSProperties}
               className="min-w-0 overflow-hidden rounded-[1.6rem] border-[3px] border-[#14213d] bg-[#fbf7ee] shadow-[5px_6px_0_#14213d]"
             >
               <h3 className="hidden border-b-[3px] border-[#14213d] bg-[#9fd3f2] px-4 py-2 font-extrabold md:block">
@@ -214,7 +224,7 @@ export function Timeline({ hours, products, selectedIndex, onSelect }: TimelineP
               <div className="hidden min-w-0 p-2 md:block" aria-label={`${group.label} timeline`}>
                 <div className="timeline-grid grid min-w-0">
                   <span className="self-center truncate pr-1 text-[0.58rem] font-extrabold uppercase tracking-[0.04em] lg:text-xs lg:tracking-[0.1em]">Combined</span>
-                  {group.hours.map(({ hour, index }) => (
+                  {group.hours.map(({ hour, index, column }) => (
                     <button
                       key={hour.start}
                       ref={(node) => { refs.current[index] = node; }}
@@ -243,7 +253,7 @@ export function Timeline({ hours, products, selectedIndex, onSelect }: TimelineP
                           moveFocus(index, hours.length - 1 - index);
                         }
                       }}
-                      style={{ gridColumn: localHour(hour.start) + 2 }}
+                      style={{ gridColumn: column + 2 }}
                       className={`grid min-h-14 min-w-0 place-content-center overflow-hidden rounded-md border px-px text-center outline-offset-1 transition-transform focus-visible:z-10 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#14213d] ${stateClass(hour.state)} ${selectedIndex === index ? "z-10 -translate-y-1 ring-2 ring-[#14213d]" : "hover:-translate-y-0.5"}`}
                     >
                       <span aria-hidden="true" className="block text-xs font-black leading-none lg:text-sm">{stateIcon(hour.state)}</span>
@@ -264,9 +274,13 @@ export function Timeline({ hours, products, selectedIndex, onSelect }: TimelineP
                   <span className="text-xs">{runs.length} {runs.length === 1 ? "run" : "runs"}</span>
                 </summary>
                 <div className="p-3">
-                  <div aria-hidden="true" className="grid grid-cols-24 overflow-hidden rounded-lg border-2 border-[#14213d]">
-                    {Array.from({ length: 24 }, (_, column) => {
-                      const entry = group.hours.find(({ hour }) => localHour(hour.start) === column);
+                  <div
+                    aria-hidden="true"
+                    className="grid overflow-hidden rounded-lg border-2 border-[#14213d]"
+                    style={{ gridTemplateColumns: `repeat(${group.columns}, minmax(0, 1fr))` }}
+                  >
+                    {Array.from({ length: group.columns }, (_, column) => {
+                      const entry = group.hours.find((candidate) => candidate.column === column);
                       return (
                         <span
                           key={column}
@@ -334,13 +348,13 @@ function ProductLane({ product, entries }: {
       >
         {product.shortName}
       </span>
-      {entries.map(({ hour }) => {
+      {entries.map(({ hour, column }) => {
         const state = productState(hour, product.fullName);
         return (
           <span
             key={`${product.fullName}-${hour.start}`}
             title={`${description}: ${state === "blocked" ? "BLOCKED" : state === "check" ? "FIELD CHECK" : "No controlling clause"}`}
-            style={{ gridColumn: localHour(hour.start) + 2 }}
+            style={{ gridColumn: column + 2 }}
             className={`flex min-h-6 min-w-0 items-center justify-center overflow-hidden rounded-sm border text-[0.55rem] font-black ${
               state === "blocked"
                 ? "border-[#9f2926] bg-[#d1433f] text-white"

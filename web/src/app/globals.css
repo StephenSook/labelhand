@@ -723,8 +723,9 @@ a {
 .source-why { color: var(--ink-soft); line-height: 1.5; }
 .source-note { font-size: 0.78rem; font-weight: 800; margin: 0.8rem 0 0; }
 
+/* --day-columns is 25 on the day clocks fall back (two 1 AM hours), 24 otherwise. */
 .timeline-grid {
-  grid-template-columns: 3.75rem repeat(24, minmax(0, 1fr));
+  grid-template-columns: 3.75rem repeat(var(--day-columns, 24), minmax(0, 1fr));
 }
 
 .timeline-state-word {
@@ -851,7 +852,7 @@ a {
 
 @media (min-width: 1024px) {
   .timeline-grid {
-    grid-template-columns: 7rem repeat(24, minmax(0, 1fr));
+    grid-template-columns: 7rem repeat(var(--day-columns, 24), minmax(0, 1fr));
   }
 }
 
